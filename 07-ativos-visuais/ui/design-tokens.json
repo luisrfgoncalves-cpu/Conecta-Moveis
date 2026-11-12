@@ -1,0 +1,29 @@
+{
+  "colors": {
+    "brand": {
+      "primary": "#ea580c",
+      "primaryHover": "#c2410c",
+      "secondary": "#0f172a",
+      "accent": "#f97316"
+    },
+    "surface": {
+      "light": "#ffffff",
+      "lightMuted": "#f8fafc",
+      "dark": "#0f172a",
+      "darkMuted": "#1e293b"
+    },
+    "text": {
+      "lightPrimary": "#0f172a",
+      "lightSecondary": "#475569",
+      "darkPrimary": "#f8fafc",
+      "darkSecondary": "#94a3b8"
+    }
+  },
+  "radii": {
+    "sm": "0.25rem",
+    "md": "0.5rem",
+    "lg": "0.75rem",
+    "full": "9999px"
+  }
+}
+
