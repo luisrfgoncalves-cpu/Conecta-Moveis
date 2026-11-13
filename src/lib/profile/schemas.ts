@@ -140,13 +140,16 @@ export const professionalProfileSchema = z.object({
   companyId: z.string().uuid().optional().nullable(),
 });
 
-// Schema de publicação do perfil (critérios mínimos obrigatórios)
+// Schema de publicação do perfil (critérios mínimos obrigatórios para vitrine de alto nível)
 export const publishValidationSchema = z.object({
   displayName: z.string().min(3, 'Nome profissional obrigatório'),
-  bio: z.string().min(20, 'Descrição com no mínimo 20 caracteres obrigatória'),
+  bio: z.string().min(20, 'Descrição profissional deve ter pelo menos 20 caracteres'),
   city: z.string().min(2, 'Cidade de atuação obrigatória'),
   state: z.string().length(2, 'Estado (UF) obrigatório'),
+  neighborhoods: z.array(z.string()).min(1, 'Informe ao menos 1 bairro ou região de atendimento'),
   specialtyIds: z.array(z.string()).min(1, 'Ao menos uma especialidade é obrigatória para publicar'),
+  whatsapp: z.string().min(10, 'WhatsApp para contato direto é obrigatório (mínimo 10 dígitos com DDD)'),
+  avatarUrl: z.string().min(5, 'Foto de perfil ou logotipo é obrigatória para publicar o perfil'),
   emailConfirmed: z.boolean().refine((val) => val === true, {
     message: 'É obrigatório ter o e-mail confirmado para publicar o perfil',
   }),

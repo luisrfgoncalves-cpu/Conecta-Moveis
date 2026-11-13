@@ -214,7 +214,7 @@ export async function togglePublishProfile(
   // Buscar perfil para validar requisitos mínimos
   const { data: profile } = await supabase
     .from('professional_profiles')
-    .select('*, profile_specialties(specialty_id)')
+    .select('*, profile_specialties(specialty_id), service_regions(neighborhoods)')
     .eq('id', profileId)
     .eq('user_id', user.id)
     .single();
@@ -225,12 +225,17 @@ export async function togglePublishProfile(
 
   if (targetPublishState) {
     // Validar critérios obrigatórios mínimos antes de permitir a publicação
+    const typedProfile = profile as typeof profile & { service_regions?: { neighborhoods?: string[] }[] };
+    const rawNeighborhoods = typedProfile.service_regions?.[0]?.neighborhoods || [];
     const validation = publishValidationSchema.safeParse({
       displayName: profile.display_name,
       bio: profile.bio ?? '',
       city: profile.city,
       state: profile.state,
+      neighborhoods: rawNeighborhoods,
       specialtyIds: profile.profile_specialties?.map((s: { specialty_id: string }) => s.specialty_id) ?? [],
+      whatsapp: profile.whatsapp ?? '',
+      avatarUrl: profile.avatar_url ?? '',
       emailConfirmed: !!user.email_confirmed_at,
     });
 

@@ -73,7 +73,7 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
     initialProfile?.profile_specialties?.map((s) => s.specialty_id) ?? []
   );
   const [whatsapp, setWhatsapp] = useState<string>(initialProfile?.whatsapp ?? '');
-  const [isWhatsappPublic, setIsWhatsappPublic] = useState<boolean>(initialProfile?.is_whatsapp_public ?? true);
+  const isWhatsappPublic = true;
   const [phone, setPhone] = useState<string>(initialProfile?.phone ?? '');
   const [isPhonePublic, setIsPhonePublic] = useState<boolean>(initialProfile?.is_phone_public ?? false);
   const [avatarUrl, setAvatarUrl] = useState<string>(initialProfile?.avatar_url ?? '');
@@ -186,26 +186,96 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
     });
   }
 
-  // Ação de Publicar / Despublicar
+  // Ação Unificada de Publicar / Despublicar (Salva automaticamente todos os dados antes)
   function handleTogglePublish(targetState: boolean) {
     setServerError('');
     setServerSuccess('');
 
-    if (!profileId) {
-      setServerError('Salve os dados do perfil antes de publicá-lo.');
-      return;
-    }
-
     startTransition(async () => {
-      // Salvar dados mais recentes primeiro
-      handleSave(false);
+      let currentActiveId = profileId;
 
-      const res = await togglePublishProfile(profileId, targetState);
+      if (targetState) {
+        // Validação preventiva imediata no cliente para feedback claro e amigável
+        if (!avatarUrl) {
+          setServerError('Adicione uma foto de perfil ou logotipo na Etapa 2 para publicar.');
+          setCurrentStep(2);
+          return;
+        }
+        if (!displayName || displayName.trim().length < 3) {
+          setServerError('Informe seu nome profissional ou comercial (mínimo 3 caracteres) na Etapa 2.');
+          setCurrentStep(2);
+          return;
+        }
+        if (!bio || bio.trim().length < 20) {
+          setServerError('Sua apresentação profissional deve ter pelo menos 20 caracteres na Etapa 2.');
+          setCurrentStep(2);
+          return;
+        }
+        if (!city || !state) {
+          setServerError('Informe sua cidade e estado de atendimento na Etapa 3.');
+          setCurrentStep(3);
+          return;
+        }
+        if (selectedSpecialties.length === 0) {
+          setServerError('Selecione pelo menos uma especialidade na Etapa 3.');
+          setCurrentStep(3);
+          return;
+        }
+        if (!whatsapp || whatsapp.trim().length < 10) {
+          setServerError('Informe um número de WhatsApp válido com DDD na Etapa 4 para receber contatos.');
+          setCurrentStep(4);
+          return;
+        }
+      }
+
+      // 1. Salvar os dados completos primeiro (garantindo persistência atômica)
+      const neighborhoods = neighborhoodsInput
+        .split(',')
+        .map((s) => s.trim())
+        .filter(Boolean);
+
+      const payload: ProfessionalProfileInput = {
+        id: currentActiveId,
+        displayName,
+        bio,
+        city,
+        state: state.toUpperCase(),
+        neighborhoods,
+        specialtyIds: selectedSpecialties,
+        whatsapp,
+        isWhatsappPublic: true, // Forçado como público para contato direto
+        phone,
+        isPhonePublic,
+        avatarUrl,
+      };
+
+      const saveRes = await saveProfessionalProfile(payload);
+      if ('error' in saveRes) {
+        setServerError(saveRes.error);
+        return;
+      }
+
+      if (saveRes.data?.id) {
+        currentActiveId = saveRes.data.id;
+        setProfileId(saveRes.data.id);
+      }
+
+      if (!currentActiveId) {
+        setServerError('Não foi possível identificar o perfil para publicação.');
+        return;
+      }
+
+      // 2. Executar a publicação oficial
+      const res = await togglePublishProfile(currentActiveId, targetState);
       if ('error' in res) {
         setServerError(res.error);
       } else {
         setIsPublished(targetState);
-        setServerSuccess(res.message ?? 'Status alterado com sucesso!');
+        setServerSuccess(
+          targetState
+            ? '🎉 Parabéns! Seu perfil foi salvo e publicado com sucesso na vitrine!'
+            : 'Perfil despublicado. Ele não está mais visível no catálogo.'
+        );
       }
     });
   }
@@ -352,7 +422,7 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
 
             <div className="space-y-2 text-center sm:text-left flex-1">
               <div className="flex items-center gap-2 justify-center sm:justify-start">
-                <span className="text-xs px-2 py-0.5 rounded bg-slate-500/20 text-slate-300 font-bold">Opcional</span>
+                <span className="text-xs px-2 py-0.5 rounded bg-orange-500/20 text-orange-400 font-bold">Obrigatório</span>
                 <span className="text-xs px-2 py-0.5 rounded bg-sky-500/20 text-sky-400 font-bold">Público</span>
               </div>
               <label
@@ -360,7 +430,7 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
                 className="cursor-pointer inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-orange-500/20 hover:bg-orange-500/30 text-orange-200 text-xs font-bold transition border border-orange-500/30 hover:border-orange-500/50 shadow-sm"
               >
                 <Camera className="w-4 h-4 text-orange-400" />
-                {avatarUrl ? 'Trocar foto de perfil' : 'Enviar foto de perfil'}
+                {avatarUrl ? 'Trocar ou reajustar foto' : 'Enviar foto de perfil ou logotipo'}
               </label>
               <input
                 id="avatar-upload"
@@ -372,10 +442,10 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
               />
               <div className="text-xs text-slate-400 space-y-0.5">
                 <p>
-                  <strong className="text-slate-300">Formatos aceitos:</strong> JPG, PNG ou WebP.
+                  <strong className="text-slate-300">Foto obrigatória para publicação.</strong> Formatos: JPG, PNG ou WebP.
                 </p>
                 <p className="text-[11px] text-slate-400">
-                  Enquadrado automaticamente em formato quadrado (1:1), redimensionado para 512px e comprimido em WebP sem perda de qualidade.
+                  Você poderá recortar, arrastar, dar zoom e girar antes de salvar.
                 </p>
               </div>
             </div>
@@ -550,19 +620,19 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
               <label htmlFor="neighborhoods" className="block text-sm font-bold text-slate-200">
                 Bairros e Cidades Vizinhas Atendidas
               </label>
-              <span className="text-xs px-2 py-0.5 rounded bg-slate-500/20 text-slate-300 font-bold">Opcional</span>
+              <span className="text-xs px-2 py-0.5 rounded bg-orange-500/20 text-orange-400 font-bold">Obrigatório</span>
             </div>
             <input
               id="neighborhoods"
               type="text"
               value={neighborhoodsInput}
               onChange={(e) => setNeighborhoodsInput(e.target.value)}
-              placeholder="Centro, Eloy Chaves, Vila Arens, Itupeva, Várzea Paulista..."
+              placeholder="Ex: Centro, Vila Arens, Eloy Chaves, Itupeva, Várzea Paulista..."
               className="w-full bg-black/30 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500/50"
             />
             <p className="text-xs text-amber-400 font-medium flex items-center gap-1.5">
               <Lock className="w-3.5 h-3.5" />
-              <strong>Privacidade garantida:</strong> Nunca informe seu endereço residencial pessoal. Apenas as regiões onde você se desloca para prestar o serviço.
+              <strong>Privacidade garantida:</strong> Informe apenas os bairros ou cidades onde você presta serviços (nunca seu endereço residencial).
             </p>
           </div>
 
@@ -600,35 +670,27 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
             </p>
           </div>
 
-          {/* WhatsApp */}
+          {/* WhatsApp Obrigatório */}
           <div className="space-y-3 p-4 rounded-xl bg-black/20 border border-white/10">
             <div className="flex items-center justify-between">
               <label htmlFor="whatsapp" className="block text-sm font-bold text-white flex items-center gap-2">
                 <Globe className="w-4 h-4 text-emerald-400" />
-                WhatsApp para Contato
+                WhatsApp para Contato Direto
               </label>
-              <span className="text-xs px-2 py-0.5 rounded bg-slate-500/20 text-slate-300 font-bold">Opcional</span>
+              <span className="text-xs px-2 py-0.5 rounded bg-orange-500/20 text-orange-400 font-bold">Obrigatório</span>
             </div>
             <input
               id="whatsapp"
               type="text"
               value={whatsapp}
               onChange={(e) => setWhatsapp(e.target.value)}
-              placeholder="Ex: 11999998888"
+              placeholder="Ex: 11999998888 (com DDD)"
               className="w-full bg-black/30 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
             />
-            <div className="flex items-center gap-3">
-              <input
-                id="isWhatsappPublic"
-                type="checkbox"
-                checked={isWhatsappPublic}
-                onChange={(e) => setIsWhatsappPublic(e.target.checked)}
-                className="w-4 h-4 accent-emerald-500 cursor-pointer"
-              />
-              <label htmlFor="isWhatsappPublic" className="text-xs text-slate-300 cursor-pointer">
-                Tornar botão direto de WhatsApp visível publicamente no perfil
-              </label>
-            </div>
+            <p className="text-xs text-emerald-400/90 flex items-center gap-1.5">
+              <Globe className="w-3.5 h-3.5" />
+              O botão de conversa direta no WhatsApp ficará sempre ativo no seu cartão público para clientes entrarem em contato com você sem intermediários.
+            </p>
           </div>
 
           {/* Telefone Fixo ou Celular Alternativo */}

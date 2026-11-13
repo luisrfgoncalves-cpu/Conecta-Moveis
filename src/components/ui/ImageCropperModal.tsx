@@ -135,7 +135,7 @@ export function ImageCropperModal({
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
 
-    // Fundo limpo
+    // Fundo neutro elegante
     ctx.fillStyle = '#0f172a';
     ctx.fillRect(0, 0, TARGET_SIZE, TARGET_SIZE);
 
@@ -151,12 +151,13 @@ export function ImageCropperModal({
     const adjustedOffsetX = offset.x * scale;
     const adjustedOffsetY = offset.y * scale;
 
-    // Dimensões base ajustadas para preencher o quadrado (fit cover inicial)
+    // Dimensões base: 'contain' preserva 100% da imagem original sem cortar nada por padrão
     const isRotated90or270 = rotation % 180 !== 0;
     const origW = isRotated90or270 ? naturalSize.height : naturalSize.width;
     const origH = isRotated90or270 ? naturalSize.width : naturalSize.height;
 
-    const baseScale = Math.max(TARGET_SIZE / origW, TARGET_SIZE / origH);
+    // Escala base preservando a imagem inteira (contain) dentro do visor de 280px
+    const baseScale = Math.min(TARGET_SIZE / origW, TARGET_SIZE / origH);
     const renderW = naturalSize.width * baseScale;
     const renderH = naturalSize.height * baseScale;
 
@@ -245,7 +246,7 @@ export function ImageCropperModal({
               <div />
             </div>
 
-            {/* Imagem a ser manipulada */}
+            {/* Imagem a ser manipulada (exibida 100% inteira inicialmente sem cortes forçados) */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               ref={imageRef}
@@ -259,7 +260,7 @@ export function ImageCropperModal({
                 transformOrigin: 'center center',
                 width: '100%',
                 height: '100%',
-                objectFit: 'cover',
+                objectFit: 'contain',
                 opacity: imageLoaded ? 1 : 0,
               }}
             />
@@ -334,3 +335,4 @@ export function ImageCropperModal({
     </div>
   );
 }
+

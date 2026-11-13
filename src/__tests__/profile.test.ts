@@ -127,7 +127,10 @@ describe('publishValidationSchema', () => {
       bio: 'Especialista em montagem de móveis com ferramentas profissionais e acabamento fino.',
       city: 'Jundiaí',
       state: 'SP',
+      neighborhoods: ['Centro', 'Vila Arens'],
       specialtyIds: ['spec-1'],
+      whatsapp: '11999998888',
+      avatarUrl: 'https://exemplo.com/avatar.webp',
       emailConfirmed: true,
     });
     expect(res.success).toBe(true);
@@ -139,7 +142,10 @@ describe('publishValidationSchema', () => {
       bio: 'Especialista em montagem de móveis com ferramentas profissionais e acabamento fino.',
       city: 'Jundiaí',
       state: 'SP',
+      neighborhoods: ['Centro'],
       specialtyIds: ['spec-1'],
+      whatsapp: '11999998888',
+      avatarUrl: 'https://exemplo.com/avatar.webp',
       emailConfirmed: false,
     });
     expect(res.success).toBe(false);

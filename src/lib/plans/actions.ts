@@ -59,6 +59,30 @@ export interface ProfessionalMetrics {
 export async function getEntitlements(userId: string): Promise<UserEntitlements> {
   const admin = getAdminClient();
 
+  try {
+    // Verificar se o usuário possui cargo de admin/moderador (acesso irrestrito)
+    const { data: roleRow } = await admin
+      .from('user_roles')
+      .select?.('role')
+      ?.eq?.('user_id', userId)
+      ?.in?.('role', ['admin', 'moderator'])
+      ?.maybeSingle?.() ?? { data: null };
+
+    if (roleRow && (roleRow as any).role === 'admin') {
+      return {
+        userId,
+        planId: 'admin',
+        planName: 'Administrador (Sem Limites)',
+        maxPhotos: 999,
+        maxCategories: 999,
+        canFeature: true,
+        hasStats: true,
+      };
+    }
+  } catch {
+    // Continua para fluxo normal se user_roles não estiver disponível
+  }
+
   // 1.1 Buscar assinatura ativa
   const { data: sub } = await admin
     .from('subscriptions')
