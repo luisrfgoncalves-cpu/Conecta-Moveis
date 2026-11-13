@@ -66,6 +66,14 @@ export function Header() {
             Como Funciona
           </Link>
           <Link 
+            href="/categorias" 
+            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold text-slate-300 hover:text-white hover:bg-white/10 transition"
+            onClick={() => sounds.playClick()}
+          >
+            <Sparkles className="w-4 h-4 text-amber-400" />
+            Categorias
+          </Link>
+          <Link 
             href="/encontrar-profissionais" 
             className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold text-slate-300 hover:text-white hover:bg-white/10 transition"
             onClick={() => sounds.playClick()}
@@ -147,6 +155,14 @@ export function Header() {
           >
             <Compass className="w-4 h-4 text-sky-400" />
             Como Funciona
+          </Link>
+          <Link 
+            href="/categorias" 
+            className="flex items-center gap-3 py-2.5 text-slate-200 font-bold border-b border-white/5" 
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            <Sparkles className="w-4 h-4 text-amber-400" />
+            Categorias
           </Link>
           <Link 
             href="/encontrar-profissionais" 

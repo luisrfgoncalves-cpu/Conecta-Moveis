@@ -36,6 +36,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/categorias" className="text-slate-300 hover:text-orange-400 transition">
+                  Categorias
+                </Link>
+              </li>
+              <li>
                 <Link href="/encontrar-profissionais" className="text-slate-300 hover:text-orange-400 transition">
                   Buscar Profissionais
                 </Link>
