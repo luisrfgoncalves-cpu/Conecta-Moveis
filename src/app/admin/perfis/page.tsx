@@ -18,7 +18,7 @@ export default async function AdminPerfisPage() {
 
   const { data } = await admin
     .from('professional_profiles')
-    .select('id, display_name, slug, city, state, is_published, is_suspended, created_at')
+    .select('id, display_name, slug, city, state, is_published, is_suspended, created_at, whatsapp, phone, bio, avatar_url')
     .order('created_at', { ascending: false });
 
   return <AdminPerfisClient initialProfiles={data || []} />;

@@ -30,6 +30,9 @@ import {
   Globe,
   Lock,
   HelpCircle,
+  Edit3,
+  ExternalLink,
+  CheckCheck,
 } from 'lucide-react';
 
 interface Props {
@@ -45,6 +48,7 @@ interface Props {
     phone?: string;
     is_phone_public?: boolean;
     avatar_url?: string;
+    slug?: string;
     profile_specialties?: { specialty_id: string }[];
     service_regions?: { neighborhoods?: string[] }[];
   } | null;
@@ -53,7 +57,10 @@ interface Props {
 }
 
 export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailConfirmed }: Props) {
-  const [currentStep, setCurrentStep] = useState(1);
+  // Se o perfil já existe e está publicado, começa no modo "visualização/edição"
+  const hasExistingProfile = !!initialProfile?.id;
+  const [isEditMode, setIsEditMode] = useState(!hasExistingProfile);
+  const [currentStep, setCurrentStep] = useState(hasExistingProfile ? 4 : 1);
   const [isPending, startTransition] = useTransition();
   const [serverError, setServerError] = useState('');
   const [serverSuccess, setServerSuccess] = useState('');
@@ -67,7 +74,7 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
   const [city, setCity] = useState<string>(initialProfile?.city ?? 'Jundiaí');
   const [state, setState] = useState<string>(initialProfile?.state ?? 'SP');
   const [neighborhoodsInput, setNeighborhoodsInput] = useState<string>(
-    initialProfile?.service_regions?.[0]?.neighborhoods?.join(', ') ?? 'Centro, Vila Arens, Eloy Chaves'
+    initialProfile?.service_regions?.[0]?.neighborhoods?.join(', ') ?? ''
   );
   const [selectedSpecialties, setSelectedSpecialties] = useState<string[]>(
     initialProfile?.profile_specialties?.map((s) => s.specialty_id) ?? []
@@ -80,6 +87,7 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [cropperRawSrc, setCropperRawSrc] = useState<string | null>(null);
   const [cropperFileName, setCropperFileName] = useState('avatar.webp');
+  const [profileSlug, setProfileSlug] = useState<string>(initialProfile?.slug ?? '');
 
   const steps = [
     { number: 1, title: 'Atuação', icon: Sparkles },
@@ -88,18 +96,26 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
     { number: 4, title: 'Contatos & Publicação', icon: Phone },
   ];
 
+  // Checar se todos os campos estão preenchidos para publicar
+  const publishReady =
+    !!avatarUrl &&
+    displayName.trim().length >= 3 &&
+    bio.trim().length >= 80 &&
+    selectedSpecialties.length >= 1 &&
+    city.trim().length >= 2 &&
+    state.trim().length === 2 &&
+    neighborhoodsInput.trim().length > 0 &&
+    whatsapp.trim().length >= 10 &&
+    isEmailConfirmed;
+
   // Iniciar seleção da imagem e abrir ajustador manual
   function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
     const rawFile = e.target.files?.[0];
     if (!rawFile) return;
-
-    // Resetar input para permitir selecionar a mesma imagem novamente se desejar
     e.target.value = '';
-
     setServerError('');
     setServerSuccess('');
 
-    // Validação de formato e tamanho no cliente
     const validation = validateClientImageFile(rawFile, 15 * 1024 * 1024);
     if (!validation.valid) {
       setServerError(validation.error || 'Arquivo inválido.');
@@ -107,33 +123,26 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
     }
 
     setCropperFileName(rawFile.name);
-
-    // Carregar para o modal de enquadramento/recorte manual
     const reader = new FileReader();
-    reader.onload = () => {
-      setCropperRawSrc(reader.result as string);
-    };
+    reader.onload = () => { setCropperRawSrc(reader.result as string); };
     reader.readAsDataURL(rawFile);
   }
 
-  // Confirmar recorte e realizar upload para o servidor
+  // Confirmar recorte e realizar upload
   async function handleConfirmCrop(croppedFile: File) {
     setCropperRawSrc(null);
     setUploadingAvatar(true);
     setServerError('');
     setServerSuccess('');
-
     try {
       const fd = new FormData();
       fd.append('file', croppedFile);
-
       const res = await uploadAvatarAction(fd);
-
       if ('error' in res) {
         setServerError(res.error);
       } else if (res.data?.publicUrl) {
         setAvatarUrl(res.data.publicUrl);
-        setServerSuccess('Foto de perfil enquadrada e salva com sucesso!');
+        setServerSuccess('Foto de perfil atualizada e otimizada com sucesso!');
       }
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Falha ao processar e enviar foto de perfil.';
@@ -143,147 +152,275 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
     }
   }
 
-  // Toggle especialidade
   function toggleSpecialty(id: string) {
     setSelectedSpecialties((prev) =>
       prev.includes(id) ? prev.filter((s) => s !== id) : [...prev, id]
     );
   }
 
-  // Salvar rascunho / progresso
-  function handleSave(showNotice = true) {
-    setServerError('');
-    setServerSuccess('');
-
+  // Salvar rascunho / progresso (retorna o ID salvo para uso interno)
+  async function doSave(): Promise<string | null> {
     const neighborhoods = neighborhoodsInput
       .split(',')
       .map((s) => s.trim())
       .filter(Boolean);
 
-    startTransition(async () => {
-      const payload: ProfessionalProfileInput = {
-        id: profileId,
-        displayName,
-        bio,
-        city,
-        state: state.toUpperCase(),
-        neighborhoods,
-        specialtyIds: selectedSpecialties,
-        whatsapp,
-        isWhatsappPublic,
-        phone,
-        isPhonePublic,
-        avatarUrl,
-      };
+    const payload: ProfessionalProfileInput = {
+      id: profileId,
+      displayName,
+      bio,
+      city,
+      state: state.toUpperCase(),
+      neighborhoods,
+      specialtyIds: selectedSpecialties,
+      whatsapp,
+      isWhatsappPublic,
+      phone,
+      isPhonePublic,
+      avatarUrl,
+    };
 
-      const res = await saveProfessionalProfile(payload);
-      if ('error' in res) {
-        setServerError(res.error);
-      } else {
-        if (res.data?.id) setProfileId(res.data.id);
-        if (showNotice) setServerSuccess(res.message ?? 'Perfil salvo com sucesso!');
-      }
+    const res = await saveProfessionalProfile(payload);
+    if ('error' in res) {
+      setServerError(res.error);
+      return null;
+    }
+    if (res.data?.id) {
+      setProfileId(res.data.id);
+      if (res.data.slug) setProfileSlug(res.data.slug);
+      return res.data.id;
+    }
+    return profileId ?? null;
+  }
+
+  function handleSaveDraft() {
+    setServerError('');
+    setServerSuccess('');
+    startTransition(async () => {
+      const id = await doSave();
+      if (id) setServerSuccess('Rascunho salvo com sucesso!');
     });
   }
 
-  // Ação Unificada de Publicar / Despublicar (Salva automaticamente todos os dados antes)
+  // Publicar: salva tudo e depois publica atomicamente
   function handleTogglePublish(targetState: boolean) {
     setServerError('');
     setServerSuccess('');
 
     startTransition(async () => {
-      let currentActiveId = profileId;
-
       if (targetState) {
-        // Validação preventiva imediata no cliente para feedback claro e amigável
+        // Validação preventiva amigável no cliente antes de qualquer chamada ao servidor
         if (!avatarUrl) {
-          setServerError('Adicione uma foto de perfil ou logotipo na Etapa 2 para publicar.');
+          setServerError('Adicione uma foto de perfil ou logotipo (Etapa 2) antes de publicar.');
           setCurrentStep(2);
           return;
         }
         if (!displayName || displayName.trim().length < 3) {
-          setServerError('Informe seu nome profissional ou comercial (mínimo 3 caracteres) na Etapa 2.');
+          setServerError('Informe seu nome profissional ou comercial com pelo menos 3 caracteres (Etapa 2).');
           setCurrentStep(2);
           return;
         }
         if (!bio || bio.trim().length < 80) {
-          setServerError('Sua apresentação profissional deve ter pelo menos 80 caracteres (aproximadamente 2 ou 3 frases sobre seus serviços e experiência) na Etapa 2.');
+          setServerError(`Sua apresentação profissional precisa de pelo menos 80 caracteres (você tem ${bio.trim().length}). Acesse a Etapa 2 para completar.`);
           setCurrentStep(2);
           return;
         }
-        if (!city || !state) {
-          setServerError('Informe sua cidade e estado de atendimento na Etapa 3.');
+        if (selectedSpecialties.length === 0) {
+          setServerError('Selecione pelo menos uma especialidade (Etapa 3).');
           setCurrentStep(3);
           return;
         }
-        if (selectedSpecialties.length === 0) {
-          setServerError('Selecione pelo menos uma especialidade na Etapa 3.');
+        if (!city || !state || state.length !== 2) {
+          setServerError('Informe sua cidade e estado de atendimento (Etapa 3).');
+          setCurrentStep(3);
+          return;
+        }
+        if (!neighborhoodsInput || neighborhoodsInput.trim().length === 0) {
+          setServerError('Informe ao menos um bairro ou região de atendimento (Etapa 3).');
           setCurrentStep(3);
           return;
         }
         if (!whatsapp || whatsapp.trim().length < 10) {
-          setServerError('Informe um número de WhatsApp válido com DDD na Etapa 4 para receber contatos.');
+          setServerError('Informe um número de WhatsApp válido com DDD (Etapa 4).');
           setCurrentStep(4);
+          return;
+        }
+        if (!isEmailConfirmed) {
+          setServerError('Confirme seu e-mail antes de publicar. Verifique sua caixa de entrada.');
           return;
         }
       }
 
-      // 1. Salvar os dados completos primeiro (garantindo persistência atômica)
-      const neighborhoods = neighborhoodsInput
-        .split(',')
-        .map((s) => s.trim())
-        .filter(Boolean);
+      // 1. Salvar todos os dados primeiro (garante que o banco está atualizado)
+      const savedId = await doSave();
+      if (!savedId) return; // doSave já setou o erro
 
-      const payload: ProfessionalProfileInput = {
-        id: currentActiveId,
-        displayName,
-        bio,
-        city,
-        state: state.toUpperCase(),
-        neighborhoods,
-        specialtyIds: selectedSpecialties,
-        whatsapp,
-        isWhatsappPublic: true, // Forçado como público para contato direto
-        phone,
-        isPhonePublic,
-        avatarUrl,
-      };
-
-      const saveRes = await saveProfessionalProfile(payload);
-      if ('error' in saveRes) {
-        setServerError(saveRes.error);
-        return;
-      }
-
-      if (saveRes.data?.id) {
-        currentActiveId = saveRes.data.id;
-        setProfileId(saveRes.data.id);
-      }
-
-      if (!currentActiveId) {
-        setServerError('Não foi possível identificar o perfil para publicação.');
-        return;
-      }
-
-      // 2. Executar a publicação oficial
-      const res = await togglePublishProfile(currentActiveId, targetState);
+      // 2. Publicar/despublicar com base no ID confirmado
+      const res = await togglePublishProfile(savedId, targetState);
       if ('error' in res) {
+        // Erro real do servidor — mostrar de forma clara sem confundir o usuário
         setServerError(res.error);
       } else {
         setIsPublished(targetState);
-        setServerSuccess(
-          targetState
-            ? '🎉 Parabéns! Seu perfil foi salvo e publicado com sucesso na vitrine!'
-            : 'Perfil despublicado. Ele não está mais visível no catálogo.'
-        );
+        if (targetState) {
+          setIsEditMode(false); // Volta para modo visualização após publicar
+          setServerSuccess('🎉 Parabéns! Seu perfil foi publicado e já está visível na vitrine!');
+        } else {
+          setServerSuccess('Perfil despublicado. Ele não está mais visível no catálogo.');
+        }
       }
     });
   }
 
+  // ─── MODO VISUALIZAÇÃO: Perfil já existe ─────────────────────────────────────
+  if (hasExistingProfile && !isEditMode) {
+    return (
+      <div className="space-y-6">
+        {/* Banner de status */}
+        <div className={`glass-panel rounded-2xl p-5 border flex items-center justify-between gap-4 ${
+          isPublished
+            ? 'border-emerald-500/30 bg-emerald-500/5'
+            : 'border-amber-500/30 bg-amber-500/5'
+        }`}>
+          <div className="flex items-center gap-3">
+            {isPublished ? (
+              <CheckCheck className="w-6 h-6 text-emerald-400 flex-shrink-0" />
+            ) : (
+              <AlertCircle className="w-6 h-6 text-amber-400 flex-shrink-0" />
+            )}
+            <div>
+              <p className={`font-bold text-sm ${isPublished ? 'text-emerald-300' : 'text-amber-300'}`}>
+                {isPublished ? 'Seu perfil está publicado e visível na vitrine!' : 'Perfil salvo como rascunho — não está visível ao público ainda.'}
+              </p>
+              <p className="text-xs text-slate-400 mt-0.5">
+                {isPublished
+                  ? 'Clientes já podem te encontrar no catálogo de profissionais.'
+                  : 'Complete os campos e clique em "Publicar" para aparecer no catálogo.'}
+              </p>
+            </div>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-2 flex-shrink-0">
+            {isPublished && profileSlug && (
+              <a
+                href={`/profissionais/${profileSlug}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-sky-500/15 text-sky-400 text-xs font-bold border border-sky-500/30 hover:bg-sky-500/25 transition"
+              >
+                <ExternalLink className="w-3.5 h-3.5" />
+                Ver Perfil Público
+              </a>
+            )}
+            <button
+              type="button"
+              onClick={() => { setIsEditMode(true); setServerError(''); setServerSuccess(''); }}
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-orange-500/15 text-orange-400 text-xs font-bold border border-orange-500/30 hover:bg-orange-500/25 transition"
+            >
+              <Edit3 className="w-3.5 h-3.5" />
+              Editar Perfil
+            </button>
+          </div>
+        </div>
+
+        {serverError && (
+          <div role="alert" className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+            <p>{serverError}</p>
+          </div>
+        )}
+        {serverSuccess && (
+          <div role="status" className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-sm flex items-start gap-3">
+            <CheckCircle2 className="w-5 h-5 flex-shrink-0 mt-0.5" />
+            <p>{serverSuccess}</p>
+          </div>
+        )}
+
+        {/* Resumo do perfil */}
+        <div className="glass-panel rounded-2xl p-6 border border-white/10 space-y-5">
+          <h2 className="text-lg font-black text-white">Resumo do seu Perfil</h2>
+
+          <div className="flex items-center gap-4 p-4 rounded-xl bg-black/20 border border-white/10">
+            <div className="w-16 h-16 rounded-2xl overflow-hidden bg-white/5 border border-white/20 flex-shrink-0 flex items-center justify-center">
+              {avatarUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+              ) : (
+                <User className="w-8 h-8 text-slate-500" />
+              )}
+            </div>
+            <div>
+              <p className="font-black text-white text-base">{displayName || '—'}</p>
+              <p className="text-xs text-orange-400 font-semibold mt-0.5">{city} • {state}</p>
+              {whatsapp && (
+                <p className="text-xs text-emerald-400 mt-0.5">📱 {whatsapp}</p>
+              )}
+            </div>
+          </div>
+
+          {bio && (
+            <div className="p-4 rounded-xl bg-black/20 border border-white/10">
+              <p className="text-xs font-bold text-slate-400 mb-1">Apresentação</p>
+              <p className="text-sm text-slate-200 leading-relaxed">{bio}</p>
+            </div>
+          )}
+
+          {selectedSpecialties.length > 0 && (
+            <div>
+              <p className="text-xs font-bold text-slate-400 mb-2">Especialidades ({selectedSpecialties.length})</p>
+              <div className="flex flex-wrap gap-2">
+                {CATEGORIES_CATALOG.flatMap(cat => cat.specialties)
+                  .filter(s => selectedSpecialties.includes(s.id))
+                  .map(s => (
+                    <span key={s.id} className="px-2.5 py-1 rounded-lg text-xs bg-orange-500/15 text-orange-300 border border-orange-500/20">
+                      {s.name}
+                    </span>
+                  ))}
+              </div>
+            </div>
+          )}
+
+          {neighborhoodsInput && (
+            <div>
+              <p className="text-xs font-bold text-slate-400 mb-1">Regiões atendidas</p>
+              <p className="text-sm text-slate-300">{neighborhoodsInput}</p>
+            </div>
+          )}
+        </div>
+
+        {/* Ação de despublicar */}
+        {isPublished && (
+          <div className="flex justify-end">
+            <button
+              type="button"
+              disabled={isPending}
+              onClick={() => handleTogglePublish(false)}
+              className="px-5 py-2.5 rounded-xl bg-amber-600/20 text-amber-400 border border-amber-500/30 text-sm font-bold hover:bg-amber-600/30 transition disabled:opacity-60"
+            >
+              {isPending ? 'Atualizando...' : 'Despublicar Perfil'}
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // ─── MODO EDIÇÃO / WIZARD ────────────────────────────────────────────────────
   return (
     <div className="space-y-8">
       {/* Barra de Progresso Superior */}
       <div className="glass-panel rounded-2xl p-6 border border-white/10">
+        {/* Botão de voltar ao resumo se já tem perfil */}
+        {hasExistingProfile && (
+          <button
+            type="button"
+            onClick={() => { setIsEditMode(false); setServerError(''); setServerSuccess(''); }}
+            className="mb-4 flex items-center gap-1.5 text-xs text-slate-400 hover:text-white transition"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            Voltar ao resumo do perfil
+          </button>
+        )}
+
         <div className="flex items-center justify-between gap-2 overflow-x-auto pb-2 sm:pb-0">
           {steps.map((st) => {
             const Icon = st.icon;
@@ -517,11 +654,11 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
             <button
               type="button"
               onClick={() => {
-                handleSave(false);
-                setCurrentStep(3);
+                startTransition(async () => { await doSave(); setCurrentStep(3); });
               }}
               className="btn-neon px-6 py-3 text-sm flex items-center gap-2"
             >
+              {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
               Próximo: Especialidades & Região
               <ArrowRight className="w-4 h-4" />
             </button>
@@ -543,13 +680,19 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <label className="block text-sm font-bold text-slate-200">
-                Selecione suas especialidades (mínimo 1 para publicar)
+                Selecione suas especialidades
               </label>
               <div className="flex gap-2">
                 <span className="text-xs px-2 py-0.5 rounded bg-orange-500/20 text-orange-400 font-bold">Obrigatório</span>
                 <span className="text-xs px-2 py-0.5 rounded bg-sky-500/20 text-sky-400 font-bold">Público</span>
               </div>
             </div>
+
+            {selectedSpecialties.length > 0 && (
+              <p className="text-xs text-emerald-400 font-medium">
+                ✓ {selectedSpecialties.length} especialidade{selectedSpecialties.length > 1 ? 's' : ''} selecionada{selectedSpecialties.length > 1 ? 's' : ''}
+              </p>
+            )}
 
             <div className="space-y-4 max-h-72 overflow-y-auto pr-2">
               {CATEGORIES_CATALOG.map((cat) => (
@@ -589,9 +732,12 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
           {/* Região: Cidade e Estado */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="sm:col-span-2 space-y-2">
-              <label htmlFor="city" className="block text-sm font-bold text-slate-200">
-                Cidade Base
-              </label>
+              <div className="flex items-center justify-between">
+                <label htmlFor="city" className="block text-sm font-bold text-slate-200">
+                  Cidade Base
+                </label>
+                <span className="text-xs px-2 py-0.5 rounded bg-orange-500/20 text-orange-400 font-bold">Obrigatório</span>
+              </div>
               <input
                 id="city"
                 type="text"
@@ -603,9 +749,12 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="state" className="block text-sm font-bold text-slate-200">
-                UF (Estado)
-              </label>
+              <div className="flex items-center justify-between">
+                <label htmlFor="state" className="block text-sm font-bold text-slate-200">
+                  UF (Estado)
+                </label>
+                <span className="text-xs px-2 py-0.5 rounded bg-orange-500/20 text-orange-400 font-bold">Obrigatório</span>
+              </div>
               <input
                 id="state"
                 type="text"
@@ -618,7 +767,7 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
             </div>
           </div>
 
-          {/* Bairros atendidos (NUNCA endereço residencial) */}
+          {/* Bairros atendidos */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <label htmlFor="neighborhoods" className="block text-sm font-bold text-slate-200">
@@ -652,11 +801,11 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
             <button
               type="button"
               onClick={() => {
-                handleSave(false);
-                setCurrentStep(4);
+                startTransition(async () => { await doSave(); setCurrentStep(4); });
               }}
               className="btn-neon px-6 py-3 text-sm flex items-center gap-2"
             >
+              {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
               Próximo: Contatos & Publicação
               <ArrowRight className="w-4 h-4" />
             </button>
@@ -670,7 +819,7 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
           <div>
             <h2 className="text-xl font-black text-white">Contatos e Publicação</h2>
             <p className="text-xs text-slate-400 mt-1">
-              Controle quais formas de contato você deseja exibir no seu perfil público.
+              Configure seu contato e publique seu perfil na vitrine.
             </p>
           </div>
 
@@ -693,7 +842,7 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
             />
             <p className="text-xs text-emerald-400/90 flex items-center gap-1.5">
               <Globe className="w-3.5 h-3.5" />
-              O botão de conversa direta no WhatsApp ficará sempre ativo no seu cartão público para clientes entrarem em contato com você sem intermediários.
+              O botão de conversa direta no WhatsApp ficará sempre ativo no seu cartão público.
             </p>
           </div>
 
@@ -727,36 +876,38 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
             </div>
           </div>
 
-            {/* Status dos Requisitos para Publicar */}
-            <div className="p-5 rounded-xl bg-white/5 border border-white/10 space-y-3">
-              <h3 className="text-sm font-bold text-white">Critérios para o perfil ficar visível no catálogo:</h3>
-              <ul className="space-y-2 text-xs">
-                <li className={`flex items-center gap-2 ${avatarUrl ? 'text-emerald-400' : 'text-slate-400'}`}>
-                  {avatarUrl ? '✓' : '○'} Foto de perfil ou logotipo ({avatarUrl ? 'Adicionada' : 'Pendente na Etapa 2'})
-                </li>
-                <li className={`flex items-center gap-2 ${displayName.length >= 3 ? 'text-emerald-400' : 'text-slate-400'}`}>
-                  {displayName.length >= 3 ? '✓' : '○'} Nome profissional preenchido ({displayName ? 'OK' : 'Pendente na Etapa 2'})
-                </li>
-                <li className={`flex items-center gap-2 ${bio.length >= 80 ? 'text-emerald-400' : 'text-slate-400'}`}>
-                  {bio.length >= 80 ? '✓' : '○'} Apresentação profissional com pelo menos 80 caracteres ({bio.length}/80)
-                </li>
-                <li className={`flex items-center gap-2 ${selectedSpecialties.length >= 1 ? 'text-emerald-400' : 'text-slate-400'}`}>
-                  {selectedSpecialties.length >= 1 ? '✓' : '○'} Ao menos 1 especialidade selecionada ({selectedSpecialties.length} selecionadas na Etapa 3)
-                </li>
-                <li className={`flex items-center gap-2 ${city && state ? 'text-emerald-400' : 'text-slate-400'}`}>
-                  {city && state ? '✓' : '○'} Cidade e UF preenchidos ({city}/{state})
-                </li>
-                <li className={`flex items-center gap-2 ${neighborhoodsInput.trim().length > 0 ? 'text-emerald-400' : 'text-slate-400'}`}>
-                  {neighborhoodsInput.trim().length > 0 ? '✓' : '○'} Bairros de atendimento definidos
-                </li>
-                <li className={`flex items-center gap-2 ${whatsapp.trim().length >= 10 ? 'text-emerald-400' : 'text-slate-400'}`}>
-                  {whatsapp.trim().length >= 10 ? '✓' : '○'} WhatsApp para contato direto com DDD ({whatsapp.trim().length >= 10 ? 'OK' : 'Pendente'})
-                </li>
-                <li className={`flex items-center gap-2 ${isEmailConfirmed ? 'text-emerald-400' : 'text-amber-400'}`}>
-                  {isEmailConfirmed ? '✓' : '⚠️'} E-mail confirmado ({isEmailConfirmed ? 'Confirmado' : 'Confirmação pendente na caixa de entrada'})
-                </li>
-              </ul>
-            </div>
+          {/* Checklist de requisitos */}
+          <div className="p-5 rounded-xl bg-white/5 border border-white/10 space-y-3">
+            <h3 className="text-sm font-bold text-white">
+              {publishReady ? '✅ Tudo pronto para publicar!' : 'Critérios para aparecer na vitrine:'}
+            </h3>
+            <ul className="space-y-2 text-xs">
+              <li className={`flex items-center gap-2 ${avatarUrl ? 'text-emerald-400' : 'text-slate-400'}`}>
+                {avatarUrl ? '✓' : '○'} Foto de perfil {avatarUrl ? '— OK' : '— Pendente na Etapa 2'}
+              </li>
+              <li className={`flex items-center gap-2 ${displayName.length >= 3 ? 'text-emerald-400' : 'text-slate-400'}`}>
+                {displayName.length >= 3 ? '✓' : '○'} Nome profissional {displayName.length >= 3 ? '— OK' : '— Pendente na Etapa 2'}
+              </li>
+              <li className={`flex items-center gap-2 ${bio.length >= 80 ? 'text-emerald-400' : 'text-slate-400'}`}>
+                {bio.length >= 80 ? '✓' : '○'} Apresentação profissional ({bio.length}/80 caracteres) {bio.length >= 80 ? '— OK' : `— faltam ${80 - bio.length} na Etapa 2`}
+              </li>
+              <li className={`flex items-center gap-2 ${selectedSpecialties.length >= 1 ? 'text-emerald-400' : 'text-slate-400'}`}>
+                {selectedSpecialties.length >= 1 ? '✓' : '○'} Especialidades ({selectedSpecialties.length} selecionadas) {selectedSpecialties.length >= 1 ? '— OK' : '— Pendente na Etapa 3'}
+              </li>
+              <li className={`flex items-center gap-2 ${city && state.length === 2 ? 'text-emerald-400' : 'text-slate-400'}`}>
+                {city && state.length === 2 ? '✓' : '○'} Cidade e UF {city && state.length === 2 ? `— ${city}/${state}` : '— Pendente na Etapa 3'}
+              </li>
+              <li className={`flex items-center gap-2 ${neighborhoodsInput.trim().length > 0 ? 'text-emerald-400' : 'text-slate-400'}`}>
+                {neighborhoodsInput.trim().length > 0 ? '✓' : '○'} Bairros de atendimento {neighborhoodsInput.trim().length > 0 ? '— OK' : '— Pendente na Etapa 3'}
+              </li>
+              <li className={`flex items-center gap-2 ${whatsapp.trim().length >= 10 ? 'text-emerald-400' : 'text-slate-400'}`}>
+                {whatsapp.trim().length >= 10 ? '✓' : '○'} WhatsApp com DDD {whatsapp.trim().length >= 10 ? '— OK' : '— Pendente acima'}
+              </li>
+              <li className={`flex items-center gap-2 ${isEmailConfirmed ? 'text-emerald-400' : 'text-amber-400'}`}>
+                {isEmailConfirmed ? '✓' : '⚠️'} E-mail confirmado {isEmailConfirmed ? '— OK' : '— Verifique sua caixa de entrada'}
+              </li>
+            </ul>
+          </div>
 
           {/* Botões de Ação Final */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-white/10">
@@ -775,7 +926,7 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
                 className="px-5 py-2.5 rounded-xl border border-sky-500/30 text-sky-400 text-sm font-semibold hover:bg-sky-500/10 flex items-center gap-2"
               >
                 <Eye className="w-4 h-4" />
-                Pré-visualizar Perfil
+                Pré-visualizar
               </button>
             </div>
 
@@ -783,10 +934,10 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
               <button
                 type="button"
                 disabled={isPending}
-                onClick={() => handleSave(true)}
-                className="px-5 py-2.5 rounded-xl border border-white/20 text-white text-sm font-bold hover:bg-white/10 transition"
+                onClick={handleSaveDraft}
+                className="px-5 py-2.5 rounded-xl border border-white/20 text-white text-sm font-bold hover:bg-white/10 transition disabled:opacity-60"
               >
-                Salvar Rascunho
+                {isPending ? 'Salvando...' : 'Salvar Rascunho'}
               </button>
 
               {isPublished ? (
@@ -796,17 +947,22 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
                   onClick={() => handleTogglePublish(false)}
                   className="px-6 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-sm font-black transition disabled:opacity-60"
                 >
-                  {isPending ? 'Atualizando...' : 'Despublicar Perfil'}
+                  {isPending ? 'Atualizando...' : 'Despublicar'}
                 </button>
               ) : (
                 <button
                   type="button"
-                  disabled={isPending}
+                  disabled={isPending || !publishReady}
                   onClick={() => handleTogglePublish(true)}
-                  className="btn-neon px-6 py-2.5 text-sm flex items-center gap-2 disabled:opacity-60"
+                  title={!publishReady ? 'Complete todos os campos obrigatórios acima para publicar' : ''}
+                  className={`px-6 py-2.5 text-sm flex items-center gap-2 rounded-xl font-black transition disabled:opacity-60 ${
+                    publishReady
+                      ? 'btn-neon'
+                      : 'bg-slate-700 text-slate-400 border border-white/10 cursor-not-allowed'
+                  }`}
                 >
                   {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Globe className="w-4 h-4" />}
-                  Publicar no Catálogo
+                  {isPending ? 'Publicando...' : publishReady ? 'Publicar no Catálogo' : 'Complete os campos acima'}
                 </button>
               )}
             </div>
@@ -866,8 +1022,7 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
                 {bio || 'Sua apresentação profissional aparecerá aqui para os clientes que acessarem seu perfil.'}
               </p>
 
-              {/* Botão de contato simulado */}
-              {isWhatsappPublic && whatsapp && (
+              {whatsapp && (
                 <div className="pt-2">
                   <div className="btn-neon w-full py-3 text-center text-sm font-bold flex items-center justify-center gap-2">
                     <Globe className="w-4 h-4" />
@@ -876,7 +1031,6 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
                 </div>
               )}
 
-              {/* Aviso Legal Obrigatório do Perfil Público */}
               <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-[11px] text-slate-400 leading-relaxed">
                 Este perfil é publicado pelo anunciante. A presença na plataforma não representa garantia da qualidade, prazo ou resultado do serviço.
               </div>

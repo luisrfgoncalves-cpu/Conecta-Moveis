@@ -351,3 +351,63 @@ export async function getStorageAndDatabaseUsage(): Promise<{
   };
 }
 
+export async function adminDeleteProfile(
+  profileId: string
+): Promise<{ success: boolean; error?: string }> {
+  const { user, role } = await getAdminUserRole();
+  if (!user || role !== 'admin') return { success: false, error: 'Acesso restrito ao administrador.' };
+
+  const admin = getAdminClient();
+
+  const { data: current } = await admin
+    .from('professional_profiles')
+    .select('display_name, slug')
+    .eq('id', profileId)
+    .single();
+
+  const { error } = await admin
+    .from('professional_profiles')
+    .delete()
+    .eq('id', profileId);
+
+  if (error) return { success: false, error: 'Erro ao excluir perfil permanentemente.' };
+
+  await recordAdminLog({
+    adminId: user.id,
+    action: 'delete_profile',
+    targetTable: 'professional_profiles',
+    targetId: profileId,
+    reason: 'Exclusão definitiva solicitada pelo administrador',
+    oldValue: current,
+  });
+
+  return { success: true };
+}
+
+export async function adminSetPublished(
+  profileId: string,
+  published: boolean
+): Promise<{ success: boolean; error?: string }> {
+  const { user, role } = await getAdminUserRole();
+  if (!user || !role) return { success: false, error: 'Acesso negado.' };
+
+  const admin = getAdminClient();
+
+  const { error } = await admin
+    .from('professional_profiles')
+    .update({ is_published: published })
+    .eq('id', profileId);
+
+  if (error) return { success: false, error: 'Erro ao alterar status de publicação.' };
+
+  await recordAdminLog({
+    adminId: user.id,
+    action: published ? 'publish_profile' : 'unpublish_profile',
+    targetTable: 'professional_profiles',
+    targetId: profileId,
+    reason: `Publicação alterada para ${published ? 'publicado' : 'despublicado'} pelo administrador`,
+  });
+
+  return { success: true };
+}
+

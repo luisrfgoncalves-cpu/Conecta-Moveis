@@ -227,6 +227,18 @@ export async function togglePublishProfile(
     // Validar critérios obrigatórios mínimos antes de permitir a publicação
     const typedProfile = profile as typeof profile & { service_regions?: { neighborhoods?: string[] }[] };
     const rawNeighborhoods = typedProfile.service_regions?.[0]?.neighborhoods || [];
+    
+    // Buscar avatar na tabela profiles caso não esteja em professional_profiles
+    let effectiveAvatar = profile.avatar_url;
+    if (!effectiveAvatar) {
+      const { data: userProfile } = await supabase
+        .from('profiles')
+        .select('avatar_url')
+        .eq('id', user.id)
+        .single();
+      effectiveAvatar = userProfile?.avatar_url ?? '';
+    }
+
     const validation = publishValidationSchema.safeParse({
       displayName: profile.display_name,
       bio: profile.bio ?? '',
@@ -235,7 +247,7 @@ export async function togglePublishProfile(
       neighborhoods: rawNeighborhoods,
       specialtyIds: profile.profile_specialties?.map((s: { specialty_id: string }) => s.specialty_id) ?? [],
       whatsapp: profile.whatsapp ?? '',
-      avatarUrl: profile.avatar_url ?? '',
+      avatarUrl: effectiveAvatar ?? '',
       emailConfirmed: !!user.email_confirmed_at,
     });
 
