@@ -83,7 +83,10 @@ export async function searchProfessionals(filters: SearchFilters): Promise<Searc
 
   // 3. Filtro por Cidade
   if (filters.cidade && filters.cidade.trim().length > 0) {
-    query = query.ilike('city', `%${filters.cidade.trim()}%`);
+    const rawCity = filters.cidade.trim();
+    // Se digitou sem acento (ex: jundiai), normaliza para o nome oficial com acento se for Jundiaí
+    const normalizedCity = rawCity.toLowerCase() === 'jundiai' ? 'Jundiaí' : rawCity;
+    query = query.ilike('city', `%${normalizedCity}%`);
   }
 
   // 4. Filtro por Categoria ou Especialidade

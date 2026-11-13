@@ -269,7 +269,7 @@ export async function togglePublishProfile(
     }
   }
 
-  const { error } = await supabase
+  const { error } = await admin
     .from('professional_profiles')
     .update({ is_published: targetPublishState })
     .eq('id', profileId)
@@ -280,6 +280,9 @@ export async function togglePublishProfile(
   }
 
   revalidatePath('/painel/perfil');
+  revalidatePath('/painel');
+  revalidatePath('/encontrar-profissionais');
+  revalidatePath('/');
   return {
     success: true,
     data: { isPublished: targetPublishState },
