@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
@@ -10,7 +11,6 @@ import {
   Sparkles,
   Clock,
   Phone,
-  MessageCircle,
   AlertTriangle,
   Star,
   CheckCircle2,
@@ -23,6 +23,8 @@ import { ShareButton } from '@/components/share/ShareButton';
 import { ReportButton } from '@/components/reports/ReportButton';
 import { ContactForm } from '@/components/contact/ContactForm';
 import { WhatsAppTracker } from '@/components/contact/WhatsAppTracker';
+import { ReviewsSection } from '@/components/reviews/ReviewsSection';
+import { getProfileReviews, checkReviewEligibility } from '@/lib/reviews/actions';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -69,6 +71,11 @@ export default async function ProfissionalPublicPage({ params }: PageProps) {
   const { data: { user } } = await supabase.auth.getUser();
   const isLoggedIn = !!user;
   const favStatus = user ? await isFavorite(professional.id) : false;
+
+  // Avaliações e elegibilidade
+  const { reviews, stats } = await getProfileReviews(professional.id);
+  const eligibility = user ? await checkReviewEligibility(professional.id) : { eligible: false, reason: 'Faça login para avaliar.' };
+  const isOwner = user ? user.id === (professional as any).user_id : false;
 
   const profileUrl = `${process.env.NEXT_PUBLIC_SITE_URL ?? 'https://conecta-moveis.vercel.app'}/profissionais/${slug}`;
 
@@ -336,26 +343,18 @@ export default async function ProfissionalPublicPage({ params }: PageProps) {
           </div>
         )}
 
-        {/* Seção de Avaliações */}
-        <div className="space-y-3 pt-2 border-t border-white/10">
-          <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-            <Star className="w-4 h-4 text-amber-400" />
-            Avaliações e Reputação
-          </h2>
-          <div className="p-5 rounded-2xl bg-white/5 border border-white/10 text-center relative">
-            <p className="text-sm font-semibold text-slate-300">Sem avaliações ainda</p>
-            <p className="text-xs text-slate-400 mt-1">
-              As avaliações serão liberadas após a conclusão de serviços comprovados através da plataforma.
-            </p>
-            <div className="mt-3 flex justify-center">
-              <ReportButton
-                targetType="review"
-                targetId={professional.id}
-                isLoggedIn={isLoggedIn}
-              />
-            </div>
-          </div>
-        </div>
+        {/* Seção de Avaliações Reais */}
+        <ReviewsSection
+          profileId={professional.id}
+          professionalName={professional.display_name}
+          initialReviews={reviews}
+          initialStats={stats}
+          isLoggedIn={isLoggedIn}
+          eligible={eligibility.eligible}
+          contactRequestId={eligibility.contactRequestId}
+          eligibilityReason={eligibility.reason}
+          isOwner={isOwner}
+        />
       </div>
 
       {/* Formulário de Solicitação de Contato */}

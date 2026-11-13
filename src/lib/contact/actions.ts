@@ -3,7 +3,6 @@
 
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';
-import { headers } from 'next/headers';
 import { contactRequestSchema, type ContactRequestInput } from './schemas';
 
 // ===== Rate limit helper =====
