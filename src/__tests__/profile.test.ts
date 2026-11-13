@@ -84,7 +84,7 @@ describe('professionalProfileSchema', () => {
     city: 'Jundiaí',
     state: 'SP',
     neighborhoods: ['Centro', 'Vila Arens'],
-    specialtyIds: ['s1111111-1111-1111-1111-111111111111'],
+    specialtyIds: ['aa111111-1111-1111-1111-111111111111'],
     whatsapp: '11999998888',
     isWhatsappPublic: true,
   };

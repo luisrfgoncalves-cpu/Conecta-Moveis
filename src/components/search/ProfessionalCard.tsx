@@ -134,3 +134,4 @@ export function ProfessionalCard({ professional }: ProfessionalCardProps) {
     </div>
   );
 }
+

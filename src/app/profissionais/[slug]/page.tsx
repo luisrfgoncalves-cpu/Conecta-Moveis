@@ -255,6 +255,50 @@ export default async function ProfissionalPublicPage({ params }: PageProps) {
           </div>
         )}
 
+        {/* Galeria de Portfólio — Apenas imagens approved, carregamento preguiçoso */}
+        {professional.portfolio && professional.portfolio.length > 0 && (
+          <div className="space-y-5 pt-2 border-t border-white/10">
+            <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
+              <Star className="w-4 h-4 text-orange-400" />
+              Portfólio de Projetos ({professional.portfolio.length} {professional.portfolio.length === 1 ? 'projeto' : 'projetos'})
+            </h2>
+            <div className="space-y-6">
+              {professional.portfolio.map((portfolioItem) => (
+                <div key={portfolioItem.id} className="space-y-3">
+                  <div>
+                    <h3 className="text-sm font-bold text-white">{portfolioItem.title}</h3>
+                    {portfolioItem.description && (
+                      <p className="text-xs text-slate-400 mt-0.5 leading-relaxed">{portfolioItem.description}</p>
+                    )}
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    {portfolioItem.images.map((img, imgIdx) => (
+                      <div key={img.id} className="relative aspect-square rounded-xl overflow-hidden bg-slate-900 border border-white/10 group">
+                        <Image
+                          src={img.thumb_url || img.image_url}
+                          alt={`${portfolioItem.title} — foto ${imgIdx + 1}`}
+                          fill
+                          className="object-cover transition group-hover:scale-105"
+                          loading="lazy"
+                          sizes="(max-width: 640px) 50vw, 33vw"
+                        />
+                        {img.is_demo && (
+                          <div className="absolute bottom-2 left-2">
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-purple-500/90 text-white backdrop-blur-md">
+                              <Sparkles className="w-2.5 h-2.5" />
+                              Demonstração
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Seção de Avaliações */}
         <div className="space-y-3 pt-2 border-t border-white/10">
           <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
@@ -272,3 +316,4 @@ export default async function ProfissionalPublicPage({ params }: PageProps) {
     </div>
   );
 }
+

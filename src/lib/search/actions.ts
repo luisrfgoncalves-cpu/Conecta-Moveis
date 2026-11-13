@@ -1,4 +1,20 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createClient } from '@/lib/supabase/server';
+
+export interface PublicPortfolioImage {
+  id: string;
+  image_url: string;
+  thumb_url: string | null;
+  sort_order: number;
+  is_demo: boolean;
+}
+
+export interface PublicPortfolioItem {
+  id: string;
+  title: string;
+  description: string | null;
+  images: PublicPortfolioImage[];
+}
 
 export interface PublicProfessional {
   id: string;
@@ -16,6 +32,7 @@ export interface PublicProfessional {
   company_slug: string | null;
   specialties?: { id: string; name: string; slug: string; category_slug?: string }[];
   service_regions?: { city: string; state: string; neighborhood: string | null }[];
+  portfolio?: PublicPortfolioItem[];
 }
 
 export interface SearchFilters {
@@ -246,6 +263,39 @@ export async function getPublicProfessionalBySlug(slug: string): Promise<PublicP
     .select('city, state, neighborhood')
     .eq('profile_id', data.id);
 
+  // Buscar portfólio público — apenas imagens aprovadas
+  const { data: portfolioItems } = await supabase
+    .from('portfolio_items')
+    .select(`
+      id,
+      title,
+      description,
+      portfolio_images!inner(id, image_url, thumb_url, sort_order, is_demo, status)
+    `)
+    .eq('profile_id', data.id);
+
+  const portfolio: PublicPortfolioItem[] = (portfolioItems || [])
+    .map((item) => {
+      const rawImages = Array.isArray(item.portfolio_images) ? item.portfolio_images : [];
+      const approvedImages = rawImages
+        .filter((img: any) => img.status === 'approved')
+        .sort((a: any, b: any) => a.sort_order - b.sort_order)
+        .map((img: any) => ({
+          id: img.id,
+          image_url: img.image_url,
+          thumb_url: img.thumb_url,
+          sort_order: img.sort_order,
+          is_demo: img.is_demo,
+        }));
+      return {
+        id: item.id,
+        title: item.title,
+        description: item.description,
+        images: approvedImages,
+      };
+    })
+    .filter((item) => item.images.length > 0);
+
   return {
     id: data.id,
     display_name: data.display_name,
@@ -262,6 +312,7 @@ export async function getPublicProfessionalBySlug(slug: string): Promise<PublicP
     company_slug: data.company_slug,
     specialties,
     service_regions: regions || [],
+    portfolio,
   };
 }
 

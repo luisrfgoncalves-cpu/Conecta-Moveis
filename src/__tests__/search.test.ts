@@ -337,6 +337,12 @@ describe('FASE 6 — Descoberta, Categorias, Busca e Perfil Público', () => {
               }),
             };
           }
+          if (table === 'portfolio_items') {
+            return {
+              select: vi.fn().mockReturnThis(),
+              eq: vi.fn().mockResolvedValue({ data: [], error: null }),
+            };
+          }
           return {};
         }),
       };

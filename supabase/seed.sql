@@ -17,15 +17,15 @@ ON CONFLICT (slug) DO NOTHING;
 -- 2. Inserir Especialidades Oficiais com UUIDs válidos
 INSERT INTO public.specialties (id, category_id, name, slug) VALUES
   -- Montador de Móveis
-  ('s1111111-1111-1111-1111-111111111111', 'c1111111-1111-1111-1111-111111111111', 'Móveis Modulados', 'moveis-modulados'),
-  ('s2222222-2222-2222-2222-222222222222', 'c1111111-1111-1111-1111-111111111111', 'Montagem de Guarda-Roupas', 'montagem-guarda-roupas'),
+  ('aa111111-1111-1111-1111-111111111111', 'c1111111-1111-1111-1111-111111111111', 'Móveis Modulados', 'moveis-modulados'),
+  ('aa222222-2222-2222-2222-222222222222', 'c1111111-1111-1111-1111-111111111111', 'Montagem de Guarda-Roupas', 'montagem-guarda-roupas'),
   ('f9daf344-c2f8-42b5-b1b0-a57b20aa2261', 'c1111111-1111-1111-1111-111111111111', 'Cozinhas Planejadas', 'cozinhas-planejadas'),
   ('e348fa49-f521-4007-af18-04508e7a8849', 'c1111111-1111-1111-1111-111111111111', 'Desmontagem e Mudança', 'desmontagem-mudanca'),
   ('269834ba-9fb5-48d5-aed0-ffaa12fff7c3', 'c1111111-1111-1111-1111-111111111111', 'Regulagem de Portas e Gavetas', 'regulagem-portas'),
 
   -- Marceneiro
-  ('s3333333-3333-3333-3333-333333333333', 'c2222222-2222-2222-2222-222222222222', 'Cozinhas Sob Medida', 'cozinhas-sob-medida'),
-  ('s4444444-4444-4444-4444-444444444444', 'c2222222-2222-2222-2222-222222222222', 'Painéis Ripados', 'paineis-ripados'),
+  ('bb333333-3333-3333-3333-333333333333', 'c2222222-2222-2222-2222-222222222222', 'Cozinhas Sob Medida', 'cozinhas-sob-medida'),
+  ('bb444444-4444-4444-4444-444444444444', 'c2222222-2222-2222-2222-222222222222', 'Painéis Ripados', 'paineis-ripados'),
   ('e360794a-1a41-44d2-8e42-7dcc96423741', 'c2222222-2222-2222-2222-222222222222', 'Closets e Dormitórios', 'closets-dormitorios'),
   ('b041fb35-79ff-4aaa-ae15-3508ea39279e', 'c2222222-2222-2222-2222-222222222222', 'Móveis para Banheiro', 'moveis-banheiro'),
   ('8fb1a1b6-9dd9-4820-9b0b-ab124126791e', 'c2222222-2222-2222-2222-222222222222', 'Restauração de Madeira', 'restauracao-madeira'),
@@ -46,7 +46,7 @@ INSERT INTO public.specialties (id, category_id, name, slug) VALUES
   ('f842745b-46c9-4f0a-aebf-60c612e16e6f', 'c5555555-5555-5555-5555-555555555555', 'Planta Técnica de Fabricação', 'planta-tecnica'),
 
   -- Parceiros Complementares
-  ('s5555555-5555-5555-5555-555555555555', 'c6666666-6666-6666-6666-666666666666', 'LED em Móveis', 'led-em-moveis'),
+  ('cc555555-5555-5555-5555-555555555555', 'c6666666-6666-6666-6666-666666666666', 'LED em Móveis', 'led-em-moveis'),
   ('bafcfa28-e3ae-491b-9da0-b6cb373860d0', 'c6666666-6666-6666-6666-666666666666', 'Vidraçaria / Portas de Alumínio', 'vidracaria-portas'),
   ('e8208d57-470e-45e9-9eb2-37bd726315ab', 'c6666666-6666-6666-6666-666666666666', 'Serralheria para Móveis', 'serralheria-moveis'),
   ('72ef8580-097b-411f-874a-b3312c3f2bbc', 'c6666666-6666-6666-6666-666666666666', 'Transporte e Frete Dedicado', 'transporte-moveis')
