@@ -206,8 +206,8 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
           setCurrentStep(2);
           return;
         }
-        if (!bio || bio.trim().length < 20) {
-          setServerError('Sua apresentação profissional deve ter pelo menos 20 caracteres na Etapa 2.');
+        if (!bio || bio.trim().length < 80) {
+          setServerError('Sua apresentação profissional deve ter pelo menos 80 caracteres (aproximadamente 2 ou 3 frases sobre seus serviços e experiência) na Etapa 2.');
           setCurrentStep(2);
           return;
         }
@@ -492,12 +492,16 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
               rows={4}
               value={bio}
               onChange={(e) => setBio(e.target.value)}
-              placeholder="Descreva sua experiência, ferramentas, tipos de móveis que atende e diferenciais de pontualidade e acabamento..."
-              className="w-full bg-black/30 border border-white/20 rounded-xl p-4 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500/50 resize-none text-sm"
+              placeholder="Ex: Atuo há mais de 6 anos com montagem e desmontagem de móveis modulados, planejados e convencionais em Jundiaí e região. Possuo ferramentas próprias completas, prezando por pontualidade, organização e fino acabamento."
+              className="w-full bg-black/30 border border-white/20 rounded-xl p-4 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500/50 resize-none text-sm leading-relaxed"
             />
-            <div className="flex justify-between text-xs text-slate-400">
-              <span>Mínimo 20 caracteres para publicar</span>
-              <span>{bio.length}/600</span>
+            <div className="flex justify-between items-center text-xs">
+              <span className={`font-medium ${bio.length >= 80 ? 'text-emerald-400' : 'text-amber-400'}`}>
+                {bio.length >= 80
+                  ? '✓ Tamanho ideal atingido'
+                  : `Mínimo de 80 caracteres para publicar (faltam ${Math.max(0, 80 - bio.length)})`}
+              </span>
+              <span className="text-slate-400">{bio.length}/800</span>
             </div>
           </div>
 
@@ -723,27 +727,36 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
             </div>
           </div>
 
-          {/* Status dos Requisitos para Publicar */}
-          <div className="p-5 rounded-xl bg-white/5 border border-white/10 space-y-3">
-            <h3 className="text-sm font-bold text-white">Critérios para o perfil ficar visível no catálogo:</h3>
-            <ul className="space-y-2 text-xs">
-              <li className={`flex items-center gap-2 ${displayName.length >= 3 ? 'text-emerald-400' : 'text-slate-400'}`}>
-                {displayName.length >= 3 ? '✓' : '○'} Nome profissional preenchido ({displayName ? 'OK' : 'Pendente'})
-              </li>
-              <li className={`flex items-center gap-2 ${bio.length >= 20 ? 'text-emerald-400' : 'text-slate-400'}`}>
-                {bio.length >= 20 ? '✓' : '○'} Descrição com pelo menos 20 caracteres ({bio.length}/20)
-              </li>
-              <li className={`flex items-center gap-2 ${selectedSpecialties.length >= 1 ? 'text-emerald-400' : 'text-slate-400'}`}>
-                {selectedSpecialties.length >= 1 ? '✓' : '○'} Ao menos 1 especialidade selecionada ({selectedSpecialties.length} selecionadas)
-              </li>
-              <li className={`flex items-center gap-2 ${city && state ? 'text-emerald-400' : 'text-slate-400'}`}>
-                {city && state ? '✓' : '○'} Cidade e UF preenchidos ({city}/{state})
-              </li>
-              <li className={`flex items-center gap-2 ${isEmailConfirmed ? 'text-emerald-400' : 'text-amber-400'}`}>
-                {isEmailConfirmed ? '✓' : '⚠️'} E-mail confirmado ({isEmailConfirmed ? 'Confirmado' : 'Confirmação pendente na caixa de entrada'})
-              </li>
-            </ul>
-          </div>
+            {/* Status dos Requisitos para Publicar */}
+            <div className="p-5 rounded-xl bg-white/5 border border-white/10 space-y-3">
+              <h3 className="text-sm font-bold text-white">Critérios para o perfil ficar visível no catálogo:</h3>
+              <ul className="space-y-2 text-xs">
+                <li className={`flex items-center gap-2 ${avatarUrl ? 'text-emerald-400' : 'text-slate-400'}`}>
+                  {avatarUrl ? '✓' : '○'} Foto de perfil ou logotipo ({avatarUrl ? 'Adicionada' : 'Pendente na Etapa 2'})
+                </li>
+                <li className={`flex items-center gap-2 ${displayName.length >= 3 ? 'text-emerald-400' : 'text-slate-400'}`}>
+                  {displayName.length >= 3 ? '✓' : '○'} Nome profissional preenchido ({displayName ? 'OK' : 'Pendente na Etapa 2'})
+                </li>
+                <li className={`flex items-center gap-2 ${bio.length >= 80 ? 'text-emerald-400' : 'text-slate-400'}`}>
+                  {bio.length >= 80 ? '✓' : '○'} Apresentação profissional com pelo menos 80 caracteres ({bio.length}/80)
+                </li>
+                <li className={`flex items-center gap-2 ${selectedSpecialties.length >= 1 ? 'text-emerald-400' : 'text-slate-400'}`}>
+                  {selectedSpecialties.length >= 1 ? '✓' : '○'} Ao menos 1 especialidade selecionada ({selectedSpecialties.length} selecionadas na Etapa 3)
+                </li>
+                <li className={`flex items-center gap-2 ${city && state ? 'text-emerald-400' : 'text-slate-400'}`}>
+                  {city && state ? '✓' : '○'} Cidade e UF preenchidos ({city}/{state})
+                </li>
+                <li className={`flex items-center gap-2 ${neighborhoodsInput.trim().length > 0 ? 'text-emerald-400' : 'text-slate-400'}`}>
+                  {neighborhoodsInput.trim().length > 0 ? '✓' : '○'} Bairros de atendimento definidos
+                </li>
+                <li className={`flex items-center gap-2 ${whatsapp.trim().length >= 10 ? 'text-emerald-400' : 'text-slate-400'}`}>
+                  {whatsapp.trim().length >= 10 ? '✓' : '○'} WhatsApp para contato direto com DDD ({whatsapp.trim().length >= 10 ? 'OK' : 'Pendente'})
+                </li>
+                <li className={`flex items-center gap-2 ${isEmailConfirmed ? 'text-emerald-400' : 'text-amber-400'}`}>
+                  {isEmailConfirmed ? '✓' : '⚠️'} E-mail confirmado ({isEmailConfirmed ? 'Confirmado' : 'Confirmação pendente na caixa de entrada'})
+                </li>
+              </ul>
+            </div>
 
           {/* Botões de Ação Final */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-white/10">

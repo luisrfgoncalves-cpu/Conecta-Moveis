@@ -107,8 +107,8 @@ export const professionalProfileSchema = z.object({
     .max(80, 'Nome profissional muito longo'),
   bio: z
     .string()
-    .min(20, 'Descrição profissional deve ter pelo menos 20 caracteres')
-    .max(600, 'Descrição profissional pode ter no máximo 600 caracteres'),
+    .min(80, 'Apresentação profissional deve ter pelo menos 80 caracteres para detalhar seus diferenciais e serviços')
+    .max(800, 'Apresentação profissional pode ter no máximo 800 caracteres'),
   city: z
     .string()
     .min(2, 'Informe a cidade de atuação')
@@ -143,7 +143,7 @@ export const professionalProfileSchema = z.object({
 // Schema de publicação do perfil (critérios mínimos obrigatórios para vitrine de alto nível)
 export const publishValidationSchema = z.object({
   displayName: z.string().min(3, 'Nome profissional obrigatório'),
-  bio: z.string().min(20, 'Descrição profissional deve ter pelo menos 20 caracteres'),
+  bio: z.string().min(80, 'Apresentação profissional deve ter pelo menos 80 caracteres para detalhar seus diferenciais e serviços'),
   city: z.string().min(2, 'Cidade de atuação obrigatória'),
   state: z.string().length(2, 'Estado (UF) obrigatório'),
   neighborhoods: z.array(z.string()).min(1, 'Informe ao menos 1 bairro ou região de atendimento'),

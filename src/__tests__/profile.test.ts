@@ -100,10 +100,10 @@ describe('professionalProfileSchema', () => {
     expect(res.error?.issues[0].message).toMatch(/3 caracteres/);
   });
 
-  it('rejeita bio curta com menos de 20 caracteres', () => {
-    const res = professionalProfileSchema.safeParse({ ...validData, bio: 'Sou montador' });
+  it('rejeita bio curta com menos de 80 caracteres', () => {
+    const res = professionalProfileSchema.safeParse({ ...validData, bio: 'Sou montador de móveis em Jundiaí e região.' });
     expect(res.success).toBe(false);
-    expect(res.error?.issues[0].message).toMatch(/20 caracteres/);
+    expect(res.error?.issues[0].message).toMatch(/80 caracteres/);
   });
 
   it('rejeita perfil sem ao menos 1 especialidade selecionada', () => {
@@ -192,7 +192,7 @@ describe('Isolamento de Perfil e Proteção de Papéis / Status', () => {
     // Um atacante tentando passar is_suspended: false ou is_featured: true via JSON
     const maliciousInput = {
       displayName: 'Hacker',
-      bio: 'Tentativa de escalada de privilégios para destaque gratuito na vitrine.',
+      bio: 'Tentativa de escalada de privilégios para destaque gratuito na vitrine do sistema de forma maliciosa.',
       city: 'Jundiaí',
       state: 'SP',
       specialtyIds: ['spec-1'],
