@@ -19,6 +19,7 @@ const adminNav = [
   { href: '/admin/avaliacoes', label: 'Avaliações', icon: Star },
   { href: '/admin/categorias', label: 'Categorias', icon: Tag },
   { href: '/admin/planos', label: 'Planos', icon: CreditCard },
+  { href: '/admin/assinaturas', label: 'Assinaturas', icon: CreditCard },
   { href: '/admin/logs', label: 'Logs de auditoria', icon: FileText },
 ];
 

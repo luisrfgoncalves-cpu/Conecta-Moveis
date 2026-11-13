@@ -397,7 +397,6 @@ describe('FASE 9 — Avaliações e Moderação de Conteúdo', () => {
     it('permite resposta apenas pelo dono do perfil avaliado', async () => {
       const { replyToReview } = await import('@/lib/reviews/actions');
 
-      const currentUserId = 'client-user-uuid-000000000001';
       const reviewMock = {
         select: vi.fn().mockReturnThis(),
         eq: vi.fn().mockReturnThis(),
