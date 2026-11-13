@@ -6,6 +6,7 @@ import { revalidatePath } from 'next/cache';
 import { createClient } from '@/lib/supabase/server';
 import { PORTFOLIO_CONFIG, runAutoModerationExtension } from './config';
 import { processPortfolioImage } from './processor';
+import { getEntitlements } from '@/lib/plans/actions';
 
 export interface PortfolioItemWithImages {
   id: string;
@@ -155,15 +156,18 @@ export async function getMyPortfolioData(): Promise<{
     return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
   };
 
+  const entitlements = await getEntitlements(user.id);
+  const maxPhotos = entitlements.maxPhotos;
+
   return {
     profileId: profile.id,
     items,
     storage: {
       totalPhotos,
-      maxPhotos: PORTFOLIO_CONFIG.MAX_PHOTOS_PER_PROFILE,
+      maxPhotos,
       totalBytes,
       storageFormatted: formatBytes(totalBytes),
-      canUploadMore: totalPhotos < PORTFOLIO_CONFIG.MAX_PHOTOS_PER_PROFILE,
+      canUploadMore: totalPhotos < maxPhotos,
     },
   };
 }
@@ -292,10 +296,13 @@ export async function uploadPortfolioPhotos(formData: FormData): Promise<{ succe
     return { success: false, error: 'Nenhum arquivo de imagem foi enviado.' };
   }
 
-  if (existingCount + files.length > PORTFOLIO_CONFIG.MAX_PHOTOS_PER_PROFILE) {
+  const entitlements = await getEntitlements(user.id);
+  const maxAllowedPhotos = entitlements.maxPhotos;
+
+  if (existingCount + files.length > maxAllowedPhotos) {
     return {
       success: false,
-      error: `Limite de fotos atingido. Seu perfil possui ${existingCount} fotos e o limite máximo provisório é de ${PORTFOLIO_CONFIG.MAX_PHOTOS_PER_PROFILE} fotos.`,
+      error: `Limite de fotos atingido. Seu plano (${entitlements.planName}) permite até ${maxAllowedPhotos} fotos e seu perfil já possui ${existingCount} fotos.`,
     };
   }
 

@@ -6,6 +6,7 @@ const envSchema = z.object({
   NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().min(1).optional(),
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(1).optional(),
   BILLING_MODE: z.enum(['off', 'test']).default('off'),
+  NEXT_PUBLIC_BILLING_MODE: z.enum(['off', 'test']).default('off'),
   LEGAL_REVIEWED: z.enum(['true', 'false']).default('false'),
 });
 
@@ -15,6 +16,7 @@ const _env = envSchema.safeParse({
   NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
   SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
   BILLING_MODE: process.env.BILLING_MODE,
+  NEXT_PUBLIC_BILLING_MODE: process.env.NEXT_PUBLIC_BILLING_MODE || process.env.BILLING_MODE,
   LEGAL_REVIEWED: process.env.LEGAL_REVIEWED,
 });
 

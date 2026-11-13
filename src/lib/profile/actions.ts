@@ -10,6 +10,7 @@ import {
   generateSlug,
 } from './schemas';
 import { processAvatarImage } from '@/lib/storage/upload';
+import { getEntitlements } from '@/lib/plans/actions';
 
 export type ProfileActionResult<T = unknown> =
   | { success: true; data?: T; message?: string }
@@ -147,6 +148,21 @@ export async function saveProfessionalProfile(
   // Sincronizar avatar na tabela profiles do usuário
   if (avatarUrl) {
     await supabase.from('profiles').update({ avatar_url: avatarUrl }).eq('id', user.id);
+  }
+
+  // Validar limites de categorias via Entitlements
+  if (specialtyIds && specialtyIds.length > 0) {
+    const { data: specs } = await admin
+      .from('specialties')
+      .select('category_id')
+      .in('id', specialtyIds);
+    const categorySet = new Set((specs || []).map((s: { category_id: string }) => s.category_id));
+    const entitlements = await getEntitlements(user.id);
+    if (categorySet.size > entitlements.maxCategories) {
+      return {
+        error: `Seu plano (${entitlements.planName}) permite atuar em no máximo ${entitlements.maxCategories} categorias simultâneas. Você selecionou especialidades pertencentes a ${categorySet.size} categorias.`,
+      };
+    }
   }
 
   // Sincronizar Especialidades (Tabela associativa profile_specialties)

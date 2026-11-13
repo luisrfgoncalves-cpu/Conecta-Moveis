@@ -13,7 +13,8 @@ import {
   Menu,
   X,
   ArrowRight,
-  ShieldCheck
+  ShieldCheck,
+  CreditCard
 } from 'lucide-react';
 
 export function Header() {
@@ -80,6 +81,14 @@ export function Header() {
           >
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
             Profissionais
+          </Link>
+          <Link 
+            href="/planos" 
+            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold text-slate-300 hover:text-white hover:bg-white/10 transition"
+            onClick={() => sounds.playClick()}
+          >
+            <CreditCard className="w-4 h-4 text-orange-400" />
+            Planos
           </Link>
           <Link 
             href="/termos" 
@@ -171,6 +180,14 @@ export function Header() {
           >
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
             Buscar Profissionais
+          </Link>
+          <Link 
+            href="/planos" 
+            className="flex items-center gap-3 py-2.5 text-slate-200 font-bold border-b border-white/5" 
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            <CreditCard className="w-4 h-4 text-orange-400" />
+            Planos
           </Link>
           <Link 
             href="/termos" 

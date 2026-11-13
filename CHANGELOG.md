@@ -1,5 +1,26 @@
 # CHANGELOG — CONECTA MÓVEIS
 
+## [Fase 11] - Planos e Monetização sem Cobrança Real
+- Criação do catálogo oficial de planos (`free`, `pro`, `enterprise`) com preços "a definir" e sem exibição de valores fictícios.
+- Implementação da função de servidor única `getEntitlements(userId)` como fonte canônica de cotas e limites.
+- Substituição do limite estático provisório da Fase 7 por validação dinâmica de entitlements em upload de fotos do portfólio (`max_photos`) e seleção de categorias (`max_categories`).
+- Controle operacional via variável `BILLING_MODE`:
+  - Modo `off`: Bloqueia alteração manual de plano e permite aos usuários registrar interesse (`plan_interest`).
+  - Modo `test`: Exibe o selo oficial "Modo de teste: nenhuma cobrança" e permite simulação de troca de plano com atualização de entitlements.
+- Criação da página pública `/planos` com transparência total sobre a inexistência de comissões sobre serviços prestados.
+- Criação de `/painel/assinatura` com barras visuais de consumo de fotos, categorias e status do selo de destaque patrocinado.
+- Exibição de métricas agregadas do profissional (visualizações de perfil, cliques de WhatsApp e solicitações) a partir de `daily_metrics`.
+- Rotulação obrigatória e expressa do selo de destaque como "Destaque patrocinado" (ou "Destaque patrocinado (Teste)" no modo de teste), sem promessas ou termos de recomendação/qualidade.
+- Funcionalidade no painel administrativo `/admin/planos` permitindo ao admin editar cotas (`max_photos`, `max_categories`, `allow_featured`, `description`) com justificativa obrigatória registrada em `admin_logs`.
+- Painel `/admin/assinaturas` atualizado com listagem de assinaturas ativas e fila de leads de interesse capturados.
+- Criação do documento arquitetural `docs/MONETIZACAO.md` contendo todos os gatilhos, rotas e políticas para futura integração com gateway.
+- Suíte de 10 testes automatizados no Vitest em `src/__tests__/monetization.test.ts` cobrindo cotas, bloqueio por `BILLING_MODE=off`, auditoria admin e rotulação de patrocínio.
+
+## [Fase 10] - Administração e Moderação
+- Implementação completa do painel `/admin` com barreira 404 para usuários comuns.
+- Gestão de usuários, perfis, empresas, fotos pendentes, denúncias e logs de auditoria.
+
+
 ## [Fase 5] - Perfis Profissionais e Empresas
 - Implementação do assistente multi-etapas com barra de progresso visual em `/painel/perfil` para preenchimento de perfil profissional (Atuação, Identidade, Especialidades/Região, Contatos/Publicação).
 - Cada campo apresenta badges semânticos e textos explicativos de transparência (Obrigatório vs Opcional; Público no perfil vs Privado/Contato; justificativa de coleta de dados).

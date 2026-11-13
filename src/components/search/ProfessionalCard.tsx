@@ -53,8 +53,13 @@ export function ProfessionalCard({ professional }: ProfessionalCardProps) {
                 {professional.display_name}
               </Link>
               {professional.is_featured && (
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-orange-500/20 text-orange-400 border border-orange-500/30">
-                  Destaque
+                <span
+                  title="Destaque patrocinado por plano de visibilidade comercial. Não representa recomendação de qualidade pela plataforma."
+                  className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-orange-500/20 text-orange-400 border border-orange-500/30"
+                >
+                  {process.env.NEXT_PUBLIC_BILLING_MODE === 'test'
+                    ? 'Destaque patrocinado (Teste)'
+                    : 'Destaque patrocinado'}
                 </span>
               )}
             </div>

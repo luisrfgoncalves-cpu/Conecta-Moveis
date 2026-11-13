@@ -45,6 +45,11 @@ export function Footer() {
                   Buscar Profissionais
                 </Link>
               </li>
+              <li>
+                <Link href="/planos" className="text-slate-300 hover:text-orange-400 transition">
+                  Planos e Visibilidade
+                </Link>
+              </li>
             </ul>
           </div>
 

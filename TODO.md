@@ -41,37 +41,40 @@
 - [x] Testes de isolamento de perfil e integridade de slug
 
 ## Fase 6 — Descoberta, Busca e Perfil Público
-- [ ] Implementar catálogo de categorias e especialidades
-- [ ] Criar `/encontrar-profissionais` e `/categorias` com filtros funcionais
-- [ ] Implementar páginas públicas `/profissionais/[slug]` e `/empresas/[slug]`
-- [ ] Inserir aviso legal obrigatório e selos permitidos
+- [x] Implementar catálogo de categorias e especialidades
+- [x] Criar `/encontrar-profissionais` e `/categorias` com filtros funcionais
+- [x] Implementar páginas públicas `/profissionais/[slug]` e `/empresas/[slug]`
+- [x] Inserir aviso legal obrigatório e selos permitidos
 
 ## Fase 7 — Portfólio e Upload Seguro
-- [ ] Criar área de portfólio no painel
-- [ ] Pipeline seguro de upload com validação por magic bytes e conversão WebP via Sharp
-- [ ] Lógica de status de aprovação (`pending` -> `approved`)
-- [ ] Validação de cota de armazenamento e imagens
+- [x] Criar área de portfólio no painel
+- [x] Pipeline seguro de upload com validação por magic bytes e conversão WebP via Sharp
+- [x] Lógica de status de aprovação (`pending` -> `approved`)
+- [x] Validação de cota de armazenamento e imagens
 
 ## Fase 8 — Contato, Favoritos e Denúncias
-- [ ] Botão de WhatsApp com contador agregado em `daily_metrics`
-- [ ] Formulário de solicitação de contato com descarte após 90 dias
-- [ ] Sistema de favoritos e canal de denúncias unificado
+- [x] Botão de WhatsApp com contador agregado em `daily_metrics`
+- [x] Formulário de solicitação de contato com descarte após 90 dias
+- [x] Sistema de favoritos e canal de denúncias unificado
 
 ## Fase 9 — Avaliações e Moderação
-- [ ] Regras de elegibilidade (contato prévio + carência de 3 dias)
-- [ ] Avaliação por 5 critérios + filtro de moderação de termos ofensivos
-- [ ] Direito de resposta do profissional
+- [x] Regras de elegibilidade (contato prévio + carência de 3 dias)
+- [x] Avaliação por 5 critérios + filtro de moderação de termos ofensivos
+- [x] Direito de resposta do profissional
 
 ## Fase 10 — Administração
-- [ ] Painel `/admin` com controle por papel (`moderator` vs `admin`)
-- [ ] Filas de fotos pendentes, denúncias e moderação de avaliações
-- [ ] Métricas de uso de banco/storage com alerta de 70% do plano gratuito
-- [ ] Auditoria completa em `admin_logs`
+- [x] Painel `/admin` com controle por papel (`moderator` vs `admin`)
+- [x] Filas de fotos pendentes, denúncias e moderação de avaliações
+- [x] Métricas de uso de banco/storage com alerta de 70% do plano gratuito
+- [x] Auditoria completa em `admin_logs`
 
 ## Fase 11 — Planos e Monetização sem Cobrança Real
-- [ ] Catálogo de planos com controle via `BILLING_MODE` (`off`/`test`)
-- [ ] Unificação de limites via `getEntitlements`
-- [ ] Sistema de destaques patrocinados rotulados
+- [x] Catálogo de planos com controle via `BILLING_MODE` (`off`/`test`)
+- [x] Unificação de limites via `getEntitlements` aplicada em uploads e categorias
+- [x] Sistema de destaques patrocinados rotulados obrigatoriamente
+- [x] Página pública `/planos` e painel do usuário `/painel/assinatura`
+- [x] Edição de cotas de planos pelo admin com log em `admin_logs`
+- [x] Documento estratégico em `docs/MONETIZACAO.md`
 
 ## Fase 12 — Qualidade, Segurança, Textos Legais e Documentação
 - [ ] Textos legais completos (Termos, Privacidade, Diretrizes) com constante `LEGAL_REVIEWED`
