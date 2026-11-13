@@ -324,7 +324,12 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
           <div className="flex flex-col sm:flex-row items-center gap-6 p-4 rounded-xl bg-black/20 border border-white/10">
             <div className="relative w-24 h-24 rounded-2xl overflow-hidden bg-white/5 border border-white/20 flex items-center justify-center flex-shrink-0">
               {avatarUrl ? (
-                <Image src={avatarUrl} alt="Avatar" fill className="object-cover" />
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={avatarUrl}
+                  alt="Avatar"
+                  className="w-full h-full object-cover"
+                />
               ) : (
                 <User className="w-10 h-10 text-slate-500" />
               )}
