@@ -200,7 +200,8 @@ export async function saveProfessionalProfile(
 
 export async function togglePublishProfile(
   profileId: string,
-  targetPublishState: boolean
+  targetPublishState: boolean,
+  clientAvatarUrl?: string
 ): Promise<ProfileActionResult<{ isPublished: boolean }>> {
   const supabase = await createClient();
   const {
@@ -229,15 +230,20 @@ export async function togglePublishProfile(
     const typedProfile = profile as typeof profile & { service_regions?: { neighborhoods?: string[] }[] };
     const rawNeighborhoods = typedProfile.service_regions?.[0]?.neighborhoods || [];
     
-    // Buscar avatar na tabela profiles caso não esteja em professional_profiles
-    let effectiveAvatar = profile.avatar_url;
+    // Obter avatar: prioriza o enviado diretamente pelo formulário, depois profiles, depois profile
+    let effectiveAvatar = clientAvatarUrl || profile.avatar_url;
     if (!effectiveAvatar) {
       const { data: userProfile } = await admin
         .from('profiles')
         .select('avatar_url')
         .eq('id', user.id)
-        .single();
+        .maybeSingle();
       effectiveAvatar = userProfile?.avatar_url ?? '';
+    }
+
+    // Se o cliente forneceu avatarUrl, atualiza no banco de profiles para persistência garantida
+    if (clientAvatarUrl) {
+      await admin.from('profiles').update({ avatar_url: clientAvatarUrl }).eq('id', user.id);
     }
 
     const validation = publishValidationSchema.safeParse({

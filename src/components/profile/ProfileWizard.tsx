@@ -274,8 +274,8 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
       const savedId = await doSave();
       if (!savedId) return; // doSave já setou o erro
 
-      // 2. Publicar/despublicar com base no ID confirmado
-      const res = await togglePublishProfile(savedId, targetState);
+      // 2. Publicar/despublicar com base no ID confirmado (passando avatarUrl atual para evitar perda por latência)
+      const res = await togglePublishProfile(savedId, targetState, avatarUrl);
       if ('error' in res) {
         // Erro real do servidor — mostrar de forma clara sem confundir o usuário
         setServerError(res.error);
