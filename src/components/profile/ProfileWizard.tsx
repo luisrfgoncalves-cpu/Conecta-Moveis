@@ -158,6 +158,25 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
     );
   }
 
+  // Selecionar ou alternar categoria na Etapa 1
+  function selectCategory(catId: string) {
+    const category = CATEGORIES_CATALOG.find((c) => c.id === catId);
+    if (!category) return;
+
+    // Se já tinha especialidades dessa categoria, desmarca; se não tinha, seleciona as especialidades da categoria
+    const catSpecIds = category.specialties.map((s) => s.id);
+    const hasAnyFromCat = catSpecIds.some((id) => selectedSpecialties.includes(id));
+
+    if (hasAnyFromCat) {
+      // Remover especialidades desta categoria
+      setSelectedSpecialties((prev) => prev.filter((id) => !catSpecIds.includes(id)));
+    } else {
+      // Adicionar especialidades padrão desta categoria (seleciona as 2 primeiras automaticamente)
+      const toAdd = catSpecIds.slice(0, 2);
+      setSelectedSpecialties((prev) => Array.from(new Set([...prev, ...toAdd])));
+    }
+  }
+
   // Salvar rascunho / progresso (retorna o ID salvo para uso interno)
   async function doSave(): Promise<string | null> {
     const neighborhoods = neighborhoodsInput
@@ -497,28 +516,73 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {CATEGORIES_CATALOG.map((cat) => (
-              <div
-                key={cat.id}
-                className="glass-card rounded-xl p-5 border border-white/10 space-y-3"
-              >
-                <div className="flex items-center justify-between">
-                  <h3 className="font-bold text-white text-base">{cat.name}</h3>
-                  <span className="text-xs text-slate-400 font-mono">{cat.specialties.length} especialidades</span>
+            {CATEGORIES_CATALOG.map((cat) => {
+              const catSpecIds = cat.specialties.map((s) => s.id);
+              const isSelected = catSpecIds.some((id) => selectedSpecialties.includes(id));
+              const selectedCount = catSpecIds.filter((id) => selectedSpecialties.includes(id)).length;
+
+              return (
+                <div
+                  key={cat.id}
+                  onClick={() => selectCategory(cat.id)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      selectCategory(cat.id);
+                    }
+                  }}
+                  className={`glass-card rounded-xl p-5 border cursor-pointer transition-all duration-200 space-y-3 text-left outline-none ${
+                    isSelected
+                      ? 'border-orange-500 bg-orange-500/10 shadow-[0_0_20px_rgba(249,115,22,0.25)] ring-1 ring-orange-500'
+                      : 'border-white/10 hover:border-white/30 hover:bg-white/5'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className={`w-5 h-5 rounded-md flex items-center justify-center text-xs font-black transition ${
+                        isSelected ? 'bg-orange-500 text-white' : 'bg-white/10 text-transparent border border-white/20'
+                      }`}>
+                        ✓
+                      </div>
+                      <h3 className="font-bold text-white text-base">{cat.name}</h3>
+                    </div>
+                    <span className={`text-xs font-mono px-2 py-0.5 rounded-full ${
+                      isSelected ? 'bg-orange-500/20 text-orange-300 font-bold' : 'text-slate-400 bg-white/5'
+                    }`}>
+                      {isSelected ? `${selectedCount} selecionada(s)` : `${cat.specialties.length} especialidades`}
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-300 leading-relaxed">{cat.description}</p>
+                  <p className="text-xs text-orange-400 font-medium">
+                    {cat.specialties.map((s) => s.name).slice(0, 3).join(', ')}...
+                  </p>
                 </div>
-                <p className="text-xs text-slate-300 leading-relaxed">{cat.description}</p>
-                <p className="text-xs text-orange-400 font-medium">
-                  {cat.specialties.map((s) => s.name).slice(0, 3).join(', ')}...
-                </p>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
-          <div className="flex justify-end pt-4 border-t border-white/10">
+          <div className="flex items-center justify-between pt-4 border-t border-white/10">
+            <p className="text-xs text-slate-400">
+              {selectedSpecialties.length > 0 ? (
+                <span className="text-emerald-400 font-semibold">
+                  ✓ Atuação selecionada ({selectedSpecialties.length} especialidade{selectedSpecialties.length > 1 ? 's' : ''}). Você pode ajustar detalhes na Etapa 3.
+                </span>
+              ) : (
+                <span>Clique em um ou mais tipos de atuação acima para selecionar.</span>
+              )}
+            </p>
             <button
               type="button"
-              onClick={() => setCurrentStep(2)}
-              className="btn-neon px-6 py-3 text-sm flex items-center gap-2"
+              onClick={() => {
+                if (selectedSpecialties.length === 0) {
+                  // Se não escolheu nenhum, seleciona a primeira como padrão para ajudar
+                  selectCategory(CATEGORIES_CATALOG[0].id);
+                }
+                setCurrentStep(2);
+              }}
+              className="btn-neon px-6 py-3 text-sm flex items-center gap-2 whitespace-nowrap"
             >
               Próximo: Identidade Pública
               <ArrowRight className="w-4 h-4" />
