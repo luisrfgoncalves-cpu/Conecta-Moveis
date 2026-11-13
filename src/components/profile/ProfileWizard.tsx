@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useState, useEffect, useTransition } from 'react';
 import Image from 'next/image';
 import {
   CATEGORIES_CATALOG,
@@ -88,6 +88,13 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
   const [cropperRawSrc, setCropperRawSrc] = useState<string | null>(null);
   const [cropperFileName, setCropperFileName] = useState('avatar.webp');
   const [profileSlug, setProfileSlug] = useState<string>(initialProfile?.slug ?? '');
+
+  // Sincronizar avatarUrl se initialProfile for atualizado pelo servidor (ex: revalidatePath)
+  useEffect(() => {
+    if (initialProfile?.avatar_url && !avatarUrl) {
+      setAvatarUrl(initialProfile.avatar_url);
+    }
+  }, [initialProfile?.avatar_url, avatarUrl]);
 
   const steps = [
     { number: 1, title: 'Atuação', icon: Sparkles },

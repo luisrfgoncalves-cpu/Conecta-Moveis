@@ -89,7 +89,7 @@ export async function saveProfessionalProfile(
   }
 
   // Sanitização estrita: dados protegidos (is_suspended, is_featured) nunca são aceitos do input
-  const profilePayload = {
+  const profilePayload: Record<string, unknown> = {
     user_id: user.id,
     display_name: displayName,
     slug,
@@ -104,6 +104,10 @@ export async function saveProfessionalProfile(
     last_active_at: new Date().toISOString(),
     // is_published e is_suspended mantidos ou padrão false
   };
+
+  if (avatarUrl) {
+    profilePayload.avatar_url = avatarUrl;
+  }
 
   let savedId = profileId;
 
@@ -145,9 +149,18 @@ export async function saveProfessionalProfile(
     }
   }
 
-  // Sincronizar avatar na tabela profiles do usuário (usando admin para garantir escrita)
+  // Sincronizar avatar na tabela profiles do usuário com upsert (garante criação mesmo se o registro não existia)
   if (avatarUrl) {
-    await admin.from('profiles').update({ avatar_url: avatarUrl }).eq('id', user.id);
+    await admin.from('profiles').upsert(
+      {
+        id: user.id,
+        email: user.email ?? '',
+        full_name: (user.user_metadata?.full_name as string) || displayName,
+        avatar_url: avatarUrl,
+        updated_at: new Date().toISOString(),
+      },
+      { onConflict: 'id' }
+    );
   }
 
   // Validar limites de categorias via Entitlements
@@ -231,7 +244,8 @@ export async function togglePublishProfile(
     const rawNeighborhoods = typedProfile.service_regions?.[0]?.neighborhoods || [];
     
     // Obter avatar: prioriza o enviado diretamente pelo formulário, depois profiles, depois profile
-    let effectiveAvatar = clientAvatarUrl || profile.avatar_url;
+    let effectiveAvatar =
+      clientAvatarUrl || ((profile as Record<string, unknown>).avatar_url as string | undefined);
     if (!effectiveAvatar) {
       const { data: userProfile } = await admin
         .from('profiles')
@@ -241,9 +255,27 @@ export async function togglePublishProfile(
       effectiveAvatar = userProfile?.avatar_url ?? '';
     }
 
-    // Se o cliente forneceu avatarUrl, atualiza no banco de profiles para persistência garantida
-    if (clientAvatarUrl) {
-      await admin.from('profiles').update({ avatar_url: clientAvatarUrl }).eq('id', user.id);
+    // Se temos avatar válido, garante persistência imediata em profiles (com upsert) e em professional_profiles
+    if (effectiveAvatar) {
+      await admin.from('profiles').upsert(
+        {
+          id: user.id,
+          email: user.email ?? '',
+          full_name: (user.user_metadata?.full_name as string) || (profile.display_name as string) || 'Profissional',
+          avatar_url: effectiveAvatar,
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: 'id' }
+      );
+
+      try {
+        await admin
+          .from('professional_profiles')
+          .update({ avatar_url: effectiveAvatar })
+          .eq('id', profileId);
+      } catch {
+        // Ignorar caso coluna ainda não exista
+      }
     }
 
     const validation = publishValidationSchema.safeParse({
@@ -437,8 +469,27 @@ export async function uploadAvatarAction(
   const { data: urlData } = admin.storage.from('avatars').getPublicUrl(fileName);
   const publicUrl = urlData.publicUrl;
 
-  // Imediatamente sincroniza a foto na tabela profiles do usuário
-  await admin.from('profiles').update({ avatar_url: publicUrl }).eq('id', user.id);
+  // Imediatamente sincroniza a foto na tabela profiles do usuário usando upsert
+  await admin.from('profiles').upsert(
+    {
+      id: user.id,
+      email: user.email ?? '',
+      full_name: (user.user_metadata?.full_name as string) || 'Profissional',
+      avatar_url: publicUrl,
+      updated_at: new Date().toISOString(),
+    },
+    { onConflict: 'id' }
+  );
+
+  // Também tenta persistir diretamente em professional_profiles (caso a coluna exista)
+  try {
+    await admin
+      .from('professional_profiles')
+      .update({ avatar_url: publicUrl })
+      .eq('user_id', user.id);
+  } catch {
+    // Ignorar caso coluna ainda não exista
+  }
 
   return {
     success: true,

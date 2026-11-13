@@ -44,13 +44,18 @@ export default async function PainelPerfilPage() {
     .eq('id', user.id)
     .maybeSingle();
 
+  const resolvedAvatarUrl =
+    ((professionalProfile as Record<string, unknown>)?.avatar_url as string | undefined) ||
+    basicProfile?.avatar_url ||
+    '';
+
   const initialData = professionalProfile
     ? {
         ...professionalProfile,
-        avatar_url: basicProfile?.avatar_url || '',
+        avatar_url: resolvedAvatarUrl,
       }
-    : basicProfile?.avatar_url
-    ? { avatar_url: basicProfile.avatar_url }
+    : resolvedAvatarUrl
+    ? { avatar_url: resolvedAvatarUrl }
     : undefined;
 
   return (
