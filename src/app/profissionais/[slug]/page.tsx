@@ -37,14 +37,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!professional) {
     return {
-      title: 'Profissional não encontrado | Conecta Móveis',
+      title: 'Profissional não encontrado',
       description: 'O perfil solicitado não existe, foi despublicado ou está suspenso.',
     };
   }
 
-  const title = `${professional.display_name} — ${professional.city}/${professional.state} | Conecta Móveis`;
+  const title = `${professional.display_name} — Profissional em ${professional.city}`;
   const description = professional.bio
-    ? professional.bio.slice(0, 155) + '...'
+    ? professional.bio.slice(0, 155) + (professional.bio.length > 155 ? '...' : '')
     : `Veja o perfil de ${professional.display_name}, prestador em ${professional.city} - ${professional.state} no setor moveleiro.`;
 
   return {
@@ -54,7 +54,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title,
       description,
       type: 'profile',
-      images: professional.avatar_url ? [{ url: professional.avatar_url }] : [],
+      locale: 'pt_BR',
+      siteName: 'Conecta Móveis',
+      images: professional.avatar_url
+        ? [{ url: professional.avatar_url, width: 400, height: 400, alt: professional.display_name }]
+        : [{ url: '/og-default.jpg', width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: professional.avatar_url ? [professional.avatar_url] : ['/og-default.jpg'],
     },
   };
 }

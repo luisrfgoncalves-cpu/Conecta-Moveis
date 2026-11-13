@@ -51,12 +51,12 @@ export default async function PainelPerfilPage() {
 
   const initialData = professionalProfile
     ? {
-        ...professionalProfile,
-        avatar_url: resolvedAvatarUrl,
-      }
+      ...professionalProfile,
+      avatar_url: resolvedAvatarUrl,
+    }
     : resolvedAvatarUrl
-    ? { avatar_url: resolvedAvatarUrl }
-    : undefined;
+      ? { avatar_url: resolvedAvatarUrl }
+      : undefined;
 
   return (
     <div className="space-y-8 max-w-4xl">

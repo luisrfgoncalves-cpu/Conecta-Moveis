@@ -14,10 +14,38 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: 'Conecta Móveis | Plataforma Moveleira de Jundiaí e Região',
-  description: 'Descubra montadores de móveis, marceneiros e lojas de planejados em Jundiaí/SP. Conexão direta e sem taxas.',
+  title: {
+    default: 'Conecta Móveis — Profissionais de Móveis em Jundiaí e Região',
+    template: '%s | Conecta Móveis',
+  },
+  description:
+    'Encontre marceneiros, montadores e especialistas em móveis planejados em Jundiaí e região. Compare perfis, portfólios e contrate com segurança.',
   icons: {
     icon: '/brand/favicon.png',
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'pt_BR',
+    url: 'https://conectamoveis.com.br',
+    siteName: 'Conecta Móveis',
+    title: 'Conecta Móveis — Profissionais de Móveis em Jundiaí e Região',
+    description:
+      'Encontre marceneiros, montadores e especialistas em móveis planejados em Jundiaí e região. Compare perfis, portfólios e contrate com segurança.',
+    images: [
+      {
+        url: '/og-default.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Conecta Móveis — Plataforma de Profissionais Moveleiros',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Conecta Móveis — Profissionais de Móveis em Jundiaí e Região',
+    description:
+      'Encontre marceneiros, montadores e especialistas em móveis planejados em Jundiaí e região. Compare perfis, portfólios e contrate com segurança.',
+    images: ['/og-default.jpg'],
   },
 };
 
