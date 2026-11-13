@@ -10,8 +10,7 @@ VALUES
   ('portfolio-public', 'portfolio-public', true)
 ON CONFLICT (id) DO NOTHING;
 
--- Habilitar RLS em storage.objects se ainda não estiver
-ALTER TABLE storage.objects ENABLE ROW LEVEL SECURITY;
+-- Nota: storage.objects já tem RLS habilitada pelo Supabase — não alterar.
 
 -- 1. Políticas para o Bucket avatars (público para leitura, upload apenas do próprio dono)
 CREATE POLICY "Leitura pública de avatars"
