@@ -1,5 +1,17 @@
 # CHANGELOG — CONECTA MÓVEIS
 
+## [Fase 5] - Perfis Profissionais e Empresas
+- Implementação do assistente multi-etapas com barra de progresso visual em `/painel/perfil` para preenchimento de perfil profissional (Atuação, Identidade, Especialidades/Região, Contatos/Publicação).
+- Cada campo apresenta badges semânticos e textos explicativos de transparência (Obrigatório vs Opcional; Público no perfil vs Privado/Contato; justificativa de coleta de dados).
+- Validação estrita no servidor dos critérios mínimos obrigatórios para publicação de perfil: nome profissional (min 3 caracteres), bio (min 20 caracteres), ao menos 1 especialidade, cidade, UF e e-mail confirmado.
+- Geração segura de slug único com normalização de acentos e sufixo anti-colisão automático.
+- Pré-visualização ao vivo do perfil público em modal simulando a exibição final para clientes, contendo o aviso legal obrigatório do MVP.
+- Funcionalidade de publicar e despublicar perfil profissional a qualquer momento pelo usuário.
+- Página `/painel/empresas` com formulário para cadastro e edição de empresas vinculando automaticamente o usuário como `owner` na tabela `company_members`.
+- Campo de CNPJ configurado como opcional, meramente informativo e com aviso explícito de que a plataforma não emite selo de garantia.
+- Pipeline de upload e processamento de avatares e logotipos no bucket `avatars`: validação por assinatura real (magic bytes para JPEG, PNG e WebP), redimensionamento para no máximo 512px, conversão para WebP, remoção de metadados EXIF e limite estrito de até 150 KB.
+- Cobertura com 19 testes automatizados no Vitest em `src/__tests__/profile.test.ts` cobrindo regras de negócio, slug único, rejeição de arquivos disfarçados/maliciosos e blindagem contra manipulação de campos protegidos (`is_suspended`, `is_featured`, papéis administrativos).
+
 ## [Fase 4] - Autenticação e Conta
 - Implementação de fluxos completos de autenticação com Supabase Auth e `@supabase/ssr`: cadastro com consentimento LGPD, login, logout, recuperação e redefinição de senha.
 - Criação das páginas públicas de auth: `/criar-conta`, `/entrar`, `/recuperar-senha` (com modo de definição de nova senha) e route handler `/auth/callback`.

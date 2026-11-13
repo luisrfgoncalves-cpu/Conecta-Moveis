@@ -35,10 +35,10 @@
 - [x] Aplicar rate limit em autenticação e mascaramento de erros
 
 ## Fase 5 — Perfis Profissionais e Empresas
-- [ ] Implementar fluxo de preenchimento de perfil com barra de progresso
-- [ ] Implementar criação e edição de empresas
-- [ ] Implementar upload e processamento de avatar/logo (WebP até 150 KB)
-- [ ] Testes de isolamento de perfil e integridade de slug
+- [x] Implementar fluxo de preenchimento de perfil com barra de progresso
+- [x] Implementar criação e edição de empresas
+- [x] Implementar upload e processamento de avatar/logo (WebP até 150 KB)
+- [x] Testes de isolamento de perfil e integridade de slug
 
 ## Fase 6 — Descoberta, Busca e Perfil Público
 - [ ] Implementar catálogo de categorias e especialidades
