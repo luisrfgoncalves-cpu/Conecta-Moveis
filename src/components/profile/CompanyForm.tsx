@@ -5,8 +5,8 @@ import { saveCompany, uploadAvatarAction } from '@/lib/profile/actions';
 import { type CompanyInput } from '@/lib/profile/schemas';
 import {
   validateClientImageFile,
-  processClientImage,
 } from '@/lib/storage/clientImage';
+import { ImageCropperModal } from '@/components/ui/ImageCropperModal';
 import {
   Building2,
   Camera,
@@ -33,6 +33,8 @@ export function CompanyForm({ initialCompany }: Props) {
   const [serverError, setServerError] = useState('');
   const [serverSuccess, setServerSuccess] = useState('');
   const [uploadingLogo, setUploadingLogo] = useState(false);
+  const [cropperRawSrc, setCropperRawSrc] = useState<string | null>(null);
+  const [cropperFileName, setCropperFileName] = useState('logo.webp');
 
   const [companyId, setCompanyId] = useState<string | undefined>(initialCompany?.id);
   const [name, setName] = useState<string>(initialCompany?.name ?? '');
@@ -41,7 +43,7 @@ export function CompanyForm({ initialCompany }: Props) {
   const [description, setDescription] = useState<string>(initialCompany?.description ?? '');
   const [logoUrl, setLogoUrl] = useState<string>(initialCompany?.logo_url ?? '');
 
-  async function handleLogoChange(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleLogoChange(e: React.ChangeEvent<HTMLInputElement>) {
     const rawFile = e.target.files?.[0];
     if (!rawFile) return;
 
@@ -55,17 +57,24 @@ export function CompanyForm({ initialCompany }: Props) {
       return;
     }
 
-    setUploadingLogo(true);
-    try {
-      const processedFile = await processClientImage(rawFile, {
-        squareCrop: true,
-        maxDimension: 512,
-        quality: 0.85,
-        outputType: 'image/webp',
-      });
+    setCropperFileName(rawFile.name);
 
+    const reader = new FileReader();
+    reader.onload = () => {
+      setCropperRawSrc(reader.result as string);
+    };
+    reader.readAsDataURL(rawFile);
+  }
+
+  async function handleConfirmCrop(croppedFile: File) {
+    setCropperRawSrc(null);
+    setUploadingLogo(true);
+    setServerError('');
+    setServerSuccess('');
+
+    try {
       const fd = new FormData();
-      fd.append('file', processedFile);
+      fd.append('file', croppedFile);
 
       const res = await uploadAvatarAction(fd);
 
@@ -73,7 +82,7 @@ export function CompanyForm({ initialCompany }: Props) {
         setServerError(res.error);
       } else if (res.data?.publicUrl) {
         setLogoUrl(res.data.publicUrl);
-        setServerSuccess('Logotipo atualizado e otimizado com sucesso!');
+        setServerSuccess('Logotipo atualizado e salvo com sucesso!');
       }
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Falha ao processar e enviar logotipo.';
@@ -271,6 +280,16 @@ export function CompanyForm({ initialCompany }: Props) {
           </button>
         </div>
       </div>
+
+      {cropperRawSrc && (
+        <ImageCropperModal
+          imageSrc={cropperRawSrc}
+          fileName={cropperFileName}
+          title="Ajustar Logotipo da Empresa"
+          onCancel={() => setCropperRawSrc(null)}
+          onConfirm={handleConfirmCrop}
+        />
+      )}
     </form>
   );
 }

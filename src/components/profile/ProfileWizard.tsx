@@ -13,8 +13,8 @@ import {
 } from '@/lib/profile/actions';
 import {
   validateClientImageFile,
-  processClientImage,
 } from '@/lib/storage/clientImage';
+import { ImageCropperModal } from '@/components/ui/ImageCropperModal';
 import {
   User,
   Sparkles,
@@ -78,6 +78,8 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
   const [isPhonePublic, setIsPhonePublic] = useState<boolean>(initialProfile?.is_phone_public ?? false);
   const [avatarUrl, setAvatarUrl] = useState<string>(initialProfile?.avatar_url ?? '');
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [cropperRawSrc, setCropperRawSrc] = useState<string | null>(null);
+  const [cropperFileName, setCropperFileName] = useState('avatar.webp');
 
   const steps = [
     { number: 1, title: 'Atuação', icon: Sparkles },
@@ -86,8 +88,8 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
     { number: 4, title: 'Contatos & Publicação', icon: Phone },
   ];
 
-  // Helper para upload de avatar com validação, enquadramento 1:1 e otimização
-  async function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
+  // Iniciar seleção da imagem e abrir ajustador manual
+  function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
     const rawFile = e.target.files?.[0];
     if (!rawFile) return;
 
@@ -104,18 +106,26 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
       return;
     }
 
-    setUploadingAvatar(true);
-    try {
-      // Pré-processa no navegador: enquadra 1:1 no centro, redimensiona para 512x512 WebP
-      const processedFile = await processClientImage(rawFile, {
-        squareCrop: true,
-        maxDimension: 512,
-        quality: 0.85,
-        outputType: 'image/webp',
-      });
+    setCropperFileName(rawFile.name);
 
+    // Carregar para o modal de enquadramento/recorte manual
+    const reader = new FileReader();
+    reader.onload = () => {
+      setCropperRawSrc(reader.result as string);
+    };
+    reader.readAsDataURL(rawFile);
+  }
+
+  // Confirmar recorte e realizar upload para o servidor
+  async function handleConfirmCrop(croppedFile: File) {
+    setCropperRawSrc(null);
+    setUploadingAvatar(true);
+    setServerError('');
+    setServerSuccess('');
+
+    try {
       const fd = new FormData();
-      fd.append('file', processedFile);
+      fd.append('file', croppedFile);
 
       const res = await uploadAvatarAction(fd);
 
@@ -123,7 +133,7 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
         setServerError(res.error);
       } else if (res.data?.publicUrl) {
         setAvatarUrl(res.data.publicUrl);
-        setServerSuccess('Foto de perfil atualizada e otimizada com sucesso!');
+        setServerSuccess('Foto de perfil enquadrada e salva com sucesso!');
       }
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Falha ao processar e enviar foto de perfil.';
@@ -727,6 +737,17 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
             </div>
           </div>
         </div>
+      )}
+
+      {/* Modal Interativo de Ajuste, Recorte e Centralização da Foto */}
+      {cropperRawSrc && (
+        <ImageCropperModal
+          imageSrc={cropperRawSrc}
+          fileName={cropperFileName}
+          title="Ajustar Foto de Perfil"
+          onCancel={() => setCropperRawSrc(null)}
+          onConfirm={handleConfirmCrop}
+        />
       )}
 
       {/* Modal de Pré-visualização do Perfil Público */}
