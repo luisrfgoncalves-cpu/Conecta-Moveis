@@ -16,6 +16,13 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 import { getPublicProfessionalBySlug } from '@/lib/search/actions';
+import { createClient } from '@/lib/supabase/server';
+import { isFavorite } from '@/lib/favorites/actions';
+import { FavoriteButton } from '@/components/favorites/FavoriteButton';
+import { ShareButton } from '@/components/share/ShareButton';
+import { ReportButton } from '@/components/reports/ReportButton';
+import { ContactForm } from '@/components/contact/ContactForm';
+import { WhatsAppTracker } from '@/components/contact/WhatsAppTracker';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -56,6 +63,14 @@ export default async function ProfissionalPublicPage({ params }: PageProps) {
   if (!professional) {
     notFound();
   }
+
+  // Verificar sessão e favorito
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  const isLoggedIn = !!user;
+  const favStatus = user ? await isFavorite(professional.id) : false;
+
+  const profileUrl = `${process.env.NEXT_PUBLIC_SITE_URL ?? 'https://conecta-moveis.vercel.app'}/profissionais/${slug}`;
 
   const isNew = () => {
     const createdDate = new Date(professional.created_at);
@@ -172,6 +187,26 @@ export default async function ProfissionalPublicPage({ params }: PageProps) {
           </div>
         </div>
 
+        {/* Barra de ações — Favoritar, Compartilhar, Denunciar */}
+        <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-white/10">
+          <FavoriteButton
+            profileId={professional.id}
+            initialIsFav={favStatus}
+            isLoggedIn={isLoggedIn}
+          />
+          <ShareButton
+            url={profileUrl}
+            title={`${professional.display_name} — ${professional.city}/${professional.state} | Conecta Móveis`}
+          />
+          <div className="ml-auto">
+            <ReportButton
+              targetType="profile"
+              targetId={professional.id}
+              isLoggedIn={isLoggedIn}
+            />
+          </div>
+        </div>
+
         {/* Sobre o Profissional (Bio) */}
         {professional.bio && (
           <div className="space-y-3 pt-2 border-t border-white/10">
@@ -232,15 +267,10 @@ export default async function ProfissionalPublicPage({ params }: PageProps) {
             </h2>
             <div className="flex flex-wrap gap-3">
               {professional.whatsapp && (
-                <a
-                  href={`https://wa.me/55${professional.whatsapp.replace(/\D/g, '')}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 text-xs font-bold border border-emerald-500/40 transition"
-                >
-                  <MessageCircle className="w-4 h-4 text-emerald-400" />
-                  <span>WhatsApp: {professional.whatsapp}</span>
-                </a>
+                <WhatsAppTracker
+                  profileId={professional.id}
+                  whatsapp={professional.whatsapp}
+                />
               )}
               {professional.phone && (
                 <a
@@ -290,6 +320,13 @@ export default async function ProfissionalPublicPage({ params }: PageProps) {
                             </span>
                           </div>
                         )}
+                        <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <ReportButton
+                            targetType="image"
+                            targetId={img.id}
+                            isLoggedIn={isLoggedIn}
+                          />
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -305,13 +342,29 @@ export default async function ProfissionalPublicPage({ params }: PageProps) {
             <Star className="w-4 h-4 text-amber-400" />
             Avaliações e Reputação
           </h2>
-          <div className="p-5 rounded-2xl bg-white/5 border border-white/10 text-center">
+          <div className="p-5 rounded-2xl bg-white/5 border border-white/10 text-center relative">
             <p className="text-sm font-semibold text-slate-300">Sem avaliações ainda</p>
             <p className="text-xs text-slate-400 mt-1">
               As avaliações serão liberadas após a conclusão de serviços comprovados através da plataforma.
             </p>
+            <div className="mt-3 flex justify-center">
+              <ReportButton
+                targetType="review"
+                targetId={professional.id}
+                isLoggedIn={isLoggedIn}
+              />
+            </div>
           </div>
         </div>
+      </div>
+
+      {/* Formulário de Solicitação de Contato */}
+      <div className="mt-6">
+        <ContactForm
+          profileId={professional.id}
+          professionalName={professional.display_name}
+          isLoggedIn={isLoggedIn}
+        />
       </div>
     </div>
   );
