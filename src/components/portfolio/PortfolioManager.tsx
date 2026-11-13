@@ -844,6 +844,7 @@ export function PortfolioManager({ initialItems, storage }: PortfolioManagerProp
                           src={img.thumb_url || img.image_url}
                           alt={`Foto ${idx + 1}`}
                           fill
+                          unoptimized
                           className="object-cover"
                           loading="lazy"
                         />

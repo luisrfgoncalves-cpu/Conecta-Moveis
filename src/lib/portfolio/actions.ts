@@ -150,6 +150,41 @@ export async function getMyPortfolioData(): Promise<{
     };
   });
 
+  // Fotos pendentes estão no bucket privado 'portfolio-pending'.
+  // Gerar Signed URLs temporárias para que o profissional visualize suas próprias fotos no painel.
+  for (const item of items) {
+    for (const img of item.images) {
+      if (img.status === 'pending') {
+        const extractPending = (url: string | null | undefined) => {
+          if (!url) return null;
+          if (url.includes(`${PORTFOLIO_CONFIG.BUCKET_PENDING}/`)) {
+            const parts = url.split(`${PORTFOLIO_CONFIG.BUCKET_PENDING}/`);
+            return parts[1] ? decodeURIComponent(parts[1].split('?')[0]) : null;
+          }
+          if (!url.startsWith('http://') && !url.startsWith('https://')) return url;
+          return null;
+        };
+
+        const thumbPath = extractPending(img.thumb_url);
+        const fullPath = extractPending(img.image_url);
+
+        if (thumbPath) {
+          const { data: signedThumb } = await supabase.storage
+            .from(PORTFOLIO_CONFIG.BUCKET_PENDING)
+            .createSignedUrl(thumbPath, 7200);
+          if (signedThumb?.signedUrl) img.thumb_url = signedThumb.signedUrl;
+        }
+
+        if (fullPath) {
+          const { data: signedFull } = await supabase.storage
+            .from(PORTFOLIO_CONFIG.BUCKET_PENDING)
+            .createSignedUrl(fullPath, 7200);
+          if (signedFull?.signedUrl) img.image_url = signedFull.signedUrl;
+        }
+      }
+    }
+  }
+
   const formatBytes = (bytes: number) => {
     if (bytes < 1024) return `${bytes} B`;
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;

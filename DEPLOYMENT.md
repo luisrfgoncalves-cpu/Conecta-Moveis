@@ -69,6 +69,37 @@ Os buckets abaixo devem existir em produção (criados pela migration `202611120
 
 ---
 
+## Backup & Recuperação de Dados
+
+O plano gratuito do Supabase (Free Tier) não inclui backup automático gerenciado diariamente pelo console. Por isso, a plataforma conta com procedimentos dedicados:
+
+1. **Backup Rápido no Painel Administrativo (`/admin/backup`):**
+   - Acesse `/admin/backup` logado como administrador.
+   - Clique em **"Baixar Backup (.json)"**.
+   - O sistema gera instantaneamente um arquivo JSON contendo todas as tabelas: perfis, portfólios, fotos, avaliações, contatos, categorias e logs de auditoria.
+   - Guarde esse arquivo em local seguro semanalmente.
+
+2. **Backup Completo via pg_dump (PostgreSQL CLI):**
+   - No painel do Supabase em **Project Settings → Database → Connection String → URI**, copie a string de conexão.
+   - Execute no terminal:
+     ```bash
+     pg_dump -h <host> -U postgres -d postgres -F c -b -v -f conecta_moveis_backup.dump
+     ```
+   - Para restaurar em caso de emergência em outro projeto:
+     ```bash
+     pg_restore -h <novo_host> -U postgres -d postgres -v conecta_moveis_backup.dump
+     ```
+
+---
+
+## Termos da Hospedagem Vercel (Hobby)
+
+- O plano Hobby da Vercel destina-se a desenvolvimento pessoal e projetos iniciais não comerciais.
+- **Antes de ativar assinaturas pagas de profissionais, publicidade ou destaque pago (`BILLING_MODE !== 'off'`)**, é mandatório realizar o upgrade para o plano **Vercel Pro ($20/mês)** para conformidade com os Termos de Serviço da Vercel.
+- Monitore o consumo de banda (100 GB/mês) em: `https://vercel.com/dashboard/usage`.
+
+---
+
 ## Domínio e DNS
 
 > _Placeholder — atualizar quando o domínio estiver registrado._

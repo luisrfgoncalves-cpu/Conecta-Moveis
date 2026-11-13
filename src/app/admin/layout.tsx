@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import {
   Users, FileImage, Building2, Flag, Star,
-  Tag, CreditCard, FileText, LayoutDashboard, LogOut, ArrowLeft, Globe,
+  Tag, CreditCard, FileText, LayoutDashboard, LogOut, ArrowLeft, Globe, Database,
 } from 'lucide-react';
 import { signOut } from '@/lib/auth/actions';
 
@@ -21,6 +21,7 @@ const adminNav = [
   { href: '/admin/planos', label: 'Planos', icon: CreditCard },
   { href: '/admin/assinaturas', label: 'Assinaturas', icon: CreditCard },
   { href: '/admin/logs', label: 'Logs de auditoria', icon: FileText },
+  { href: '/admin/backup', label: 'Backup & Dados', icon: Database },
 ];
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { Check, X, HardDrive } from 'lucide-react';
+import { Check, X, HardDrive, ExternalLink } from 'lucide-react';
 import { adminApprovePhoto, adminRejectPhoto } from '@/lib/admin/actions';
 
 interface PendingPhotoItem {
@@ -72,16 +72,28 @@ export function AdminFotosClient({ initialPhotos }: { initialPhotos: PendingPhot
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {photos.map((photo) => (
             <div key={photo.id} className="glass-panel rounded-2xl overflow-hidden border border-white/10 flex flex-col">
-              <div className="relative aspect-square bg-slate-900">
+              <div className="relative aspect-square bg-slate-900 group">
                 <Image
                   src={photo.thumb_url || photo.image_url}
-                  alt=""
+                  alt={photo.portfolio_items?.title || 'Foto de portfólio pendente'}
                   fill
+                  unoptimized
                   className="object-cover"
                 />
                 <div className="absolute top-2 right-2 bg-black/70 backdrop-blur-md px-2 py-0.5 rounded text-[10px] text-slate-300 font-mono">
                   {(photo.bytes_size / 1024).toFixed(0)} KB
                 </div>
+                {photo.image_url && (
+                  <a
+                    href={photo.image_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Ver imagem em tamanho original"
+                    className="absolute bottom-2 right-2 p-1.5 rounded-lg bg-black/70 hover:bg-black/90 text-white/80 hover:text-white backdrop-blur-md transition opacity-0 group-hover:opacity-100 focus:opacity-100"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                )}
               </div>
               <div className="p-3.5 space-y-2 flex-1 flex flex-col justify-between">
                 <div>

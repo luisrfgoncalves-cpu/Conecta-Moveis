@@ -411,3 +411,104 @@ export async function adminSetPublished(
   return { success: true };
 }
 
+/**
+ * 12. Backup e Exportação completa de Dados do Banco
+ * Permite ao administrador baixar cópia JSON de todos os dados essenciais do sistema.
+ */
+export async function exportDatabaseBackup(): Promise<{
+  success: boolean;
+  error?: string;
+  data?: {
+    metadata: {
+      exportedAt: string;
+      exportedBy: string;
+      platform: string;
+      counts: Record<string, number>;
+    };
+    tables: {
+      profiles: any[];
+      professional_profiles: any[];
+      portfolio_items: any[];
+      portfolio_images: any[];
+      categories: any[];
+      reviews: any[];
+      contact_requests: any[];
+      reports: any[];
+      admin_audit_logs: any[];
+    };
+  };
+}> {
+  const { user, role } = await getAdminUserRole();
+  if (!user || role !== 'admin') {
+    return { success: false, error: 'Apenas administradores podem exportar backup completo.' };
+  }
+
+  const admin = getAdminClient();
+
+  try {
+    const [
+      profilesRes,
+      profProfilesRes,
+      itemsRes,
+      imagesRes,
+      categoriesRes,
+      reviewsRes,
+      contactsRes,
+      reportsRes,
+      logsRes,
+    ] = await Promise.all([
+      admin.from('profiles').select('*'),
+      admin.from('professional_profiles').select('*'),
+      admin.from('portfolio_items').select('*'),
+      admin.from('portfolio_images').select('*'),
+      admin.from('categories').select('*'),
+      admin.from('reviews').select('*'),
+      admin.from('contact_requests').select('*'),
+      admin.from('reports').select('*'),
+      admin.from('admin_audit_logs').select('*').order('created_at', { ascending: false }).limit(500),
+    ]);
+
+    const backupData = {
+      metadata: {
+        exportedAt: new Date().toISOString(),
+        exportedBy: user.id,
+        platform: 'Conecta Móveis Jundiaí',
+        counts: {
+          profiles: profilesRes.data?.length || 0,
+          professional_profiles: profProfilesRes.data?.length || 0,
+          portfolio_items: itemsRes.data?.length || 0,
+          portfolio_images: imagesRes.data?.length || 0,
+          categories: categoriesRes.data?.length || 0,
+          reviews: reviewsRes.data?.length || 0,
+          contact_requests: contactsRes.data?.length || 0,
+          reports: reportsRes.data?.length || 0,
+          admin_audit_logs: logsRes.data?.length || 0,
+        },
+      },
+      tables: {
+        profiles: profilesRes.data || [],
+        professional_profiles: profProfilesRes.data || [],
+        portfolio_items: itemsRes.data || [],
+        portfolio_images: imagesRes.data || [],
+        categories: categoriesRes.data || [],
+        reviews: reviewsRes.data || [],
+        contact_requests: contactsRes.data || [],
+        reports: reportsRes.data || [],
+        admin_audit_logs: logsRes.data || [],
+      },
+    };
+
+    await recordAdminLog({
+      adminId: user.id,
+      action: 'export_backup',
+      targetTable: 'system',
+      targetId: 'backup',
+      reason: 'Exportação manual de backup do banco de dados em JSON realizada pelo administrador',
+    });
+
+    return { success: true, data: backupData };
+  } catch (err: any) {
+    return { success: false, error: err.message || 'Falha ao gerar backup.' };
+  }
+}
+
