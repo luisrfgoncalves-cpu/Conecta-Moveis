@@ -145,9 +145,9 @@ export async function saveProfessionalProfile(
     }
   }
 
-  // Sincronizar avatar na tabela profiles do usuário
+  // Sincronizar avatar na tabela profiles do usuário (usando admin para garantir escrita)
   if (avatarUrl) {
-    await supabase.from('profiles').update({ avatar_url: avatarUrl }).eq('id', user.id);
+    await admin.from('profiles').update({ avatar_url: avatarUrl }).eq('id', user.id);
   }
 
   // Validar limites de categorias via Entitlements
@@ -232,7 +232,7 @@ export async function togglePublishProfile(
     // Buscar avatar na tabela profiles caso não esteja em professional_profiles
     let effectiveAvatar = profile.avatar_url;
     if (!effectiveAvatar) {
-      const { data: userProfile } = await supabase
+      const { data: userProfile } = await admin
         .from('profiles')
         .select('avatar_url')
         .eq('id', user.id)
@@ -426,10 +426,14 @@ export async function uploadAvatarAction(
   }
 
   const { data: urlData } = admin.storage.from('avatars').getPublicUrl(fileName);
+  const publicUrl = urlData.publicUrl;
+
+  // Imediatamente sincroniza a foto na tabela profiles do usuário
+  await admin.from('profiles').update({ avatar_url: publicUrl }).eq('id', user.id);
 
   return {
     success: true,
-    data: { publicUrl: urlData.publicUrl },
+    data: { publicUrl },
     message: 'Imagem enviada e otimizada em WebP com sucesso!',
   };
 }
