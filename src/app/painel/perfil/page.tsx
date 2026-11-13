@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/server';
+import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 import { redirect } from 'next/navigation';
 import type { Metadata } from 'next';
 import { ProfileWizard } from '@/components/profile/ProfileWizard';
@@ -18,8 +19,15 @@ export default async function PainelPerfilPage() {
     redirect('/entrar?next=/painel/perfil');
   }
 
+  // Obter client admin para carregar service_regions e profile_specialties sem bloqueio de RLS
+  const admin = createSupabaseClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    { auth: { autoRefreshToken: false, persistSession: false } }
+  );
+
   // Buscar perfil profissional com especialidades e regiões de atendimento associadas
-  const { data: professionalProfile } = await supabase
+  const { data: professionalProfile } = await admin
     .from('professional_profiles')
     .select(`
       *,
@@ -27,14 +35,14 @@ export default async function PainelPerfilPage() {
       service_regions(city, state, neighborhoods)
     `)
     .eq('user_id', user.id)
-    .single();
+    .maybeSingle();
 
   // Buscar avatar na tabela profiles básica
-  const { data: basicProfile } = await supabase
+  const { data: basicProfile } = await admin
     .from('profiles')
     .select('avatar_url')
     .eq('id', user.id)
-    .single();
+    .maybeSingle();
 
   const initialData = professionalProfile
     ? {

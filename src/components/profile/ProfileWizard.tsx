@@ -444,7 +444,18 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
           {steps.map((st) => {
             const Icon = st.icon;
             const isActive = currentStep === st.number;
-            const isDone = currentStep > st.number;
+
+            // Determinar se a etapa está genuinamente preenchida/concluída
+            let isDone = false;
+            if (st.number === 1) {
+              isDone = selectedSpecialties.length >= 1;
+            } else if (st.number === 2) {
+              isDone = !!avatarUrl && displayName.trim().length >= 3 && bio.trim().length >= 80;
+            } else if (st.number === 3) {
+              isDone = selectedSpecialties.length >= 1 && city.trim().length >= 2 && state.trim().length === 2 && neighborhoodsInput.trim().length > 0;
+            } else if (st.number === 4) {
+              isDone = whatsapp.trim().length >= 10 && isEmailConfirmed;
+            }
 
             return (
               <button

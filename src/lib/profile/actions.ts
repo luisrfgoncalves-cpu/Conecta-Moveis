@@ -211,8 +211,9 @@ export async function togglePublishProfile(
     return { error: 'Sessão expirada. Faça login novamente.' };
   }
 
-  // Buscar perfil para validar requisitos mínimos
-  const { data: profile } = await supabase
+  // Buscar perfil para validar requisitos mínimos (usando admin para ler relações com segurança contra RLS)
+  const admin = getAdminClient();
+  const { data: profile } = await admin
     .from('professional_profiles')
     .select('*, profile_specialties(specialty_id), service_regions(neighborhoods)')
     .eq('id', profileId)
