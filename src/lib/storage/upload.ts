@@ -99,3 +99,4 @@ export async function processAvatarImage(rawBuffer: Buffer): Promise<ImageValida
     };
   }
 }
+
