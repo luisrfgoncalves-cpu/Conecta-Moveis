@@ -16,6 +16,9 @@ import {
   AlertCircle,
   Loader2,
   Layers,
+  Edit3,
+  X,
+  ImagePlus,
 } from 'lucide-react';
 import {
   PortfolioItemWithImages,
@@ -25,6 +28,7 @@ import {
   reorderPortfolioPhotos,
   deletePortfolioImage,
   deletePortfolioProject,
+  updatePortfolioProject,
 } from '@/lib/portfolio/actions';
 import { CATEGORIES_CATALOG } from '@/lib/profile/schemas';
 
@@ -49,7 +53,19 @@ export function PortfolioManager({ initialItems, storage }: PortfolioManagerProp
   const [projectCategory, setProjectCategory] = useState('');
   const [authorshipDeclaration, setAuthorshipDeclaration] = useState(false);
 
-  // File input ref
+  // Upload de fotos NO formulário de criação
+  const [createFiles, setCreateFiles] = useState<File[]>([]);
+  const [createFilePreviews, setCreateFilePreviews] = useState<string[]>([]);
+  const createFileInputRef = useRef<HTMLInputElement>(null);
+
+  // Estado de edição de projeto existente
+  const [editingItemId, setEditingItemId] = useState<string | null>(null);
+  const [editTitle, setEditTitle] = useState('');
+  const [editDesc, setEditDesc] = useState('');
+  const [editCategory, setEditCategory] = useState('');
+  const [editLoading, setEditLoading] = useState(false);
+
+  // File input ref (upload de fotos em projetos já criados)
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDemoUpload, setIsDemoUpload] = useState(false);
 
@@ -106,6 +122,41 @@ export function PortfolioManager({ initialItems, storage }: PortfolioManagerProp
     });
   };
 
+  // Selecionar fotos para o formulário de CRIAÇÃO
+  const handleCreateFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    const MAX_CREATE_FILES = 6;
+    const remaining = MAX_CREATE_FILES - createFiles.length;
+    if (files.length > remaining) {
+      setErrorMessage(`Você pode adicionar no máximo ${MAX_CREATE_FILES} fotos por projeto (restam ${remaining} slots).`);
+      return;
+    }
+
+    const newFiles: File[] = [];
+    const newPreviews: string[] = [];
+
+    Array.from(files).forEach((file) => {
+      newFiles.push(file);
+      newPreviews.push(URL.createObjectURL(file));
+    });
+
+    setCreateFiles((prev) => [...prev, ...newFiles]);
+    setCreateFilePreviews((prev) => [...prev, ...newPreviews]);
+
+    // Reset input para permitir selecionar o mesmo arquivo novamente
+    if (createFileInputRef.current) createFileInputRef.current.value = '';
+  };
+
+  const removeCreateFile = (idx: number) => {
+    setCreateFiles((prev) => prev.filter((_, i) => i !== idx));
+    setCreateFilePreviews((prev) => {
+      URL.revokeObjectURL(prev[idx]);
+      return prev.filter((_, i) => i !== idx);
+    });
+  };
+
   const handleCreateProject = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
@@ -119,34 +170,62 @@ export function PortfolioManager({ initialItems, storage }: PortfolioManagerProp
     formData.append('authorship_declaration', String(authorshipDeclaration));
 
     const res = await createPortfolioProject(formData);
-    setLoading(false);
 
     if (!res.success) {
+      setLoading(false);
       setErrorMessage(res.error || 'Erro ao criar projeto.');
       return;
     }
 
-    setSuccessMessage('Projeto criado com sucesso! Agora você pode enviar as fotos.');
+    // Se há fotos selecionadas, fazer upload agora
+    if (createFiles.length > 0 && res.itemId) {
+      setActiveUploadItemId(res.itemId);
+      setUploadProgress(20);
+
+      try {
+        const uploadFormData = new FormData();
+        uploadFormData.append('itemId', res.itemId);
+        uploadFormData.append('is_demo', 'false');
+
+        setUploadProgress(40);
+        for (const file of createFiles) {
+          const compressed = await compressClientImage(file);
+          uploadFormData.append('files', compressed);
+        }
+
+        setUploadProgress(70);
+        const uploadRes = await uploadPortfolioPhotos(uploadFormData);
+        setUploadProgress(100);
+
+        if (!uploadRes.success) {
+          setErrorMessage(uploadRes.error || 'Projeto criado, mas falha ao enviar fotos.');
+        } else {
+          setSuccessMessage(`Projeto criado e ${uploadRes.uploadedCount || createFiles.length} foto(s) enviada(s) para moderação!`);
+        }
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : 'Erro ao processar as fotos.';
+        setErrorMessage(`Projeto criado, mas erro ao enviar fotos: ${msg}`);
+      } finally {
+        setActiveUploadItemId(null);
+        setUploadProgress(null);
+      }
+    } else {
+      setSuccessMessage('Projeto criado com sucesso! Agora você pode adicionar fotos.');
+    }
+
+    setLoading(false);
     setIsCreatingProject(false);
     setProjectTitle('');
     setProjectDesc('');
     setProjectCategory('');
     setAuthorshipDeclaration(false);
+    // Limpar previews
+    createFilePreviews.forEach((url) => URL.revokeObjectURL(url));
+    setCreateFiles([]);
+    setCreateFilePreviews([]);
 
-    // Atualizar lista local
-    if (res.itemId) {
-      setItems([
-        {
-          id: res.itemId,
-          title: projectTitle,
-          description: projectDesc || null,
-          category_id: projectCategory || null,
-          created_at: new Date().toISOString(),
-          images: [],
-        },
-        ...items,
-      ]);
-    }
+    // Recarregar para buscar o estado real do servidor (incluindo fotos)
+    setTimeout(() => window.location.reload(), 800);
   };
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>, itemId: string) => {
@@ -275,6 +354,53 @@ export function PortfolioManager({ initialItems, storage }: PortfolioManagerProp
     setTimeout(() => window.location.reload(), 1000);
   };
 
+  const startEditing = (item: PortfolioItemWithImages) => {
+    setEditingItemId(item.id);
+    setEditTitle(item.title);
+    setEditDesc(item.description || '');
+    setEditCategory(item.category_id || '');
+    setErrorMessage(null);
+    setSuccessMessage(null);
+  };
+
+  const cancelEditing = () => {
+    setEditingItemId(null);
+    setEditTitle('');
+    setEditDesc('');
+    setEditCategory('');
+  };
+
+  const handleSaveEdit = async (itemId: string) => {
+    setEditLoading(true);
+    setErrorMessage(null);
+    setSuccessMessage(null);
+
+    const formData = new FormData();
+    formData.append('item_id', itemId);
+    formData.append('title', editTitle);
+    formData.append('description', editDesc);
+    formData.append('category_id', editCategory);
+
+    const res = await updatePortfolioProject(formData);
+    setEditLoading(false);
+
+    if (!res.success) {
+      setErrorMessage(res.error || 'Falha ao atualizar projeto.');
+      return;
+    }
+
+    // Atualização otimista local
+    setItems((prev) =>
+      prev.map((it) =>
+        it.id === itemId
+          ? { ...it, title: editTitle, description: editDesc || null, category_id: editCategory || null }
+          : it
+      )
+    );
+    setSuccessMessage('Projeto atualizado com sucesso!');
+    cancelEditing();
+  };
+
   return (
     <div className="space-y-8">
       {/* Barra de Resumo de Armazenamento e Cota */}
@@ -348,7 +474,12 @@ export function PortfolioManager({ initialItems, storage }: PortfolioManagerProp
             </h3>
             <button
               type="button"
-              onClick={() => setIsCreatingProject(false)}
+              onClick={() => {
+                setIsCreatingProject(false);
+                createFilePreviews.forEach((url) => URL.revokeObjectURL(url));
+                setCreateFiles([]);
+                setCreateFilePreviews([]);
+              }}
               className="text-xs text-slate-400 hover:text-white"
             >
               Cancelar
@@ -402,6 +533,74 @@ export function PortfolioManager({ initialItems, storage }: PortfolioManagerProp
             />
           </div>
 
+          {/* Upload de Fotos na criação */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-300">
+                Fotos do Projeto (Opcional — até 6)
+              </label>
+              {createFiles.length > 0 && (
+                <span className="text-xs text-orange-400 font-semibold">
+                  {createFiles.length} foto(s) selecionada(s)
+                </span>
+              )}
+            </div>
+
+            {/* Grid de pré-visualização */}
+            {createFilePreviews.length > 0 && (
+              <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+                {createFilePreviews.map((preview, idx) => (
+                  <div key={idx} className="relative group rounded-xl overflow-hidden aspect-square bg-slate-900 border border-white/10">
+                    <Image src={preview} alt={`Prévia ${idx + 1}`} fill className="object-cover" />
+                    <button
+                      type="button"
+                      onClick={() => removeCreateFile(idx)}
+                      className="absolute inset-0 flex items-center justify-center bg-black/60 opacity-0 group-hover:opacity-100 transition text-white"
+                    >
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div>
+                ))}
+                {createFiles.length < 6 && (
+                  <label className="rounded-xl aspect-square bg-white/5 border border-dashed border-white/20 flex flex-col items-center justify-center text-slate-500 hover:border-orange-500/50 hover:text-orange-400 cursor-pointer transition">
+                    <ImagePlus className="w-5 h-5" />
+                    <span className="text-[10px] mt-1">Mais</span>
+                    <input
+                      ref={createFileInputRef}
+                      type="file"
+                      multiple
+                      accept="image/jpeg,image/png,image/webp"
+                      onChange={handleCreateFileSelect}
+                      className="hidden"
+                    />
+                  </label>
+                )}
+              </div>
+            )}
+
+            {createFiles.length === 0 && (
+              <label className="flex flex-col items-center justify-center gap-2 p-6 rounded-xl bg-white/5 border border-dashed border-white/15 hover:border-orange-500/40 hover:bg-orange-500/5 cursor-pointer transition group">
+                <ImagePlus className="w-7 h-7 text-slate-500 group-hover:text-orange-400 transition" />
+                <div className="text-center">
+                  <p className="text-xs font-semibold text-slate-300 group-hover:text-white transition">
+                    Selecionar Fotos do Projeto
+                  </p>
+                  <p className="text-[11px] text-slate-500 mt-0.5">
+                    JPG, PNG ou WebP • Até 6 fotos • Comprimidas automaticamente
+                  </p>
+                </div>
+                <input
+                  ref={createFileInputRef}
+                  type="file"
+                  multiple
+                  accept="image/jpeg,image/png,image/webp"
+                  onChange={handleCreateFileSelect}
+                  className="hidden"
+                />
+              </label>
+            )}
+          </div>
+
           {/* Declaração Obrigatória de Autoria */}
           <div className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-2">
             <label className="flex items-start gap-3 cursor-pointer">
@@ -424,7 +623,12 @@ export function PortfolioManager({ initialItems, storage }: PortfolioManagerProp
           <div className="flex justify-end gap-3 pt-2">
             <button
               type="button"
-              onClick={() => setIsCreatingProject(false)}
+              onClick={() => {
+                setIsCreatingProject(false);
+                createFilePreviews.forEach((url) => URL.revokeObjectURL(url));
+                setCreateFiles([]);
+                setCreateFilePreviews([]);
+              }}
               className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white bg-white/5 hover:bg-white/10 transition"
             >
               Cancelar
@@ -432,9 +636,10 @@ export function PortfolioManager({ initialItems, storage }: PortfolioManagerProp
             <button
               type="submit"
               disabled={loading || !authorshipDeclaration}
-              className="px-6 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-orange-500 hover:bg-orange-600 text-white transition disabled:opacity-50"
+              className="px-6 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-orange-500 hover:bg-orange-600 text-white transition disabled:opacity-50 flex items-center gap-2"
             >
-              {loading ? 'Salvando...' : 'Criar Projeto'}
+              {loading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+              {loading ? 'Salvando...' : createFiles.length > 0 ? `Criar e Enviar ${createFiles.length} Foto(s)` : 'Criar Projeto'}
             </button>
           </div>
         </form>
@@ -461,47 +666,132 @@ export function PortfolioManager({ initialItems, storage }: PortfolioManagerProp
             >
               {/* Cabeçalho do Projeto */}
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-4 border-b border-white/10">
-                <div>
-                  <h4 className="text-lg font-bold text-white">{item.title}</h4>
-                  {item.description && (
-                    <p className="text-xs text-slate-400 mt-1 max-w-2xl leading-relaxed">
-                      {item.description}
-                    </p>
-                  )}
+                <div className="flex-1 min-w-0">
+                  {editingItemId !== item.id ? (
+                    <>
+                      <h4 className="text-lg font-bold text-white truncate">{item.title}</h4>
+                      {item.description && (
+                        <p className="text-xs text-slate-400 mt-1 max-w-2xl leading-relaxed line-clamp-2">
+                          {item.description}
+                        </p>
+                      )}
+                    </>
+                  ) : null}
                 </div>
 
-                <div className="flex items-center gap-2 self-end sm:self-auto">
-                  {/* Botão de Upload de Fotos */}
-                  <label
-                    className={`px-3.5 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition cursor-pointer ${
-                      currentStorage.canUploadMore
-                        ? 'bg-orange-500/20 hover:bg-orange-500/30 text-orange-400 border border-orange-500/30'
-                        : 'bg-white/5 text-slate-500 border border-white/5 cursor-not-allowed opacity-50'
-                    }`}
-                  >
-                    <UploadCloud className="w-4 h-4" />
-                    <span>Adicionar Fotos</span>
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      multiple
-                      accept="image/jpeg,image/png,image/webp"
-                      disabled={!currentStorage.canUploadMore || activeUploadItemId === item.id}
-                      onChange={(e) => handleFileSelect(e, item.id)}
-                      className="hidden"
-                    />
-                  </label>
+                {editingItemId !== item.id && (
+                  <div className="flex items-center gap-2 self-end sm:self-auto shrink-0">
+                    {/* Botão Editar */}
+                    <button
+                      type="button"
+                      onClick={() => startEditing(item)}
+                      className="p-1.5 rounded-xl text-slate-400 hover:text-orange-400 hover:bg-orange-500/10 transition"
+                      title="Editar projeto"
+                    >
+                      <Edit3 className="w-4 h-4" />
+                    </button>
 
-                  <button
-                    type="button"
-                    onClick={() => handleDeleteProject(item.id)}
-                    className="p-1.5 rounded-xl text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition"
-                    title="Excluir projeto e fotos"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
+                    {/* Botão de Upload de Fotos */}
+                    <label
+                      className={`px-3.5 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition cursor-pointer ${
+                        currentStorage.canUploadMore
+                          ? 'bg-orange-500/20 hover:bg-orange-500/30 text-orange-400 border border-orange-500/30'
+                          : 'bg-white/5 text-slate-500 border border-white/5 cursor-not-allowed opacity-50'
+                      }`}
+                    >
+                      <UploadCloud className="w-4 h-4" />
+                      <span>Adicionar Fotos</span>
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        multiple
+                        accept="image/jpeg,image/png,image/webp"
+                        disabled={!currentStorage.canUploadMore || activeUploadItemId === item.id}
+                        onChange={(e) => handleFileSelect(e, item.id)}
+                        className="hidden"
+                      />
+                    </label>
+
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteProject(item.id)}
+                      className="p-1.5 rounded-xl text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition"
+                      title="Excluir projeto e fotos"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                )}
               </div>
+
+              {/* Formulário de Edição Inline */}
+              {editingItemId === item.id && (
+                <div className="space-y-4 p-4 rounded-xl bg-orange-500/5 border border-orange-500/20 animate-in fade-in duration-150">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold uppercase tracking-wider text-orange-400 flex items-center gap-1.5">
+                      <Edit3 className="w-3.5 h-3.5" />
+                      Editar Projeto
+                    </span>
+                    <button type="button" onClick={cancelEditing} className="text-slate-400 hover:text-white transition">
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div className="space-y-1">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-400">Título *</label>
+                      <input
+                        type="text"
+                        value={editTitle}
+                        onChange={(e) => setEditTitle(e.target.value)}
+                        className="w-full px-3 py-2 rounded-xl bg-slate-950/80 border border-white/20 text-white text-sm focus:border-orange-500 focus:outline-none"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="block text-xs font-bold uppercase tracking-wider text-slate-400">Categoria</label>
+                      <select
+                        value={editCategory}
+                        onChange={(e) => setEditCategory(e.target.value)}
+                        className="w-full px-3 py-2 rounded-xl bg-slate-950/80 border border-white/20 text-white text-sm focus:border-orange-500 focus:outline-none"
+                      >
+                        <option value="">Sem categoria</option>
+                        {CATEGORIES_CATALOG.map((cat) => (
+                          <option key={cat.id} value={cat.id}>{cat.name}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="block text-xs font-bold uppercase tracking-wider text-slate-400">Descrição</label>
+                    <textarea
+                      rows={2}
+                      value={editDesc}
+                      onChange={(e) => setEditDesc(e.target.value)}
+                      className="w-full px-3 py-2 rounded-xl bg-slate-950/80 border border-white/20 text-white text-sm focus:border-orange-500 focus:outline-none"
+                    />
+                  </div>
+
+                  <div className="flex justify-end gap-2">
+                    <button
+                      type="button"
+                      onClick={cancelEditing}
+                      className="px-4 py-1.5 rounded-xl text-xs font-semibold text-slate-300 bg-white/5 hover:bg-white/10 transition"
+                    >
+                      Cancelar
+                    </button>
+                    <button
+                      type="button"
+                      disabled={editLoading || !editTitle.trim() || editTitle.trim().length < 3}
+                      onClick={() => handleSaveEdit(item.id)}
+                      className="px-5 py-1.5 rounded-xl text-xs font-bold uppercase tracking-wider bg-orange-500 hover:bg-orange-600 text-white transition disabled:opacity-50 flex items-center gap-1.5"
+                    >
+                      {editLoading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+                      {editLoading ? 'Salvando...' : 'Salvar Edição'}
+                    </button>
+                  </div>
+                </div>
+              )}
 
               {/* Barra de Progresso de Upload */}
               {activeUploadItemId === item.id && uploadProgress !== null && (
@@ -632,4 +922,3 @@ export function PortfolioManager({ initialItems, storage }: PortfolioManagerProp
     </div>
   );
 }
-

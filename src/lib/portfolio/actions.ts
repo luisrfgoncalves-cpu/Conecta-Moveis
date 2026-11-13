@@ -233,6 +233,47 @@ export async function createPortfolioProject(formData: FormData): Promise<{ succ
 }
 
 /**
+ * Edição de um projeto de Portfólio existente (título, descrição e categoria).
+ */
+export async function updatePortfolioProject(
+  formData: FormData
+): Promise<{ success: boolean; error?: string }> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { success: false, error: 'Usuário não autenticado.' };
+
+  const itemId = (formData.get('item_id') as string)?.trim();
+  const title = (formData.get('title') as string)?.trim();
+  const description = (formData.get('description') as string)?.trim() || null;
+  const category_id = (formData.get('category_id') as string)?.trim() || null;
+
+  if (!itemId) return { success: false, error: 'ID do projeto não informado.' };
+  if (!title || title.length < 3)
+    return { success: false, error: 'O título deve ter no mínimo 3 caracteres.' };
+
+  const { data: profile } = await supabase
+    .from('professional_profiles')
+    .select('id')
+    .eq('user_id', user.id)
+    .single();
+
+  if (!profile) return { success: false, error: 'Perfil profissional não encontrado.' };
+
+  const { error } = await supabase
+    .from('portfolio_items')
+    .update({ title, description, category_id: category_id || null })
+    .eq('id', itemId)
+    .eq('profile_id', profile.id);
+
+  if (error) return { success: false, error: error.message };
+
+  revalidatePath('/painel/portfolio');
+  return { success: true };
+}
+
+/**
  * Upload seguro de fotos para o bucket `portfolio-pending`.
  * Valida cota máxima (6 fotos), magic bytes, remove EXIF, gera miniatura e registra bytes.
  */
