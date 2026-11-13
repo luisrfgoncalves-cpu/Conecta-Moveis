@@ -5,6 +5,10 @@ import Image from 'next/image';
 import { saveCompany, uploadAvatarAction } from '@/lib/profile/actions';
 import { type CompanyInput } from '@/lib/profile/schemas';
 import {
+  validateClientImageFile,
+  processClientImage,
+} from '@/lib/storage/clientImage';
+import {
   Building2,
   Camera,
   CheckCircle2,
@@ -39,21 +43,44 @@ export function CompanyForm({ initialCompany }: Props) {
   const [logoUrl, setLogoUrl] = useState<string>(initialCompany?.logo_url ?? '');
 
   async function handleLogoChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const rawFile = e.target.files?.[0];
+    if (!rawFile) return;
+
+    e.target.value = '';
+    setServerError('');
+    setServerSuccess('');
+
+    const validation = validateClientImageFile(rawFile, 15 * 1024 * 1024);
+    if (!validation.valid) {
+      setServerError(validation.error || 'Arquivo inválido.');
+      return;
+    }
 
     setUploadingLogo(true);
-    setServerError('');
-    const fd = new FormData();
-    fd.append('file', file);
+    try {
+      const processedFile = await processClientImage(rawFile, {
+        squareCrop: true,
+        maxDimension: 512,
+        quality: 0.85,
+        outputType: 'image/webp',
+      });
 
-    const res = await uploadAvatarAction(fd);
-    setUploadingLogo(false);
+      const fd = new FormData();
+      fd.append('file', processedFile);
 
-    if ('error' in res) {
-      setServerError(res.error);
-    } else if (res.data?.publicUrl) {
-      setLogoUrl(res.data.publicUrl);
+      const res = await uploadAvatarAction(fd);
+
+      if ('error' in res) {
+        setServerError(res.error);
+      } else if (res.data?.publicUrl) {
+        setLogoUrl(res.data.publicUrl);
+        setServerSuccess('Logotipo atualizado e otimizado com sucesso!');
+      }
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Falha ao processar e enviar logotipo.';
+      setServerError(msg);
+    } finally {
+      setUploadingLogo(false);
     }
   }
 
@@ -121,22 +148,27 @@ export function CompanyForm({ initialCompany }: Props) {
             </div>
             <label
               htmlFor="company-logo-upload"
-              className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-white text-xs font-bold transition border border-white/20"
+              className="cursor-pointer inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-orange-500/20 hover:bg-orange-500/30 text-orange-200 text-xs font-bold transition border border-orange-500/30 hover:border-orange-500/50 shadow-sm"
             >
-              <Camera className="w-4 h-4" />
+              <Camera className="w-4 h-4 text-orange-400" />
               {logoUrl ? 'Trocar logotipo' : 'Enviar logotipo'}
             </label>
             <input
               id="company-logo-upload"
               type="file"
-              accept="image/jpeg,image/png,image/webp"
+              accept="image/jpeg,image/png,image/webp,image/jpg"
               onChange={handleLogoChange}
               disabled={uploadingLogo}
               className="hidden"
             />
-            <p className="text-xs text-slate-400">
-              Otimizado em WebP (máx. 512px e até 150 KB). EXIF removido.
-            </p>
+            <div className="text-xs text-slate-400 space-y-0.5">
+              <p>
+                <strong className="text-slate-300">Formatos aceitos:</strong> JPG, PNG ou WebP.
+              </p>
+              <p className="text-[11px] text-slate-400">
+                Enquadrado automaticamente em formato quadrado (1:1), redimensionado para 512px e comprimido em WebP.
+              </p>
+            </div>
           </div>
         </div>
 

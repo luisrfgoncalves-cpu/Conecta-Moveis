@@ -1,12 +1,13 @@
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 import { headers } from 'next/headers';
 
-type RateLimitAction = 'signup' | 'login' | 'password_recovery';
+type RateLimitAction = 'signup' | 'login' | 'password_recovery' | 'resend_confirmation';
 
 const LIMITS: Record<RateLimitAction, { max: number; windowMinutes: number }> = {
   signup: { max: 5, windowMinutes: 60 },
   login: { max: 10, windowMinutes: 15 },
   password_recovery: { max: 3, windowMinutes: 60 },
+  resend_confirmation: { max: 4, windowMinutes: 30 },
 };
 
 function getAdminClient() {

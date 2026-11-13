@@ -89,7 +89,14 @@ export async function signIn(formData: unknown): Promise<ActionResult> {
   const { error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) {
-    // Genérico — não revelar se e-mail existe
+    const errorMsg = error.message?.toLowerCase() || '';
+    if (errorMsg.includes('email not confirmed') || errorMsg.includes('email_not_confirmed')) {
+      return {
+        error:
+          'Seu cadastro foi realizado, mas seu e-mail ainda não foi confirmado. Acesse sua caixa de entrada (e spam) e clique no link de ativação enviado para o seu e-mail.',
+      };
+    }
+    // Genérico para proteger privacidade
     return { error: 'E-mail ou senha incorretos.' };
   }
 
@@ -129,6 +136,38 @@ export async function recoverPassword(formData: unknown): Promise<ActionResult> 
     success: true,
     message:
       'Se esse e-mail estiver cadastrado, você receberá um link para redefinir sua senha.',
+  };
+}
+
+// ─── Reenvio de Confirmação de Cadastro ────────────────────────────────────────
+
+export async function resendConfirmationEmail(email: string): Promise<ActionResult> {
+  const trimmed = email?.trim().toLowerCase();
+  if (!trimmed || !trimmed.includes('@')) {
+    return { error: 'Informe um e-mail válido para reenviar a confirmação.' };
+  }
+
+  const rateCheck = await checkRateLimit('resend_confirmation');
+  if (!rateCheck.allowed) {
+    return { error: 'Muitas solicitações. Aguarde alguns instantes antes de reenviar.' };
+  }
+
+  const supabase = await createClient();
+  const { error } = await supabase.auth.resend({
+    type: 'signup',
+    email: trimmed,
+    options: {
+      emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback`,
+    },
+  });
+
+  if (error) {
+    return { error: 'Não foi possível reenviar o link no momento. Tente novamente em breve.' };
+  }
+
+  return {
+    success: true,
+    message: 'Novo link de confirmação enviado! Verifique sua caixa de entrada e spam.',
   };
 }
 

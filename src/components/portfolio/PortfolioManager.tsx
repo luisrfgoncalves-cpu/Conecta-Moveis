@@ -170,35 +170,38 @@ export function PortfolioManager({ initialItems, storage }: PortfolioManagerProp
     setActiveUploadItemId(itemId);
     setUploadProgress(20);
 
-    const formData = new FormData();
-    formData.append('itemId', itemId);
-    formData.append('is_demo', String(isDemoUpload));
+    try {
+      const formData = new FormData();
+      formData.append('itemId', itemId);
+      formData.append('is_demo', String(isDemoUpload));
 
-    // Compressão cliente
-    setUploadProgress(40);
-    for (let i = 0; i < selectedFiles.length; i++) {
-      const compressed = await compressClientImage(selectedFiles[i]);
-      formData.append('files', compressed);
-    }
+      // Compressão cliente
+      setUploadProgress(40);
+      for (let i = 0; i < selectedFiles.length; i++) {
+        const compressed = await compressClientImage(selectedFiles[i]);
+        formData.append('files', compressed);
+      }
 
-    setUploadProgress(70);
-    const res = await uploadPortfolioPhotos(formData);
-    setUploadProgress(100);
-    setActiveUploadItemId(null);
+      setUploadProgress(70);
+      const res = await uploadPortfolioPhotos(formData);
+      setUploadProgress(100);
 
-    if (fileInputRef.current) fileInputRef.current.value = '';
+      if (!res.success) {
+        setErrorMessage(res.error || 'Falha ao enviar fotos.');
+        return;
+      }
 
-    if (!res.success) {
-      setErrorMessage(res.error || 'Falha ao enviar fotos.');
+      setSuccessMessage(`${res.uploadedCount || selectedFiles.length} foto(s) enviada(s) para moderação!`);
+      // Recarregar a página para atualizar o estado completo
+      window.location.reload();
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Erro ao processar as fotos para envio.';
+      setErrorMessage(msg);
+    } finally {
+      setActiveUploadItemId(null);
       setUploadProgress(null);
-      return;
+      if (fileInputRef.current) fileInputRef.current.value = '';
     }
-
-    setSuccessMessage(`${res.uploadedCount || selectedFiles.length} foto(s) enviada(s) para moderação!`);
-    setTimeout(() => setUploadProgress(null), 1000);
-
-    // Recarregar a página para atualizar o estado completo
-    window.location.reload();
   };
 
   const handleMoveImage = async (itemId: string, imageIndex: number, direction: 'up' | 'down') => {

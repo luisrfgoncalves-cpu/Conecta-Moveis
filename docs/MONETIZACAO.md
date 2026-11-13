@@ -65,3 +65,4 @@ Recomendação técnica: Gateway com forte presença no mercado nacional (ex: **
 * O selo de destaque patrocinado é rotulado textualmente como **"Destaque patrocinado"**.
 * É proibido usar termos como "Melhor avaliado", "Recomendado pela plataforma" ou "Garantido" para perfis pagos.
 * A ordenação na busca posiciona os perfis patrocinados com peso moderado sem monopolizar o resultado da busca orgânica.
+

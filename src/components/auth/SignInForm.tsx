@@ -5,9 +5,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useState, useTransition } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { signIn } from '@/lib/auth/actions';
+import { signIn, resendConfirmationEmail } from '@/lib/auth/actions';
 import { signInSchema, type SignInInput } from '@/lib/auth/schemas';
-import { Eye, EyeOff, Loader2 } from 'lucide-react';
+import { Eye, EyeOff, Loader2, MailCheck, AlertTriangle } from 'lucide-react';
 
 export function SignInForm() {
   const router = useRouter();
@@ -16,19 +16,45 @@ export function SignInForm() {
   const hasConfirmationError = searchParams.get('erro') === 'confirmacao';
 
   const [serverError, setServerError] = useState('');
+  const [resendSuccess, setResendSuccess] = useState('');
+  const [isResending, setIsResending] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [isPending, startTransition] = useTransition();
 
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<SignInInput>({
     resolver: zodResolver(signInSchema),
   });
 
+  const emailValue = watch('email');
+  const isUnconfirmedEmailError = serverError.toLowerCase().includes('ainda não foi confirmado');
+
+  async function handleResendEmail() {
+    if (!emailValue || !emailValue.includes('@')) {
+      setServerError('Preencha seu e-mail no formulário abaixo para receber um novo link.');
+      return;
+    }
+    setIsResending(true);
+    setResendSuccess('');
+    try {
+      const res = await resendConfirmationEmail(emailValue);
+      if ('error' in res) {
+        setServerError(res.error);
+      } else {
+        setResendSuccess(res.message || 'Link reenviado com sucesso! Confira sua caixa de entrada.');
+      }
+    } finally {
+      setIsResending(false);
+    }
+  }
+
   function onSubmit(data: SignInInput) {
     setServerError('');
+    setResendSuccess('');
     startTransition(async () => {
       const result = await signIn(data);
       if ('error' in result) {
@@ -47,14 +73,56 @@ export function SignInForm() {
       </p>
 
       {hasConfirmationError && (
-        <div role="alert" className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm">
-          Link de confirmação inválido ou expirado. Solicite um novo link de acesso.
+        <div role="alert" className="mb-4 p-3.5 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm flex items-start gap-2.5">
+          <AlertTriangle className="w-5 h-5 flex-shrink-0 text-red-400 mt-0.5" />
+          <span>Link de confirmação inválido ou expirado. Digite seu e-mail abaixo e clique em reenviar link.</span>
+        </div>
+      )}
+
+      {resendSuccess && (
+        <div role="status" className="mb-4 p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-sm flex items-start gap-2.5">
+          <MailCheck className="w-5 h-5 flex-shrink-0 text-emerald-400 mt-0.5" />
+          <span>{resendSuccess}</span>
         </div>
       )}
 
       {serverError && (
-        <div role="alert" className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm">
-          {serverError}
+        <div
+          role="alert"
+          className={`mb-4 p-3.5 rounded-xl border text-sm flex flex-col gap-2 ${
+            isUnconfirmedEmailError
+              ? 'bg-amber-500/10 border-amber-500/30 text-amber-300'
+              : 'bg-red-500/10 border-red-500/30 text-red-400'
+          }`}
+        >
+          <div className="flex items-start gap-2.5">
+            <AlertTriangle className={`w-5 h-5 flex-shrink-0 mt-0.5 ${isUnconfirmedEmailError ? 'text-amber-400' : 'text-red-400'}`} />
+            <p className="flex-1 leading-relaxed">{serverError}</p>
+          </div>
+
+          {isUnconfirmedEmailError && (
+            <div className="mt-2 pt-2 border-t border-amber-500/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+              <span className="text-xs text-amber-200/80">Não localizou a mensagem de ativação?</span>
+              <button
+                type="button"
+                onClick={handleResendEmail}
+                disabled={isResending}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 text-xs font-bold transition border border-amber-500/40 disabled:opacity-50"
+              >
+                {isResending ? (
+                  <>
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    Reenviando…
+                  </>
+                ) : (
+                  <>
+                    <MailCheck className="w-3.5 h-3.5" />
+                    Reenviar e-mail de ativação
+                  </>
+                )}
+              </button>
+            </div>
+          )}
         </div>
       )}
 
