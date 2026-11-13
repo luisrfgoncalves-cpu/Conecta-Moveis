@@ -123,12 +123,14 @@ export function SearchFilters({ currentFilters }: SearchFiltersProps) {
             {/* Conteúdo compartilhado dos filtros */}
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+                <label htmlFor="mobile-termo" className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
                   Palavra-chave / Nome
                 </label>
                 <div className="relative">
                   <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3.5" />
                   <input
+                    id="mobile-termo"
+                    aria-label="Palavra-chave ou Nome"
                     type="text"
                     value={termo}
                     onChange={(e) => setTermo(e.target.value)}
@@ -140,10 +142,12 @@ export function SearchFilters({ currentFilters }: SearchFiltersProps) {
 
               <div className="grid grid-cols-3 gap-2">
                 <div className="col-span-1">
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+                  <label htmlFor="mobile-uf" className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
                     UF
                   </label>
                   <select
+                    id="mobile-uf"
+                    aria-label="UF"
                     value={uf}
                     onChange={(e) => setUf(e.target.value)}
                     className="w-full px-2 py-2.5 rounded-xl bg-slate-950 border border-white/20 text-white text-sm focus:border-orange-500 focus:outline-none"
@@ -157,10 +161,12 @@ export function SearchFilters({ currentFilters }: SearchFiltersProps) {
                 </div>
 
                 <div className="col-span-2">
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+                  <label htmlFor="mobile-cidade" className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
                     Cidade
                   </label>
                   <input
+                    id="mobile-cidade"
+                    aria-label="Cidade"
                     type="text"
                     value={cidade}
                     onChange={(e) => setCidade(e.target.value)}
@@ -171,10 +177,12 @@ export function SearchFilters({ currentFilters }: SearchFiltersProps) {
               </div>
 
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+                <label htmlFor="mobile-categoria" className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
                   Categoria
                 </label>
                 <select
+                  id="mobile-categoria"
+                  aria-label="Categoria"
                   value={categoria}
                   onChange={(e) => {
                     setCategoria(e.target.value);
@@ -192,10 +200,12 @@ export function SearchFilters({ currentFilters }: SearchFiltersProps) {
               </div>
 
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+                <label htmlFor="mobile-especialidade" className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
                   Especialidade
                 </label>
                 <select
+                  id="mobile-especialidade"
+                  aria-label="Especialidade"
                   value={especialidade}
                   onChange={(e) => setEspecialidade(e.target.value)}
                   className="w-full px-3 py-2.5 rounded-xl bg-slate-950 border border-white/20 text-white text-sm focus:border-orange-500 focus:outline-none"
@@ -210,10 +220,12 @@ export function SearchFilters({ currentFilters }: SearchFiltersProps) {
               </div>
 
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+                <label htmlFor="mobile-ordenacao" className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
                   Ordenar Por
                 </label>
                 <select
+                  id="mobile-ordenacao"
+                  aria-label="Ordenar Por"
                   value={ordenacao}
                   onChange={(e) => setOrdenacao(e.target.value)}
                   className="w-full px-3 py-2.5 rounded-xl bg-slate-950 border border-white/20 text-white text-sm focus:border-orange-500 focus:outline-none"
@@ -276,12 +288,14 @@ export function SearchFilters({ currentFilters }: SearchFiltersProps) {
           >
             {/* Termo */}
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+              <label htmlFor="desktop-termo" className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
                 Palavra-chave
               </label>
               <div className="relative">
                 <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3.5" />
                 <input
+                  id="desktop-termo"
+                  aria-label="Palavra-chave"
                   type="text"
                   value={termo}
                   onChange={(e) => setTermo(e.target.value)}
@@ -294,10 +308,12 @@ export function SearchFilters({ currentFilters }: SearchFiltersProps) {
             {/* UF e Cidade */}
             <div className="grid grid-cols-3 gap-2">
               <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+                <label htmlFor="desktop-uf" className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
                   UF
                 </label>
                 <select
+                  id="desktop-uf"
+                  aria-label="UF"
                   value={uf}
                   onChange={(e) => setUf(e.target.value)}
                   className="w-full px-2 py-2 rounded-xl bg-slate-950/80 border border-white/15 text-white text-xs focus:border-orange-500 focus:outline-none"
@@ -310,10 +326,12 @@ export function SearchFilters({ currentFilters }: SearchFiltersProps) {
                 </select>
               </div>
               <div className="col-span-2">
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+                <label htmlFor="desktop-cidade" className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
                   Cidade
                 </label>
                 <input
+                  id="desktop-cidade"
+                  aria-label="Cidade"
                   type="text"
                   value={cidade}
                   onChange={(e) => setCidade(e.target.value)}
@@ -325,10 +343,12 @@ export function SearchFilters({ currentFilters }: SearchFiltersProps) {
 
             {/* Categoria */}
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+              <label htmlFor="desktop-categoria" className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
                 Categoria
               </label>
               <select
+                id="desktop-categoria"
+                aria-label="Categoria"
                 value={categoria}
                 onChange={(e) => {
                   setCategoria(e.target.value);
@@ -347,10 +367,12 @@ export function SearchFilters({ currentFilters }: SearchFiltersProps) {
 
             {/* Especialidade */}
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+              <label htmlFor="desktop-especialidade" className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
                 Especialidade
               </label>
               <select
+                id="desktop-especialidade"
+                aria-label="Especialidade"
                 value={especialidade}
                 onChange={(e) => setEspecialidade(e.target.value)}
                 className="w-full px-3 py-2 rounded-xl bg-slate-950/80 border border-white/15 text-white text-xs focus:border-orange-500 focus:outline-none"
@@ -366,10 +388,12 @@ export function SearchFilters({ currentFilters }: SearchFiltersProps) {
 
             {/* Ordenação */}
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
+              <label htmlFor="desktop-ordenacao" className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
                 Ordenação
               </label>
               <select
+                id="desktop-ordenacao"
+                aria-label="Ordenação"
                 value={ordenacao}
                 onChange={(e) => setOrdenacao(e.target.value)}
                 className="w-full px-3 py-2 rounded-xl bg-slate-950/80 border border-white/15 text-white text-xs focus:border-orange-500 focus:outline-none"

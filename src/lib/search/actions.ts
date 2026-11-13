@@ -207,41 +207,41 @@ export async function searchProfessionals(filters: SearchFilters): Promise<Searc
           .from('public_professionals')
           .select('*', { count: 'exact' });
 
-      if (filters.termo && filters.termo.trim().length > 0) {
-        const term = filters.termo.trim();
-        adminQuery = adminQuery.or(`display_name.ilike.%${term}%,bio.ilike.%${term}%`);
-      }
-      if (filters.uf && filters.uf.trim().length > 0) {
-        adminQuery = adminQuery.eq('state', filters.uf.trim().toUpperCase());
-      }
-      if (filters.cidade && filters.cidade.trim().length > 0) {
-        const rawCity = filters.cidade.trim();
-        if (rawCity.toLowerCase().includes('jundi')) {
-          adminQuery = adminQuery.or('city.ilike.%Jundiaí%,city.ilike.%Jundiai%');
-        } else {
-          adminQuery = adminQuery.ilike('city', `%${rawCity}%`);
+        if (filters.termo && filters.termo.trim().length > 0) {
+          const term = filters.termo.trim();
+          adminQuery = adminQuery.or(`display_name.ilike.%${term}%,bio.ilike.%${term}%`);
         }
-      }
-      if (profileIdsFilter && profileIdsFilter.length > 0) {
-        adminQuery = adminQuery.in('id', profileIdsFilter);
-      }
-      if (sort === 'recentes' || sort === 'atividade') {
-        adminQuery = adminQuery.order('created_at', { ascending: false });
-      } else {
-        adminQuery = adminQuery.order('is_featured', { ascending: false }).order('created_at', { ascending: false });
-      }
-      adminQuery = adminQuery.range(from, to);
+        if (filters.uf && filters.uf.trim().length > 0) {
+          adminQuery = adminQuery.eq('state', filters.uf.trim().toUpperCase());
+        }
+        if (filters.cidade && filters.cidade.trim().length > 0) {
+          const rawCity = filters.cidade.trim();
+          if (rawCity.toLowerCase().includes('jundi')) {
+            adminQuery = adminQuery.or('city.ilike.%Jundiaí%,city.ilike.%Jundiai%');
+          } else {
+            adminQuery = adminQuery.ilike('city', `%${rawCity}%`);
+          }
+        }
+        if (profileIdsFilter && profileIdsFilter.length > 0) {
+          adminQuery = adminQuery.in('id', profileIdsFilter);
+        }
+        if (sort === 'recentes' || sort === 'atividade') {
+          adminQuery = adminQuery.order('created_at', { ascending: false });
+        } else {
+          adminQuery = adminQuery.order('is_featured', { ascending: false }).order('created_at', { ascending: false });
+        }
+        adminQuery = adminQuery.range(from, to);
 
-      const adminRes = await adminQuery;
-      if (adminRes.data && adminRes.data.length > 0) {
-        data = adminRes.data;
-        count = adminRes.count;
-      } else {
-        // Segundo nível de resiliência: se a view no Supabase ainda estiver bloqueada ou sem SECURITY DEFINER,
-        // consulta diretamente na tabela professional_profiles (somente perfis publicados e não suspensos)
-        let directQuery = adminClient
-          .from('professional_profiles')
-          .select(`
+        const adminRes = await adminQuery;
+        if (adminRes.data && adminRes.data.length > 0) {
+          data = adminRes.data;
+          count = adminRes.count;
+        } else {
+          // Segundo nível de resiliência: se a view no Supabase ainda estiver bloqueada ou sem SECURITY DEFINER,
+          // consulta diretamente na tabela professional_profiles (somente perfis publicados e não suspensos)
+          let directQuery = adminClient
+            .from('professional_profiles')
+            .select(`
             id,
             display_name,
             slug,
@@ -257,70 +257,70 @@ export async function searchProfessionals(filters: SearchFilters): Promise<Searc
             user_id,
             companies(name, slug)
           `, { count: 'exact' })
-          .eq('is_published', true)
-          .eq('is_suspended', false);
+            .eq('is_published', true)
+            .eq('is_suspended', false);
 
-        if (filters.termo && filters.termo.trim().length > 0) {
-          const term = filters.termo.trim();
-          directQuery = directQuery.or(`display_name.ilike.%${term}%,bio.ilike.%${term}%`);
-        }
-        if (filters.uf && filters.uf.trim().length > 0) {
-          directQuery = directQuery.eq('state', filters.uf.trim().toUpperCase());
-        }
-        if (filters.cidade && filters.cidade.trim().length > 0) {
-          const rawCity = filters.cidade.trim();
-          if (rawCity.toLowerCase().includes('jundi')) {
-            directQuery = directQuery.or('city.ilike.%Jundiaí%,city.ilike.%Jundiai%');
+          if (filters.termo && filters.termo.trim().length > 0) {
+            const term = filters.termo.trim();
+            directQuery = directQuery.or(`display_name.ilike.%${term}%,bio.ilike.%${term}%`);
+          }
+          if (filters.uf && filters.uf.trim().length > 0) {
+            directQuery = directQuery.eq('state', filters.uf.trim().toUpperCase());
+          }
+          if (filters.cidade && filters.cidade.trim().length > 0) {
+            const rawCity = filters.cidade.trim();
+            if (rawCity.toLowerCase().includes('jundi')) {
+              directQuery = directQuery.or('city.ilike.%Jundiaí%,city.ilike.%Jundiai%');
+            } else {
+              directQuery = directQuery.ilike('city', `%${rawCity}%`);
+            }
+          }
+          if (profileIdsFilter && profileIdsFilter.length > 0) {
+            directQuery = directQuery.in('id', profileIdsFilter);
+          }
+          if (sort === 'recentes' || sort === 'atividade') {
+            directQuery = directQuery.order('created_at', { ascending: false });
           } else {
-            directQuery = directQuery.ilike('city', `%${rawCity}%`);
+            directQuery = directQuery.order('is_featured', { ascending: false }).order('created_at', { ascending: false });
+          }
+          directQuery = directQuery.range(from, to);
+
+          const directRes = await directQuery;
+          if (directRes.data && directRes.data.length > 0) {
+            const userIds = directRes.data.map((p: any) => p.user_id).filter(Boolean);
+            const { data: userProfiles } = await adminClient
+              .from('profiles')
+              .select('id, avatar_url')
+              .in('id', userIds);
+
+            const avatarMap = new Map((userProfiles || []).map((u: any) => [u.id, u.avatar_url]));
+
+            data = directRes.data.map((p: any) => {
+              const comp = Array.isArray(p.companies) ? p.companies[0] : p.companies;
+              return {
+                id: p.id,
+                display_name: p.display_name,
+                slug: p.slug,
+                bio: p.bio,
+                city: p.city,
+                state: p.state,
+                whatsapp: p.is_whatsapp_public ? p.whatsapp : null,
+                phone: p.is_phone_public ? p.phone : null,
+                is_featured: p.is_featured,
+                created_at: p.created_at,
+                avatar_url: p.avatar_url || avatarMap.get(p.user_id) || null,
+                company_name: comp?.name || null,
+                company_slug: comp?.slug || null,
+              };
+            });
+            count = directRes.count;
           }
         }
-        if (profileIdsFilter && profileIdsFilter.length > 0) {
-          directQuery = directQuery.in('id', profileIdsFilter);
-        }
-        if (sort === 'recentes' || sort === 'atividade') {
-          directQuery = directQuery.order('created_at', { ascending: false });
-        } else {
-          directQuery = directQuery.order('is_featured', { ascending: false }).order('created_at', { ascending: false });
-        }
-        directQuery = directQuery.range(from, to);
-
-        const directRes = await directQuery;
-        if (directRes.data && directRes.data.length > 0) {
-          const userIds = directRes.data.map((p: any) => p.user_id).filter(Boolean);
-          const { data: userProfiles } = await adminClient
-            .from('profiles')
-            .select('id, avatar_url')
-            .in('id', userIds);
-
-          const avatarMap = new Map((userProfiles || []).map((u: any) => [u.id, u.avatar_url]));
-
-          data = directRes.data.map((p: any) => {
-            const comp = Array.isArray(p.companies) ? p.companies[0] : p.companies;
-            return {
-              id: p.id,
-              display_name: p.display_name,
-              slug: p.slug,
-              bio: p.bio,
-              city: p.city,
-              state: p.state,
-              whatsapp: p.is_whatsapp_public ? p.whatsapp : null,
-              phone: p.is_phone_public ? p.phone : null,
-              is_featured: p.is_featured,
-              created_at: p.created_at,
-              avatar_url: p.avatar_url || avatarMap.get(p.user_id) || null,
-              company_name: comp?.name || null,
-              company_slug: comp?.slug || null,
-            };
-          });
-          count = directRes.count;
-        }
       }
+    } catch (fallbackErr) {
+      console.error('Fallback admin query error:', fallbackErr);
     }
-  } catch (fallbackErr) {
-    console.error('Fallback admin query error:', fallbackErr);
   }
-}
 
   if (error && (!data || data.length === 0)) {
     console.error('Erro ao consultar public_professionals:', error);

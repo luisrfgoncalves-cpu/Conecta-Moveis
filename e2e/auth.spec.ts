@@ -7,7 +7,7 @@ test.describe('Páginas de autenticação', () => {
     await page.goto('/entrar');
     await expect(page).toHaveTitle(/Entrar/);
     await expect(page.getByLabel('E-mail')).toBeVisible();
-    await expect(page.getByLabel('Senha')).toBeVisible();
+    await expect(page.getByLabel('Senha', { exact: true })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Entrar' })).toBeVisible();
   });
 
@@ -16,7 +16,7 @@ test.describe('Páginas de autenticação', () => {
     await expect(page).toHaveTitle(/Criar conta/);
     await expect(page.getByLabel('Nome completo')).toBeVisible();
     await expect(page.getByLabel('E-mail')).toBeVisible();
-    await expect(page.getByLabel('Senha')).toBeVisible();
+    await expect(page.getByLabel('Senha', { exact: true })).toBeVisible();
     await expect(page.getByRole('checkbox')).toBeVisible();
   });
 
@@ -34,8 +34,8 @@ test.describe('Validação de formulários', () => {
     await page.goto('/criar-conta');
     await page.getByLabel('Nome completo').fill('João Testador');
     await page.getByLabel('E-mail').fill('nao-e-email');
-    await page.getByLabel('Senha').fill('senha1234');
-    await page.getByRole('button', { name: 'Criar conta' }).click();
+    await page.getByLabel('Senha', { exact: true }).fill('senha1234');
+    await page.getByRole('button', { name: /criar conta/i }).click();
     await expect(page.getByRole('alert').first()).toBeVisible();
   });
 
@@ -43,9 +43,9 @@ test.describe('Validação de formulários', () => {
     await page.goto('/criar-conta');
     await page.getByLabel('Nome completo').fill('João Testador');
     await page.getByLabel('E-mail').fill('joao@teste.com');
-    await page.getByLabel('Senha').fill('senha1234');
+    await page.getByLabel('Senha', { exact: true }).fill('senha1234');
     // Não marca checkbox
-    await page.getByRole('button', { name: 'Criar conta' }).click();
+    await page.getByRole('button', { name: /criar conta/i }).click();
     await expect(page.getByRole('alert').first()).toBeVisible();
   });
 
@@ -88,15 +88,15 @@ test.describe('Acessibilidade', () => {
   test('/entrar não tem rolagem horizontal em 390px', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/entrar');
-    const scrollWidth = await page.evaluate(() => document.body.scrollWidth);
-    expect(scrollWidth).toBeLessThanOrEqual(390);
+    const hasScroll = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
+    expect(hasScroll).toBe(false);
   });
 
   test('/criar-conta não tem rolagem horizontal em 390px', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/criar-conta');
-    const scrollWidth = await page.evaluate(() => document.body.scrollWidth);
-    expect(scrollWidth).toBeLessThanOrEqual(390);
+    const hasScroll = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
+    expect(hasScroll).toBe(false);
   });
 
   test('/entrar tem link de recuperação de senha', async ({ page }) => {
@@ -111,12 +111,12 @@ test.describe('Acessibilidade', () => {
 
   test('/criar-conta tem link para voltar ao login', async ({ page }) => {
     await page.goto('/criar-conta');
-    await expect(page.getByRole('link', { name: 'Entrar' })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Entrar' }).first()).toBeVisible();
   });
 
   test('botão de mostrar/ocultar senha funciona em /entrar', async ({ page }) => {
     await page.goto('/entrar');
-    const passwordInput = page.getByLabel('Senha');
+    const passwordInput = page.getByLabel('Senha', { exact: true });
     const toggleButton = page.getByRole('button', { name: 'Mostrar senha' });
 
     await expect(passwordInput).toHaveAttribute('type', 'password');

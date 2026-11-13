@@ -11,7 +11,7 @@ test.describe('Perfil Público de Profissional', () => {
     await page.goto('/encontrar-profissionais');
 
     // Wait for page to settle
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('domcontentloaded');
 
     // Find all images inside cards/list items
     const images = page.locator(

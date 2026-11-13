@@ -8,8 +8,13 @@ test.describe('Busca de Profissionais', () => {
 
   test('existe input de busca na página', async ({ page }) => {
     await page.goto('/encontrar-profissionais');
+    // Open drawer on mobile if button is present
+    const drawerBtn = page.getByRole('button', { name: /filtrar/i }).filter({ visible: true });
+    if (await drawerBtn.isVisible().catch(() => false)) {
+      await drawerBtn.click();
+    }
     // Look for a text/search input
-    const input = page.locator('input[type="text"], input[type="search"], input[placeholder*="busca" i], input[placeholder*="cidade" i], input[placeholder*="profissional" i], input[name*="busca" i], input[name*="cidade" i]');
+    const input = page.locator('input[type="text"], input[type="search"], input[placeholder*="busca" i], input[placeholder*="cidade" i], input[placeholder*="profissional" i], input[name*="busca" i], input[name*="cidade" i]').filter({ visible: true });
     await expect(input.first()).toBeVisible();
   });
 
@@ -17,7 +22,7 @@ test.describe('Busca de Profissionais', () => {
     await page.goto('/encontrar-profissionais');
     const button = page.locator(
       'button[type="submit"], button:has-text("Buscar"), button:has-text("Filtrar"), button:has-text("Aplicar"), button:has-text("Pesquisar")'
-    );
+    ).filter({ visible: true });
     await expect(button.first()).toBeVisible();
   });
 

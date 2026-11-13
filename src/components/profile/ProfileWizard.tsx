@@ -303,11 +303,10 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
     return (
       <div className="space-y-6">
         {/* Banner de status */}
-        <div className={`glass-panel rounded-2xl p-5 border flex items-center justify-between gap-4 ${
-          isPublished
+        <div className={`glass-panel rounded-2xl p-5 border flex items-center justify-between gap-4 ${isPublished
             ? 'border-emerald-500/30 bg-emerald-500/5'
             : 'border-amber-500/30 bg-amber-500/5'
-        }`}>
+          }`}>
           <div className="flex items-center gap-3">
             {isPublished ? (
               <CheckCheck className="w-6 h-6 text-emerald-400 flex-shrink-0" />
@@ -365,11 +364,10 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
         <div className="glass-panel rounded-2xl p-6 border border-white/10 space-y-6">
           <div className="flex items-center justify-between border-b border-white/10 pb-4">
             <h2 className="text-lg font-black text-white">Visualização do Cartão do Perfil</h2>
-            <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${
-              isPublished
+            <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${isPublished
                 ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
                 : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
-            }`}>
+              }`}>
               {isPublished ? '● Publicado na vitrine' : '○ Rascunho privado'}
             </span>
           </div>
@@ -484,22 +482,20 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
                 key={st.number}
                 type="button"
                 onClick={() => setCurrentStep(st.number)}
-                className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold transition whitespace-nowrap ${
-                  isActive
+                className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold transition whitespace-nowrap ${isActive
                     ? 'bg-orange-500/20 text-orange-400 border border-orange-500/40'
                     : isDone
-                    ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                    : 'text-slate-400 hover:text-white hover:bg-white/5'
-                }`}
+                      ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                      : 'text-slate-400 hover:text-white hover:bg-white/5'
+                  }`}
               >
                 <div
-                  className={`w-6 h-6 rounded-lg flex items-center justify-center text-xs font-black ${
-                    isActive
+                  className={`w-6 h-6 rounded-lg flex items-center justify-center text-xs font-black ${isActive
                       ? 'bg-orange-500 text-white'
                       : isDone
-                      ? 'bg-emerald-500 text-white'
-                      : 'bg-white/10 text-slate-400'
-                  }`}
+                        ? 'bg-emerald-500 text-white'
+                        : 'bg-white/10 text-slate-400'
+                    }`}
                 >
                   {isDone ? '✓' : <Icon className="w-3.5 h-3.5" />}
                 </div>
@@ -566,24 +562,21 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
                       selectCategory(cat.id);
                     }
                   }}
-                  className={`glass-card rounded-xl p-5 border cursor-pointer transition-all duration-200 space-y-3 text-left outline-none ${
-                    isSelected
+                  className={`glass-card rounded-xl p-5 border cursor-pointer transition-all duration-200 space-y-3 text-left outline-none ${isSelected
                       ? 'border-orange-500 bg-orange-500/10 shadow-[0_0_20px_rgba(249,115,22,0.25)] ring-1 ring-orange-500'
                       : 'border-white/10 hover:border-white/30 hover:bg-white/5'
-                  }`}
+                    }`}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <div className={`w-5 h-5 rounded-md flex items-center justify-center text-xs font-black transition ${
-                        isSelected ? 'bg-orange-500 text-white' : 'bg-white/10 text-transparent border border-white/20'
-                      }`}>
+                      <div className={`w-5 h-5 rounded-md flex items-center justify-center text-xs font-black transition ${isSelected ? 'bg-orange-500 text-white' : 'bg-white/10 text-transparent border border-white/20'
+                        }`}>
                         ✓
                       </div>
                       <h3 className="font-bold text-white text-base">{cat.name}</h3>
                     </div>
-                    <span className={`text-xs font-mono px-2 py-0.5 rounded-full ${
-                      isSelected ? 'bg-orange-500/20 text-orange-300 font-bold' : 'text-slate-400 bg-white/5'
-                    }`}>
+                    <span className={`text-xs font-mono px-2 py-0.5 rounded-full ${isSelected ? 'bg-orange-500/20 text-orange-300 font-bold' : 'text-slate-400 bg-white/5'
+                      }`}>
                       {isSelected ? `${selectedCount} selecionada(s)` : `${cat.specialties.length} especialidades`}
                     </span>
                   </div>
@@ -805,11 +798,10 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
                           key={spec.id}
                           type="button"
                           onClick={() => toggleSpecialty(spec.id)}
-                          className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
-                            selected
+                          className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${selected
                               ? 'bg-orange-500 text-white shadow-md shadow-orange-500/30'
                               : 'bg-white/5 text-slate-300 hover:bg-white/10 border border-white/10'
-                          }`}
+                            }`}
                         >
                           {selected ? '✓ ' : '+ '}
                           {spec.name}
@@ -1062,11 +1054,10 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
                   disabled={isPending || !publishReady}
                   onClick={() => handleTogglePublish(true)}
                   title={!publishReady ? 'Complete todos os campos obrigatórios acima para publicar' : ''}
-                  className={`px-6 py-2.5 text-sm flex items-center gap-2 rounded-xl font-black transition disabled:opacity-60 ${
-                    publishReady
+                  className={`px-6 py-2.5 text-sm flex items-center gap-2 rounded-xl font-black transition disabled:opacity-60 ${publishReady
                       ? 'btn-neon'
                       : 'bg-slate-700 text-slate-400 border border-white/10 cursor-not-allowed'
-                  }`}
+                    }`}
                 >
                   {isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Globe className="w-4 h-4" />}
                   {isPending ? 'Publicando...' : publishReady ? 'Publicar no Catálogo' : 'Complete os campos acima'}

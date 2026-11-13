@@ -13,16 +13,16 @@ test.describe('Página Inicial', () => {
     await page.goto('/');
     // Check for navigation link pointing to the search/find page
     const searchLink = page.locator(
-      'a[href="/encontrar-profissionais"], a[href="/busca"], a[href*="profissionais"], a[href*="busca"]'
-    );
+      'a[href="/encontrar-profissionais"], a[href="/busca"], a[href*="profissionais"]'
+    ).filter({ visible: true });
     await expect(searchLink.first()).toBeVisible();
   });
 
   test('existe link para /para-profissionais, /planos ou /criar-conta', async ({ page }) => {
     await page.goto('/');
     const proLink = page.locator(
-      'a[href="/para-profissionais"], a[href="/planos"], a[href="/criar-conta"], a[href*="profissional"]'
-    );
+      'a[href="/para-profissionais"], a[href="/planos"], a[href="/criar-conta"]'
+    ).filter({ visible: true });
     await expect(proLink.first()).toBeVisible();
   });
 
