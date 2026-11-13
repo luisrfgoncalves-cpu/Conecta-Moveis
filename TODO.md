@@ -1,89 +1,48 @@
-# TODO — CONECTA MÓVEIS
+# TODO e Pendências — Conecta Móveis
 
-## Fase 1 — Auditoria e Planejamento
-- [x] Inspecionar repositório e ferramentas disponíveis
-- [x] Criar `PROJECT_PLAN.md`
-- [x] Criar `DECISIONS.md`
-- [x] Criar `TODO.md`
-- [x] Criar `ARCHITECTURE.md`
-- [x] Criar `RISKS.md`
-- [x] Garantir existência de `docs/REFERENCIA.md`
-- [x] Formular as 12 perguntas de decisões para o proprietário
+> Última atualização: 2026-11-13
 
-## Fase 2 — Fundação Técnica e Casca Visual
-- [x] Inicializar projeto Next.js com App Router, TypeScript e Tailwind
-- [x] Configurar ESLint, Prettier, Vitest e Playwright
-- [x] Criar `.env.example` e validação com Zod
-- [x] Importar ativos visuais da pasta `07-ativos-visuais`
-- [x] Implementar design tokens e animações com suporte a prefers-reduced-motion
-- [x] Criar componentes de layout e páginas base (Hero, Busca preliminar, 404, Erro)
-- [x] Validar responsividade (320, 390, 768 e 1280px) e ausência de rolagem horizontal
+---
 
-## Fase 3 — Banco de Dados, RLS e Dados de Teste
-- [x] Criar migrations com todas as tabelas e constraints
-- [x] Configurar funções auxiliares de segurança com `SECURITY DEFINER`
-- [x] Habilitar RLS em 100% das tabelas não públicas
-- [x] Configurar buckets do Supabase Storage e políticas de acesso
-- [x] Criar view pública para listagem de profissionais
-- [x] Criar seed de desenvolvimento e documentar RLS em `docs/RLS_MATRIX.md`
-- [x] Executar testes automatizados de permissão (positivos e negativos)
+## 🔴 Bloqueadores do Lançamento
 
-## Fase 4 — Autenticação e Conta
-- [x] Implementar cadastro, login, logout e recuperação de senha
-- [x] Proteger rotas via middleware e server actions
-- [x] Implementar gestão de conta (alteração de credenciais, exclusão e exportação de dados)
-- [x] Aplicar rate limit em autenticação e mascaramento de erros
+Itens que **impedem** o lançamento público. Nenhum deploy para produção enquanto estes estiverem abertos.
 
-## Fase 5 — Perfis Profissionais e Empresas
-- [x] Implementar fluxo de preenchimento de perfil com barra de progresso
-- [x] Implementar criação e edição de empresas
-- [x] Implementar upload e processamento de avatar/logo (WebP até 150 KB)
-- [x] Testes de isolamento de perfil e integridade de slug
+- [ ] **Revisão jurídica** dos textos legais (`LEGAL_REVIEWED=false` → `true` após advogado aprovar)
+- [ ] **Domínio** `conectamoveis.com.br` registrado, configurado na Vercel e SSL ativo
+- [ ] **Migration** `20261113000001_fix_view_security_and_rls.sql` aplicada no Supabase de **produção**
+- [ ] **Buckets de Storage** criados e policies configuradas em produção (`avatar-uploads`, `portfolio-pending`, `portfolio-public`)
+- [ ] **Variáveis de ambiente de produção** configuradas na Vercel (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_APP_URL`, `BILLING_MODE`, `LEGAL_REVIEWED`)
+- [ ] `NEXT_PUBLIC_APP_URL` apontando para o domínio de produção (não `localhost`)
 
-## Fase 6 — Descoberta, Busca e Perfil Público
-- [x] Implementar catálogo de categorias e especialidades
-- [x] Criar `/encontrar-profissionais` e `/categorias` com filtros funcionais
-- [x] Implementar páginas públicas `/profissionais/[slug]` e `/empresas/[slug]`
-- [x] Inserir aviso legal obrigatório e selos permitidos
+---
 
-## Fase 7 — Portfólio e Upload Seguro
-- [x] Criar área de portfólio no painel
-- [x] Pipeline seguro de upload com validação por magic bytes e conversão WebP via Sharp
-- [x] Lógica de status de aprovação (`pending` -> `approved`)
-- [x] Validação de cota de armazenamento e imagens
+## 🟡 Alta Prioridade (pós-lançamento v1)
 
-## Fase 8 — Contato, Favoritos e Denúncias
-- [x] Botão de WhatsApp com contador agregado em `daily_metrics`
-- [x] Formulário de solicitação de contato com descarte após 90 dias
-- [x] Sistema de favoritos e canal de denúncias unificado
+Implementar nas primeiras semanas após o lançamento.
 
-## Fase 9 — Avaliações e Moderação
-- [x] Regras de elegibilidade (contato prévio + carência de 3 dias)
-- [x] Avaliação por 5 critérios + filtro de moderação de termos ofensivos
-- [x] Direito de resposta do profissional
+- [ ] **Testes E2E** completos com Playwright (fluxos: cadastro profissional, edição de perfil, busca, contato, avaliação, denúncia)
+- [ ] **Auditoria de acessibilidade** (axe) com zero violações críticas em todas as rotas públicas
+- [ ] **Integração real de pagamento** (Stripe ou Pagar.me) para planos de visibilidade
+- [ ] **E-mails transacionais** (Resend ou SendGrid) para: boas-vindas, confirmação de e-mail, notificação de avaliação, moderação de foto
+- [ ] **Sistema de moderação de fotos de portfólio automatizado** (Google Cloud Vision ou AWS Rekognition — atualmente stub `noop`)
+- [ ] **Mapa de profissionais** (Google Maps ou Leaflet) na página de busca
+- [ ] **Backups automáticos** do banco de dados (requer upgrade para Supabase Pro)
+- [ ] Monitorar **limites de infra** (Storage, Bandwidth) conforme descrito em `LIMITES_INFRA.md`
 
-## Fase 10 — Administração
-- [x] Painel `/admin` com controle por papel (`moderator` vs `admin`)
-- [x] Filas de fotos pendentes, denúncias e moderação de avaliações
-- [x] Métricas de uso de banco/storage com alerta de 70% do plano gratuito
-- [x] Auditoria completa em `admin_logs`
+---
 
-## Fase 11 — Planos e Monetização sem Cobrança Real
-- [x] Catálogo de planos com controle via `BILLING_MODE` (`off`/`test`)
-- [x] Unificação de limites via `getEntitlements` aplicada em uploads e categorias
-- [x] Sistema de destaques patrocinados rotulados obrigatoriamente
-- [x] Página pública `/planos` e painel do usuário `/painel/assinatura`
-- [x] Edição de cotas de planos pelo admin com log em `admin_logs`
-- [x] Documento estratégico em `docs/MONETIZACAO.md`
+## 🟢 Melhorias Futuras
 
-## Fase 12 — Qualidade, Segurança, Textos Legais e Documentação
-- [ ] Textos legais completos (Termos, Privacidade, Diretrizes) com constante `LEGAL_REVIEWED`
-- [ ] Auditoria de acessibilidade via axe (zero violações críticas)
-- [ ] Headers de segurança (CSP) e varredura contra segredos
-- [ ] Cobertura de testes E2E dos fluxos principais
+Backlog de médio/longo prazo — sem data definida.
 
-## Fase 13 — Implantação e Lançamento Controlado
-- [ ] Configuração do Supabase de Produção
-- [ ] Deploy na Vercel com domínio customizado e HTTPS
-- [ ] Documentação de backup manual e checklist do Apêndice A
-
+- [ ] **App mobile** (React Native / Expo) para clientes e profissionais
+- [ ] **Chat em tempo real** entre cliente e profissional (Supabase Realtime ou WebSockets)
+- [ ] **Sistema de orçamentos formais** com PDF e histórico
+- [ ] **Agenda e disponibilidade** do profissional com integração de calendário
+- [ ] **Programa de Bug Bounty** formal com recompensas
+- [ ] **Entitlements dinâmicos por plano** (`MAX_PHOTOS_PER_PROFILE` variável por assinatura — Fase 11 do plano original)
+- [ ] **Multi-região** Supabase para menor latência fora de São Paulo
+- [ ] **Dashboard de analytics** para profissionais (visualizações de perfil, cliques de contato)
+- [ ] **SEO avançado**: rich snippets de avaliações (schema.org `LocalBusiness`)
+- [ ] **Internacionalização** (i18n) para outros estados/países

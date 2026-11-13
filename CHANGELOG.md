@@ -1,74 +1,41 @@
-# CHANGELOG — CONECTA MÓVEIS
+# Changelog
 
-## [Fase 11] - Planos e Monetização sem Cobrança Real
-- Criação do catálogo oficial de planos (`free`, `pro`, `enterprise`) com preços "a definir" e sem exibição de valores fictícios.
-- Implementação da função de servidor única `getEntitlements(userId)` como fonte canônica de cotas e limites.
-- Substituição do limite estático provisório da Fase 7 por validação dinâmica de entitlements em upload de fotos do portfólio (`max_photos`) e seleção de categorias (`max_categories`).
-- Controle operacional via variável `BILLING_MODE`:
-  - Modo `off`: Bloqueia alteração manual de plano e permite aos usuários registrar interesse (`plan_interest`).
-  - Modo `test`: Exibe o selo oficial "Modo de teste: nenhuma cobrança" e permite simulação de troca de plano com atualização de entitlements.
-- Criação da página pública `/planos` com transparência total sobre a inexistência de comissões sobre serviços prestados.
-- Criação de `/painel/assinatura` com barras visuais de consumo de fotos, categorias e status do selo de destaque patrocinado.
-- Exibição de métricas agregadas do profissional (visualizações de perfil, cliques de WhatsApp e solicitações) a partir de `daily_metrics`.
-- Rotulação obrigatória e expressa do selo de destaque como "Destaque patrocinado" (ou "Destaque patrocinado (Teste)" no modo de teste), sem promessas ou termos de recomendação/qualidade.
-- Funcionalidade no painel administrativo `/admin/planos` permitindo ao admin editar cotas (`max_photos`, `max_categories`, `allow_featured`, `description`) com justificativa obrigatória registrada em `admin_logs`.
-- Painel `/admin/assinaturas` atualizado com listagem de assinaturas ativas e fila de leads de interesse capturados.
-- Criação do documento arquitetural `docs/MONETIZACAO.md` contendo todos os gatilhos, rotas e políticas para futura integração com gateway.
-- Suíte de 10 testes automatizados no Vitest em `src/__tests__/monetization.test.ts` cobrindo cotas, bloqueio por `BILLING_MODE=off`, auditoria admin e rotulação de patrocínio.
+Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 
-## [Fase 10] - Administração e Moderação
-- Implementação completa do painel `/admin` com barreira 404 para usuários comuns.
-- Gestão de usuários, perfis, empresas, fotos pendentes, denúncias e logs de auditoria.
+Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/).
+Versões seguem [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
+---
 
-## [Fase 5] - Perfis Profissionais e Empresas
-- Implementação do assistente multi-etapas com barra de progresso visual em `/painel/perfil` para preenchimento de perfil profissional (Atuação, Identidade, Especialidades/Região, Contatos/Publicação).
-- Cada campo apresenta badges semânticos e textos explicativos de transparência (Obrigatório vs Opcional; Público no perfil vs Privado/Contato; justificativa de coleta de dados).
-- Validação estrita no servidor dos critérios mínimos obrigatórios para publicação de perfil: nome profissional (min 3 caracteres), bio (min 20 caracteres), ao menos 1 especialidade, cidade, UF e e-mail confirmado.
-- Geração segura de slug único com normalização de acentos e sufixo anti-colisão automático.
-- Pré-visualização ao vivo do perfil público em modal simulando a exibição final para clientes, contendo o aviso legal obrigatório do MVP.
-- Funcionalidade de publicar e despublicar perfil profissional a qualquer momento pelo usuário.
-- Página `/painel/empresas` com formulário para cadastro e edição de empresas vinculando automaticamente o usuário como `owner` na tabela `company_members`.
-- Campo de CNPJ configurado como opcional, meramente informativo e com aviso explícito de que a plataforma não emite selo de garantia.
-- Pipeline de upload e processamento de avatares e logotipos no bucket `avatars`: validação por assinatura real (magic bytes para JPEG, PNG e WebP), redimensionamento para no máximo 512px, conversão para WebP, remoção de metadados EXIF e limite estrito de até 150 KB.
-- Cobertura com 19 testes automatizados no Vitest em `src/__tests__/profile.test.ts` cobrindo regras de negócio, slug único, rejeição de arquivos disfarçados/maliciosos e blindagem contra manipulação de campos protegidos (`is_suspended`, `is_featured`, papéis administrativos).
+## [Unreleased]
 
-## [Fase 4] - Autenticação e Conta
-- Implementação de fluxos completos de autenticação com Supabase Auth e `@supabase/ssr`: cadastro com consentimento LGPD, login, logout, recuperação e redefinição de senha.
-- Criação das páginas públicas de auth: `/criar-conta`, `/entrar`, `/recuperar-senha` (com modo de definição de nova senha) e route handler `/auth/callback`.
-- Proteção robusta em duas camadas para `/painel` e `/admin`: via `src/middleware.ts` com validação de token JWT no servidor e guardas de sessão nos layouts de cada rota.
-- Layout administrativo em `/admin` com barreira de permissão: usuários comuns recebem 404 estrito (não revela existência da rota).
-- Implementação de `/painel/configuracoes` (alteração de e-mail de acesso) e `/painel/seguranca` (alteração de senha, exportação integral dos dados em JSON conforme LGPD e exclusão definitiva de conta com desvinculação em cascata).
-- Mascaramento e sanitização de mensagens de erro para impedir vazamento/enumeração de e-mails cadastrados.
-- Sistema de proteção contra abuso e força bruta com rate limiting estruturado na tabela `rate_limits` do Postgres sem dependência de serviços externos pagos.
-- Formulários implementados com React Hook Form e validação estrita com Zod, acessibilidade WCAG (labels, descrições via `aria-describedby`, alertas semânticos e estados visuais de loading).
-- Criação e atualização de `docs/LIMITES_INFRA.md` documentando limites do plano gratuito e marcando a configuração de SMTP dedicado (ex: Resend) como pendência bloqueadora para o lançamento.
-- Cobertura com 32 testes unitários no Vitest e suíte E2E Playwright em `e2e/auth.spec.ts`.
+### Added
+- **Fase 12:** Textos legais (Termos de Uso, Privacidade, Política de Anúncios, Avaliações, Portfólio, Denúncia, Assinatura) com banner de revisão pendente
+- Cabeçalhos de segurança HTTP via `next.config` (CSP, X-Frame-Options, HSTS, etc.)
+- Metadados SEO e Open Graph para páginas públicas
+- Sitemap XML e robots.txt dinâmicos
+- Documentação completa: README, SECURITY, DEPLOYMENT, LIMITES_INFRA, CHANGELOG, TODO
+- Testes E2E com Playwright (home, busca, acessibilidade, perfil público)
+- Portfólio: upload de fotos diretamente no formulário de criação de projeto
+- Portfólio: botão de editar projeto existente
 
-## [Fase 3] - Banco de Dados, RLS e Dados de Teste
-- Criação da Migration 001 (`20261112000001_initial_schema.sql`) contendo todas as 24 tabelas, enums, constraints, foreign keys explícitas com política de deleção e triggers (`updated_at` e auto-criação de `profile` + `user_roles`).
-- Implementação de funções de segurança com `SECURITY DEFINER` e `SET search_path = public`: `is_admin()`, `is_moderator()`, `is_company_member()`.
-- Habilitação obrigatória de RLS em 100% das tabelas do schema public.
-- Criação da Migration 002 (`20261112000002_storage_buckets.sql`) configurando os buckets `avatars`, `portfolio-pending` (100% privado) e `portfolio-public` (leitura pública, escrita moderada).
-- Criação da View pública segura `public_professionals` blindando campos privados (apenas profissionais ativos e publicados).
-- Criação do `supabase/seed.sql` com categorias e especialidades oficiais do polo de Jundiaí e planos do catálogo.
-- Elaboração completa da documentação técnica: `docs/RLS_MATRIX.md` e `DATABASE_SCHEMA.md` com instrução manual de promoção do primeiro admin.
-- Testes automatizados com Vitest (`src/__tests__/rls.test.ts`) cobrindo todas as políticas de segurança e testes negativos obrigatórios.
+---
 
-## [Fase 2] - Fundação Técnica e Casca Visual
-- Setup do projeto Next.js 15 (App Router, React 19, TypeScript, Tailwind CSS).
-- Configuração de ferramentas de qualidade: ESLint (com FlatConfig), Vitest e Playwright.
-- Implementação de validação de variáveis de ambiente com Zod (`src/lib/env.ts`) e cliente Supabase desacoplado (`src/lib/supabase/client.ts`).
-- Estruturação dos ativos visuais em `07-ativos-visuais/` (tokens de cores, motion CSS, diretrizes de copy institucional e banner spec).
-- Criação dos logos da marca e ícone em SVG vetorial leve em `public/brand/`.
-- Criação de imagens SVG otimizadas para hero desktop e mobile, e placeholder explícito para modo de demonstração em `public/images/`.
-- Implementação do gerenciador de efeitos sonoros opcionais via Web Audio API (`src/lib/sound.ts`) com 0 KB de rede.
-- Construção dos componentes de casca: Header com tema claro/escuro sem flash, gaveta mobile, controle de som, Footer informativo, Hero com overlay escuro à esquerda, SearchBox preliminar desabilitada com aviso, Card de profissional com selo "Exemplo demonstrativo", Alert com aviso legal obrigatório, Skeleton e EmptyState.
-- Criação das páginas públicas da casca: `/` (Home com foco em Jundiaí/SP), `/como-funciona`, `/encontrar-profissionais`, `/termos`, `/privacidade`, `/denunciar`, `/not-found` e `/error`.
-- Testes E2E com Playwright cobrindo ausência de rolagem horizontal em 320px, 390px, 768px e 1280px, integridade de rotas e carregamento de imagens/logos (zero 404).
+## [0.1.0] — 2026-11-13
 
-## [Fase 1] - Auditoria e Planejamento
-- Auditoria do repositório e checagem de ferramentas de ambiente.
-- Documentação inicial: `PROJECT_PLAN.md`, `DECISIONS.md`, `TODO.md`, `ARCHITECTURE.md`, `RISKS.md` e `docs/REFERENCIA.md`.
-- Registro formal das decisões do proprietário em `DECISIONS.md`.
-
+### Added
+- **Autenticação** via e-mail/senha e magic link (Supabase Auth)
+- **Perfil profissional** com wizard multi-etapas (dados pessoais, especialidades, localização, avatar)
+- **Portfólio** com upload de fotos, pipeline de moderação e aprovação por administrador
+- **Busca pública** de profissionais com filtros (cidade, especialidade, avaliação mínima)
+  - 3 níveis de fallback: view anon → view com service role → tabela direta
+- **Sistema de avaliações** com estrelas e texto; denúncia de avaliações inadequadas
+- **Sistema de denúncias** de perfis e conteúdo com fila de análise para administradores
+- **Planos e assinatura** (modo mockado — integração real de pagamento pendente)
+- **Painel administrativo** com moderação de fotos, avaliações e denúncias
+- View `public_professionals` com `SECURITY DEFINER` para busca anônima segura
+- Migrations SQL: schema inicial, buckets de Storage, correções de segurança em views e RLS
+- Configuração de RLS (Row Level Security) em todas as tabelas sensíveis
+- Componente `LegalBanner` indicando textos em revisão jurídica
+- Configuração `LEGAL_REVIEWED` em `src/lib/legal/config.ts`
+- Suite de testes unitários com Vitest (10 arquivos cobrindo auth, RLS, busca, perfil, portfólio, avaliações, moderação, monetização, contato, env)
