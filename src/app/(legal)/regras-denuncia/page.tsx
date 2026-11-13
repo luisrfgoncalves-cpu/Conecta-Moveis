@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import { LEGAL_REVIEWED, LEGAL_VERSION, LEGAL_DATE } from "@/lib/legal/config";
+import { LEGAL_VERSION, LEGAL_DATE } from "@/lib/legal/config";
 import { LegalBanner } from "@/components/legal/LegalBanner";
 
 export const metadata: Metadata = {
   title: "Regras de Denúncia | Conecta Móveis",
   description:
     "Como funciona o processo de denúncia de conteúdos e profissionais na Conecta Móveis.",
-  ...(!LEGAL_REVIEWED && { robots: { index: false } }),
 };
 
 export default function RegrasDenunciaPage() {

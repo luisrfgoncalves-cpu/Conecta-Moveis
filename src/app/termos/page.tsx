@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import { LEGAL_REVIEWED, LEGAL_VERSION, LEGAL_DATE } from "@/lib/legal/config";
+import { LEGAL_VERSION, LEGAL_DATE } from "@/lib/legal/config";
 import { LegalBanner } from "@/components/legal/LegalBanner";
 
 export const metadata: Metadata = {
   title: "Termos de Uso | Conecta Móveis",
   description:
     "Termos de uso e condições gerais da plataforma Conecta Móveis — marketplace de profissionais de móveis em Jundiaí/SP.",
-  ...(!LEGAL_REVIEWED && { robots: { index: false } }),
 };
 
 export default function TermosPage() {

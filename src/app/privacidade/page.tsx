@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import { LEGAL_REVIEWED, LEGAL_VERSION, LEGAL_DATE } from "@/lib/legal/config";
+import { LEGAL_VERSION, LEGAL_DATE } from "@/lib/legal/config";
 import { LegalBanner } from "@/components/legal/LegalBanner";
 
 export const metadata: Metadata = {
   title: "Política de Privacidade | Conecta Móveis",
   description:
     "Saiba como a Conecta Móveis coleta, usa e protege seus dados pessoais, em conformidade com a LGPD.",
-  ...(!LEGAL_REVIEWED && { robots: { index: false } }),
 };
 
 export default function PrivacidadePage() {

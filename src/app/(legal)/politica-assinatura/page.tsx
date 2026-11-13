@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import { LEGAL_REVIEWED, LEGAL_VERSION, LEGAL_DATE } from "@/lib/legal/config";
+import { LEGAL_VERSION, LEGAL_DATE } from "@/lib/legal/config";
 import { LegalBanner } from "@/components/legal/LegalBanner";
 
 export const metadata: Metadata = {
   title: "Política de Assinatura | Conecta Móveis",
   description:
     "Como funcionam os planos de assinatura da Conecta Móveis: benefícios, cancelamento e condições.",
-  ...(!LEGAL_REVIEWED && { robots: { index: false } }),
 };
 
 export default function PoliticaAssinaturaPage() {

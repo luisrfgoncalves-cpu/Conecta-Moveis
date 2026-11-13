@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import { LEGAL_REVIEWED, LEGAL_VERSION, LEGAL_DATE } from "@/lib/legal/config";
+import { LEGAL_VERSION, LEGAL_DATE } from "@/lib/legal/config";
 import { LegalBanner } from "@/components/legal/LegalBanner";
 
 export const metadata: Metadata = {
   title: "Política de Avaliações | Conecta Móveis",
   description:
     "Como funcionam as avaliações de profissionais na Conecta Móveis: regras, moderação e direitos.",
-  ...(!LEGAL_REVIEWED && { robots: { index: false } }),
 };
 
 export default function PoliticaAvaliacoesPage() {
