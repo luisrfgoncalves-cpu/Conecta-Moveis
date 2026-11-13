@@ -1,5 +1,17 @@
 # CHANGELOG — CONECTA MÓVEIS
 
+## [Fase 4] - Autenticação e Conta
+- Implementação de fluxos completos de autenticação com Supabase Auth e `@supabase/ssr`: cadastro com consentimento LGPD, login, logout, recuperação e redefinição de senha.
+- Criação das páginas públicas de auth: `/criar-conta`, `/entrar`, `/recuperar-senha` (com modo de definição de nova senha) e route handler `/auth/callback`.
+- Proteção robusta em duas camadas para `/painel` e `/admin`: via `src/middleware.ts` com validação de token JWT no servidor e guardas de sessão nos layouts de cada rota.
+- Layout administrativo em `/admin` com barreira de permissão: usuários comuns recebem 404 estrito (não revela existência da rota).
+- Implementação de `/painel/configuracoes` (alteração de e-mail de acesso) e `/painel/seguranca` (alteração de senha, exportação integral dos dados em JSON conforme LGPD e exclusão definitiva de conta com desvinculação em cascata).
+- Mascaramento e sanitização de mensagens de erro para impedir vazamento/enumeração de e-mails cadastrados.
+- Sistema de proteção contra abuso e força bruta com rate limiting estruturado na tabela `rate_limits` do Postgres sem dependência de serviços externos pagos.
+- Formulários implementados com React Hook Form e validação estrita com Zod, acessibilidade WCAG (labels, descrições via `aria-describedby`, alertas semânticos e estados visuais de loading).
+- Criação e atualização de `docs/LIMITES_INFRA.md` documentando limites do plano gratuito e marcando a configuração de SMTP dedicado (ex: Resend) como pendência bloqueadora para o lançamento.
+- Cobertura com 32 testes unitários no Vitest e suíte E2E Playwright em `e2e/auth.spec.ts`.
+
 ## [Fase 3] - Banco de Dados, RLS e Dados de Teste
 - Criação da Migration 001 (`20261112000001_initial_schema.sql`) contendo todas as 24 tabelas, enums, constraints, foreign keys explícitas com política de deleção e triggers (`updated_at` e auto-criação de `profile` + `user_roles`).
 - Implementação de funções de segurança com `SECURITY DEFINER` e `SET search_path = public`: `is_admin()`, `is_moderator()`, `is_company_member()`.

@@ -29,10 +29,10 @@
 - [x] Executar testes automatizados de permissão (positivos e negativos)
 
 ## Fase 4 — Autenticação e Conta
-- [ ] Implementar cadastro, login, logout e recuperação de senha
-- [ ] Proteger rotas via middleware e server actions
-- [ ] Implementar gestão de conta (alteração de credenciais, exclusão e exportação de dados)
-- [ ] Aplicar rate limit em autenticação e mascaramento de erros
+- [x] Implementar cadastro, login, logout e recuperação de senha
+- [x] Proteger rotas via middleware e server actions
+- [x] Implementar gestão de conta (alteração de credenciais, exclusão e exportação de dados)
+- [x] Aplicar rate limit em autenticação e mascaramento de erros
 
 ## Fase 5 — Perfis Profissionais e Empresas
 - [ ] Implementar fluxo de preenchimento de perfil com barra de progresso
