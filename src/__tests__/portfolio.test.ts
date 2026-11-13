@@ -248,7 +248,7 @@ describe('FASE 7 — Server Actions de Portfólio', () => {
     form.append('itemId', 'fake-item-id');
     // Simular envio que excederia o limite
     for (let i = 0; i < 3; i++) {
-      form.append('files', new File([makeJPEGBuffer()], `foto${i}.jpg`, { type: 'image/jpeg' }));
+      form.append('files', new File([new Uint8Array(makeJPEGBuffer())], `foto${i}.jpg`, { type: 'image/jpeg' }));
     }
 
     const res = await uploadPortfolioPhotos(form);

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import {
   Users, FileImage, Building2, Flag, Star,
-  Tag, CreditCard, FileText, LayoutDashboard, LogOut,
+  Tag, CreditCard, FileText, LayoutDashboard, LogOut, ArrowLeft,
 } from 'lucide-react';
 import { signOut } from '@/lib/auth/actions';
 
@@ -84,7 +84,14 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             ))}
           </ul>
 
-          <div className="mt-4 pt-4 border-t border-white/10">
+          <div className="mt-4 pt-4 border-t border-white/10 space-y-1">
+            <Link
+              href="/painel"
+              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-300 hover:text-white hover:bg-white/8 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"
+            >
+              <ArrowLeft className="w-4 h-4 flex-shrink-0" aria-hidden />
+              Voltar ao Meu Painel
+            </Link>
             <form action={handleSignOut}>
               <button
                 type="submit"
