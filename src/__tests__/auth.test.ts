@@ -167,3 +167,4 @@ describe('RLS — verificações estruturais', () => {
     expect(genericMsg).toContain('Se esse e-mail estiver cadastrado');
   });
 });
+

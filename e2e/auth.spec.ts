@@ -126,3 +126,4 @@ test.describe('Acessibilidade', () => {
     await expect(passwordInput).toHaveAttribute('type', 'password');
   });
 });
+
