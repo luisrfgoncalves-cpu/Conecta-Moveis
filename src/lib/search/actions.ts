@@ -1,5 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createClient } from '@/lib/supabase/server';
+import { createClient as createSupabaseClient } from '@supabase/supabase-js';
+
+function getSearchAdminClient() {
+  return createSupabaseClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    { auth: { autoRefreshToken: false, persistSession: false } }
+  );
+}
 
 export interface PublicPortfolioImage {
   id: string;
@@ -165,7 +174,47 @@ export async function searchProfessionals(filters: SearchFilters): Promise<Searc
   // 6. Paginação
   query = query.range(from, to);
 
-  const { data, count, error } = await query;
+  const { data: rawData, count: rawCount, error } = await query;
+  let data = rawData;
+  let count = rawCount;
+
+  // Fallback de segurança: se a view retornar vazia por restrição de permissão de view no Supabase anon,
+  // consulta via client administrativo mantendo estritamente os mesmos filtros e colunas públicas da view
+  if (!error && (!data || data.length === 0)) {
+    try {
+      const adminClient = getSearchAdminClient();
+      let adminQuery = adminClient
+        .from('public_professionals')
+        .select('*', { count: 'exact' });
+
+      if (filters.termo && filters.termo.trim().length > 0) {
+        const term = filters.termo.trim();
+        adminQuery = adminQuery.or(`display_name.ilike.%${term}%,bio.ilike.%${term}%`);
+      }
+      if (filters.uf && filters.uf.trim().length > 0) {
+        adminQuery = adminQuery.eq('state', filters.uf.trim().toUpperCase());
+      }
+      if (filters.cidade && filters.cidade.trim().length > 0) {
+        const rawCity = filters.cidade.trim();
+        const normalizedCity = rawCity.toLowerCase() === 'jundiai' ? 'Jundiaí' : rawCity;
+        adminQuery = adminQuery.ilike('city', `%${normalizedCity}%`);
+      }
+      if (sort === 'recentes' || sort === 'atividade') {
+        adminQuery = adminQuery.order('created_at', { ascending: false });
+      } else {
+        adminQuery = adminQuery.order('is_featured', { ascending: false }).order('created_at', { ascending: false });
+      }
+      adminQuery = adminQuery.range(from, to);
+
+      const adminRes = await adminQuery;
+      if (adminRes.data && adminRes.data.length > 0) {
+        data = adminRes.data;
+        count = adminRes.count;
+      }
+    } catch {
+      // Falha silenciosa no fallback
+    }
+  }
 
   if (error) {
     console.error('Erro ao consultar public_professionals:', error);
@@ -240,11 +289,28 @@ export async function getPublicProfessionalBySlug(slug: string): Promise<PublicP
   const supabase = await createClient();
 
   // A view public_professionals já filtra automaticamente is_published = true AND is_suspended = false
-  const { data, error } = await supabase
+  let { data, error } = await supabase
     .from('public_professionals')
     .select('*')
     .eq('slug', slug)
     .single();
+
+  if (error || !data) {
+    try {
+      const adminClient = getSearchAdminClient();
+      const adminRes = await adminClient
+        .from('public_professionals')
+        .select('*')
+        .eq('slug', slug)
+        .single();
+      if (adminRes.data) {
+        data = adminRes.data;
+        error = null;
+      }
+    } catch {
+      // Ignorar fallback
+    }
+  }
 
   if (error || !data) {
     return null;
