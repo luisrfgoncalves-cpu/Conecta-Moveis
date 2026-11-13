@@ -1,8 +1,9 @@
-import Link from 'next/link';
-import { ArrowLeft, ShieldCheck, HelpCircle } from 'lucide-react';
+import { ShieldCheck, HelpCircle } from 'lucide-react';
 import { getPlansCatalog } from '@/lib/plans/actions';
 import { createClient } from '@/lib/supabase/server';
 import { PlansClient } from '@/components/plans/PlansClient';
+import { BackButton } from '@/components/navigation/BackButton';
+import { Breadcrumbs } from '@/components/navigation/Breadcrumbs';
 
 export const metadata = {
   title: 'Planos e Visibilidade — Conecta Móveis',
@@ -36,21 +37,20 @@ export default async function PlanosPage() {
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 space-y-12">
       {/* Topo / Voltar */}
-      <div className="space-y-4 text-center max-w-3xl mx-auto">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-orange-400 hover:text-orange-300 transition"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Voltar ao Início
-        </Link>
-        <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
-          Planos de Visibilidade Profissional
-        </h1>
-        <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-          Destaque seu trabalho, apresente seu portfólio completo e seja encontrado por clientes que
-          buscam serviços moveleiros de qualidade.
-        </p>
+      <div className="space-y-4">
+        <div className="flex items-center justify-between gap-4">
+          <Breadcrumbs items={[{ label: 'Planos e Visibilidade' }]} />
+          <BackButton fallback="/" label="Voltar à tela anterior" />
+        </div>
+        <div className="text-center max-w-3xl mx-auto pt-2">
+          <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
+            Planos de Visibilidade Profissional
+          </h1>
+          <p className="text-sm sm:text-base text-slate-300 leading-relaxed mt-3">
+            Destaque seu trabalho, apresente seu portfólio completo e seja encontrado por clientes que
+            buscam serviços moveleiros de qualidade.
+          </p>
+        </div>
       </div>
 
       {/* Grade de Planos com Interatividade */}
@@ -96,3 +96,4 @@ export default async function PlanosPage() {
     </div>
   );
 }
+

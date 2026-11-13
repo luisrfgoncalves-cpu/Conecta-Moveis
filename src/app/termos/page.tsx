@@ -1,17 +1,15 @@
-import Link from 'next/link';
-import { ShieldCheck, ArrowLeft } from 'lucide-react';
+import { ShieldCheck } from 'lucide-react';
+import { BackButton } from '@/components/navigation/BackButton';
+import { Breadcrumbs } from '@/components/navigation/Breadcrumbs';
 
 export default function TermosPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-14 space-y-8">
-      <div className="space-y-3">
-        <Link 
-          href="/" 
-          className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-orange-400 hover:text-orange-300 transition"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Voltar ao Início
-        </Link>
+      <div className="space-y-4">
+        <div className="flex items-center justify-between gap-4">
+          <Breadcrumbs items={[{ label: 'Termos de Uso' }]} />
+          <BackButton fallback="/" label="Voltar à tela anterior" />
+        </div>
         <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
           Termos de Uso e Condições Gerais
         </h1>

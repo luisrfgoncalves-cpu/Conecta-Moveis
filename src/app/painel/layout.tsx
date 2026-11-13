@@ -17,6 +17,7 @@ import {
   Building2,
   LogOut,
   ShieldAlert,
+  Globe,
 } from 'lucide-react';
 
 const navItems = [
@@ -127,7 +128,14 @@ export default async function PainelLayout({ children }: { children: React.React
             ))}
           </ul>
 
-          <div className="mt-4 pt-4 border-t border-white/10">
+          <div className="mt-4 pt-4 border-t border-white/10 space-y-1">
+            <Link
+              href="/"
+              className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold text-sky-400 bg-sky-500/10 hover:bg-sky-500/20 border border-sky-500/25 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500"
+            >
+              <Globe className="w-4 h-4 flex-shrink-0" aria-hidden />
+              Ver Vitrine Pública
+            </Link>
             <form action={handleSignOut}>
               <button
                 type="submit"

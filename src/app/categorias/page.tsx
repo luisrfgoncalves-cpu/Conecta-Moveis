@@ -1,7 +1,9 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowLeft, ArrowRight, Wrench, Sparkles, Box, Hammer, Ruler, Lightbulb, LucideIcon } from 'lucide-react';
+import { ArrowRight, Wrench, Sparkles, Box, Hammer, Ruler, Lightbulb, LucideIcon } from 'lucide-react';
 import { CATEGORIES_CATALOG } from '@/lib/profile/schemas';
+import { BackButton } from '@/components/navigation/BackButton';
+import { Breadcrumbs } from '@/components/navigation/Breadcrumbs';
 
 export const metadata: Metadata = {
   title: 'Categorias de Serviços | Conecta Móveis',
@@ -20,15 +22,12 @@ const iconMap: Record<string, LucideIcon> = {
 export default function CategoriasPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 space-y-10">
-      {/* Topo com navegação */}
-      <div className="space-y-3">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-orange-400 hover:text-orange-300 transition"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Voltar ao Início
-        </Link>
+      {/* Topo com navegação profissional */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between gap-4">
+          <Breadcrumbs items={[{ label: 'Categorias' }]} />
+          <BackButton fallback="/" label="Voltar à tela anterior" />
+        </div>
         <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
           Categorias do Setor Moveleiro
         </h1>

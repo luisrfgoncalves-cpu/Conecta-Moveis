@@ -4,7 +4,6 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
-  ArrowLeft,
   MapPin,
   Building,
   ShieldCheck,
@@ -25,6 +24,8 @@ import { ContactForm } from '@/components/contact/ContactForm';
 import { WhatsAppTracker } from '@/components/contact/WhatsAppTracker';
 import { ReviewsSection } from '@/components/reviews/ReviewsSection';
 import { getProfileReviews, checkReviewEligibility } from '@/lib/reviews/actions';
+import { BackButton } from '@/components/navigation/BackButton';
+import { Breadcrumbs } from '@/components/navigation/Breadcrumbs';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -97,15 +98,15 @@ export default async function ProfissionalPublicPage({ params }: PageProps) {
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 space-y-8">
-      {/* Navegação de Retorno */}
-      <div>
-        <Link
-          href="/encontrar-profissionais"
-          className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-orange-400 hover:text-orange-300 transition"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Voltar à busca de profissionais
-        </Link>
+      {/* Navegação de Retorno e Breadcrumbs */}
+      <div className="flex items-center justify-between gap-4">
+        <Breadcrumbs
+          items={[
+            { label: 'Profissionais', href: '/encontrar-profissionais' },
+            { label: professional.display_name },
+          ]}
+        />
+        <BackButton fallback="/encontrar-profissionais" label="Voltar à busca" />
       </div>
 
       {/* Cartão Principal do Perfil */}

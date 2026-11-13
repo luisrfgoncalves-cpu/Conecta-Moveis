@@ -4,6 +4,7 @@ import Image from 'next/image';
 import './globals.css';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
+import { ConditionalShellWrapper } from '@/components/layout/ConditionalShellWrapper';
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
@@ -43,11 +44,9 @@ export default function RootLayout({
           <div className="absolute inset-0 bg-gradient-to-b from-[#07090f]/50 via-[#07090f]/60 to-[#07090f]/80" />
         </div>
 
-        <Header />
-        <main className="flex-1 w-full relative z-10">
+        <ConditionalShellWrapper header={<Header />} footer={<Footer />}>
           {children}
-        </main>
-        <Footer />
+        </ConditionalShellWrapper>
       </body>
     </html>
   );

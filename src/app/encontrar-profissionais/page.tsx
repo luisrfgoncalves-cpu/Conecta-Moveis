@@ -1,10 +1,12 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowLeft, UserX, ChevronLeft, ChevronRight } from 'lucide-react';
+import { UserX, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Alert } from '@/components/ui/Feedback';
 import { searchProfessionals, SearchFilters as FilterType } from '@/lib/search/actions';
 import { SearchFilters } from '@/components/search/SearchFilters';
 import { ProfessionalCard } from '@/components/search/ProfessionalCard';
+import { BackButton } from '@/components/navigation/BackButton';
+import { Breadcrumbs } from '@/components/navigation/Breadcrumbs';
 
 export const metadata: Metadata = {
   title: 'Encontrar Profissionais e Empresas | Conecta Móveis',
@@ -52,25 +54,22 @@ export default async function EncontrarProfissionaisPage({ searchParams }: PageP
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 space-y-8">
-      {/* Topo com navegação */}
-      <div className="space-y-3">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-orange-400 hover:text-orange-300 transition"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Voltar ao Início
-        </Link>
+      {/* Topo com navegação profissional */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between gap-4">
+          <Breadcrumbs items={[{ label: 'Buscar Profissionais' }]} />
+          <BackButton fallback="/" label="Voltar à tela anterior" />
+        </div>
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
             <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
               Encontrar Profissionais
             </h1>
             <p className="text-sm sm:text-base text-slate-300 max-w-2xl mt-1 leading-relaxed">
-              Catálogo de profissionais verificados e atuantes no polo de Jundiaí e região.
+              Catálogo de profissionais e empresas atuantes no polo de Jundiaí e região.
             </p>
           </div>
-          <span className="text-xs font-semibold text-slate-400 bg-white/5 px-3 py-1.5 rounded-xl border border-white/10 self-start sm:self-auto">
+          <span className="text-xs font-semibold text-slate-300 bg-white/5 px-3 py-1.5 rounded-xl border border-white/10 self-start sm:self-auto shadow-sm">
             {result.total} {result.total === 1 ? 'profissional encontrado' : 'profissionais encontrados'}
           </span>
         </div>
