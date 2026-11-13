@@ -126,13 +126,19 @@ export const professionalProfileSchema = z.object({
     .min(1, 'Selecione ao menos 1 especialidade de atuação'),
   whatsapp: z
     .string()
-    .regex(/^$|^\(?[1-9]{2}\)? ?9?[0-9]{4}-?[0-9]{4}$/, 'Formato de WhatsApp inválido (ex: 11999998888)')
+    .transform((val) => val.replace(/\D/g, ''))
+    .refine((val) => val === '' || (val.length >= 10 && val.length <= 11), {
+      message: 'Informe o WhatsApp com DDD (10 ou 11 dígitos, ex: 11999998888)',
+    })
     .optional()
     .or(z.literal('')),
   isWhatsappPublic: z.boolean().default(false),
   phone: z
     .string()
-    .regex(/^$|^\(?[1-9]{2}\)? ?[0-9]{4}-?[0-9]{4}$/, 'Formato de telefone fixo/celular inválido')
+    .transform((val) => val.replace(/\D/g, ''))
+    .refine((val) => val === '' || (val.length >= 10 && val.length <= 11), {
+      message: 'Informe o telefone com DDD (10 ou 11 dígitos, ex: 1145210000)',
+    })
     .optional()
     .or(z.literal('')),
   isPhonePublic: z.boolean().default(false),

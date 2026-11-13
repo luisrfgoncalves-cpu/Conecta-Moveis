@@ -355,43 +355,58 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
         )}
 
         {/* Resumo do perfil */}
-        <div className="glass-panel rounded-2xl p-6 border border-white/10 space-y-5">
-          <h2 className="text-lg font-black text-white">Resumo do seu Perfil</h2>
+        <div className="glass-panel rounded-2xl p-6 border border-white/10 space-y-6">
+          <div className="flex items-center justify-between border-b border-white/10 pb-4">
+            <h2 className="text-lg font-black text-white">Visualização do Cartão do Perfil</h2>
+            <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${
+              isPublished
+                ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+            }`}>
+              {isPublished ? '● Publicado na vitrine' : '○ Rascunho privado'}
+            </span>
+          </div>
 
-          <div className="flex items-center gap-4 p-4 rounded-xl bg-black/20 border border-white/10">
-            <div className="w-16 h-16 rounded-2xl overflow-hidden bg-white/5 border border-white/20 flex-shrink-0 flex items-center justify-center">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 p-5 rounded-2xl bg-black/30 border border-white/10">
+            <div className="w-20 h-20 rounded-2xl overflow-hidden bg-white/5 border border-white/20 flex-shrink-0 flex items-center justify-center shadow-lg">
               {avatarUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
               ) : (
-                <User className="w-8 h-8 text-slate-500" />
+                <User className="w-10 h-10 text-slate-500" />
               )}
             </div>
-            <div>
-              <p className="font-black text-white text-base">{displayName || '—'}</p>
-              <p className="text-xs text-orange-400 font-semibold mt-0.5">{city} • {state}</p>
+            <div className="space-y-1">
+              <h3 className="font-black text-white text-xl">{displayName || 'Nome Profissional'}</h3>
+              <p className="text-xs text-orange-400 font-bold flex items-center gap-1.5">
+                <MapPin className="w-3.5 h-3.5" /> {city} • {state}
+              </p>
               {whatsapp && (
-                <p className="text-xs text-emerald-400 mt-0.5">📱 {whatsapp}</p>
+                <p className="text-xs text-emerald-400 font-mono flex items-center gap-1.5 mt-1">
+                  <Globe className="w-3.5 h-3.5" /> WhatsApp: {whatsapp}
+                </p>
               )}
             </div>
           </div>
 
           {bio && (
-            <div className="p-4 rounded-xl bg-black/20 border border-white/10">
-              <p className="text-xs font-bold text-slate-400 mb-1">Apresentação</p>
-              <p className="text-sm text-slate-200 leading-relaxed">{bio}</p>
+            <div className="p-5 rounded-2xl bg-black/30 border border-white/10 space-y-2">
+              <p className="text-xs font-bold text-orange-400/90 uppercase tracking-wider">Apresentação Profissional</p>
+              <p className="text-sm text-slate-200 leading-relaxed whitespace-pre-wrap break-all [overflow-wrap:anywhere]">
+                {bio}
+              </p>
             </div>
           )}
 
           {selectedSpecialties.length > 0 && (
-            <div>
-              <p className="text-xs font-bold text-slate-400 mb-2">Especialidades ({selectedSpecialties.length})</p>
+            <div className="p-5 rounded-2xl bg-black/30 border border-white/10 space-y-3">
+              <p className="text-xs font-bold text-orange-400/90 uppercase tracking-wider">Especialidades Atendidas ({selectedSpecialties.length})</p>
               <div className="flex flex-wrap gap-2">
                 {CATEGORIES_CATALOG.flatMap(cat => cat.specialties)
                   .filter(s => selectedSpecialties.includes(s.id))
                   .map(s => (
-                    <span key={s.id} className="px-2.5 py-1 rounded-lg text-xs bg-orange-500/15 text-orange-300 border border-orange-500/20">
-                      {s.name}
+                    <span key={s.id} className="px-3 py-1 rounded-xl text-xs bg-orange-500/15 text-orange-300 border border-orange-500/30 font-medium">
+                      ✓ {s.name}
                     </span>
                   ))}
               </div>
@@ -399,9 +414,9 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
           )}
 
           {neighborhoodsInput && (
-            <div>
-              <p className="text-xs font-bold text-slate-400 mb-1">Regiões atendidas</p>
-              <p className="text-sm text-slate-300">{neighborhoodsInput}</p>
+            <div className="p-5 rounded-2xl bg-black/30 border border-white/10 space-y-2">
+              <p className="text-xs font-bold text-orange-400/90 uppercase tracking-wider">Regiões e Bairros de Atendimento</p>
+              <p className="text-sm text-slate-300 font-medium">{neighborhoodsInput}</p>
             </div>
           )}
         </div>
@@ -907,17 +922,22 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
               </label>
               <span className="text-xs px-2 py-0.5 rounded bg-orange-500/20 text-orange-400 font-bold">Obrigatório</span>
             </div>
-            <input
-              id="whatsapp"
-              type="text"
-              value={whatsapp}
-              onChange={(e) => setWhatsapp(e.target.value)}
-              placeholder="Ex: 11999998888 (com DDD)"
-              className="w-full bg-black/30 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50"
-            />
+            <div className="flex gap-2">
+              <div className="w-20 px-3 py-3 rounded-xl bg-white/5 border border-white/15 text-slate-300 font-bold text-sm flex items-center justify-center select-none">
+                🇧🇷 +55
+              </div>
+              <input
+                id="whatsapp"
+                type="text"
+                value={whatsapp}
+                onChange={(e) => setWhatsapp(e.target.value)}
+                placeholder="DDD + Número (ex: 11 99999-8888)"
+                className="flex-1 bg-black/30 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 text-sm font-medium"
+              />
+            </div>
             <p className="text-xs text-emerald-400/90 flex items-center gap-1.5">
               <Globe className="w-3.5 h-3.5" />
-              O botão de conversa direta no WhatsApp ficará sempre ativo no seu cartão público.
+              Digite o DDD e o número (ex: 11999998888 ou 11 99999-8888). O sistema aceita com ou sem máscara.
             </p>
           </div>
 
@@ -929,14 +949,19 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
               </label>
               <span className="text-xs px-2 py-0.5 rounded bg-slate-500/20 text-slate-300 font-bold">Opcional</span>
             </div>
-            <input
-              id="phone"
-              type="text"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              placeholder="Ex: 1145210000"
-              className="w-full bg-black/30 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500/50"
-            />
+            <div className="flex gap-2">
+              <div className="w-20 px-3 py-3 rounded-xl bg-white/5 border border-white/15 text-slate-300 font-bold text-sm flex items-center justify-center select-none">
+                🇧🇷 +55
+              </div>
+              <input
+                id="phone"
+                type="text"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="DDD + Número (ex: 11 4521-0000)"
+                className="flex-1 bg-black/30 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500/50 text-sm font-medium"
+              />
+            </div>
             <div className="flex items-center gap-3">
               <input
                 id="isPhonePublic"
