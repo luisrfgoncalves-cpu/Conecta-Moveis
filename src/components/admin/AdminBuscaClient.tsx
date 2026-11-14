@@ -16,6 +16,7 @@ import type { SearchSynonym, NoResultLog } from '@/lib/search/schemas';
 import {
   upsertSearchSynonym,
   deleteSearchSynonym,
+  purgeOldSearchLogs,
 } from '@/lib/search/actions';
 
 interface AdminBuscaClientProps {
@@ -98,6 +99,21 @@ export function AdminBuscaClient({
         showFeedback(true, 'Sinônimo removido.');
       } else {
         showFeedback(false, res.error || 'Erro ao remover.');
+      }
+    });
+  }
+
+  function handlePurge() {
+    if (!confirm('Deseja excluir registros de buscas sem resultado com mais de 365 dias?')) return;
+    startTransition(async () => {
+      const res = await purgeOldSearchLogs(365);
+      if (res.success) {
+        showFeedback(
+          true,
+          `Ciclo de limpeza concluído: ${res.deletedCount ?? 0} registros antigos expurgados.`
+        );
+      } else {
+        showFeedback(false, res.error || 'Erro ao executar ciclo de limpeza.');
       }
     });
   }
@@ -239,9 +255,19 @@ export function AdminBuscaClient({
       {/* Aba: Termos Sem Resultado */}
       {tab === 'sem-resultado' && (
         <div className="space-y-4">
-          <div className="flex items-center gap-2 text-sm text-gray-500 bg-amber-50 border border-amber-200 rounded-lg px-4 py-2.5">
-            <AlertTriangle className="h-4 w-4 text-amber-500 flex-shrink-0" />
-            Dados agregados por termo e dia — sem identificação de usuário ou IP.
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-sm bg-amber-50 border border-amber-200 rounded-lg px-4 py-3">
+            <div className="flex items-center gap-2 text-gray-700">
+              <AlertTriangle className="h-4 w-4 text-amber-500 flex-shrink-0" />
+              <span>Dados agregados por termo e dia — sem identificação de usuário ou IP (LGPD art. 6º, III).</span>
+            </div>
+            <button
+              onClick={handlePurge}
+              disabled={isPending}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-md text-xs font-semibold whitespace-nowrap transition-colors disabled:opacity-60 self-start sm:self-auto"
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+              Limpar registros &gt; 365 dias
+            </button>
           </div>
 
           {noResults.length === 0 ? (

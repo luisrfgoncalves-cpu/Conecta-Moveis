@@ -571,6 +571,30 @@ export async function deleteSearchSynonym(id: string): Promise<{
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// 9. Admin: executar ciclo de limpeza / expurgo de logs antigos de busca
+// ─────────────────────────────────────────────────────────────────────────────
+export async function purgeOldSearchLogs(retentionDays = 365): Promise<{
+  success: boolean;
+  deletedCount?: number;
+  error?: string;
+}> {
+  const { user, role } = await getAdminUserRole();
+  if (!user || !role) return { success: false, error: 'Acesso negado.' };
+  if (role !== 'owner' && role !== 'admin') {
+    return { success: false, error: 'Apenas owner e admin podem executar o ciclo de limpeza.' };
+  }
+
+  const admin = getAdminClient();
+  const { data, error } = await admin.rpc('purge_search_no_results_logs', {
+    p_retention_days: retentionDays,
+  });
+
+  if (error) return { success: false, error: error.message };
+  revalidatePath('/admin/busca');
+  return { success: true, deletedCount: Number(data ?? 0) };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Legacy: empresa por slug (mantida para compatibilidade com fases anteriores)
 // ─────────────────────────────────────────────────────────────────────────────
 export interface PublicCompany {

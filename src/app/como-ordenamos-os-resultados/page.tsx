@@ -47,8 +47,27 @@ export default function ComoOrdenamosOsResultadosPage() {
 
         <div className="glass-panel p-5 rounded-2xl border border-white/10 space-y-2">
           <h3 className="text-sm font-bold text-white flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-400" />
+            2. Motor de Busca Textual Ponderado (Sem Julgamento de Mérito)
+          </h3>
+          <p className="text-slate-300 leading-relaxed">
+            Quando o visitante digita um termo na barra de busca, o sistema utiliza indexação textual ponderada (PostgreSQL Full-Text Search) sem avaliar beleza ou mérito de trabalhos:
+          </p>
+          <ul className="text-slate-400 space-y-1 list-disc list-inside pt-1">
+            <li><strong>Peso A (Máxima relevância):</strong> Correspondência exata no nome profissional e especialidades declaradas pelo anunciante.</li>
+            <li><strong>Peso B:</strong> Correspondência com a categoria do setor moveleiro.</li>
+            <li><strong>Peso C:</strong> Menção na descrição/biografia redigida pelo profissional.</li>
+            <li><strong>Peso D:</strong> Cidade sede e regiões de atendimento informadas.</li>
+          </ul>
+          <p className="text-slate-400 text-[11px] pt-1">
+            A busca é indiferente a acentuação (unaccent), expande sinônimos do vocabulário moveleiro e tolera pequenos erros de digitação (trigramas).
+          </p>
+        </div>
+
+        <div className="glass-panel p-5 rounded-2xl border border-white/10 space-y-2">
+          <h3 className="text-sm font-bold text-white flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-amber-400" />
-            2. Destaques Patrocinados (Sempre Rotulados)
+            3. Destaques Patrocinados (Sempre Rotulados)
           </h3>
           <p className="text-slate-300 leading-relaxed">
             Perfis que contratam planos de visibilidade comercial podem ter destaque nas primeiras posições de forma rotativa. Todo e qualquer perfil com essa característica é <strong>obrigatoriamente rotulado com a etiqueta ostensiva &quot;Destaque patrocinado&quot;</strong>, em respeito ao art. 36 do Código de Defesa do Consumidor e às normas do CONAR. A contratação de planos pagos <strong>nunca altera avaliações nem isenta o anunciante de moderação</strong>.
@@ -58,7 +77,7 @@ export default function ComoOrdenamosOsResultadosPage() {
         <div className="glass-panel p-5 rounded-2xl border border-white/10 space-y-2">
           <h3 className="text-sm font-bold text-white flex items-center gap-2">
             <Clock className="w-4 h-4 text-sky-400" />
-            3. Opções Livres de Escolha do Usuário
+            4. Opções Livres de Escolha do Usuário
           </h3>
           <p className="text-slate-300 leading-relaxed">
             O visitante pode a qualquer momento alterar o filtro de ordenação para atender à sua preferência:

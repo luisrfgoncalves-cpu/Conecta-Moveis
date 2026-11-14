@@ -7,6 +7,7 @@ import {
   listSearchSynonyms,
   upsertSearchSynonym,
   deleteSearchSynonym,
+  purgeOldSearchLogs,
 } from '../lib/search/actions';
 
 vi.mock('next/cache', () => ({
@@ -228,6 +229,12 @@ vi.mock('@supabase/supabase-js', () => ({
           });
         }
         return { data: null, error: null };
+      }
+
+      if (functionName === 'purge_search_no_results_logs') {
+        const count = mockNoResultsDB.length;
+        mockNoResultsDB = [];
+        return { data: count, error: null };
       }
 
       if (functionName === 'suggest_similar_term') {
@@ -523,6 +530,29 @@ describe('FASE 22 — Busca Inteligente Nativa no Postgres', () => {
         synonyms: ['t1'],
         is_active: true,
       });
+      expect(res.success).toBe(false);
+      expect(res.error).toContain('Apenas owner e admin');
+    });
+  });
+
+  // ───────────────────────────────────────────────────────────────────────────
+  // Teste 11: Ciclo de Limpeza / Expurgo de Logs Antigos
+  // ───────────────────────────────────────────────────────────────────────────
+  describe('11. Ciclo de Limpeza / Expurgo de Logs Antigos', () => {
+    it('permite expurgar logs de termos sem resultado com mais de 365 dias', async () => {
+      mockNoResultsDB.push({
+        term: 'antigo',
+        search_date: '2024-01-01',
+        count: 5,
+      });
+      const res = await purgeOldSearchLogs(365);
+      expect(res.success).toBe(true);
+      expect(res.deletedCount).toBeGreaterThan(0);
+    });
+
+    it('rejeita expurgo se o usuário não for admin/owner', async () => {
+      mockRole = 'moderator';
+      const res = await purgeOldSearchLogs(365);
       expect(res.success).toBe(false);
       expect(res.error).toContain('Apenas owner e admin');
     });

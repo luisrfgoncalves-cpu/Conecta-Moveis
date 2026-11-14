@@ -409,7 +409,21 @@ USING (
   )
 );
 
--- 16. EXPLAIN simulado com volume de 2.000 perfis
+-- 16. Função de ciclo de limpeza / expurgo de logs antigos de busca sem resultado
+CREATE OR REPLACE FUNCTION purge_search_no_results_logs(p_retention_days INT DEFAULT 365)
+RETURNS INT AS $$
+DECLARE
+  v_deleted INT;
+BEGIN
+  DELETE FROM public.search_no_results_log
+  WHERE search_date < (CURRENT_DATE - (p_retention_days || ' days')::INTERVAL);
+  
+  GET DIAGNOSTICS v_deleted = ROW_COUNT;
+  RETURN v_deleted;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- 17. EXPLAIN simulado com volume de 2.000 perfis
 -- (executado no ambiente de dev; resultado registrado em ARCHITECTURE.md)
 -- Para reproduzir:
 --   EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)
