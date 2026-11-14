@@ -107,3 +107,4 @@ Caso a assessoria jurídica ou a estratégia de negócios exija no futuro que 10
 | **Backups** | Manuais via script | Diários automáticos + PITR |
 | **Cobrança Comercial** | Modo Simulação / Risco de TOS | 100% Regularizado na Vercel Pro |
 | **E-mails Transacionais** | ~50-200/dia | Ilimitado via Resend/SMTP dedicado |
+

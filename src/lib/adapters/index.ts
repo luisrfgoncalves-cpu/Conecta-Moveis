@@ -26,3 +26,4 @@ export const defaultAdapters: AppAdapters = {
   rateLimit: new MemoryRateLimitAdapter(),
   search: new PostgresFullTextSearchAdapter(),
 };
+

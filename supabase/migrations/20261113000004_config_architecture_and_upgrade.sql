@@ -140,3 +140,4 @@ CREATE POLICY "Leitura de entitlements por usuários autenticados"
 ON public.commercial_entitlements FOR SELECT
 TO authenticated
 USING (true);
+

@@ -70,3 +70,4 @@ export interface CapacitySimulationResult {
   max_profiles_sustainable: number;
   recommendation: string;
 }
+

@@ -129,3 +129,4 @@ export const FEATURE_FLAGS_REGISTRY: Record<string, FeatureFlag> = {
     legal_approval_id: null,
   },
 };
+

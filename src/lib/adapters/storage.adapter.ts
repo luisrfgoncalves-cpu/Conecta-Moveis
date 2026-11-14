@@ -52,3 +52,4 @@ export class SupabaseStorageAdapter implements StorageAdapter {
     return { success: true };
   }
 }
+

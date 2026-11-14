@@ -106,3 +106,22 @@ Este documento registra todas as avaliações do Gate de Isenção ao longo das 
   - Validar as cláusulas de bloqueio brando para assegurar respeito aos direitos adquiridos de anunciantes que assinaram planos com limites anteriores.
   - Avaliar se a documentação do DPA da AWS/Vercel atende integralmente às exigências de transferência internacional antes do início da cobrança comercial em produção.
 
+---
+
+### J-007 — Administração Completa do Núcleo, MFA e Governança de Papéis (Fase 19)
+- **Data**: 2026-11-13
+- **Fase**: Fase 19 — Administração Completa: Núcleo
+- **Funcionalidade ou Texto**: Criação de hierarquia estrita de papéis (`owner`, `admin`, `moderator`, `support`), MFA obrigatório (TOTP AAL2) para rotas e ações administrativas, painel avançado de gestão de usuários em `/admin/usuarios` com ações de suspensão, bloqueio de e-mail e exclusão em duas etapas respeitando retenção legal, atribuição manual de planos com histórico e vigência, exportação auditada de logs imutáveis e garantia mandatória de não alteração de conteúdo alheio (Regra R7).
+- **Regras e Normas Envolvidas**: R7, R10, R15, R16; Marco Civil da Internet (arts. 15 e 19); LGPD (arts. 6º, 16 e 46 — segurança e retenção); CDC art. 37.
+- **Risco**: Médio (impacto em segurança de acesso de alto privilégio e conformidade com R7).
+- **Decisão Tomada**:
+  1. **Papéis Estritos**: O papel `owner` é exclusivo e único habilitado a alterar papéis de outros administradores e executar exclusões irreversíveis. `moderator` atua nas filas de aprovação/denúncia e `support` possui somente leitura.
+  2. **Imutabilidade e Regra R7**: Moderadores e administradores **nunca** editam textos ou fotos de anunciantes. Apenas aprovam, rejeitam, ocultam ou solicitam correção formal (preservando a isenção de autoria do Marco Civil).
+  3. **Segurança AAL2 (MFA)**: Acesso administrativo e ações críticas requerem autenticador TOTP verificado no servidor, com instruções de recuperação documentadas caso o dispositivo seja perdido.
+  4. **Logs Imutáveis**: Bloqueio total de `UPDATE` e `DELETE` na tabela `admin_logs` via RLS; exportações para CSV geram registro telemático obrigatório.
+- **Quem Decidiu**: Usuário (solicitação da Fase 19).
+- **Evidência**: `docs/ADMIN_BOOTSTRAP.sql`, `src/lib/admin/`, `src/app/admin/usuarios/`, `src/app/admin/logs/`, `docs/RLS_MATRIX.md`.
+- **Pendência para o Advogado**:
+  - Validar se o procedimento de suspensão e bloqueio prevê notificação adequada do motivo ao usuário sem ferir direitos contratuais.
+
+

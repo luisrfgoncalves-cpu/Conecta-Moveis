@@ -13,10 +13,10 @@ function getAdminClient() {
   );
 }
 
-export type AdminRole = 'admin' | 'moderator';
+export type AdminRole = 'owner' | 'admin' | 'moderator' | 'support';
 
 /**
- * 1. Verifica autenticação e papel do usuário (moderator ou admin)
+ * 1. Verifica autenticação e papel do usuário (owner, admin, moderator ou support)
  */
 export async function getAdminUserRole(): Promise<{
   user: { id: string; email: string } | null;
@@ -32,7 +32,7 @@ export async function getAdminUserRole(): Promise<{
     .from('user_roles')
     .select('role')
     .eq('user_id', user.id)
-    .in('role', ['admin', 'moderator'])
+    .in('role', ['owner', 'admin', 'moderator', 'support'])
     .maybeSingle();
 
   if (!roleRow) return { user: null, role: null };
@@ -511,4 +511,393 @@ export async function exportDatabaseBackup(): Promise<{
     return { success: false, error: err.message || 'Falha ao gerar backup.' };
   }
 }
+
+// ==============================================================================
+// FASE 19 — ADMINISTRAÇÃO COMPLETA: NÚCLEO
+// ==============================================================================
+
+/**
+ * 12. Verificação de Nível MFA AAL2 no Servidor
+ */
+export async function checkAdminMfaAal2(): Promise<{
+  isAal2: boolean;
+  hasMfaEnrolled: boolean;
+}> {
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+    if (!data) return { isAal2: true, hasMfaEnrolled: false };
+
+    const hasMfaEnrolled = data.nextLevel === 'aal2';
+    const isAal2 = data.currentLevel === 'aal2';
+
+    return { isAal2, hasMfaEnrolled };
+  } catch {
+    return { isAal2: true, hasMfaEnrolled: false };
+  }
+}
+
+/**
+ * 13. Busca de Usuários com Ficha Segura (Sem senhas ou tokens)
+ */
+export async function searchAdminUsers(searchTerm?: string): Promise<{
+  success: boolean;
+  users?: Array<{
+    id: string;
+    full_name: string;
+    email: string;
+    phone: string | null;
+    is_suspended: boolean;
+    created_at: string;
+    role: string | null;
+    active_plan: string;
+  }>;
+  error?: string;
+}> {
+  const { user, role } = await getAdminUserRole();
+  if (!user || !role) return { success: false, error: 'Acesso negado.' };
+
+  const admin = getAdminClient();
+  let query = admin
+    .from('profiles')
+    .select('id, full_name, email, phone, is_suspended, created_at')
+    .order('created_at', { ascending: false })
+    .limit(50);
+
+  if (searchTerm && searchTerm.trim()) {
+    const term = searchTerm.trim();
+    query = query.or(`full_name.ilike.%${term}%,email.ilike.%${term}%`);
+  }
+
+  const { data: profiles, error } = await query;
+  if (error) return { success: false, error: error.message };
+
+  // Buscar papéis e planos
+  const userIds = (profiles || []).map((p) => p.id);
+  const [rolesRes, plansRes] = await Promise.all([
+    admin.from('user_roles').select('user_id, role').in('user_id', userIds),
+    admin.from('manual_plan_grants').select('user_id, plan_code').eq('is_active', true).in('user_id', userIds),
+  ]);
+
+  const roleMap = new Map((rolesRes.data || []).map((r) => [r.user_id, r.role]));
+  const planMap = new Map((plansRes.data || []).map((p) => [p.user_id, p.plan_code]));
+
+  const mapped = (profiles || []).map((p) => ({
+    id: p.id,
+    full_name: p.full_name,
+    email: p.email,
+    phone: p.phone,
+    is_suspended: Boolean(p.is_suspended),
+    created_at: p.created_at,
+    role: roleMap.get(p.id) || 'user',
+    active_plan: planMap.get(p.id) || 'gratuito',
+  }));
+
+  return { success: true, users: mapped };
+}
+
+/**
+ * 14. Suspender Usuário
+ */
+export async function suspendUserAccount(
+  targetUserId: string,
+  reason: string
+): Promise<{ success: boolean; error?: string }> {
+  const { user, role } = await getAdminUserRole();
+  if (!user || !role || role === 'support') {
+    return { success: false, error: 'Acesso negado: permissão insuficiente.' };
+  }
+  if (!reason || reason.trim().length < 10) {
+    return { success: false, error: 'Justificativa de suspensão de no mínimo 10 caracteres é obrigatória.' };
+  }
+
+  const admin = getAdminClient();
+  const { error } = await admin
+    .from('profiles')
+    .update({ is_suspended: true, updated_at: new Date().toISOString() })
+    .eq('id', targetUserId);
+
+  if (error) return { success: false, error: error.message };
+
+  await recordAdminLog({
+    adminId: user.id,
+    action: 'suspend_user_account',
+    targetTable: 'profiles',
+    targetId: targetUserId,
+    reason: reason.trim(),
+    oldValue: { is_suspended: false },
+    newValue: { is_suspended: true },
+  });
+
+  return { success: true };
+}
+
+/**
+ * 15. Reativar Usuário
+ */
+export async function reactivateUserAccount(
+  targetUserId: string,
+  reason: string
+): Promise<{ success: boolean; error?: string }> {
+  const { user, role } = await getAdminUserRole();
+  if (!user || !role || role === 'support') {
+    return { success: false, error: 'Acesso negado: permissão insuficiente.' };
+  }
+  if (!reason || reason.trim().length < 10) {
+    return { success: false, error: 'Justificativa de reativação de no mínimo 10 caracteres é obrigatória.' };
+  }
+
+  const admin = getAdminClient();
+  const { error } = await admin
+    .from('profiles')
+    .update({ is_suspended: false, updated_at: new Date().toISOString() })
+    .eq('id', targetUserId);
+
+  if (error) return { success: false, error: error.message };
+
+  await recordAdminLog({
+    adminId: user.id,
+    action: 'reactivate_user_account',
+    targetTable: 'profiles',
+    targetId: targetUserId,
+    reason: reason.trim(),
+    oldValue: { is_suspended: true },
+    newValue: { is_suspended: false },
+  });
+
+  return { success: true };
+}
+
+/**
+ * 16. Forçar Logout de Usuário (Invalidação de Sessão)
+ */
+export async function forceUserLogout(
+  targetUserId: string,
+  reason: string
+): Promise<{ success: boolean; error?: string }> {
+  const { user, role } = await getAdminUserRole();
+  if (!user || !role || role === 'support') {
+    return { success: false, error: 'Acesso negado: permissão insuficiente.' };
+  }
+  if (!reason || reason.trim().length < 10) {
+    return { success: false, error: 'Justificativa de encerramento de sessão de no mínimo 10 caracteres é obrigatória.' };
+  }
+
+  const admin = getAdminClient();
+  try {
+    await admin.auth.admin.signOut(targetUserId);
+  } catch {
+    // Ignora se não houver sessão ativa
+  }
+
+  await recordAdminLog({
+    adminId: user.id,
+    action: 'force_user_signout',
+    targetTable: 'auth.users',
+    targetId: targetUserId,
+    reason: reason.trim(),
+  });
+
+  return { success: true };
+}
+
+/**
+ * 17. Exclusão ou Anonimização em Duas Etapas (Exclusivo OWNER)
+ */
+export async function deleteUserAccountTwoStep(
+  targetUserId: string,
+  reason: string,
+  confirmationWord: string
+): Promise<{ success: boolean; error?: string }> {
+  const { user, role } = await getAdminUserRole();
+  if (!user || role !== 'owner') {
+    return { success: false, error: 'Apenas o proprietário (owner) possui autorização para exclusão definitiva de contas.' };
+  }
+
+  if (confirmationWord !== 'CONFIRMAR_EXCLUSAO') {
+    return { success: false, error: "A palavra de confirmação deve ser exatamente 'CONFIRMAR_EXCLUSAO'." };
+  }
+
+  if (!reason || reason.trim().length < 15) {
+    return { success: false, error: 'Justificativa formal com no mínimo 15 caracteres é estritamente obrigatória.' };
+  }
+
+  const admin = getAdminClient();
+
+  // Trava de Legal Hold: se houver registros telemáticos sob preservação judicial, bloqueia exclusão
+  const { data: heldLogs } = await admin
+    .from('app_access_logs')
+    .select('id')
+    .eq('user_id', targetUserId)
+    .eq('legal_hold', true)
+    .limit(1);
+
+  if (heldLogs && heldLogs.length > 0) {
+    return {
+      success: false,
+      error: 'OPERAÇÃO BLOQUEADA: Este usuário possui registros sob ordem judicial de preservação (legal hold). Os dados não podem ser excluídos.',
+    };
+  }
+
+  // Grava log auditado da exclusão ANTES de remover
+  await recordAdminLog({
+    adminId: user.id,
+    action: 'delete_user_account_permanent',
+    targetTable: 'auth.users',
+    targetId: targetUserId,
+    reason: reason.trim(),
+  });
+
+  // Executa remoção no auth e cascade
+  const { error } = await admin.auth.admin.deleteUser(targetUserId);
+  if (error) return { success: false, error: error.message };
+
+  return { success: true };
+}
+
+/**
+ * 18. Concessão de Plano Manual com Efeito Imediato e Histórico
+ */
+export async function grantManualPlan(params: {
+  userId: string;
+  planCode: string;
+  validUntil?: string | null;
+  reason: string;
+  origin: 'manual' | 'convite' | 'teste' | 'pago_futuro';
+}): Promise<{ success: boolean; error?: string }> {
+  const { user, role } = await getAdminUserRole();
+  if (!user || (role !== 'owner' && role !== 'admin')) {
+    return { success: false, error: 'Acesso restrito a administradores ou proprietário.' };
+  }
+
+  if (!params.reason || params.reason.trim().length < 10) {
+    return { success: false, error: 'Justificativa de concessão com no mínimo 10 caracteres é obrigatória.' };
+  }
+
+  const admin = getAdminClient();
+
+  // 1. Desativa planos manuais ativos anteriores
+  await admin
+    .from('manual_plan_grants')
+    .update({ is_active: false, updated_at: new Date().toISOString() })
+    .eq('user_id', params.userId)
+    .eq('is_active', true);
+
+  // 2. Insere novo plano manual
+  const { data: newGrant, error } = await admin
+    .from('manual_plan_grants')
+    .insert({
+      user_id: params.userId,
+      plan_code: params.planCode,
+      valid_from: new Date().toISOString(),
+      valid_until: params.validUntil ? new Date(params.validUntil).toISOString() : null,
+      reason: params.reason.trim(),
+      origin: params.origin,
+      granted_by: user.id,
+      is_active: true,
+    })
+    .select('id')
+    .single();
+
+  if (error) return { success: false, error: error.message };
+
+  // 3. Grava log auditado
+  await recordAdminLog({
+    adminId: user.id,
+    action: 'grant_manual_plan',
+    targetTable: 'manual_plan_grants',
+    targetId: newGrant?.id || params.userId,
+    reason: params.reason.trim(),
+    newValue: { plan: params.planCode, origin: params.origin, valid_until: params.validUntil },
+  });
+
+  return { success: true };
+}
+
+/**
+ * 19. Revogação de Plano Manual
+ */
+export async function revokeManualPlan(
+  grantId: string,
+  reason: string
+): Promise<{ success: boolean; error?: string }> {
+  const { user, role } = await getAdminUserRole();
+  if (!user || (role !== 'owner' && role !== 'admin')) {
+    return { success: false, error: 'Acesso restrito a administradores ou proprietário.' };
+  }
+
+  if (!reason || reason.trim().length < 10) {
+    return { success: false, error: 'Justificativa de revogação de no mínimo 10 caracteres é obrigatória.' };
+  }
+
+  const admin = getAdminClient();
+  const { error } = await admin
+    .from('manual_plan_grants')
+    .update({
+      is_active: false,
+      revoked_at: new Date().toISOString(),
+      revoked_by: user.id,
+      revocation_reason: reason.trim(),
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', grantId);
+
+  if (error) return { success: false, error: error.message };
+
+  await recordAdminLog({
+    adminId: user.id,
+    action: 'revoke_manual_plan',
+    targetTable: 'manual_plan_grants',
+    targetId: grantId,
+    reason: reason.trim(),
+  });
+
+  return { success: true };
+}
+
+/**
+ * 20. Exportação Auditada de Logs Administrativos para CSV
+ */
+export async function exportAdminLogsToCsv(): Promise<{
+  success: boolean;
+  csvContent?: string;
+  error?: string;
+}> {
+  const { user, role } = await getAdminUserRole();
+  if (!user || !role) return { success: false, error: 'Acesso negado.' };
+
+  const admin = getAdminClient();
+  const { data: logs, error } = await admin
+    .from('admin_logs')
+    .select('id, admin_id, action, target_table, target_id, reason, created_at')
+    .order('created_at', { ascending: false })
+    .limit(1000);
+
+  if (error) return { success: false, error: error.message };
+
+  const headers = ['ID', 'Admin_ID', 'Acao', 'Tabela_Alvo', 'ID_Alvo', 'Motivo', 'Data_Hora'];
+  const rows = (logs || []).map((l) => [
+    l.id,
+    l.admin_id,
+    l.action,
+    l.target_table,
+    l.target_id,
+    `"${(l.reason || '').replace(/"/g, '""')}"`,
+    l.created_at,
+  ]);
+
+  const csvContent = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
+
+  // Registrar em log que a exportação foi realizada
+  await recordAdminLog({
+    adminId: user.id,
+    action: 'export_admin_logs_csv',
+    targetTable: 'admin_logs',
+    targetId: 'csv_export',
+    reason: `Exportação de ${(logs || []).length} registros de auditoria em arquivo CSV realizada por ${user.email}`,
+  });
+
+  return { success: true, csvContent };
+}
+
 

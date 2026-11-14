@@ -32,3 +32,4 @@ export class PostgresFullTextSearchAdapter implements SearchAdapter {
     };
   }
 }
+

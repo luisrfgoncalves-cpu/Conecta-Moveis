@@ -47,3 +47,4 @@ export class FreeJobSchedulerAdapter implements JobSchedulerAdapter {
     }));
   }
 }
+
