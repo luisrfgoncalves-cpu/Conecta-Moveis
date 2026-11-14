@@ -52,7 +52,7 @@ export default async function DenunciarPage({ searchParams }: DenunciarPageProps
         <ShieldAlert className="w-5 h-5 text-orange-400 flex-shrink-0 mt-0.5" aria-hidden />
         <p className="text-xs text-slate-300 leading-relaxed">
           Toda denúncia vai diretamente para a fila de moderação administrativa.
-          O sigilo do denunciante é garantido. O prazo de análise é de até 5 dias úteis.
+          O sigilo do denunciante é preservado. O prazo de análise é de até 5 dias úteis.
         </p>
       </div>
 
@@ -65,7 +65,7 @@ export default async function DenunciarPage({ searchParams }: DenunciarPageProps
         />
         {/* O ReportButton abre modal — aqui exibimos versão inline expandida */}
         <p className="text-xs text-slate-500 mt-4">
-          Ao enviar, você concorda que sua denúncia será armazenada e analisada pela nossa equipe de moderação.
+          Ao enviar, você concorda que sua denúncia será armazenada e analisada pela moderação da plataforma.
           Denúncias de má-fé podem resultar em suspensão da conta.
         </p>
       </div>

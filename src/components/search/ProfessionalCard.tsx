@@ -82,16 +82,25 @@ export function ProfessionalCard({ professional }: ProfessionalCardProps) {
 
         {/* Selos Permitidos */}
         <div className="flex flex-wrap gap-1.5 pt-1">
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+          <span
+            title="Informação automática; não é recomendação."
+            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+          >
             <ShieldCheck className="w-3 h-3" />
             E-mail confirmado
           </span>
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-medium bg-sky-500/10 text-sky-400 border border-sky-500/20">
+          <span
+            title="Informação automática; não é recomendação."
+            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-medium bg-sky-500/10 text-sky-400 border border-sky-500/20"
+          >
             <Sparkles className="w-3 h-3" />
             Perfil completo
           </span>
           {isNew() && (
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20">
+            <span
+              title="Informação automática; não é recomendação."
+              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20"
+            >
               <Clock className="w-3 h-3" />
               Perfil novo
             </span>

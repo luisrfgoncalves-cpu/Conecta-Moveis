@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     template: '%s | Conecta Móveis',
   },
   description:
-    'Encontre marceneiros, montadores e especialistas em móveis planejados em Jundiaí e região. Compare perfis, portfólios e contrate com segurança.',
+    'Encontre marceneiros, montadores e especialistas em móveis planejados em Jundiaí e região. Compare perfis, portfólios e solicite contato com segurança.',
   icons: {
     icon: '/brand/favicon.png',
   },
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     siteName: 'Conecta Móveis',
     title: 'Conecta Móveis — Profissionais de Móveis em Jundiaí e Região',
     description:
-      'Encontre marceneiros, montadores e especialistas em móveis planejados em Jundiaí e região. Compare perfis, portfólios e contrate com segurança.',
+      'Encontre marceneiros, montadores e especialistas em móveis planejados em Jundiaí e região. Compare perfis, portfólios e solicite contato com segurança.',
     images: [
       {
         url: '/og-default.jpg',
@@ -44,7 +44,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Conecta Móveis — Profissionais de Móveis em Jundiaí e Região',
     description:
-      'Encontre marceneiros, montadores e especialistas em móveis planejados em Jundiaí e região. Compare perfis, portfólios e contrate com segurança.',
+      'Encontre marceneiros, montadores e especialistas em móveis planejados em Jundiaí e região. Compare perfis, portfólios e solicite contato com segurança.',
     images: ['/og-default.jpg'],
   },
 };

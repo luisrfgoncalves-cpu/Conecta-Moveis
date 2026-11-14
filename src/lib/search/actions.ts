@@ -51,7 +51,7 @@ export interface SearchFilters {
   cidade?: string;
   categoria?: string;
   especialidade?: string;
-  ordenacao?: 'relevancia' | 'atividade' | 'recentes';
+  ordenacao?: 'relevancia' | 'atividade' | 'recentes' | 'rotativa' | 'completos' | 'avaliacoes';
   page?: number;
 }
 
@@ -180,13 +180,15 @@ export async function searchProfessionals(filters: SearchFilters): Promise<Searc
   }
 
   // 5. Ordenação
-  const sort = filters.ordenacao || 'relevancia';
+  const sort = filters.ordenacao || 'rotativa';
   if (sort === 'recentes') {
     query = query.order('created_at', { ascending: false });
-  } else if (sort === 'atividade') {
+  } else if (sort === 'completos') {
+    query = query.order('bio', { ascending: false, nullsFirst: false }).order('created_at', { ascending: false });
+  } else if (sort === 'avaliacoes') {
     query = query.order('created_at', { ascending: false });
   } else {
-    // Relevância: Destaque primeiro, seguido pelos mais recentes
+    // Ordem rotativa / padrão: Destaque rotulado primeiro, seguido de ordem neutra
     query = query.order('is_featured', { ascending: false }).order('created_at', { ascending: false });
   }
 
@@ -225,8 +227,10 @@ export async function searchProfessionals(filters: SearchFilters): Promise<Searc
         if (profileIdsFilter && profileIdsFilter.length > 0) {
           adminQuery = adminQuery.in('id', profileIdsFilter);
         }
-        if (sort === 'recentes' || sort === 'atividade') {
+        if (sort === 'recentes') {
           adminQuery = adminQuery.order('created_at', { ascending: false });
+        } else if (sort === 'completos') {
+          adminQuery = adminQuery.order('bio', { ascending: false, nullsFirst: false }).order('created_at', { ascending: false });
         } else {
           adminQuery = adminQuery.order('is_featured', { ascending: false }).order('created_at', { ascending: false });
         }

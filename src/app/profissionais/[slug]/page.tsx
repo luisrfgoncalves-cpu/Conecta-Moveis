@@ -23,6 +23,7 @@ import { ReportButton } from '@/components/reports/ReportButton';
 import { ContactForm } from '@/components/contact/ContactForm';
 import { WhatsAppTracker } from '@/components/contact/WhatsAppTracker';
 import { ReviewsSection } from '@/components/reviews/ReviewsSection';
+import { PlatformNotice } from '@/components/legal/PlatformNotice';
 import { getProfileReviews, checkReviewEligibility } from '@/lib/reviews/actions';
 import { BackButton } from '@/components/navigation/BackButton';
 import { Breadcrumbs } from '@/components/navigation/Breadcrumbs';
@@ -176,16 +177,25 @@ export default async function ProfissionalPublicPage({ params }: PageProps) {
 
             {/* Selos Permitidos */}
             <div className="flex flex-wrap gap-2 pt-1">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              <span
+                title="Informação automática; não é recomendação."
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+              >
                 <ShieldCheck className="w-3.5 h-3.5" />
                 E-mail confirmado
               </span>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-sky-500/10 text-sky-400 border border-sky-500/20">
+              <span
+                title="Informação automática; não é recomendação."
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-sky-500/10 text-sky-400 border border-sky-500/20"
+              >
                 <Sparkles className="w-3.5 h-3.5" />
                 Perfil completo
               </span>
               {isNew() && (
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                <span
+                  title="Informação automática; não é recomendação."
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20"
+                >
                   <Clock className="w-3.5 h-3.5" />
                   Perfil novo
                 </span>
@@ -193,6 +203,9 @@ export default async function ProfissionalPublicPage({ params }: PageProps) {
             </div>
           </div>
         </div>
+
+        {/* Aviso Fixo da Plataforma */}
+        <PlatformNotice />
 
         {/* Aviso Obrigatório aos Contratantes */}
         <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-start gap-3">

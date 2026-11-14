@@ -84,6 +84,9 @@ export function ReviewsSection({
           ) : (
             <p className="text-xs text-slate-400 mt-1">Sem avaliações ainda.</p>
           )}
+          <p className="text-[11px] text-slate-500 mt-1 italic">
+            Opinião do usuário. A Conecta Móveis não verifica nem endossa avaliações; a publicação segue regras públicas.
+          </p>
         </div>
 
         {/* Botão de avaliar se for elegível */}

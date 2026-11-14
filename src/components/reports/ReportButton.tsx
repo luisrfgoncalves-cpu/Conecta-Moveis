@@ -87,7 +87,7 @@ export function ReportButton({ targetType, targetId, isLoggedIn }: ReportButtonP
                 </div>
                 <p className="text-sm font-semibold text-white">Denúncia registrada</p>
                 <p className="text-xs text-slate-400">
-                  Sua denúncia foi recebida e será analisada pela nossa equipe.<br />
+                  Sua denúncia foi recebida e será analisada pela moderação da plataforma.<br />
                   Ela não ficará visível para outros usuários.
                 </p>
                 <button

@@ -58,7 +58,7 @@ export default function HomePage() {
         <Alert type="legal">
           <strong className="text-white font-extrabold text-sm block mb-1.5">Aviso Institucional de Segurança e LGPD:</strong>
           <span className="text-slate-200 font-normal">
-            Este catálogo é publicado diretamente pelos profissionais e empresas parceiras. A plataforma não atua como prestadora nem garantidora de montagens, fabricações ou orçamentos. A negociação e a contratação são 100% livres e diretas entre você e o profissional.
+            Este catálogo é publicado diretamente pelos profissionais e empresas cadastrados. A plataforma não atua como prestadora nem garantidora de montagens, fabricações ou orçamentos. A negociação e a solicitação de contato são livres e diretas entre você e o anunciante.
           </span>
         </Alert>
       </div>
@@ -130,7 +130,7 @@ export default function HomePage() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="glass-card rounded-3xl p-8 sm:p-12 relative overflow-hidden border border-white/15">
           <div className="absolute right-0 top-0 w-96 h-96 bg-orange-500/15 rounded-full blur-[100px] pointer-events-none" />
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
             <div className="space-y-3">
               <div className="w-12 h-12 rounded-2xl bg-orange-500/20 border border-orange-500/40 flex items-center justify-center text-orange-400">

@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { UserX, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Alert } from '@/components/ui/Feedback';
+import { PlatformNotice } from '@/components/legal/PlatformNotice';
 import { searchProfessionals, SearchFilters as FilterType } from '@/lib/search/actions';
 import { SearchFilters } from '@/components/search/SearchFilters';
 import { ProfessionalCard } from '@/components/search/ProfessionalCard';
@@ -74,6 +75,9 @@ export default async function EncontrarProfissionaisPage({ searchParams }: PageP
           </span>
         </div>
       </div>
+
+      {/* Aviso Curto Fixo da Plataforma */}
+      <PlatformNotice />
 
       {/* Aviso Legal Obrigatório da Plataforma */}
       <Alert type="legal">

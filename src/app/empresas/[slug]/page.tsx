@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { getPublicCompanyBySlug } from '@/lib/search/actions';
 import { ProfessionalCard } from '@/components/search/ProfessionalCard';
+import { PlatformNotice } from '@/components/legal/PlatformNotice';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -123,6 +124,9 @@ export default async function EmpresaPublicPage({ params }: PageProps) {
             )}
           </div>
         </div>
+
+        {/* Aviso Fixo da Plataforma */}
+        <PlatformNotice />
 
         {/* Aviso Obrigatório aos Contratantes */}
         <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-start gap-3">

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { Search, SlidersHorizontal, RotateCcw, X, Check } from 'lucide-react';
 import { CATEGORIES_CATALOG } from '@/lib/profile/schemas';
 
@@ -25,7 +26,7 @@ export function SearchFilters({ currentFilters }: SearchFiltersProps) {
   const [cidade, setCidade] = useState(currentFilters.cidade || '');
   const [categoria, setCategoria] = useState(currentFilters.categoria || '');
   const [especialidade, setEspecialidade] = useState(currentFilters.especialidade || '');
-  const [ordenacao, setOrdenacao] = useState(currentFilters.ordenacao || 'relevancia');
+  const [ordenacao, setOrdenacao] = useState(currentFilters.ordenacao || 'rotativa');
 
   // Especialidades dinâmicas baseadas na categoria selecionada
   const selectedCategoryObj = CATEGORIES_CATALOG.find((c) => c.slug === categoria);
@@ -48,7 +49,7 @@ export function SearchFilters({ currentFilters }: SearchFiltersProps) {
     if (c?.trim()) params.set('cidade', c.trim());
     if (cat?.trim()) params.set('categoria', cat.trim());
     if (esp?.trim()) params.set('especialidade', esp.trim());
-    if (ord && ord !== 'relevancia') params.set('ordenacao', ord);
+    if (ord && ord !== 'rotativa' && ord !== 'relevancia') params.set('ordenacao', ord);
 
     // Reset para página 1 ao filtrar
     params.set('page', '1');
@@ -63,7 +64,7 @@ export function SearchFilters({ currentFilters }: SearchFiltersProps) {
     setCidade('');
     setCategoria('');
     setEspecialidade('');
-    setOrdenacao('relevancia');
+    setOrdenacao('rotativa');
     router.push('/encontrar-profissionais');
     setIsDrawerOpen(false);
   };
@@ -230,10 +231,17 @@ export function SearchFilters({ currentFilters }: SearchFiltersProps) {
                   onChange={(e) => setOrdenacao(e.target.value)}
                   className="w-full px-3 py-2.5 rounded-xl bg-slate-950 border border-white/20 text-white text-sm focus:border-orange-500 focus:outline-none"
                 >
-                  <option value="relevancia">Relevância (Padrão)</option>
-                  <option value="atividade">Última Atividade</option>
+                  <option value="rotativa">Ordem Rotativa (Padrão)</option>
                   <option value="recentes">Mais Recentes</option>
+                  <option value="completos">Perfil Mais Completo</option>
+                  <option value="avaliacoes">Por Avaliação dos Usuários</option>
                 </select>
+                <Link
+                  href="/como-ordenamos-os-resultados"
+                  className="text-[11px] text-orange-400 hover:underline block mt-1"
+                >
+                  Como ordenamos os resultados
+                </Link>
               </div>
             </div>
 
@@ -398,10 +406,17 @@ export function SearchFilters({ currentFilters }: SearchFiltersProps) {
                 onChange={(e) => setOrdenacao(e.target.value)}
                 className="w-full px-3 py-2 rounded-xl bg-slate-950/80 border border-white/15 text-white text-xs focus:border-orange-500 focus:outline-none"
               >
-                <option value="relevancia">Relevância (Padrão)</option>
-                <option value="atividade">Atividade</option>
+                <option value="rotativa">Ordem Rotativa (Padrão)</option>
                 <option value="recentes">Mais Recentes</option>
+                <option value="completos">Perfil Mais Completo</option>
+                <option value="avaliacoes">Por Avaliação dos Usuários</option>
               </select>
+              <Link
+                href="/como-ordenamos-os-resultados"
+                className="text-[11px] text-orange-400 hover:underline block mt-1"
+              >
+                Como ordenamos os resultados
+              </Link>
             </div>
 
             <button

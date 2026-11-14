@@ -4,10 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "node scripts/check-operator-production.mjs && node scripts/check-isencao.mjs && next build",
     "start": "next start",
     "lint": "eslint src/ --max-warnings=0",
     "typecheck": "tsc --noEmit",
+    "check:isencao": "node scripts/check-isencao.mjs",
+    "check:operator": "node scripts/check-operator-production.mjs",
     "test": "vitest run",
     "test:e2e": "playwright test"
   },

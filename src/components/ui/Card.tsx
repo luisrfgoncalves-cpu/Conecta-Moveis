@@ -14,7 +14,7 @@ interface CardProps {
 
 export function Card({
   title,
-  professionalName = 'Profissional Parceiro',
+  professionalName = 'Profissional Cadastrado',
   category,
   location,
   imageUrl = '/images/portfolio-cozinha.svg',
