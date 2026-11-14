@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { LEGAL_VERSION, LEGAL_DATE } from "@/lib/legal/config";
 import { LegalBanner } from "@/components/legal/LegalBanner";
 
 export const metadata: Metadata = {
-  title: "Política de Assinatura | Conecta Móveis",
+  title: "Política de Planos e Assinatura | Conecta Móveis",
   description:
-    "Como funcionam os planos de assinatura da Conecta Móveis: benefícios, cancelamento e condições.",
+    "Diretrizes para aquisição de espaço de anúncio, planos mensais e ausência de comissões na Conecta Móveis.",
 };
 
 export default function PoliticaAssinaturaPage() {
@@ -13,114 +14,45 @@ export default function PoliticaAssinaturaPage() {
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-14 space-y-8">
       <div className="space-y-2">
         <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
-          Política de Assinatura
+          Política de Planos de Anúncio e Assinatura
         </h1>
         <p className="text-xs text-slate-400">
-          Versão {LEGAL_VERSION} — {LEGAL_DATE}
+          Versão {LEGAL_VERSION} — Atualizado em {LEGAL_DATE}
         </p>
       </div>
 
       <LegalBanner />
 
       <div className="space-y-6 text-sm text-slate-200 leading-relaxed">
-        <p className="text-slate-300 italic">
-          A Conecta Móveis é uma plataforma de divulgação. Os profissionais são
-          autônomos e independentes. Orçamento, contratação, pagamento e
-          execução do serviço ocorrem diretamente entre cliente e profissional,
-          sem intermediação da plataforma.
-        </p>
-        <p className="text-slate-300 italic">
-          A presença na plataforma não é garantia de qualidade, pontualidade ou
-          resultado.
-        </p>
+        <div className="p-4 rounded-xl bg-orange-500/10 border border-orange-500/20 text-orange-200 text-xs">
+          <strong>Apenas Mensalidade Fixa:</strong> A cobrança de assinaturas remunera exclusivamente a disponibilização do espaço publicitário digital (vitrine). A plataforma não cobra comissões sobre orçamentos, negócios ou serviços fechados.
+        </div>
 
         <section>
-          <h2 className="text-lg font-bold text-white mb-2">
-            1. O que são os planos de assinatura
-          </h2>
+          <h2 className="text-lg font-bold text-white mb-2">1. Natureza da Assinatura: Locação de Espaço Digital</h2>
           <p>
-            A Conecta Móveis oferece planos pagos que concedem maior visibilidade
-            ao perfil do anunciante dentro da plataforma — como destaque nos
-            resultados de busca, mais espaço para fotos e portfólio, e acesso a
-            recursos exclusivos. Os planos são ferramentas de <strong>visibilidade</strong>, 
-            não de captação garantida de clientes.
-          </p>
-          <p className="mt-2 text-amber-300/80">
-            Assinar um plano não garante o recebimento de contatos, orçamentos
-            ou contratações. Os resultados dependem de fatores externos à
-            plataforma, como qualidade do perfil, demanda do mercado e
-            disponibilidade do profissional.
+            Os planos de assinatura da Conecta Móveis destinam-se exclusivamente a ampliar o espaço de fotos de portfólio e a posição de exibição na vitrine do diretório. A contratação de um plano não confere qualquer garantia de captação de clientes, volume de orçamentos ou faturamento, dependendo exclusivamente do mercado e do relacionamento direto entre consumidor e anunciante.
           </p>
         </section>
 
         <section>
-          <h2 className="text-lg font-bold text-white mb-2">
-            2. Cobrança e renovação
-          </h2>
+          <h2 className="text-lg font-bold text-white mb-2">2. Ausência Total de Comissão ou Intermediação Financeira</h2>
           <p>
-            Os planos são cobrados antecipadamente pelo período escolhido (mensal
-            ou anual). O valor é debitado no ato da contratação ou renovação.
-            Planos com renovação automática serão renovados automaticamente ao
-            fim de cada período, salvo cancelamento prévio.
+            A Conecta Móveis jamais cobra percentual, comissão, taxa de sucesso ou qualquer valor atrelado aos negócios acordados entre o cliente e o profissional. Todo e qualquer pagamento relativo à execução dos serviços moveleiros é pactuado diretamente entre as partes, sem participação ou retenção por parte da Conecta Móveis.
           </p>
         </section>
 
         <section>
-          <h2 className="text-lg font-bold text-white mb-2">
-            3. Cancelamento
-          </h2>
+          <h2 className="text-lg font-bold text-white mb-2">3. Cancelamento e Direito de Arrependimento</h2>
           <p>
-            O cancelamento pode ser solicitado a qualquer momento pelo painel do
-            assinante. Ao cancelar, o plano permanece ativo até o fim do período
-            já pago — não há reembolso proporcional pelo tempo restante. Após o
-            encerramento do período vigente, o perfil retorna ao plano gratuito.
+            O anunciante que assinar um plano pago na condição de consumidor tem a prerrogativa legal de desistência prevista no Código de Defesa do Consumidor, podendo solicitar o reembolso integral no prazo de 7 (sete) dias a contar da assinatura inicial pelo suporte em <Link href="/contato" className="text-orange-400 underline">Contato</Link>. O cancelamento subsequente pode ser feito a qualquer momento no painel, cessando renovações futuras.
           </p>
         </section>
 
         <section>
-          <h2 className="text-lg font-bold text-white mb-2">
-            4. Alteração de plano
-          </h2>
+          <h2 className="text-lg font-bold text-white mb-2">4. Suspensão por Violação Ética ou Jurídica</h2>
           <p>
-            O anunciante pode fazer upgrade de plano a qualquer momento, com
-            cobrança proporcional ao período restante. O downgrade entra em
-            vigor apenas no próximo ciclo de renovação.
-          </p>
-        </section>
-
-        <section>
-          <h2 className="text-lg font-bold text-white mb-2">
-            5. Suspensão por violação de termos
-          </h2>
-          <p>
-            Perfis que violem os Termos de Uso ou demais políticas da plataforma
-            podem ter a assinatura suspensa sem direito a reembolso. A plataforma
-            pode remover conteúdo sem aviso prévio e solicitar correção ou
-            comprovação.
-          </p>
-        </section>
-
-        <section>
-          <h2 className="text-lg font-bold text-white mb-2">
-            6. Alterações nos planos e preços
-          </h2>
-          <p>
-            A Conecta Móveis pode alterar os planos disponíveis, seus benefícios
-            e preços a qualquer momento. Assinantes ativos serão comunicados com
-            antecedência mínima de 30 dias antes de qualquer aumento de preço.
-          </p>
-        </section>
-
-        <section>
-          <h2 className="text-lg font-bold text-white mb-2">
-            7. Seus dados e privacidade
-          </h2>
-          <p>
-            Para exercer seus direitos como titular de dados, acesse{" "}
-            <a href="/contato" className="text-orange-400 underline">
-              /contato
-            </a>
-            .
+            A vigência de um plano pago não isenta o anunciante de cumprir as regras da plataforma. Caso um anunciante assinante cometa fraude, utilize fotos sem autorização ou viole as políticas de uso, o anúncio será suspenso sem direito a indenização, sem prejuízo da cobrança de perdas e danos através do direito de regresso.
           </p>
         </section>
       </div>

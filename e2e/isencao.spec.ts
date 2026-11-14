@@ -64,3 +64,4 @@ test.describe('FASE 15 — E2E de Isenção, Avisos e Tela de Saída WhatsApp', 
     }
   });
 });
+

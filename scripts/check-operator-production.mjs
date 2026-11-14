@@ -15,3 +15,4 @@ if (isProduction && strictCheck && isPending) {
   console.log(`✅ Verificação do operador: ${isPending ? 'Identificação pendente de dados formais (permitido fora de produção)' : 'Operador identificado'}`);
   process.exit(0);
 }
+

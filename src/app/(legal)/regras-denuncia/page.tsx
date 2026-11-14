@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { LEGAL_VERSION, LEGAL_DATE } from "@/lib/legal/config";
 import { LegalBanner } from "@/components/legal/LegalBanner";
 
 export const metadata: Metadata = {
-  title: "Regras de Denúncia | Conecta Móveis",
+  title: "Regras de Notificação e Retirada | Conecta Móveis",
   description:
-    "Como funciona o processo de denúncia de conteúdos e profissionais na Conecta Móveis.",
+    "Procedimento formal para notificação de conteúdos ilícitos, prazos, contestação e custódia probatória.",
 };
 
 export default function RegrasDenunciaPage() {
@@ -13,129 +14,60 @@ export default function RegrasDenunciaPage() {
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-14 space-y-8">
       <div className="space-y-2">
         <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
-          Regras de Denúncia
+          Regras de Notificação e Retirada (Takedown)
         </h1>
         <p className="text-xs text-slate-400">
-          Versão {LEGAL_VERSION} — {LEGAL_DATE}
+          Versão {LEGAL_VERSION} — Atualizado em {LEGAL_DATE}
         </p>
       </div>
 
       <LegalBanner />
 
       <div className="space-y-6 text-sm text-slate-200 leading-relaxed">
-        <p className="text-slate-300 italic">
-          A Conecta Móveis é uma plataforma de divulgação. Os profissionais são
-          autônomos e independentes. Orçamento, contratação, pagamento e
-          execução do serviço ocorrem diretamente entre cliente e profissional,
-          sem intermediação da plataforma.
-        </p>
-        <p className="text-slate-300 italic">
-          A presença na plataforma não é garantia de qualidade, pontualidade ou
-          resultado.
-        </p>
+        <div className="p-4 rounded-xl bg-orange-500/10 border border-orange-500/20 text-orange-200 text-xs">
+          <strong>Procedimento da Plataforma:</strong> Este documento disciplina o fluxo de acolhimento de denúncias e notificações formais para remoção de conteúdos alegadamente ilegais, nos termos do Marco Civil da Internet (Lei 12.965/2014) e da Lei de Direitos Autorais (Lei 9.610/1998).
+        </div>
 
         <section>
-          <h2 className="text-lg font-bold text-white mb-2">
-            1. O que pode ser denunciado
-          </h2>
-          <p>São tipos válidos de denúncia:</p>
-          <ul className="list-disc list-inside mt-2 space-y-1 ml-2">
-            <li>Perfil falso ou informações enganosas;</li>
-            <li>Fotos de portfólio que não pertencem ao anunciante;</li>
-            <li>
-              Avaliação falsa, forjada ou que viole a política de avaliações;
-            </li>
-            <li>
-              Conteúdo ofensivo, discriminatório ou que viole direitos de
-              terceiros;
-            </li>
-            <li>Perfil de profissional que não atua na área declarada;</li>
-            <li>Suspeita de golpe ou fraude no contato com o profissional;</li>
-            <li>
-              Qualquer conteúdo que viole os Termos de Uso ou a legislação
-              brasileira.
-            </li>
+          <h2 className="text-lg font-bold text-white mb-2">1. Categorias de Notificação</h2>
+          <p>
+            Qualquer pessoa física, titular de direito autoral, representante legal ou autoridade pública pode formalizar notificação fundamentada através da página <Link href="/denunciar" className="text-orange-400 underline">Notificar Conteúdo</Link>, nas seguintes categorias:
+          </p>
+          <ul className="list-disc pl-5 mt-2 space-y-1 text-slate-300">
+            <li>Violação de direitos autorais ou uso indevido de fotos de projetos;</li>
+            <li>Uso não autorizado de marca registrada ou nome empresarial;</li>
+            <li>Ofensa à honra, calúnia, injúria ou difamação em avaliações;</li>
+            <li>Exposição indevida de dados pessoais ou violação de privacidade (LGPD);</li>
+            <li>Suspeita fundamentada de fraude, perfil fictício ou estelionato;</li>
+            <li>Conteúdos com gravidade extrema ou ilicitude manifesta (R9).</li>
           </ul>
         </section>
 
         <section>
-          <h2 className="text-lg font-bold text-white mb-2">
-            2. Como fazer uma denúncia
-          </h2>
+          <h2 className="text-lg font-bold text-white mb-2">2. Requisitos Formais e Protocolo</h2>
           <p>
-            Utilize o botão &quot;Denunciar&quot; disponível em perfis, avaliações e fotos
-            de portfólio, ou acesse a página{" "}
-            <a href="/denunciar" className="text-orange-400 underline">
-              /denunciar
-            </a>
-            . Descreva o motivo com o máximo de detalhes possível. Denúncias
-            anônimas são aceitas, mas denúncias identificadas facilitam a
-            apuração.
+            Toda notificação deve conter: identificação do notificante (nome completo e e-mail ativo), link exato ou identificação inequívoca do conteúdo infrator, detalhamento dos fatos e declaração expressa de veracidade e boa-fé. O sistema gera automaticamente um <strong>número de protocolo (NOT-YYYY-XXXXXX)</strong> para acompanhamento.
           </p>
         </section>
 
         <section>
-          <h2 className="text-lg font-bold text-white mb-2">
-            3. Processo de análise
-          </h2>
+          <h2 className="text-lg font-bold text-white mb-2">3. Análise, Prazos e Medidas Preventivas</h2>
           <p>
-            Após recebida, a denúncia é registrada e encaminhada à equipe de
-            moderação. O conteúdo denunciado pode ser ocultado preventivamente
-            durante a análise. A equipe avalia as evidências disponíveis e pode
-            solicitar informações adicionais ao denunciante ou ao denunciado.
+            A equipe de moderação recebe a notificação e analisa a consistência formal no prazo de até 48 horas úteis. Em casos de manifesta gravidade ou comprovada titularidade de direitos autorais, o conteúdo pode ser cautelarmente ocultado enquanto se aguarda manifestação das partes.
           </p>
         </section>
 
         <section>
-          <h2 className="text-lg font-bold text-white mb-2">
-            4. Resultados possíveis
-          </h2>
-          <p>Após análise, a denúncia pode resultar em:</p>
-          <ul className="list-disc list-inside mt-2 space-y-1 ml-2">
-            <li>
-              <strong className="text-white">Arquivamento:</strong> quando não
-              há indícios suficientes de irregularidade;
-            </li>
-            <li>
-              <strong className="text-white">Remoção de conteúdo:</strong>{" "}
-              exclusão da avaliação, foto ou informação específica;
-            </li>
-            <li>
-              <strong className="text-white">Suspensão do perfil:</strong>{" "}
-              bloqueio temporário da conta enquanto a situação é regularizada;
-            </li>
-            <li>
-              <strong className="text-white">Remoção permanente:</strong>{" "}
-              encerramento definitivo do perfil em casos graves ou reincidentes.
-            </li>
-          </ul>
-          <p className="mt-2">
-            A plataforma pode remover conteúdo sem aviso prévio e solicitar
-            correção ou comprovação.
+          <h2 className="text-lg font-bold text-white mb-2">4. Contraditório e Contranotificação</h2>
+          <p>
+            O anunciante cujo conteúdo foi objeto de medida será notificado e terá o direito de apresentar contranotificação (contestação) instruída com provas de titularidade ou regularidade do conteúdo. Havendo controvérsia fática insanável, a reintegração final poderá depender de consenso entre as partes ou ordem judicial.
           </p>
         </section>
 
         <section>
-          <h2 className="text-lg font-bold text-white mb-2">
-            5. Uso indevido do sistema de denúncias
-          </h2>
+          <h2 className="text-lg font-bold text-white mb-2">5. Preservação de Evidências e Custódia para Autoridades</h2>
           <p>
-            Denúncias maliciosas, feitas com o objetivo de prejudicar
-            concorrentes ou usuários sem razão, podem resultar em suspensão da
-            conta do denunciante.
-          </p>
-        </section>
-
-        <section>
-          <h2 className="text-lg font-bold text-white mb-2">
-            6. Seus dados e privacidade
-          </h2>
-          <p>
-            Para exercer seus direitos como titular de dados, acesse{" "}
-            <a href="/contato" className="text-orange-400 underline">
-              /contato
-            </a>
-            .
+            Todo conteúdo objeto de notificação formal ou ocultação preventiva tem seus dados e mídias congelados em snapshot seguro acompanhado de <strong>hash criptográfico SHA-256</strong>. Essas informações são mantidas sob custódia probatória e podem ser fornecidas exclusivamente à Polícia Judiciária e ao Poder Judiciário mediante requisição nos termos da lei. Consulte nosso <Link href="/autoridades" className="text-orange-400 underline">Canal de Autoridades</Link>.
           </p>
         </section>
       </div>

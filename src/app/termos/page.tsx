@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { LEGAL_VERSION, LEGAL_DATE } from "@/lib/legal/config";
 import { LegalBanner } from "@/components/legal/LegalBanner";
 
 export const metadata: Metadata = {
-  title: "Termos de Uso | Conecta Móveis",
+  title: "Termos de Uso e Condições Gerais | Conecta Móveis",
   description:
-    "Termos de uso e condições gerais da plataforma Conecta Móveis — marketplace de profissionais de móveis em Jundiaí/SP.",
+    "Termos de uso da plataforma Conecta Móveis — vitrine de anúncios e aproximação no setor moveleiro em Jundiaí e região.",
 };
 
 export default function TermosPage() {
@@ -16,139 +17,100 @@ export default function TermosPage() {
           Termos de Uso e Condições Gerais
         </h1>
         <p className="text-xs text-slate-400">
-          Versão {LEGAL_VERSION} — {LEGAL_DATE}
+          Versão {LEGAL_VERSION} — Atualizado em {LEGAL_DATE}
         </p>
       </div>
 
       <LegalBanner />
 
       <div className="space-y-6 text-sm text-slate-200 leading-relaxed">
-        <p className="text-slate-300 italic">
-          A Conecta Móveis é uma plataforma de divulgação. Os profissionais são
-          autônomos e independentes. Orçamento, contratação, pagamento e
-          execução do serviço ocorrem diretamente entre cliente e profissional,
-          sem intermediação da plataforma.
-        </p>
-        <p className="text-slate-300 italic">
-          A presença na plataforma não é garantia de qualidade, pontualidade ou
-          resultado.
-        </p>
+        <div className="p-4 rounded-xl bg-orange-500/10 border border-orange-500/20 text-orange-200 text-xs">
+          <strong>Declaração Oficial:</strong> A Conecta Móveis é um provedor de aplicação de internet que oferece espaço de divulgação (vitrine e diretório de anúncios) e meio de aproximação inicial entre usuários e anunciantes do setor moveleiro. Não é fornecedora, prestadora, corretora, representante nem garantidora de serviços.
+        </div>
 
         <section>
-          <h2 className="text-lg font-bold text-white mb-2">
-            1. O que é a Conecta Móveis
-          </h2>
+          <h2 className="text-lg font-bold text-white mb-2">1. Natureza e Função da Plataforma</h2>
           <p>
-            A Conecta Móveis é um catálogo digital que permite que profissionais
-            do setor moveleiro — marceneiros, montadores, decoradores e lojas —
-            divulguem seus serviços para consumidores da região de Jundiaí e
-            cidades vizinhas. A plataforma não participa da prestação dos
-            serviços, não emite orçamentos e não retém pagamentos.
-          </p>
-        </section>
-
-        <section>
-          <h2 className="text-lg font-bold text-white mb-2">
-            2. Quem pode usar a plataforma
-          </h2>
-          <p>
-            Qualquer pessoa física ou jurídica maior de 18 anos ou devidamente
-            representada pode se cadastrar como consumidor ou como anunciante.
-            Ao criar uma conta, o usuário declara que as informações fornecidas
-            são verdadeiras.
-          </p>
-        </section>
-
-        <section>
-          <h2 className="text-lg font-bold text-white mb-2">
-            3. Responsabilidade pelos conteúdos publicados
-          </h2>
-          <p>
-            Cada anunciante é o único responsável pelas informações, fotos,
-            portfólios e avaliações que publica. A Conecta Móveis não valida
-            previamente os conteúdos e não garante a veracidade das informações.
-            Conteúdos falsos, enganosos ou ilegais podem ser removidos a
-            qualquer momento.
+            A Conecta Móveis opera exclusivamente como catálogo e vitrine de divulgação regional (Jundiaí e cidades vizinhas). A plataforma não presta serviços de montagem, marcenaria ou reparos, não intermedeia pagamentos, não retém valores e não cobra qualquer comissão ou porcentagem sobre negócios eventualmente pactuados entre as partes.
           </p>
           <p className="mt-2">
-            A plataforma pode remover conteúdo sem aviso prévio e solicitar
-            correção ou comprovação.
+            Saiba mais em detalhes na nossa página <Link href="/funcao-da-plataforma" className="text-orange-400 underline">Função e Limites da Plataforma</Link>.
           </p>
         </section>
 
         <section>
-          <h2 className="text-lg font-bold text-white mb-2">
-            4. Negociação e contratação
-          </h2>
+          <h2 className="text-lg font-bold text-white mb-2">2. Requisitos de Acesso e Trava de Idade</h2>
           <p>
-            Todo contato, orçamento, negociação e pagamento ocorre diretamente
-            entre o consumidor e o profissional. A Conecta Móveis não participa
-            desse processo e não assume qualquer responsabilidade por acordos
-            firmados entre as partes.
+            O uso dos serviços, cadastro de perfil ou anúncio na Conecta Móveis é <strong>estritamente restrito a pessoas com 18 anos ou mais</strong> ou pessoas jurídicas regularmente constituídas. Ao criar uma conta, você declara expressamente possuir plena capacidade civil.
           </p>
         </section>
 
         <section>
-          <h2 className="text-lg font-bold text-white mb-2">
-            5. Condutas proibidas
-          </h2>
+          <h2 className="text-lg font-bold text-white mb-2">3. Não Endosso, Sem Avaliação e Sem Garantia</h2>
           <p>
-            É proibido cadastrar informações falsas, utilizar a plataforma para
-            fraudes, publicar conteúdo ofensivo ou que viole direitos autorais
-            de terceiros, ou tentar comprometer a segurança e disponibilidade
-            dos sistemas da Conecta Móveis.
+            A presença de qualquer profissional, empresa ou anúncio nesta plataforma <strong>não constitui recomendação, seleção, homologação ou atestado de idoneidade</strong> por parte da Conecta Móveis.
+          </p>
+          <p className="mt-2">
+            A plataforma não verifica previamente a competência técnica dos anunciantes nem garante a qualidade, a pontualidade ou o resultado dos serviços. Orientações preventivas e canais de proteção podem ser consultados em <Link href="/contrate-com-seguranca" className="text-orange-400 underline">Orientações de Segurança</Link>.
           </p>
         </section>
 
         <section>
-          <h2 className="text-lg font-bold text-white mb-2">
-            6. Encerramento de conta
-          </h2>
+          <h2 className="text-lg font-bold text-white mb-2">4. Responsabilidade do Anunciante e Direitos de Propriedade</h2>
           <p>
-            A Conecta Móveis pode suspender ou encerrar contas que violem estes
-            termos, sem necessidade de aviso prévio. O usuário também pode
-            solicitar o encerramento da própria conta a qualquer momento pelo
-            painel ou pelo canal de contato.
+            O anunciante é o único e integral responsável pelas informações, fotos, portfólios, marcas, prazos e orçamentos que publicar, bem como pela execução dos serviços prestados.
+          </p>
+          <p className="mt-2">
+            O anunciante declara e garante ser o titular exclusivo dos direitos autorais de todas as fotos e imagens de projetos enviadas, ou que possui expressa autorização legal de autores e clientes. O anunciante concede à Conecta Móveis licença limitada, não exclusiva, gratuita e revogável exclusivamente para veicular as imagens na vitrine do anúncio.
           </p>
         </section>
 
         <section>
-          <h2 className="text-lg font-bold text-white mb-2">
-            7. Alterações nos termos
-          </h2>
+          <h2 className="text-lg font-bold text-white mb-2">5. Direito de Regresso</h2>
           <p>
-            Estes termos podem ser atualizados a qualquer momento. A versão
-            vigente sempre estará disponível nesta página com a data de
-            atualização. O uso continuado da plataforma após uma atualização
-            implica aceitação dos novos termos.
+            Caso a Conecta Móveis venha a responder administrativa ou judicialmente por qualquer dano, infração autoral, inadimplemento ou ato ilícito praticado pelo anunciante ou originado de seu conteúdo, a plataforma exercerá integralmente o <strong>direito de regresso</strong> contra o anunciante responsável, incluindo custas e honorários advocatícios.
           </p>
         </section>
 
         <section>
-          <h2 className="text-lg font-bold text-white mb-2">
-            8. Seus dados pessoais
-          </h2>
+          <h2 className="text-lg font-bold text-white mb-2">6. Modelo de Cobrança: Apenas Espaço de Divulgação</h2>
           <p>
-            O tratamento de dados pessoais está descrito na nossa{" "}
-            <a href="/privacidade" className="text-orange-400 underline">
-              Política de Privacidade
-            </a>
-            . Para exercer seus direitos como titular de dados, acesse{" "}
-            <a href="/contato" className="text-orange-400 underline">
-              /contato
-            </a>
-            .
+            Eventuais planos pagos cobram unicamente mensalidade fixa pela disponibilização do espaço de anúncio ou destaque. A plataforma <strong>não recebe nem retém comissão sobre orçamentos ou negócios fechados</strong> e não participa de cobrança ao cliente.
           </p>
         </section>
 
         <section>
-          <h2 className="text-lg font-bold text-white mb-2">
-            9. Lei aplicável
-          </h2>
+          <h2 className="text-lg font-bold text-white mb-2">7. Moderação e Procedimento de Notificação e Retirada</h2>
           <p>
-            Estes termos são regidos pela legislação brasileira. O foro da
-            Comarca de Jundiaí/SP fica eleito para dirimir quaisquer
-            controvérsias decorrentes do uso da plataforma.
+            A plataforma mantém moderação baseada em regras públicas e uniformes. Violações de direitos autorais, imagem, dados pessoais ou práticas ilícitas podem ser comunicadas formalmente com protocolo em <Link href="/denunciar" className="text-orange-400 underline">Notificar Conteúdo</Link>. Conteúdos ilegais ou que desrespeitem estas normas serão suspensos ou removidos, resguardado o direito de contestação.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-lg font-bold text-white mb-2">8. Responsabilidade Legal da Plataforma</h2>
+          <p>
+            A Conecta Móveis responde pelos seus próprios atos e deveres legais impostos pelo Marco Civil da Internet (Lei 12.965/2014) e pela LGPD (Lei 13.709/2018), incluindo segurança dos dados, atendimento a ordens judiciais e guarda de logs de conexão e acesso a aplicações nos termos da lei.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-lg font-bold text-white mb-2">9. Alterações e Aceite de Termos</h2>
+          <p>
+            Quaisquer alterações materiais nestes termos serão avisadas aos usuários cadastrados e demandarão novo aceite para prosseguimento do uso. O histórico e versões anteriores dos documentos podem ser consultados no rodapé legal da plataforma.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-lg font-bold text-white mb-2">10. Legislação e Foro</h2>
+          <p>
+            Estes termos são regidos pelas leis da República Federativa do Brasil. Fica respeitado o foro de domicílio do consumidor nas relações de consumo, e subsidiariamente eleito o foro da Comarca de Jundiaí/SP para as demais controvérsias.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="text-lg font-bold text-white mb-2">11. Contatos do Operador</h2>
+          <p>
+            Para exercer direitos de titular de dados pessoais, apresentar notificações extrajudiciais ou comunicar ordens de autoridades públicas, consulte os canais dedicados em <Link href="/contato" className="text-orange-400 underline">Contato e Informações Legais</Link> e em <Link href="/autoridades" className="text-orange-400 underline">Canal de Autoridades</Link>.
           </p>
         </section>
       </div>

@@ -54,3 +54,14 @@ Este documento registra todas as avaliações do Gate de Isenção ao longo das 
 - **Evidência**: `docs/REGISTRO_JURIDICO.md`, `src/components/layout/WhatsAppExitModal.tsx`, `src/app/funcao-da-plataforma/page.tsx`, `scripts/check-isencao.mjs`.
 - **Pendência para o Advogado**: Definição da Razão Social e CNPJ definitivo para preenchimento em `app_settings` / variáveis de ambiente.
 
+### J-004 — Gate de Isenção para Fase 16 (Termos, Políticas, Notificação/Retirada e Evidências)
+- **Data**: 2026-11-13
+- **Fase**: Fase 16 — Passo 4 de 15
+- **Funcionalidade ou Texto**: Criação de `takedown_notices` com geração de protocolo, tela `/autoridades`, ação de ocultar e preservar evidências em caso gravíssimo, botão no admin para exportar dossiê policial com hash SHA-256, versionamento de termos com `legal_documents` e trava de maioridade (18+) no cadastro.
+- **Regras e Normas Envolvidas**: R7, R8, R9, R12, R17; Marco Civil da Internet (art. 19); STF Temas 987 e 533; ECA / ECA Digital; CDC (art. 37, 51); Lei de Direitos Autorais (Lei 9.610/98).
+- **Risco**: Médio (processos de remoção de conteúdo e custódia de evidências de ilícitos).
+- **Decisão Tomada**: Instituir protocolo numérico sequencial para toda notificação, preservação imutável de snapshot JSON e hash SHA-256 para autoridades judiciais/policiais, garantia de contraditório (contestação) ao anunciante sem que terceiros acessem a notificação (RLS estrita), trava no formulário de cadastro impedindo menor de 18 anos.
+- **Quem Decidiu**: Usuário (solicitação explícita do Passo 4 com botão de evidências no admin).
+- **Evidência**: `supabase/migrations/20261113000002_takedown_notices_and_evidence.sql`, `src/app/autoridades/page.tsx`, `src/app/denunciar/page.tsx`, `src/app/admin/denuncias/page.tsx`.
+- **Pendência para o Advogado**: Definição formal dos prazos de resposta (sugestão técnica: 24h para triagem, 3 dias para contestação).
+

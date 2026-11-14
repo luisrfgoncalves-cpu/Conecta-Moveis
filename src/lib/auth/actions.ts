@@ -45,7 +45,12 @@ export async function signUp(formData: unknown): Promise<ActionResult> {
     email,
     password,
     options: {
-      data: { full_name: fullName },
+      data: {
+        full_name: fullName,
+        age_declaration: true,
+        terms_version: '2.0',
+        terms_accepted_at: new Date().toISOString(),
+      },
       emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback`,
     },
   });

@@ -13,6 +13,9 @@ export const signUpSchema = z.object({
   acceptedTerms: z.literal(true, {
     errorMap: () => ({ message: 'Você precisa aceitar os termos para continuar' }),
   }),
+  ageDeclaration: z.literal(true, {
+    errorMap: () => ({ message: 'Você precisa declarar ter 18 anos ou mais para se cadastrar' }),
+  }),
 });
 
 export const signInSchema = z.object({

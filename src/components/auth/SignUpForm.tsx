@@ -167,6 +167,27 @@ export function SignUpForm() {
           )}
         </div>
 
+        <div>
+          <div className="flex items-start gap-3">
+            <input
+              id="ageDeclaration"
+              type="checkbox"
+              aria-invalid={!!errors.ageDeclaration}
+              aria-describedby={errors.ageDeclaration ? 'age-error' : undefined}
+              className="mt-0.5 w-4 h-4 accent-orange-500 cursor-pointer"
+              {...register('ageDeclaration')}
+            />
+            <label htmlFor="ageDeclaration" className="text-xs text-slate-400 leading-relaxed cursor-pointer">
+              Declaro que tenho 18 anos ou mais e que possuo plena capacidade civil para utilizar e anunciar na plataforma.
+            </label>
+          </div>
+          {errors.ageDeclaration && (
+            <p id="age-error" role="alert" className="mt-1 text-xs text-red-400">
+              {errors.ageDeclaration.message}
+            </p>
+          )}
+        </div>
+
         <button
           type="submit"
           disabled={isPending}

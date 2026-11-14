@@ -18,6 +18,7 @@ describe('signUpSchema', () => {
       email: 'carlos@example.com',
       password: 'senha1234',
       acceptedTerms: true,
+      ageDeclaration: true,
     }).success).toBe(true);
   });
 
