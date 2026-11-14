@@ -63,7 +63,7 @@ ALTER TABLE public.professional_profiles
   ADD COLUMN IF NOT EXISTS search_vector tsvector;
 
 -- 6. Função que reconstrói o tsvector de um perfil (combinando nome, bio, especialidades, cidades e categorias)
-CREATE OR REPLACE FUNCTION build_profile_search_vector(profile_id UUID)
+CREATE OR REPLACE FUNCTION build_profile_search_vector(p_profile_id UUID)
 RETURNS tsvector AS $$
 DECLARE
   v_display_name TEXT;
@@ -82,14 +82,14 @@ BEGIN
     COALESCE(state, '')
   INTO v_display_name, v_bio, v_city, v_state
   FROM public.professional_profiles
-  WHERE id = profile_id;
+  WHERE id = p_profile_id;
 
   -- Especialidades associadas
   SELECT COALESCE(string_agg(s.name, ' '), '')
   INTO v_specialties
   FROM public.profile_specialties ps
   JOIN public.specialties s ON s.id = ps.specialty_id
-  WHERE ps.profile_id = profile_id;
+  WHERE ps.profile_id = p_profile_id;
 
   -- Categorias associadas
   SELECT COALESCE(string_agg(DISTINCT c.name, ' '), '')
@@ -97,13 +97,13 @@ BEGIN
   FROM public.profile_specialties ps
   JOIN public.specialties s ON s.id = ps.specialty_id
   JOIN public.categories c ON c.id = s.category_id
-  WHERE ps.profile_id = profile_id;
+  WHERE ps.profile_id = p_profile_id;
 
   -- Cidades de atendimento
   SELECT COALESCE(string_agg(DISTINCT sr.city, ' '), '')
   INTO v_service_cities
   FROM public.service_regions sr
-  WHERE sr.profile_id = profile_id;
+  WHERE sr.profile_id = p_profile_id;
 
   RETURN (
     setweight(to_tsvector('portuguese_unaccent', unaccent(v_display_name)), 'A') ||
