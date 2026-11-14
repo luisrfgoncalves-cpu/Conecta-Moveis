@@ -142,4 +142,26 @@ Este documento registra todas as avaliações do Gate de Isenção ao longo das 
 - **Pendência para o Advogado**:
   - Validar a lista de termos bloqueados para slugs para proteção marcária contra eventuais disputas de concorrência desleal entre profissionais de Jundiaí.
 
+---
+
+### J-009 — Curadoria de Conformidade e Moderação Reforçada (Fase 21)
+- **Data**: 2026-11-13
+- **Fase**: Fase 21 — Curadoria de Conformidade e Moderação Reforçada
+- **Funcionalidade ou Texto**: Fila unificada de curadoria de conformidade com níveis de gravidade e contagem de prazo (SLA); revisão prévia de conteúdo comercial e patrocínios (`pending_paid_review` — Regra R6 / STF Tema 987); biblioteca de motivos de recusa baseada nas políticas públicas publicadas; rotulagem obrigatória e neutra de "Destaque patrocinado" ou "Destaque de teste" (sem juízo de valor ou endosso); ação imediata "Ocultar e preservar" para ilícitos graves; relatório mensal automatizado de auditoria de igualdade entre planos (R14 e R20); relatório anual de transparência de moderação.
+- **Regras e Normas Envolvidas**: R4, R6, R7, R8, R9, R14, R16, R20; STF Tema 987 (responsabilidade por anúncios patrocinados); Marco Civil da Internet (art. 19); Código de Defesa do Consumidor (arts. 36 e 37 — identificação clara de publicidade e proibição de endosso enganoso); LGPD (art. 6º — transparência e dados agregados).
+- **Risco**: Médio (processos de remoção de publicações, custódia probatória de ilícitos e governança de anúncios pagos).
+- **Decisão Tomada**:
+  1. **Natureza da Curadoria**: A moderação é exclusivamente de conformidade com regras objetivas das políticas públicas (ausência de dados de contato na vitrine não logada, ausência de termos de endosso ou promessa de garantia, ausência de fotos de terceiros ou ilícitos). É expressamente vedada a avaliação de gosto, mérito artesanal, beleza ou qualidade (Regras R4 e R20).
+  2. **Revisão Prévia de Conteúdo Comercial (Regra R6)**: Perfis com planos pagos ou destaques adquiridos entram em `pending_paid_review`. O benefício de visibilidade patrocinada só é ativado após aprovação de conformidade documentada (registrando quem aprovou, data/hora e versão). Edição relevante do perfil reverte o estado para nova conferência.
+  3. **Rotulagem Estrita de Publicidade**: Todo destaque de busca ou vitrine recebe apenas o rótulo "Destaque patrocinado" ou "Destaque de teste". É terminantemente proibido o uso de expressões como "escolha da equipe", "marceneiro recomendado" ou "melhor da região".
+  4. **Segregação de Funções**: Moderadores e administradores são impedidos pelo sistema de aprovar ou auditar seus próprios conteúdos ou perfis.
+  5. **Auditoria de Isonomia (R14 e R20)**: Relatório administrativo mensal compara o tempo médio de atendimento e a taxa de remoção de denúncias entre anunciantes gratuitos e pagos para comprovar em juízo a ausência de privilégio ou complacência comercial.
+  6. **Transparência e Minimização**: O relatório anual de transparência é gerado em dados estatísticos agregados por categoria de infração, sem conter dados pessoais ou identificadores de usuários.
+- **Quem Decidiu**: Usuário (solicitação formal da Fase 21).
+- **Evidência**: `supabase/migrations/20261113000007_curadoria_conformidade.sql`, `src/lib/curadoria/`, `src/app/admin/curadoria/`, `src/__tests__/curadoria_conformidade.test.ts`.
+- **Pendência para o Advogado**:
+  - Homologação do catálogo de motivos formais de decisão vinculados a cada política pública.
+  - Validação dos modelos de notificação para anunciantes e notificantes.
+
+
 

@@ -6,12 +6,13 @@ import Image from 'next/image';
 import {
   Users, FileImage, Building2, Flag, Star,
   Tag, CreditCard, FileText, LayoutDashboard, LogOut, ArrowLeft, Globe, Database, Shield, Settings,
-  Ticket,
+  Ticket, ShieldCheck,
 } from 'lucide-react';
 import { signOut } from '@/lib/auth/actions';
 
 const adminNav = [
   { href: '/admin', label: 'Visão geral', icon: LayoutDashboard },
+  { href: '/admin/curadoria', label: 'Curadoria & Fila Única', icon: ShieldCheck },
   { href: '/admin/usuarios', label: 'Usuários', icon: Users },
   { href: '/admin/convites', label: 'Convites & Degustação', icon: Ticket },
   { href: '/admin/perfis', label: 'Perfis', icon: Users },

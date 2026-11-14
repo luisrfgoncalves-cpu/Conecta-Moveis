@@ -11,6 +11,7 @@ import {
 } from './schemas';
 import { processAvatarImage } from '@/lib/storage/upload';
 import { getEntitlements } from '@/lib/plans/actions';
+import { triggerPaidReviewOnProfileEdit } from '@/lib/curadoria/actions';
 
 export type ProfileActionResult<T = unknown> =
   | { success: true; data?: T; message?: string }
@@ -199,6 +200,9 @@ export async function saveProfessionalProfile(
     });
   }
 
+  // Se for plano comercial ou destaque, edição aciona revisão prévia de conformidade (Regra R6)
+  await triggerPaidReviewOnProfileEdit(user.id).catch(() => {});
+
   revalidatePath('/painel/perfil');
   revalidatePath('/painel');
 
@@ -310,6 +314,9 @@ export async function togglePublishProfile(
   if (error) {
     return { error: 'Não foi possível alterar o status de publicação.' };
   }
+
+  // Se for plano comercial ou destaque, edição aciona revisão prévia de conformidade (Regra R6)
+  await triggerPaidReviewOnProfileEdit(user.id).catch(() => {});
 
   revalidatePath('/painel/perfil');
   revalidatePath('/painel');
