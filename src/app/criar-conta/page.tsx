@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -21,7 +22,9 @@ export default function CriarContaPage() {
           priority
         />
       </Link>
-      <SignUpForm />
+      <Suspense fallback={<div className="text-slate-400 text-sm">Carregando formulário...</div>}>
+        <SignUpForm />
+      </Suspense>
     </main>
   );
 }

@@ -2,25 +2,40 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState, useTransition } from 'react';
+import { useState, useTransition, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { signUp } from '@/lib/auth/actions';
 import { signUpSchema, type SignUpInput } from '@/lib/auth/schemas';
-import { Eye, EyeOff, Loader2, CheckCircle2 } from 'lucide-react';
+import { Eye, EyeOff, Loader2, CheckCircle2, Ticket } from 'lucide-react';
 
 export function SignUpForm() {
+  const searchParams = useSearchParams();
   const [serverError, setServerError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isPending, startTransition] = useTransition();
 
+  const initialToken = searchParams.get('convite') || searchParams.get('token') || '';
+  const initialRef = searchParams.get('ref') || '';
+
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<SignUpInput>({
     resolver: zodResolver(signUpSchema),
+    defaultValues: {
+      inviteToken: initialToken,
+      campaignRef: initialRef,
+    },
   });
+
+  useEffect(() => {
+    if (initialToken) setValue('inviteToken', initialToken);
+    if (initialRef) setValue('campaignRef', initialRef);
+  }, [initialToken, initialRef, setValue]);
 
   function onSubmit(data: SignUpInput) {
     setServerError('');
@@ -136,6 +151,24 @@ export function SignUpForm() {
               Mínimo de 8 caracteres
             </p>
           )}
+        </div>
+
+        <div>
+          <label htmlFor="inviteToken" className="block text-sm font-semibold text-slate-300 mb-1.5">
+            Código de convite <span className="text-xs text-slate-400 font-normal">(se houver)</span>
+          </label>
+          <div className="relative">
+            <input
+              id="inviteToken"
+              type="text"
+              autoComplete="off"
+              className="w-full bg-black/30 border border-white/20 rounded-xl px-4 py-3 pl-10 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500/50 transition font-mono text-sm"
+              placeholder="Cole seu código ou link de convite"
+              {...register('inviteToken')}
+            />
+            <Ticket className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+          </div>
+          <input type="hidden" {...register('campaignRef')} />
         </div>
 
         <div>

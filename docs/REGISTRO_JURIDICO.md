@@ -124,4 +124,22 @@ Este documento registra todas as avaliações do Gate de Isenção ao longo das 
 - **Pendência para o Advogado**:
   - Validar se o procedimento de suspensão e bloqueio prevê notificação adequada do motivo ao usuário sem ferir direitos contratuais.
 
+---
+
+### J-008 — Gestão de Convites, Degustação, Campanhas e Slugs Restritos (Fase 20)
+- **Data**: 2026-11-13
+- **Fase**: Fase 20 — Convites, Testes, Campanhas e Configurações Globais
+- **Funcionalidade ou Texto**: Sistema de convites com tokens protegidos por hash (`invite_links`), resgate único por usuário com concessão de período de teste parametrizável pelo proprietário, modo de cadastro controlado (`signup_mode`: aberto, somente convite, fechado), reversão diária automática ao plano gratuito após expiração do teste sem exclusão de mídias, criação de slugs personalizados de perfil com lista de bloqueio de termos de endosso ou oficiais, e agregação de campanhas (`ref`) sem rastreadores terceiros.
+- **Regras e Normas Envolvidas**: R4, R5, R14, R16; CDC arts. 30, 36 e 37 (vedação de publicidade enganosa e endosso); Marco Civil art. 19; LGPD art. 6º (minimização e privacidade).
+- **Risco**: Baixo a Médio (controle de acesso à plataforma, links promocionais e regras de nomenclatura pública de perfis).
+- **Decisão Tomada**:
+  1. **Controle Total do Proprietário**: A quantidade de dias de teste concedida por convite (ex: 7, 14, 30, 60 dias) é definida e editada livremente pelo proprietário no momento da criação ou edição do link.
+  2. **Bloqueio de Slugs com Termos de Endosso (Regra R4)**: O sistema proíbe categoricamente o registro de endereços de perfil (`slug`) que contenham palavras de endosso governamental, garantia ou superioridade (ex: `oficial`, `melhor`, `certificado`, `garantido`, `prefeitura`, `procon`).
+  3. **Neutralidade de Moderação e Avaliações (Regra R14)**: Usuários que entrarem por convites de campanha ou em períodos de teste **nunca** recebem selos de destaque editorial ou vantagens no algoritmo de ordenação de busca nem tratamento diferenciado em denúncias/avaliações.
+  4. **Proteção de Tokens**: Nenhum token de convite é gravado em texto puro no banco de dados; apenas o hash criptográfico SHA-256 é persistido.
+- **Quem Decidiu**: Usuário (solicitação da Fase 20 com ênfase no controle exclusivo de prazos pelo dono).
+- **Evidência**: `supabase/migrations/20261113000006_invite_links_and_campaigns.sql`, `src/lib/invites/`, `src/app/convite/`, `src/app/admin/convites/`.
+- **Pendência para o Advogado**:
+  - Validar a lista de termos bloqueados para slugs para proteção marcária contra eventuais disputas de concorrência desleal entre profissionais de Jundiaí.
+
 

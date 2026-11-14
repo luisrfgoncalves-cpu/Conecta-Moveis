@@ -16,6 +16,8 @@ export const signUpSchema = z.object({
   ageDeclaration: z.literal(true, {
     errorMap: () => ({ message: 'Você precisa declarar ter 18 anos ou mais para se cadastrar' }),
   }),
+  inviteToken: z.string().optional(),
+  campaignRef: z.string().optional(),
 });
 
 export const signInSchema = z.object({

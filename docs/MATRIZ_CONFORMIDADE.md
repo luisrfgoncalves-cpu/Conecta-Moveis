@@ -20,7 +20,7 @@
 | **R13 — Identificação do Operador (CNPJ)** | Decreto 7.962/2013 | Rodapé, canais de contato e trava de build em produção | `isencao.test.ts`, `check:operator` | `testado` | `src/components/layout/Footer.tsx`, `/contato`, `operator.ts` |
 | **R14 — Avaliações Uniformes sem Privilégio** | CDC art. 37 / R14 | Regras idênticas para todos os perfis + disclaimer de opinião do usuário | `reviews.test.ts` | `testado` | `src/components/reviews/ReviewsSection.tsx` |
 | **R15 — Ausência de Subordinação** | CLT art. 3º e 442-B | Sem fixação de preço, horário, uniforme ou exclusividade | Análise contratual | `pendente de revisão jurídica` | `docs/JURIDICO_BASE.md` |
-| **R16 — Gate de Isenção Permanente** | Governança Técnica | Registro de impacto obrigatório a cada nova funcionalidade | Auditoria manual | `implementado` | `docs/REGISTRO_JURIDICO.md` (J-001 a J-007) |
+| **R16 — Gate de Isenção Permanente** | Governança Técnica | Registro de impacto obrigatório a cada nova funcionalidade | Auditoria manual | `implementado` | `docs/REGISTRO_JURIDICO.md` (J-001 a J-008) |
 | **R17 — Responsabilidade "Nos Termos da Lei"** | CDC art. 51, I | Declaração oficial institucional e termos sem promessa de imunidade | Leitura de termos | `pendente de revisão jurídica` | `src/app/funcao-da-plataforma/page.tsx`, `src/app/(legal)/*` |
 | **R18 — Aviso Prévio de Redirecionamento WhatsApp** | CDC art. 31 / R18 | Modal de saída com cautelas contratuais antes do `wa.me` por sessão/anunciante | `isencao.spec.ts` | `testado` | `src/components/contact/WhatsAppTracker.tsx` |
 | **R19 — Sem Parcerias de Garantia Externa** | CDC art. 7 / R19 | Sem vinculação de seguros, crédito ou garantias terceiras | Verificação de integrações | `implementado` | `src/lib/*` |

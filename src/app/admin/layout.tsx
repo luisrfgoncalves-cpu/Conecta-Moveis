@@ -6,12 +6,14 @@ import Image from 'next/image';
 import {
   Users, FileImage, Building2, Flag, Star,
   Tag, CreditCard, FileText, LayoutDashboard, LogOut, ArrowLeft, Globe, Database, Shield, Settings,
+  Ticket,
 } from 'lucide-react';
 import { signOut } from '@/lib/auth/actions';
 
 const adminNav = [
   { href: '/admin', label: 'Visão geral', icon: LayoutDashboard },
   { href: '/admin/usuarios', label: 'Usuários', icon: Users },
+  { href: '/admin/convites', label: 'Convites & Degustação', icon: Ticket },
   { href: '/admin/perfis', label: 'Perfis', icon: Users },
   { href: '/admin/empresas', label: 'Empresas', icon: Building2 },
   { href: '/admin/fotos', label: 'Fotos pendentes', icon: FileImage },
@@ -42,7 +44,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     .from('user_roles')
     .select('role')
     .eq('user_id', user.id)
-    .in('role', ['admin', 'moderator'])
+    .in('role', ['owner', 'admin', 'moderator'])
     .single();
 
   // Usuário comum em /admin → 404 (não revela que a rota existe)

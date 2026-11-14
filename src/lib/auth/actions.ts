@@ -13,6 +13,7 @@ import {
   deleteAccountSchema,
 } from './schemas';
 import { checkRateLimit } from './rate-limit';
+import { getSignupMode, validateInviteToken, redeemInviteLink } from '@/lib/invites/actions';
 
 export type ActionResult =
   | { success: true; redirectTo?: string; message?: string }
@@ -33,7 +34,35 @@ export async function signUp(formData: unknown): Promise<ActionResult> {
   const parsed = signUpSchema.safeParse(formData);
   if (!parsed.success) return { error: parsed.error.errors[0].message };
 
-  const { email, password, fullName } = parsed.data;
+  const { email, password, fullName, inviteToken, campaignRef } = parsed.data;
+
+  // 1. Verificar Modo de Cadastro Global (signup_mode)
+  const signupMode = await getSignupMode();
+  if (signupMode === 'fechado') {
+    return { error: 'Novos cadastros estão temporariamente suspensos no momento.' };
+  }
+
+  if (signupMode === 'somente_convite') {
+    if (!inviteToken || !inviteToken.trim()) {
+      return {
+        error: 'O cadastro no momento é exclusivo para convidados. Informe um código de convite válido.',
+      };
+    }
+    const tokenCheck = await validateInviteToken(inviteToken);
+    if (!tokenCheck.valid) {
+      return {
+        error: tokenCheck.error || 'Código de convite inválido ou expirado.',
+      };
+    }
+  } else if (inviteToken && inviteToken.trim()) {
+    // Se o modo estiver aberto mas foi informado convite, valida
+    const tokenCheck = await validateInviteToken(inviteToken);
+    if (!tokenCheck.valid) {
+      return {
+        error: tokenCheck.error || 'Código de convite inválido ou expirado.',
+      };
+    }
+  }
 
   const rateCheck = await checkRateLimit('signup');
   if (!rateCheck.allowed) {
@@ -50,6 +79,7 @@ export async function signUp(formData: unknown): Promise<ActionResult> {
         age_declaration: true,
         terms_version: '2.0',
         terms_accepted_at: new Date().toISOString(),
+        campaign_ref: campaignRef || null,
       },
       emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback`,
     },
@@ -60,7 +90,7 @@ export async function signUp(formData: unknown): Promise<ActionResult> {
     return { error: 'Não foi possível criar a conta. Verifique os dados e tente novamente.' };
   }
 
-  // Registrar aceite dos termos (LGPD)
+  // Registrar aceite dos termos (LGPD) e aplicar convite se houver
   if (data.user) {
     const admin = getAdminSupabase();
     await admin.from('user_consents').insert({
@@ -68,6 +98,10 @@ export async function signUp(formData: unknown): Promise<ActionResult> {
       terms_version: '1.0',
       privacy_version: '1.0',
     });
+
+    if (inviteToken && inviteToken.trim()) {
+      await redeemInviteLink(inviteToken.trim(), data.user.id);
+    }
   }
 
   return {
