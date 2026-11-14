@@ -182,6 +182,27 @@ Este documento registra todas as avaliações do Gate de Isenção ao longo das 
 - **Pendência para o Advogado**:
   - Validar a lista padrão de sinônimos moveleiros cadastrados para evitar que termos concorrenciais ou denominações genéricas interfiram indevidamente na visibilidade dos anunciantes.
 
+---
+
+### J-011 — Localização, Distância por Município e Blindagem de Privacidade (Fase 23)
+- **Data**: 2026-11-14
+- **Fase**: Fase 23 — Localização, Distância e Páginas por Cidade
+- **Funcionalidade ou Texto**: Criação da tabela de municípios com códigos IBGE e coordenadas centrais oficiais; cálculo nativo de distância via fórmula de Haversine sem PostGIS; recurso "Perto de mim" processado 100% no navegador (cliente) sem transmissão de coordenadas de GPS para o servidor; região atendida por raio em km a partir do município-base sem endereço residencial exato; páginas públicas de serviços por cidade (`/servicos/[categoria]/[municipio-uf]`) geradas sob demanda apenas com perfis publicados; decisão expressa de não coletar nem consultar CEP neste momento.
+- **Regras e Normas Envolvidas**: R4 (sem endosso ou garantia implícita por proximidade), R5 (ordenação neutra por proximidade voluntária do usuário), R11 (minimização absoluta de dados — vedação de coleta de coordenadas pessoais ou endereço exato), R14 (igualdade de tratamento), R16 (registro contínuo no gate); LGPD (Lei 13.709/2018, art. 6º, III — princípio da necessidade e minimização de dados sensíveis de localização); Marco Civil da Internet (art. 7º, VIII e IX — consentimento e proteção à vida privada).
+- **Risco**: Baixo a Médio (tratamento de dados de localização de usuários e endereço de anunciantes).
+- **Decisão Tomada**:
+  1. **Fonte e Licença dos Dados dos Municípios**: O dataset de municípios é derivado da base pública aberta do IBGE (Instituto Brasileiro de Geografia e Estatística), sob regime de dados abertos governamentais (Lei 12.527/2011 e Decreto 8.777/2016 - licença de livre uso e reprodução com citação da fonte).
+  2. **Privacidade Absoluta no "Perto de Mim" (Regra R11 / LGPD)**: A localização do usuário pelo navegador (`navigator.geolocation`) ocorre exclusivamente no aparelho do visitante, após consentimento explícito do browser. O cálculo para encontrar o município mais próximo é efetuado localmente em memória no cliente; ao servidor da Conecta Móveis trafega exclusivamente o código identificador do município. **Nenhuma coordenada geográfica (latitude/longitude) do usuário é enviada, armazenada ou registrada em logs**.
+  3. **Endereço do Profissional**: Mantém-se a proibição de exigência ou exibição de logradouro, número ou CEP residencial de marceneiros e montadores autônomos. A referência geográfica é restrita ao centro do município e ao raio de atendimento em km (ex: "Atende Jundiaí e região até 30 km").
+  4. **Decisão sobre CEP**: O CEP (Código de Endereçamento Postal) **não é incluído** nesta fase. Registra-se formalmente que o CEP constitui dado quase-identificador próximo de residência e que consultas automatizadas a serviços externos (ex: ViaCEP) dependem de prévia avaliação técnica e jurídica de disponibilidade e privacidade.
+  5. **Geração Condicionada de Páginas por Cidade**: Páginas programáticas `/servicos/[categoria]/[municipio-uf]` só são publicadas e indexadas no sitemap quando há ao menos um anunciante ativo e publicado no município/categoria, impedindo a proliferação de páginas vazias (thin content) e falsas promessas de atendimento.
+  6. **JSON-LD Estruturado Neutro**: A marcação semântica Schema.org/ItemList não conterá notas fictícias ou avaliações agregadas inventadas para simular autoridade perante motores de busca.
+- **Quem Decidiu**: Usuário (solicitação formal da Fase 23).
+- **Evidência**: `supabase/migrations/20261114000002_municipios_distancia_cidades.sql`, `src/lib/geo/`, `src/components/geo/`, `src/app/servicos/`, `src/__tests__/localizacao_distancia.test.ts`.
+- **Pendência para o Advogado**:
+  - Avaliar impacto futuro de integração com APIs de CEP para cálculo de frete ou deslocamento comercial quando houver monetização por serviço orçado fora da plataforma.
+
+
 
 
 

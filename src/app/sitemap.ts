@@ -62,7 +62,29 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     }));
 
-    return [...staticRoutes, ...profileRoutes];
+    // Rotas de serviços por cidade (somente cidades do polo que possuem perfis publicados)
+    const serviceCityRoutes: MetadataRoute.Sitemap = [
+      {
+        url: `${BASE_URL}/servicos/marcenaria/jundiai-sp`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly',
+        priority: 0.7,
+      },
+      {
+        url: `${BASE_URL}/servicos/montador-de-moveis/jundiai-sp`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly',
+        priority: 0.7,
+      },
+      {
+        url: `${BASE_URL}/servicos/loja-de-planejados/jundiai-sp`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly',
+        priority: 0.7,
+      },
+    ];
+
+    return [...staticRoutes, ...profileRoutes, ...serviceCityRoutes];
   } catch {
     return staticRoutes;
   }
