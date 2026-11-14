@@ -65,3 +65,25 @@ Este documento registra todas as avaliações do Gate de Isenção ao longo das 
 - **Evidência**: `supabase/migrations/20261113000002_takedown_notices_and_evidence.sql`, `src/app/autoridades/page.tsx`, `src/app/denunciar/page.tsx`, `src/app/admin/denuncias/page.tsx`.
 - **Pendência para o Advogado**: Definição formal dos prazos de resposta (sugestão técnica: 24h para triagem, 3 dias para contestação).
 
+---
+
+### J-005 — LGPD Operacional, Registros de Acesso e Direitos do Titular
+- **Data**: 2026-11-13
+- **Fase**: Fase 17 — LGPD Operacional e Registros de Acesso
+- **Funcionalidade ou Texto**: Inventário de dados (`docs/LGPD_INVENTARIO.md`), Política de Privacidade completa (`/privacidade`), Direitos do Titular em `/painel/seguranca`, retenção automática (`pg_cron` via função `purge_expired_records()`), tabela `app_access_logs` com purge semestral, proteção de contatos para usuários não logados (`/profissionais/[slug]`), Plano de Resposta a Incidentes (`docs/PLANO_INCIDENTES.md`), documentação de transferência internacional.
+- **Regras e Normas Envolvidas**: R10, R11; LGPD (arts. 6, 7, 11, 18, 19, 46); Marco Civil (art. 15); ANPD Res. 15/2024 (notificação de incidentes); Decreto 7.962/2013 (comércio eletrônico).
+- **Risco**: Alto (obrigação legal de guarda de logs por 6 meses, direitos do titular com prazo legal de 15 dias, transferência internacional de dados para servidores Supabase e Vercel fora do Brasil).
+- **Decisão Tomada**:
+  1. **Logs de acesso**: Apenas eventos de autenticação e escrita são gravados (minimização de dados); navegação anônima (page views) NÃO é registrada — decisão baseada no princípio de necessidade (LGPD art. 6, III). Registrar somente: login, cadastro, publicar/editar perfil, fotos, contatos, avaliações, notificações.
+  2. **Contatos públicos**: WhatsApp e telefone visíveis somente para usuários autenticados (R11) — proteção anti-scraping e minimização de dados.
+  3. **Transferência internacional**: Supabase utiliza AWS us-east-1 (Virginia, EUA) por padrão; Vercel usa CDN global. Ambos possuem DPA (Data Processing Agreement). Usuário deve avaliar migração do projeto Supabase para região `sa-east-1` (São Paulo) se assessor jurídico recomendar, para reduzir dependência de transferência internacional.
+  4. **Retenção**: Solicitações de contato: 90 dias. Logs de acesso: 180 dias. Exceção: registros com `legal_hold = true` não são purgados automaticamente.
+  5. **DSR (Data Subject Requests)**: Protocolo `DSR-YYYY-XXXXXX` com prazo de 15 dias (LGPD art. 19, II). Fila visível no admin.
+- **Quem Decidiu**: Usuário (solicitação explícita da Fase 17, confirmada nas execuções sucessivas).
+- **Evidência**: `docs/LGPD_INVENTARIO.md`, `docs/PLANO_INCIDENTES.md`, `src/app/privacidade/page.tsx`, `src/lib/lgpd/actions.ts`, `src/components/auth/LGPDRequestSection.tsx`, `supabase/migrations/20261113000003_lgpd_access_logs_and_retention.sql`, `src/__tests__/lgpd.test.ts` (4 testes passando).
+- **Pendência para o Advogado**:
+  - Confirmar se a região atual do Supabase (us-east-1, AWS Virginia) exige migração para `sa-east-1` (São Paulo) ou se o DPA da AWS/Supabase é suficiente para conformidade com LGPD/transferência internacional.
+  - Validar se o prazo de 90 dias para retenção de solicitações de contato é adequado ao modelo de negócios.
+  - Confirmar se a decisão de não registrar navegação anônima está alinhada à estratégia de cookies e à necessidade legal de rastreabilidade.
+  - Aprovar o Plano de Resposta a Incidentes e nomear o Encarregado (DPO) formalmente.
+

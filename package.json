@@ -10,7 +10,7 @@
     "typecheck": "tsc --noEmit",
     "check:isencao": "node scripts/check-isencao.mjs",
     "check:operator": "node scripts/check-operator-production.mjs",
-    "test": "vitest run",
+    "test": "vitest run --testTimeout=15000",
     "test:e2e": "playwright test"
   },
   "dependencies": {

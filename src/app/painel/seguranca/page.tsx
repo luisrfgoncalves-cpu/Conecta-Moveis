@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import type { Metadata } from 'next';
 import { ChangePasswordForm, DownloadDataButton, DeleteAccountForm } from '@/components/auth/SecurityForms';
+import { LGPDRequestSection } from '@/components/auth/LGPDRequestSection';
 import { Lock, Download, Trash2 } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -53,6 +54,9 @@ export default async function SegurancaPage() {
           consentimentos e assinaturas. Nenhuma senha é exportada.
         </p>
       </section>
+
+      {/* Solicitações de Direitos LGPD (Art. 18 / 19) */}
+      <LGPDRequestSection />
 
       {/* Excluir conta */}
       <section aria-labelledby="delete-section-title" className="glass-panel rounded-2xl p-6 border border-red-500/20">

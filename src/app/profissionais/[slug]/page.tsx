@@ -290,29 +290,44 @@ export default async function ProfissionalPublicPage({ params }: PageProps) {
           </div>
         )}
 
-        {/* Seção de Contato Público (Opcionais autorizados pelo usuário) */}
+        {/* Seção de Contato Público (Opcionais autorizados pelo usuário com proteção anti-scraping para usuários logados) */}
         {(professional.whatsapp || professional.phone) && (
           <div className="space-y-3 pt-2 border-t border-white/10">
             <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300">
               Contatos Autorizados
             </h2>
-            <div className="flex flex-wrap gap-3">
-              {professional.whatsapp && (
-                <WhatsAppTracker
-                  profileId={professional.id}
-                  whatsapp={professional.whatsapp}
-                />
-              )}
-              {professional.phone && (
-                <a
-                  href={`tel:${professional.phone.replace(/\D/g, '')}`}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-slate-200 text-xs font-bold border border-white/20 transition"
+            {isLoggedIn ? (
+              <div className="flex flex-wrap gap-3">
+                {professional.whatsapp && (
+                  <WhatsAppTracker
+                    profileId={professional.id}
+                    whatsapp={professional.whatsapp}
+                  />
+                )}
+                {professional.phone && (
+                  <a
+                    href={`tel:${professional.phone.replace(/\D/g, '')}`}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-slate-200 text-xs font-bold border border-white/20 transition"
+                  >
+                    <Phone className="w-4 h-4 text-slate-300" />
+                    <span>Telefone: {professional.phone}</span>
+                  </a>
+                )}
+              </div>
+            ) : (
+              <div className="p-4 rounded-xl bg-white/5 border border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <div className="text-xs text-slate-400">
+                  <span className="font-semibold text-white block mb-0.5">Proteção de Contato (Anti-Spam / LGPD):</span>
+                  Para visualizar o WhatsApp e telefone do anunciante, faça login na sua conta gratuita.
+                </div>
+                <Link
+                  href={`/entrar?redirect=/profissionais/${slug}`}
+                  className="px-4 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold transition shrink-0"
                 >
-                  <Phone className="w-4 h-4 text-slate-300" />
-                  <span>Telefone: {professional.phone}</span>
-                </a>
-              )}
-            </div>
+                  Fazer login para ver contato
+                </Link>
+              </div>
+            )}
           </div>
         )}
 

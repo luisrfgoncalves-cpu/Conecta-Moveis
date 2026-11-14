@@ -59,6 +59,22 @@ SUPABASE_SMTP_PORT=587
 
 ---
 
+## 3. Estimativa de Armazenamento de Registros de Acesso (Marco Civil art. 15)
+
+O plano gratuito do Supabase possui **limite total de 500 MB** de banco de dados.
+
+| Métrica | Estimativa | Observações |
+| :--- | :--- | :--- |
+| **Tamanho por registro de log** | ~250 a 300 bytes | IP, Timestamp, User ID, Ação e User-Agent truncado |
+| **Eventos diários (escrita e auth)** | ~200 a 500 eventos/dia | Apenas login, cadastro, edição de perfil, foto e contato |
+| **Volume mensal gerado** | ~6.000 a 15.000 linhas | ~1,8 MB a 4,5 MB / mês |
+| **Janela de 6 meses (Retenção Legal)** | ~36.000 a 90.000 linhas | **~11 MB a 27 MB no total** |
+| **Impacto no limite de 500 MB** | **< 6% da cota** | Perfeitamente comportável no plano gratuito |
+
+> **Decisão Operacional:** O purge diário aos 180 dias (`INTERVAL '180 days'`) garante que os logs nunca cresçam indefinidamente. A gravação de navegação anônima (visualização de páginas) foi deliberadamente descartada para poupar o banco e respeitar a minimização da LGPD.
+
+---
+
 ## Gatilhos de Migração de Infra
 
 Registrar em `/admin` e agir imediatamente quando qualquer condição for atingida:
