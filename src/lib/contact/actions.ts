@@ -4,6 +4,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 import { contactRequestSchema, type ContactRequestInput } from './schemas';
+import { validateHoneypot } from '@/lib/security/honeypot';
 
 // ===== Rate limit helper =====
 function getAdminClient() {
@@ -107,6 +108,11 @@ export async function createContactRequest(
   const parsed = contactRequestSchema.safeParse(input);
   if (!parsed.success) {
     return { success: false, error: parsed.error.issues[0].message };
+  }
+
+  // Proteção Anti-bot Cirúrgica: Honeypot
+  if (!validateHoneypot({ hp_field: parsed.data.hp_field, hp_timestamp: parsed.data.hp_timestamp })) {
+    return { success: false, error: 'Envio bloqueado por suspeita de automação não humana.' };
   }
 
   // Rate limit por user_id

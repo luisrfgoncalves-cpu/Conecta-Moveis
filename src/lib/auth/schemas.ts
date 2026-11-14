@@ -1,11 +1,17 @@
 import { z } from 'zod';
+import { isDisposableEmail } from './disposableEmails';
 
 export const signUpSchema = z.object({
   fullName: z
     .string()
     .min(2, 'Nome deve ter pelo menos 2 caracteres')
     .max(100, 'Nome muito longo'),
-  email: z.string().email('Informe um e-mail válido'),
+  email: z
+    .string()
+    .email('Informe um e-mail válido')
+    .refine((val) => !isDisposableEmail(val), {
+      message: 'Por favor, utilize um provedor de e-mail corporativo ou pessoal válido (e-mails temporários não são permitidos).',
+    }),
   password: z
     .string()
     .min(8, 'Senha deve ter pelo menos 8 caracteres')

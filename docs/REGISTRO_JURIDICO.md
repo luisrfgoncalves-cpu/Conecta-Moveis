@@ -228,3 +228,22 @@ Este documento registra todas as avaliações do Gate de Isenção ao longo das 
 - **Pendência para o Advogado**:
   - Validar os termos formais da declaração de autoria e a extensão da solidariedade caso um anunciante afirme falsamente a autoria de foto pertencente a terceiro.
   - Avaliar se o rótulo "Imagem ilustrativa" atende plenamente ao padrão de informação clara e ostensiva exigido pelo PROCON/CDC para móveis planejados e marcenaria sob medida.
+
+---
+
+### J-013 — Segurança Cirúrgica e Resguardo LGPD (Fase 25)
+- **Data**: 2026-11-14
+- **Fase**: Fase 25 — Segurança Reforçada (Execução Cirúrgica de Baixo Risco)
+- **Funcionalidade ou Texto**: Bloqueio local estático de e-mails descartáveis no cadastro; armadilha honeypot invisível para bots em solicitações de contato; rate limit local por IP/usuário para contatos; tabela interna de logs de erro (`app_error_logs`) no Postgres com sanitização prévia (scrubbing de dados pessoais/LGPD) e retenção curta (30 dias); políticas de senhas mínimas no servidor e verificação de integridade RLS das tabelas criadas.
+- **Regras e Normas Envolvidas**: R10 (registros restritos), R11 (minimização de dados pessoais e proteção contra raspagem), R16 (Gate de Isenção); LGPD (Lei 13.709/2018, art. 6º, III e VII - minimização e segurança; art. 46 - medidas de segurança); Marco Civil da Internet (Lei 12.965/2014, art. 15).
+- **Risco**: Baixo (implementações estritamente locais, aditivas e defensivas; descartados itens de risco médio/alto como CSP restritiva em tempo de execução, Turnstile externo e Sentry terceiro que gerariam dependências, custos ou quebras de tela).
+- **Decisão Tomada**:
+  1. **Exclusão de Riscos Médios e Altos**: Deliberada abstenção de adicionar Cloudflare Turnstile (dispensando subprocessador adicional e chamadas remotas de captcha) e Sentry externo (evitando transferência internacional e custos de plano). Mantida a estabilidade do Next.js sem CSP excessivamente restritiva que bloqueie assets dinâmicos.
+  2. **Bloqueio Local de Provedores Temporários**: Lista estática local de e-mails descartáveis para impedir perfis e cadastros fraudulentos/fantasmas, sem consultas externas de rede.
+  3. **Anti-raspagem com Honeypot**: Inclusão de campo armadilha transparente a usuários humanos no envio de contatos; preenchimento automático descarta o envio silenciosamente.
+  4. **Scrubbing de Erros no Postgres**: Nova tabela restrita `app_error_logs` acessível somente por service_role/admin, com função de mascaramento para que emails, CPFs e telefones nunca sejam persistidos na pilha de erro.
+  5. **Verificação de RLS**: Auditoria de ausência de bypass em tabelas de aplicação.
+- **Quem Decidiu**: Usuário (orientação expressa de evitar itens de risco alto/médio e executar exclusivamente itens de baixo risco sem conflito).
+- **Evidência**: `src/lib/auth/disposableEmails.ts`, `src/lib/security/honeypot.ts`, `src/lib/errors/logger.ts`, `supabase/migrations/20261114000004_seguranca_reforcada_cirurgica.sql`, `src/__tests__/seguranca_cirurgica.test.ts`.
+- **Pendência para o Advogado**:
+  - Homologar a lista de dados coletados em incidentes e confirmar se a retenção de 30 dias de erros anônimos cumpre os parâmetros de governança da ANPD.

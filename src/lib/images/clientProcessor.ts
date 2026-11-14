@@ -138,3 +138,4 @@ export async function generateThumbhashFromCanvas(canvas: HTMLCanvasElement): Pr
     return null;
   }
 }
+

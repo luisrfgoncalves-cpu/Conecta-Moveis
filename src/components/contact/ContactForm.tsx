@@ -87,6 +87,19 @@ export function ContactForm({ profileId, professionalName, isLoggedIn }: Contact
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-3" noValidate>
         <input type="hidden" {...register('profileId')} />
 
+        {/* Honeypot invisível para descarte de bots sem impactar humanos */}
+        <div style={{ display: 'none' }} aria-hidden="true">
+          <label htmlFor="_hp_bot_field">Não preencha este campo</label>
+          <input
+            id="_hp_bot_field"
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+            {...register('hp_field')}
+          />
+          <input type="hidden" value={Date.now()} {...register('hp_timestamp')} />
+        </div>
+
         <div>
           <label htmlFor="contact-message" className="block text-xs font-medium text-slate-300 mb-1">
             Sua mensagem <span aria-hidden>*</span>

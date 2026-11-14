@@ -17,6 +17,8 @@ export const contactRequestSchema = z.object({
           'Não inclua preços, orçamentos, agenda ou formas de pagamento nesta mensagem.',
       }
     ),
+  hp_field: z.string().optional(),
+  hp_timestamp: z.union([z.number(), z.string()]).optional(),
 });
 
 export type ContactRequestInput = z.infer<typeof contactRequestSchema>;

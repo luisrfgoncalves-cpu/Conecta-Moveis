@@ -73,3 +73,31 @@ Futuramente pretendemos implementar um programa de bug bounty. Pesquisadores que
 - Não divulgue publicamente detalhes da vulnerabilidade antes de 90 dias após a correção (coordinated disclosure)
 
 O não cumprimento destas regras pode resultar em ação legal.
+
+---
+
+## Relatório de Segurança e Riscos Residuais Honestos (Fase 25)
+
+### 1. Medidas de Segurança Implementadas Cirurgicamente
+- **Bloqueio de E-mails Descartáveis:** Implementado validador estático local no schema de cadastro (`src/lib/auth/disposableEmails.ts`) cobrindo mais de 30 provedores de e-mails descartáveis (Mailinator, TempMail, 10MinuteMail, Yopmail, etc.) sem consultas externas a APIs.
+- **Proteção Anti-Bot & Honeypot:** Campo invisível (`hp_field`) e trava temporal de submissão inseridos em solicitações de contato (`src/lib/security/honeypot.ts` e `ContactForm.tsx`). Bots que preenchem formulários de forma automatizada são descartados sem gerar impacto nos usuários humanos.
+- **Proteção Anti-Raspagem:** Ocultação de contatos (telefone, e-mail) para usuários não logados e rate-limit de solicitações por ID de usuário e IP.
+- **Monitoramento de Erros sem Subprocessadores Externos:** Tabela `public.app_error_logs` no Postgres associada a sanitizador (`src/lib/errors/scrubbing.ts`) que remove e-mails, CPFs, telefones e tokens de autorização antes de persistir a pilha de erro. Retenção automática de 30 dias na rotina de expurgo.
+- **Revisão e Isolamento de RLS:** Todas as tabelas públicas e de suporte contam com Row Level Security ativo, impedindo leitura ou gravação não autorizada.
+
+### 2. Riscos Residuais Honestos
+1. **Ausência de Captcha Visual Ativo:** Deliberadamente optou-se por não integrar Cloudflare Turnstile nesta etapa para não introduzir dependência externa, chamadas de rede no cliente ou risco de bloqueio indevido de usuários legítimos no MVP. Bots sofisticados que ignoram campos ocultos ainda poderiam tentar submissões se o rate-limit por IP/sessão for contornado com proxies rotativos.
+2. **Monitoramento sem Alerta em Tempo Real:** A tabela interna de erros grava falhas técnicas sem expor dados pessoais, mas não conta com push de notificação imediata (Slack/Discord/PagerDuty) como uma ferramenta gerenciada (ex: Sentry) ofereceria. Erros dependem de consulta administrativa periódica.
+3. **Ausência de CSP em Modo Bloqueante Total:** Para garantir total compatibilidade e não quebrar fontes, estilos dinâmicos do Tailwind e uploads no Supabase Storage, a Content Security Policy estrita em modo `enforce` foi adiada para o momento em que a suíte em produção estiver consolidada com domínio próprio.
+
+---
+
+## Impacto Jurídico (Fase 25)
+
+- **O que mudou na isenção:**
+  - Adoção de salvaguardas adicionais para cumprimento dos princípios de Segurança (art. 6º, VII) e Minimização (art. 6º, III) da LGPD, prevenindo o registro acidental de dados pessoais em pilhas de erro ou depuração.
+  - Bloqueio de contas temporárias/descartáveis auxilia na mitigação de perfis fraudulentos, estelionato (CP art. 171) e spamming, fortalecendo a boa-fé objetiva da plataforma como classificado de anúncios neutro.
+  - Honeypot inibe raspagem massiva de dados cadastrais dos profissionais (art. 7º, § 4º da LGPD).
+- **O que ficou pendente para o advogado:**
+  - Validar se o prazo de retenção técnica de 30 dias para logs de erros atende às diretrizes de governança da ANPD para agentes de tratamento de pequeno porte.
+  - Apreciar se no momento do lançamento comercial haverá necessidade de instituir Cloudflare Turnstile ou Captcha similar e sua menção obrigatória na Política de Privacidade como subprocessador de segurança.

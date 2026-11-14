@@ -74,3 +74,4 @@ CREATE POLICY "Apenas moderadores e admins veem log de orfaos"
 ON public.orphan_cleanup_log FOR ALL
 TO authenticated
 USING (public.is_moderator());
+
