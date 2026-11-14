@@ -6,7 +6,7 @@ import Image from 'next/image';
 import {
   Users, FileImage, Building2, Flag, Star,
   Tag, CreditCard, FileText, LayoutDashboard, LogOut, ArrowLeft, Globe, Database, Shield, Settings,
-  Ticket, ShieldCheck, Search,
+  Ticket, ShieldCheck, Search, HardDrive,
 } from 'lucide-react';
 import { signOut } from '@/lib/auth/actions';
 
@@ -26,6 +26,7 @@ const adminNav = [
   { href: '/admin/assinaturas', label: 'Assinaturas', icon: CreditCard },
   { href: '/admin/privacidade', label: 'LGPD & Titulares', icon: Shield },
   { href: '/admin/configuracoes', label: 'Configurações & Upgrade', icon: Settings },
+  { href: '/admin/capacidade', label: 'Capacidade & Cotas', icon: HardDrive },
   { href: '/admin/logs', label: 'Logs de auditoria', icon: FileText },
   { href: '/admin/backup', label: 'Backup & Dados', icon: Database },
 ];

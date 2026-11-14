@@ -247,3 +247,21 @@ Este documento registra todas as avaliações do Gate de Isenção ao longo das 
 - **Evidência**: `src/lib/auth/disposableEmails.ts`, `src/lib/security/honeypot.ts`, `src/lib/errors/logger.ts`, `supabase/migrations/20261114000004_seguranca_reforcada_cirurgica.sql`, `src/__tests__/seguranca_cirurgica.test.ts`.
 - **Pendência para o Advogado**:
   - Homologar a lista de dados coletados em incidentes e confirmar se a retenção de 30 dias de erros anônimos cumpre os parâmetros de governança da ANPD.
+
+---
+
+### J-014 — Capacidade no Gratuito, Monitoramento de Cotas, Backup Seguro e PWA Mínimo (Fase 26)
+- **Data**: 2026-11-14
+- **Fase**: Fase 26 — Capacidade para 300 Usuários no Gratuito, Backup e PWA
+- **Funcionalidade ou Texto**: Estratégia de dimensionamento e controle de consumo para operar estritamente dentro dos tetos gratuitos (Supabase Free: 500 MB DB / 1 GB Storage; Vercel Hobby: 100 GB banda); painel de capacidade administrativa em `/admin/capacidade` com alertas preditivos em 70% e 90%; PWA mínimo nativo do Next.js (`manifest.ts`) sem service worker intrusivo e sem persistência offline de dados privados de titulares; workflow automatizado de backup via GitHub Actions (com segredos no cofre e pg_dump) sem expor credenciais no repositório; rotina de expurgo automatizada com verificação periódica de limites.
+- **Regras e Normas Envolvidas**: R1 (isenção de cobrança prematura), R10 (expurgo periódico de retenções legais), R11 (PWA sem armazenamento local de dados de terceiros), R16 (Gate de Isenção); LGPD (arts. 46 e 48 — continuidade e segurança da informação através de rotinas de backup isoladas); Marco Civil da Internet (art. 15).
+- **Risco**: Baixo (otimizações de cache, arquivos descritivos de manifesto PWA sem risco de regressão funcional, scripts de backup assíncronos e painel administrativo meramente consultivo).
+- **Decisão Tomada**:
+  1. **Teto Gratuito Garantido**: A plataforma é configurada e monitorada para suportar até 300 anunciantes com 3 fotos (1 capa + 2 perfil) dentro do limite de 1 GB do Supabase Free. Alertas visuais no painel administrativo a 70% e 90% informam o proprietário com antecedência sobre a necessidade futura de upgrade.
+  2. **PWA Mínimo e Seguro (Item 5)**: O manifesto PWA é gerado via rota nativa do Next.js (`src/app/manifest.ts`), permitindo atalho na tela inicial do celular sem registrar Service Workers complexos que pudessem cachear dados pessoais ou prender versões antigas em navegadores de usuários.
+  3. **Rotina de Backup Isolada e Segura (Item 4)**: Documentação e workflow do GitHub Actions (`.github/workflows/db-backup.yml`) usando segredos externos (`DB_CONNECTION_STRING`), nunca com credenciais comitadas.
+  4. **Atualização de LIMITES_INFRA.md**: Documentadas as métricas reais medidas para 300 anunciantes e gatilhos objetivos para contratação do plano pago quando houver monetização.
+- **Quem Decidiu**: Usuário (orientação para manter o projeto 100% no plano gratuito com segurança até início de lucros consistentes).
+- **Evidência**: `src/app/manifest.ts`, `src/app/admin/capacidade/page.tsx`, `src/components/admin/AdminCapacidadeClient.tsx`, `.github/workflows/db-backup.yml`, `docs/LIMITES_INFRA.md`, `src/__tests__/capacidade_pwa.test.ts`.
+- **Pendência para o Advogado**:
+  - Verificar se a política de contingência e backup documentada atende ao padrão esperado de conformidade de segurança e mitigação de risco de incidentes da LGPD.

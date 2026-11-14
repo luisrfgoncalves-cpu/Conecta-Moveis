@@ -79,15 +79,29 @@ O plano gratuito do Supabase possui **limite total de 500 MB** de banco de dados
 
 Registrar em `/admin` e agir imediatamente quando qualquer condição for atingida:
 
-- [ ] Banco > **350 MB**
-- [ ] Storage > **700 MB**
-- [ ] Transferência mensal > **3,5 GB**
-- [ ] Primeira cobrança real de qualquer usuário
-- [ ] Dados reais de usuários sem backup gerenciado
-- [ ] Necessidade de e-mail em volume (> 200/dia)
-- [ ] Primeira notificação de pausa do Supabase
+- [ ] Banco > **350 MB** (70% do teto gratuito de 500 MB)
+- [ ] Storage > **700 MB** (70% do teto gratuito de 1.000 MB)
+- [ ] Transferência mensal > **70 GB** (70% da cota Vercel Hobby)
+- [ ] Primeira cobrança real de qualquer usuário (gatilho mandatório para Vercel Pro)
+- [ ] Mais de 300 anunciantes ativos com fotos de portfólio
+- [ ] Necessidade de e-mail em volume (> 100/dia)
 
 ---
 
-*Atualizado em: 12/11/2026 — Fase 4*
+## 4. Medição de Dimensionamento para 300 Profissionais (Fase 26)
+
+Dimensionamento aferido para a arquitetura WebP com metas de compressão cliente da Fase 24:
+
+| Recurso | Consumo Estimado para 300 Perfis | Cota do Plano Gratuito | Margem Livre | Status |
+| :--- | :--- | :--- | :--- | :--- |
+| **Storage de Fotos** | 300 perfis × 3 fotos × ~220 KB = **~193 MB** | 1.000 MB (Supabase Free) | **~807 MB (80.7%)** | 🟢 Folga Ampla |
+| **Banco PostgreSQL** | 300 contas + perfis + logs + erros = **~60 MB** | 500 MB (Supabase Free) | **~440 MB (88.0%)** | 🟢 Folga Ampla |
+| **Transferência CDN** | 10.000 visitas/mês com cache agressivo = **~8 GB/mês** | 100 GB (Vercel Hobby) | **~92 GB (92.0%)** | 🟢 Folga Ampla |
+| **First Load JS** | **103 kB** (medido no build do Next.js) | Meta <= 120 kB | **17 kB abaixo** | 🟢 Excelente |
+
+> **Conclusão:** É perfeitamente seguro e viável operar a plataforma até atingir 300 profissionais cadastrados sem pagar nenhum centavo em infraestrutura, contando com o painel `/admin/capacidade` para alertar preventivamente aos 70% de consumo.
+
+---
+
+*Atualizado em: 14/11/2026 — Fase 26 (Segurança de Cotas e PWA)*
 

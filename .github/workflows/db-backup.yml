@@ -1,0 +1,38 @@
+name: Supabase Database Backup
+
+on:
+  schedule:
+    # Executa todo domingo às 03:00 UTC
+    - cron: '0 3 * * 0'
+  workflow_dispatch: # Permite disparo manual via painel do GitHub
+
+jobs:
+  backup:
+    name: Backup PostgreSQL
+    runs-on: ubuntu-latest
+    steps:
+      - name: Instalar PostgreSQL Client
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y postgresql-client
+
+      - name: Executar pg_dump com Segredo do Cofre
+        env:
+          DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          if [ -z "$DB_URL" ]; then
+            echo "::warning ::Segredo SUPABASE_DB_URL não configurado. Adicione a URI do banco em Settings > Secrets."
+            exit 0
+          fi
+          DATE=$(date +%Y-%m-%d_%H%M%S)
+          mkdir -p ./backups
+          pg_dump "$DB_URL" --format=custom --file="./backups/conecta_moveis_backup_${DATE}.dump"
+          echo "BACKUP_FILE=./backups/conecta_moveis_backup_${DATE}.dump" >> $GITHUB_ENV
+
+      - name: Salvar Artefato de Backup (Retenção Segura)
+        if: env.BACKUP_FILE != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: conecta-moveis-postgres-backup
+          path: ${{ env.BACKUP_FILE }}
+          retention-days: 30
