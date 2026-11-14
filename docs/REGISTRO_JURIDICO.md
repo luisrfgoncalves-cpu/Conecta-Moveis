@@ -163,5 +163,25 @@ Este documento registra todas as avaliações do Gate de Isenção ao longo das 
   - Homologação do catálogo de motivos formais de decisão vinculados a cada política pública.
   - Validação dos modelos de notificação para anunciantes e notificantes.
 
+---
+
+### J-010 — Busca Inteligente Nativa, Sinônimos e Ordenação Neutra (Fase 22)
+- **Data**: 2026-11-14
+- **Fase**: Fase 22 — Busca Inteligente (dentro do Postgres, sem serviço externo)
+- **Funcionalidade ou Texto**: Busca inteligente com Postgres FTS (`unaccent` + `pg_trgm` + `tsvector` com peso), sinônimos gerenciados no admin (`search_synonyms`), tolerância a erros de digitação (trigrama), sugestões "Você quis dizer...?", autocomplete de especialidades e cidades com rate limit e cache, registro anônimo de termos sem resultado por dia (sem usuário, sem IP), ordenação rotativa e neutra por padrão (sem critério de "qualidade" ou recomendação implícita — R4, R5, R14, R20).
+- **Regras e Normas Envolvidas**: R4 (sem endosso ou recomendação), R5 (ordenação neutra e transparente, destaque pago rotulado), R11 (minimização de dados, sem IP ou usuário no log de buscas sem resultado), R14 (igualdade de tratamento entre planos), R16 (registro contínuo no gate), R20 (sem julgamento de qualidade/mérito no algoritmo de busca); Marco Civil da Internet (art. 19); LGPD (art. 6º, III e VI — minimização e transparência).
+- **Risco**: Baixo (mecanismo técnico de indexação e recuperação textual sem dependências externas nem perfilamento de usuários).
+- **Decisão Tomada**:
+  1. **Nenhum Critério Oculto de "Qualidade" (Regras R4 e R20)**: A ordenação por relevância baseia-se unicamente em correspondência textual (`ts_rank_cd`), similaridade de trigramas e data de publicação ou completude do perfil (preenchimento objetivo de bio, avatar e dados de contato), vedando pontuações por mérito subjetivo ou avaliação editorial.
+  2. **Destaque Pago e Destaque de Degustação Sempre Rotulados (Regra R5)**: Planos com benefício de visibilidade aparecem no topo apenas rotulados expressamente como "Destaque patrocinado" ou "Destaque de teste", rotacionando de forma justa com outros anunciantes da mesma categoria.
+  3. **Privacidade e Minimização Total nas Buscas (Regra R11)**: A tabela `search_no_results_log` registra unicamente a data do calendário e o termo buscado com contagem agregada, sem registrar IP, identificador de sessão, cookies ou dados do usuário.
+  4. **Exclusão Estrita de Perfis Suspensos ou Despublicados**: A função `search_profiles` e as queries de autocomplete impõem obrigatoriamente a condição `is_published = true AND is_suspended = false`, garantindo que conteúdos moderados ou com restrição nunca figurem em resultados nem autocompletes.
+  5. **Sem Dependência Externa**: Todo o mecanismo opera nativamente no Postgres do Supabase via extensões aprovadas (`unaccent`, `pg_trgm`), mantendo a autonomia da infraestrutura e custos previsíveis dentro do plano gratuito.
+- **Quem Decidiu**: Usuário (solicitação formal da Fase 22).
+- **Evidência**: `supabase/migrations/20261114000001_busca_inteligente.sql`, `src/lib/search/actions.ts`, `src/lib/search/schemas.ts`, `src/components/search/SearchBar.tsx`, `src/app/admin/busca/`, `src/__tests__/busca_inteligente.test.ts`.
+- **Pendência para o Advogado**:
+  - Validar a lista padrão de sinônimos moveleiros cadastrados para evitar que termos concorrenciais ou denominações genéricas interfiram indevidamente na visibilidade dos anunciantes.
+
+
 
 

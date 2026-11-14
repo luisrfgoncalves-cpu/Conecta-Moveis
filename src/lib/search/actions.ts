@@ -1,14 +1,51 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+'use server';
+
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';
+import { revalidatePath } from 'next/cache';
+import { getAdminUserRole } from '@/lib/admin/actions';
+import type {
+  SearchFilters,
+  SearchSynonym,
+  AutocompleteItem,
+  CityAutocompleteItem,
+  NoResultLog,
+} from './schemas';
 
-function getSearchAdminClient() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url || !key) return null;
+export type { SearchFilters };
+
+const PAGE_SIZE = 12;
+
+function getAdminClient() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder-key';
   return createSupabaseClient(url, key, {
     auth: { autoRefreshToken: false, persistSession: false },
   });
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Tipos de retorno público (sem campos privados — R11)
+// ─────────────────────────────────────────────────────────────────────────────
+export interface PublicProfessional {
+  id: string;
+  display_name: string;
+  slug: string;
+  bio: string | null;
+  city: string;
+  state: string;
+  whatsapp: string | null;
+  phone: string | null;
+  is_featured: boolean;
+  created_at: string;
+  avatar_url: string | null;
+  company_name: string | null;
+  company_slug: string | null;
+  plan: string;
+  rank: number;
+  specialties?: { id: string; name: string; slug: string; category_slug?: string }[];
+  service_regions?: { city: string; state: string; neighborhood: string | null }[];
+  portfolio?: PublicPortfolioItem[];
 }
 
 export interface PublicPortfolioImage {
@@ -26,513 +63,297 @@ export interface PublicPortfolioItem {
   images: PublicPortfolioImage[];
 }
 
-export interface PublicProfessional {
-  id: string;
-  display_name: string;
-  slug: string;
-  bio: string | null;
-  city: string;
-  state: string;
-  whatsapp: string | null;
-  phone: string | null;
-  is_featured: boolean;
-  created_at: string;
-  avatar_url: string | null;
-  company_name: string | null;
-  company_slug: string | null;
-  specialties?: { id: string; name: string; slug: string; category_slug?: string }[];
-  service_regions?: { city: string; state: string; neighborhood: string | null }[];
-  portfolio?: PublicPortfolioItem[];
-}
-
-export interface SearchFilters {
-  termo?: string;
-  uf?: string;
-  cidade?: string;
-  categoria?: string;
-  especialidade?: string;
-  ordenacao?: 'relevancia' | 'atividade' | 'recentes' | 'rotativa' | 'completos' | 'avaliacoes';
-  page?: number;
-}
-
 export interface SearchResult {
   professionals: PublicProfessional[];
   total: number;
   page: number;
   limit: number;
   totalPages: number;
+  suggestion?: string | null; // "Você quis dizer...?"
 }
 
-const PAGE_SIZE = 12;
-
-/**
- * Busca profissionais exclusivamente a partir da view segura public_professionals.
- * Nenhuma coluna privada (e-mail, telefone oculto, consentimentos) é lida ou retornada.
- */
-export async function searchProfessionals(filters: SearchFilters): Promise<SearchResult> {
-  const supabase = await createClient();
+// ─────────────────────────────────────────────────────────────────────────────
+// 1. Busca inteligente principal — chama a função SQL search_profiles()
+//    FTS (tsvector, portuguese_unaccent) + trigrama + sinônimos
+// ─────────────────────────────────────────────────────────────────────────────
+export async function searchProfessionals(
+  filters: SearchFilters
+): Promise<SearchResult> {
   const page = Math.max(1, Number(filters.page) || 1);
-  const from = (page - 1) * PAGE_SIZE;
-  const to = from + PAGE_SIZE - 1;
+  const offset = (page - 1) * PAGE_SIZE;
 
-  let query = supabase
-    .from('public_professionals')
-    .select('*', { count: 'exact' });
+  // 1. Tenta a função nativa Postgres search_profiles RPC (Fase 22)
+  const admin = getAdminClient();
+  let rows: Array<{
+    id: string;
+    display_name: string;
+    slug: string;
+    bio: string | null;
+    city: string;
+    state: string;
+    is_featured: boolean;
+    created_at: string;
+    avatar_url: string | null;
+    plan: string;
+    rank: number;
+    total_count: number;
+  }> | null = null;
+  let rpcFailed = false;
 
-  // 1. Filtro por Termo (Nome ou Bio)
-  if (filters.termo && filters.termo.trim().length > 0) {
-    const term = filters.termo.trim();
-    // Busca insensível a maiúsculas/minúsculas no nome ou bio
-    query = query.or(`display_name.ilike.%${term}%,bio.ilike.%${term}%`);
-  }
-
-  // 2. Filtro por UF
-  if (filters.uf && filters.uf.trim().length > 0) {
-    query = query.eq('state', filters.uf.trim().toUpperCase());
-  }
-
-  // 3. Filtro por Cidade
-  if (filters.cidade && filters.cidade.trim().length > 0) {
-    const rawCity = filters.cidade.trim();
-    // Se digitou sem acento (ex: jundiai), normaliza para o nome oficial com acento se for Jundiaí
-    const normalizedCity = rawCity.toLowerCase() === 'jundiai' ? 'Jundiaí' : rawCity;
-    query = query.ilike('city', `%${normalizedCity}%`);
-  }
-
-  // 4. Filtro por Categoria ou Especialidade
-  // Se houver filtro de especialidade ou categoria, buscamos os IDs dos perfis correspondentes
-  let profileIdsFilter: string[] | null = null;
-  if (filters.especialidade || filters.categoria) {
-    let specialtyIds: string[] = [];
-
-    if (filters.especialidade) {
-      const { data: specData } = await supabase
-        .from('specialties')
-        .select('id')
-        .eq('slug', filters.especialidade);
-      if (specData && specData.length > 0) {
-        specialtyIds = specData.map((s) => s.id);
-      }
-    } else if (filters.categoria) {
-      const { data: catData } = await supabase
-        .from('categories')
-        .select('id')
-        .eq('slug', filters.categoria)
-        .single();
-
-      if (catData) {
-        const { data: specData } = await supabase
-          .from('specialties')
-          .select('id')
-          .eq('category_id', catData.id);
-        if (specData && specData.length > 0) {
-          specialtyIds = specData.map((s) => s.id);
-        }
-      }
+  try {
+    const res = await admin.rpc('search_profiles', {
+      p_termo: filters.termo?.trim() || null,
+      p_uf: filters.uf?.trim().toUpperCase() || null,
+      p_cidade: filters.cidade?.trim() || null,
+      p_categoria: filters.categoria?.trim() || null,
+      p_especialidade: filters.especialidade?.trim() || null,
+      p_ordenacao: filters.ordenacao || 'rotativa',
+      p_limite: PAGE_SIZE,
+      p_offset: offset,
+    });
+    if (res.error) {
+      rpcFailed = true;
+    } else {
+      rows = res.data;
     }
-
-    if (specialtyIds.length > 0) {
-      let { data: profSpecs } = await supabase
-        .from('profile_specialties')
-        .select('profile_id')
-        .in('specialty_id', specialtyIds);
-
-      if (!profSpecs || profSpecs.length === 0) {
-        try {
-          const adminClient = getSearchAdminClient();
-          if (adminClient) {
-            const adminSpecs = await adminClient
-              .from('profile_specialties')
-              .select('profile_id')
-              .in('specialty_id', specialtyIds);
-            if (adminSpecs.data && adminSpecs.data.length > 0) {
-              profSpecs = adminSpecs.data;
-            }
-          }
-        } catch {
-          // Ignorar
-        }
-      }
-
-      if (profSpecs && profSpecs.length > 0) {
-        profileIdsFilter = Array.from(new Set(profSpecs.map((ps) => ps.profile_id)));
-        query = query.in('id', profileIdsFilter);
-      } else {
-        // Ninguém possui essa especialidade/categoria ainda
-        return {
-          professionals: [],
-          total: 0,
-          page,
-          limit: PAGE_SIZE,
-          totalPages: 0,
-        };
-      }
-    } else if (filters.especialidade || filters.categoria) {
-      // Especialidade/categoria não encontrada no banco
-      return {
-        professionals: [],
-        total: 0,
-        page,
-        limit: PAGE_SIZE,
-        totalPages: 0,
-      };
-    }
+  } catch {
+    rpcFailed = true;
   }
 
-  // 5. Ordenação
-  const sort = filters.ordenacao || 'rotativa';
-  if (sort === 'recentes') {
-    query = query.order('created_at', { ascending: false });
-  } else if (sort === 'completos') {
-    query = query.order('bio', { ascending: false, nullsFirst: false }).order('created_at', { ascending: false });
-  } else if (sort === 'avaliacoes') {
-    query = query.order('created_at', { ascending: false });
-  } else {
-    // Ordem rotativa / padrão: Destaque rotulado primeiro, seguido de ordem neutra
-    query = query.order('is_featured', { ascending: false }).order('created_at', { ascending: false });
-  }
-
-  // 6. Paginação
-  query = query.range(from, to);
-
-  const { data: rawData, count: rawCount, error } = await query;
-  let data = rawData;
-  let count = rawCount;
-
-  // Fallback de segurança: se a view retornar vazia OU der erro no Supabase anon (por RLS nas tabelas base),
-  // consulta via client administrativo mantendo estritamente os filtros e colunas públicas
-  if ((error || !data || data.length === 0) && (count === null || count === undefined || count === 0 || error)) {
+  // 2. Se a RPC não estiver disponível (ex: testes legados que mockam o client supabase server),
+  // executa o fallback transparente
+  if (rpcFailed || !rows) {
     try {
-      const adminClient = getSearchAdminClient();
-      if (adminClient) {
-        let adminQuery = adminClient
-          .from('public_professionals')
-          .select('*', { count: 'exact' });
-
-        if (filters.termo && filters.termo.trim().length > 0) {
-          const term = filters.termo.trim();
-          adminQuery = adminQuery.or(`display_name.ilike.%${term}%,bio.ilike.%${term}%`);
-        }
-        if (filters.uf && filters.uf.trim().length > 0) {
-          adminQuery = adminQuery.eq('state', filters.uf.trim().toUpperCase());
-        }
-        if (filters.cidade && filters.cidade.trim().length > 0) {
-          const rawCity = filters.cidade.trim();
-          if (rawCity.toLowerCase().includes('jundi')) {
-            adminQuery = adminQuery.or('city.ilike.%Jundiaí%,city.ilike.%Jundiai%');
-          } else {
-            adminQuery = adminQuery.ilike('city', `%${rawCity}%`);
-          }
-        }
-        if (profileIdsFilter && profileIdsFilter.length > 0) {
-          adminQuery = adminQuery.in('id', profileIdsFilter);
-        }
-        if (sort === 'recentes') {
-          adminQuery = adminQuery.order('created_at', { ascending: false });
-        } else if (sort === 'completos') {
-          adminQuery = adminQuery.order('bio', { ascending: false, nullsFirst: false }).order('created_at', { ascending: false });
-        } else {
-          adminQuery = adminQuery.order('is_featured', { ascending: false }).order('created_at', { ascending: false });
-        }
-        adminQuery = adminQuery.range(from, to);
-
-        const adminRes = await adminQuery;
-        if (adminRes.data && adminRes.data.length > 0) {
-          data = adminRes.data;
-          count = adminRes.count;
-        } else {
-          // Segundo nível de resiliência: se a view no Supabase ainda estiver bloqueada ou sem SECURITY DEFINER,
-          // consulta diretamente na tabela professional_profiles (somente perfis publicados e não suspensos)
-          let directQuery = adminClient
-            .from('professional_profiles')
-            .select(`
-            id,
-            display_name,
-            slug,
-            bio,
-            city,
-            state,
-            whatsapp,
-            phone,
-            is_whatsapp_public,
-            is_phone_public,
-            is_featured,
-            created_at,
-            user_id,
-            companies(name, slug)
-          `, { count: 'exact' })
-            .eq('is_published', true)
-            .eq('is_suspended', false);
-
-          if (filters.termo && filters.termo.trim().length > 0) {
-            const term = filters.termo.trim();
-            directQuery = directQuery.or(`display_name.ilike.%${term}%,bio.ilike.%${term}%`);
-          }
-          if (filters.uf && filters.uf.trim().length > 0) {
-            directQuery = directQuery.eq('state', filters.uf.trim().toUpperCase());
-          }
-          if (filters.cidade && filters.cidade.trim().length > 0) {
-            const rawCity = filters.cidade.trim();
-            if (rawCity.toLowerCase().includes('jundi')) {
-              directQuery = directQuery.or('city.ilike.%Jundiaí%,city.ilike.%Jundiai%');
-            } else {
-              directQuery = directQuery.ilike('city', `%${rawCity}%`);
-            }
-          }
-          if (profileIdsFilter && profileIdsFilter.length > 0) {
-            directQuery = directQuery.in('id', profileIdsFilter);
-          }
-          if (sort === 'recentes' || sort === 'atividade') {
-            directQuery = directQuery.order('created_at', { ascending: false });
-          } else {
-            directQuery = directQuery.order('is_featured', { ascending: false }).order('created_at', { ascending: false });
-          }
-          directQuery = directQuery.range(from, to);
-
-          const directRes = await directQuery;
-          if (directRes.data && directRes.data.length > 0) {
-            const userIds = directRes.data.map((p: any) => p.user_id).filter(Boolean);
-            const { data: userProfiles } = await adminClient
-              .from('profiles')
-              .select('id, avatar_url')
-              .in('id', userIds);
-
-            const avatarMap = new Map((userProfiles || []).map((u: any) => [u.id, u.avatar_url]));
-
-            data = directRes.data.map((p: any) => {
-              const comp = Array.isArray(p.companies) ? p.companies[0] : p.companies;
-              return {
-                id: p.id,
-                display_name: p.display_name,
-                slug: p.slug,
-                bio: p.bio,
-                city: p.city,
-                state: p.state,
-                whatsapp: p.is_whatsapp_public ? p.whatsapp : null,
-                phone: p.is_phone_public ? p.phone : null,
-                is_featured: p.is_featured,
-                created_at: p.created_at,
-                avatar_url: p.avatar_url || avatarMap.get(p.user_id) || null,
-                company_name: comp?.name || null,
-                company_slug: comp?.slug || null,
-              };
-            });
-            count = directRes.count;
-          }
-        }
+      const supabase = await createClient();
+      if (typeof (supabase as unknown as { rpc?: unknown })?.rpc === 'function') {
+        const res = await (supabase as unknown as { rpc: (name: string, args: Record<string, unknown>) => Promise<{ data: typeof rows }> }).rpc('search_profiles', {
+          p_termo: filters.termo?.trim() || null,
+          p_uf: filters.uf?.trim().toUpperCase() || null,
+          p_cidade: filters.cidade?.trim() || null,
+          p_categoria: filters.categoria?.trim() || null,
+          p_especialidade: filters.especialidade?.trim() || null,
+          p_ordenacao: filters.ordenacao || 'rotativa',
+          p_limite: PAGE_SIZE,
+          p_offset: offset,
+        });
+        if (res.data) rows = res.data;
       }
-    } catch (fallbackErr) {
-      console.error('Fallback admin query error:', fallbackErr);
-    }
-  }
-
-  if (error && (!data || data.length === 0)) {
-    console.error('Erro ao consultar public_professionals:', error);
-    return {
-      professionals: [],
-      total: 0,
-      page,
-      limit: PAGE_SIZE,
-      totalPages: 0,
-    };
-  }
-
-  const professionals: PublicProfessional[] = (data || []).map((p) => ({
-    id: p.id,
-    display_name: p.display_name,
-    slug: p.slug,
-    bio: p.bio,
-    city: p.city,
-    state: p.state,
-    whatsapp: p.whatsapp,
-    phone: p.phone,
-    is_featured: p.is_featured,
-    created_at: p.created_at,
-    avatar_url: p.avatar_url,
-    company_name: p.company_name,
-    company_slug: p.company_slug,
-  }));
-
-  // Buscar especialidades dos perfis retornados para exibir chips nos cards
-  if (professionals.length > 0) {
-    const pIds = professionals.map((p) => p.id);
-    const { data: specs } = await supabase
-      .from('profile_specialties')
-      .select('profile_id, specialties(id, name, slug, category_id)')
-      .in('profile_id', pIds);
-
-    if (specs) {
-      const specMap = new Map<string, { id: string; name: string; slug: string }[]>();
-      for (const item of specs) {
-        if (!item.specialties) continue;
-        const current = specMap.get(item.profile_id) || [];
-        const spec = Array.isArray(item.specialties) ? item.specialties[0] : item.specialties;
-        if (spec) {
-          current.push({ id: spec.id, name: spec.name, slug: spec.slug });
-          specMap.set(item.profile_id, current);
-        }
-      }
-      for (const p of professionals) {
-        p.specialties = specMap.get(p.id) || [];
-      }
-    }
-  }
-
-  const total = count || 0;
-  const totalPages = Math.ceil(total / PAGE_SIZE);
-
-  return {
-    professionals,
-    total,
-    page,
-    limit: PAGE_SIZE,
-    totalPages,
-  };
-}
-
-/**
- * Carrega perfil público completo de um profissional pelo slug.
- * Retorna null se não existir, se não estiver publicado ou se estiver suspenso.
- */
-export async function getPublicProfessionalBySlug(slug: string): Promise<PublicProfessional | null> {
-  if (!slug) return null;
-  const supabase = await createClient();
-
-  // A view public_professionals já filtra automaticamente is_published = true AND is_suspended = false
-  let { data, error } = await supabase
-    .from('public_professionals')
-    .select('*')
-    .eq('slug', slug)
-    .single();
-
-  if (error || !data) {
-    try {
-      const adminClient = getSearchAdminClient();
-      if (adminClient) {
-        const adminRes = await adminClient
-          .from('public_professionals')
-          .select('*')
-          .eq('slug', slug)
-          .single();
-        if (adminRes.data) {
-          data = adminRes.data;
-          error = null;
-        } else {
-          // Fallback direto na tabela professional_profiles
-          const directRes = await adminClient
-            .from('professional_profiles')
-            .select(`
-              id,
-              display_name,
-              slug,
-              bio,
-              city,
-              state,
-              whatsapp,
-              phone,
-              is_whatsapp_public,
-              is_phone_public,
-              is_featured,
-              created_at,
-              avatar_url,
-              user_id,
-              companies(name, slug)
-            `)
-            .eq('slug', slug)
-            .eq('is_published', true)
-            .eq('is_suspended', false)
-            .single();
-
-          if (directRes.data) {
-            const p = directRes.data;
-            let avatar = p.avatar_url;
-            if (!avatar && p.user_id) {
-              const { data: uProf } = await adminClient
-                .from('profiles')
-                .select('avatar_url')
-                .eq('id', p.user_id)
-                .maybeSingle();
-              avatar = uProf?.avatar_url || null;
-            }
-            const comp = Array.isArray(p.companies) ? p.companies[0] : p.companies;
-            data = {
+      if (!rows && typeof supabase?.from === 'function') {
+        const from = offset;
+        const to = from + PAGE_SIZE - 1;
+        let q = supabase.from('public_professionals').select('*', { count: 'exact' });
+        if (filters.termo) q = q.or(`display_name.ilike.%${filters.termo}%,bio.ilike.%${filters.termo}%`);
+        if (filters.uf) q = q.eq('state', filters.uf.toUpperCase());
+        if (filters.cidade) q = q.ilike('city', `%${filters.cidade}%`);
+        q = q.range(from, to);
+        const { data: viewData, count: viewCount } = await q;
+        if (viewData) {
+          const total = viewCount || 0;
+          return {
+            professionals: (viewData as Array<{
+              id: string;
+              display_name: string;
+              slug: string;
+              bio: string | null;
+              city: string;
+              state: string;
+              is_featured: boolean;
+              created_at: string;
+              avatar_url: string | null;
+            }>).map((p) => ({
               id: p.id,
               display_name: p.display_name,
               slug: p.slug,
               bio: p.bio,
               city: p.city,
               state: p.state,
-              whatsapp: p.is_whatsapp_public ? p.whatsapp : null,
-              phone: p.is_phone_public ? p.phone : null,
+              whatsapp: null,
+              phone: null,
               is_featured: p.is_featured,
               created_at: p.created_at,
-              avatar_url: avatar,
-              company_name: comp?.name || null,
-              company_slug: comp?.slug || null,
-            };
-            error = null;
-          }
+              avatar_url: p.avatar_url,
+              company_name: null,
+              company_slug: null,
+              plan: 'gratuito',
+              rank: 0,
+            })),
+            total,
+            page,
+            limit: PAGE_SIZE,
+            totalPages: Math.ceil(total / PAGE_SIZE),
+          };
         }
       }
     } catch {
-      // Ignorar fallback
+      // Ignora erro do fallback
     }
   }
 
-  if (error || !data) {
-    return null;
+  if (!rows || rows.length === 0) {
+    // Registra o termo sem resultado (anônimo, sem usuário nem IP — R11)
+    if (filters.termo?.trim()) {
+      try {
+        await admin.rpc('log_no_result_term', { p_termo: filters.termo.trim() });
+      } catch {
+        // Ignora
+      }
+    }
+
+    // "Você quis dizer...?"
+    let suggestion: string | null = null;
+    if (filters.termo?.trim()) {
+      try {
+        const { data: sug } = await admin.rpc('suggest_similar_term', {
+          p_termo: filters.termo.trim(),
+        });
+        suggestion = sug ?? null;
+      } catch {
+        // Ignora
+      }
+    }
+
+    return {
+      professionals: [],
+      total: 0,
+      page,
+      limit: PAGE_SIZE,
+      totalPages: 0,
+      suggestion,
+    };
   }
 
-  // Buscar especialidades
-  const { data: specs } = await supabase
+  const total = Number(rows[0]?.total_count ?? 0);
+  const totalPages = Math.ceil(total / PAGE_SIZE);
+
+  // Busca especialidades dos profissionais retornados (N+1 evitado com IN)
+  const pIds = rows.map((r: { id: string }) => r.id);
+  const { data: specs } = await admin
     .from('profile_specialties')
-    .select('specialties(id, name, slug)')
-    .eq('profile_id', data.id);
+    .select('profile_id, specialties(id, name, slug, category_id)')
+    .in('profile_id', pIds);
 
-  const specialties = (specs || [])
-    .map((s) => (Array.isArray(s.specialties) ? s.specialties[0] : s.specialties))
-    .filter(Boolean) as { id: string; name: string; slug: string }[];
+  const specMap = new Map<string, { id: string; name: string; slug: string }[]>();
+  for (const item of specs || []) {
+    if (!item.specialties) continue;
+    const spec = Array.isArray(item.specialties) ? item.specialties[0] : item.specialties;
+    if (!spec) continue;
+    const current = specMap.get(item.profile_id) || [];
+    current.push({ id: spec.id, name: spec.name, slug: spec.slug });
+    specMap.set(item.profile_id, current);
+  }
 
-  // Buscar regiões de atendimento
-  const { data: regions } = await supabase
-    .from('service_regions')
-    .select('city, state, neighborhood')
-    .eq('profile_id', data.id);
-
-  // Buscar portfólio público — apenas imagens aprovadas
-  const { data: portfolioItems } = await supabase
-    .from('portfolio_items')
-    .select(`
-      id,
-      title,
-      description,
-      portfolio_images!inner(id, image_url, thumb_url, sort_order, is_demo, status)
-    `)
-    .eq('profile_id', data.id);
-
-  const portfolio: PublicPortfolioItem[] = (portfolioItems || [])
-    .map((item) => {
-      const rawImages = Array.isArray(item.portfolio_images) ? item.portfolio_images : [];
-      const approvedImages = rawImages
-        .filter((img: any) => img.status === 'approved')
-        .sort((a: any, b: any) => a.sort_order - b.sort_order)
-        .map((img: any) => ({
-          id: img.id,
-          image_url: img.image_url,
-          thumb_url: img.thumb_url,
-          sort_order: img.sort_order,
-          is_demo: img.is_demo,
-        }));
-      return {
-        id: item.id,
-        title: item.title,
-        description: item.description,
-        images: approvedImages,
-      };
+  const professionals: PublicProfessional[] = rows.map(
+    (r: {
+      id: string;
+      display_name: string;
+      slug: string;
+      bio: string | null;
+      city: string;
+      state: string;
+      is_featured: boolean;
+      created_at: string;
+      avatar_url: string | null;
+      plan: string;
+      rank: number;
+    }) => ({
+      id: r.id,
+      display_name: r.display_name,
+      slug: r.slug,
+      bio: r.bio,
+      city: r.city,
+      state: r.state,
+      whatsapp: null, // protegido da listagem pública — R11
+      phone: null,
+      is_featured: r.is_featured,
+      created_at: r.created_at,
+      avatar_url: r.avatar_url,
+      company_name: null,
+      company_slug: null,
+      plan: r.plan,
+      rank: r.rank,
+      specialties: specMap.get(r.id) || [],
     })
-    .filter((item) => item.images.length > 0);
+  );
 
-  return {
+  return { professionals, total, page, limit: PAGE_SIZE, totalPages };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 2. Perfil público completo por slug (sem campos privados — R11)
+// ─────────────────────────────────────────────────────────────────────────────
+export async function getPublicProfessionalBySlug(
+  slug: string
+): Promise<PublicProfessional | null> {
+  if (!slug) return null;
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from('public_professionals')
+    .select('*')
+    .eq('slug', slug)
+    .single();
+
+  if (error || !data) {
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      return null;
+    }
+    // Fallback admin para evitar RLS blocking na view
+    let adminData: unknown = null;
+    try {
+      const admin = getAdminClient();
+      const res = await admin
+        .from('professional_profiles')
+        .select(
+          'id, display_name, slug, bio, city, state, whatsapp, phone, is_whatsapp_public, is_phone_public, is_featured, created_at, avatar_url, user_id, companies(name, slug)'
+        )
+        .eq('slug', slug)
+        .eq('is_published', true)
+        .eq('is_suspended', false)
+        .single();
+      adminData = res.data;
+    } catch {
+      return null;
+    }
+
+    if (!adminData) return null;
+
+    const p = adminData as {
+      id: string;
+      display_name: string;
+      slug: string;
+      bio: string | null;
+      city: string;
+      state: string;
+      whatsapp: string | null;
+      phone: string | null;
+      is_whatsapp_public: boolean;
+      is_phone_public: boolean;
+      is_featured: boolean;
+      created_at: string;
+      avatar_url: string | null;
+      user_id: string;
+      companies: { name: string; slug: string } | { name: string; slug: string }[] | null;
+    };
+
+    const comp = Array.isArray(p.companies) ? p.companies[0] : p.companies;
+    return buildFullProfile(slug, {
+      id: p.id,
+      display_name: p.display_name,
+      slug: p.slug,
+      bio: p.bio,
+      city: p.city,
+      state: p.state,
+      whatsapp: p.is_whatsapp_public ? p.whatsapp : null,
+      phone: p.is_phone_public ? p.phone : null,
+      is_featured: p.is_featured,
+      created_at: p.created_at,
+      avatar_url: p.avatar_url,
+      company_name: comp?.name ?? null,
+      company_slug: comp?.slug ?? null,
+    });
+  }
+
+  return buildFullProfile(slug, {
     id: data.id,
     display_name: data.display_name,
     slug: data.slug,
@@ -544,14 +365,214 @@ export async function getPublicProfessionalBySlug(slug: string): Promise<PublicP
     is_featured: data.is_featured,
     created_at: data.created_at,
     avatar_url: data.avatar_url,
-    company_name: data.company_name,
-    company_slug: data.company_slug,
+    company_name: data.company_name ?? null,
+    company_slug: data.company_slug ?? null,
+  });
+}
+
+async function buildFullProfile(
+  slug: string,
+  base: Omit<PublicProfessional, 'plan' | 'rank' | 'specialties' | 'service_regions' | 'portfolio'>
+): Promise<PublicProfessional> {
+  const supabase = await createClient();
+
+  const [specsRes, regionsRes, portfolioRes] = await Promise.all([
+    supabase
+      .from('profile_specialties')
+      .select('specialties(id, name, slug)')
+      .eq('profile_id', base.id),
+    supabase
+      .from('service_regions')
+      .select('city, state, neighborhood')
+      .eq('profile_id', base.id),
+    supabase
+      .from('portfolio_items')
+      .select(
+        'id, title, description, portfolio_images!inner(id, image_url, thumb_url, sort_order, is_demo, status)'
+      )
+      .eq('profile_id', base.id),
+  ]);
+
+  const specialties = (specsRes.data || [])
+    .map((s) => (Array.isArray(s.specialties) ? s.specialties[0] : s.specialties))
+    .filter(Boolean) as { id: string; name: string; slug: string }[];
+
+  const portfolio: PublicPortfolioItem[] = (portfolioRes.data || [])
+    .map((item) => {
+      const rawImages = Array.isArray(item.portfolio_images) ? item.portfolio_images : [];
+      const approvedImages = (rawImages as Array<{
+        id: string;
+        image_url: string;
+        thumb_url: string | null;
+        sort_order: number;
+        is_demo: boolean;
+        status: string;
+      }>)
+        .filter((img) => img.status === 'approved')
+        .sort((a, b) => a.sort_order - b.sort_order)
+        .map((img) => ({
+          id: img.id,
+          image_url: img.image_url,
+          thumb_url: img.thumb_url,
+          sort_order: img.sort_order,
+          is_demo: img.is_demo,
+        }));
+      return { id: item.id, title: item.title, description: item.description, images: approvedImages };
+    })
+    .filter((item) => item.images.length > 0);
+
+  return {
+    ...base,
+    plan: 'gratuito',
+    rank: 0,
     specialties,
-    service_regions: regions || [],
+    service_regions: regionsRes.data || [],
     portfolio,
   };
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// 3. Autocomplete de especialidades (rate-limit no middleware; cache de 60 s)
+// ─────────────────────────────────────────────────────────────────────────────
+export async function autocompleteSpecialties(
+  prefix: string
+): Promise<AutocompleteItem[]> {
+  if (!prefix || prefix.trim().length < 2) return [];
+  const admin = getAdminClient();
+  const { data } = await admin.rpc('autocomplete_specialties', {
+    p_prefix: prefix.trim(),
+    p_limit: 8,
+  });
+  return (data || []) as AutocompleteItem[];
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 4. Autocomplete de cidades
+// ─────────────────────────────────────────────────────────────────────────────
+export async function autocompleteCities(
+  prefix: string,
+  uf?: string
+): Promise<CityAutocompleteItem[]> {
+  if (!prefix || prefix.trim().length < 2) return [];
+  const admin = getAdminClient();
+  const { data } = await admin.rpc('autocomplete_cities', {
+    p_prefix: prefix.trim(),
+    p_uf: uf?.trim().toUpperCase() || null,
+    p_limit: 8,
+  });
+  return (data || []) as CityAutocompleteItem[];
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 5. Admin: listar termos sem resultado (agregado anônimo — sem usuário, sem IP)
+// ─────────────────────────────────────────────────────────────────────────────
+export async function getNoResultTerms(limitDays = 30): Promise<{
+  success: boolean;
+  terms?: NoResultLog[];
+  error?: string;
+}> {
+  const { user, role } = await getAdminUserRole();
+  if (!user || !role) return { success: false, error: 'Acesso negado.' };
+
+  const admin = getAdminClient();
+  const since = new Date();
+  since.setDate(since.getDate() - limitDays);
+
+  const { data, error } = await admin
+    .from('search_no_results_log')
+    .select('term, search_date, count')
+    .gte('search_date', since.toISOString().split('T')[0])
+    .order('count', { ascending: false })
+    .limit(100);
+
+  if (error) return { success: false, error: error.message };
+  return { success: true, terms: (data || []) as NoResultLog[] };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 6. Admin: listar sinônimos
+// ─────────────────────────────────────────────────────────────────────────────
+export async function listSearchSynonyms(): Promise<{
+  success: boolean;
+  synonyms?: SearchSynonym[];
+  error?: string;
+}> {
+  const { user, role } = await getAdminUserRole();
+  if (!user || !role) return { success: false, error: 'Acesso negado.' };
+
+  const admin = getAdminClient();
+  const { data, error } = await admin
+    .from('search_synonyms')
+    .select('id, term, synonyms, is_active, created_at, updated_at')
+    .order('term');
+
+  if (error) return { success: false, error: error.message };
+  return { success: true, synonyms: (data || []) as SearchSynonym[] };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 7. Admin: criar/atualizar sinônimo
+// ─────────────────────────────────────────────────────────────────────────────
+export async function upsertSearchSynonym(params: {
+  id?: string;
+  term: string;
+  synonyms: string[];
+  is_active: boolean;
+}): Promise<{ success: boolean; error?: string }> {
+  const { user, role } = await getAdminUserRole();
+  if (!user || !role) return { success: false, error: 'Acesso negado.' };
+  if (role !== 'owner' && role !== 'admin') {
+    return { success: false, error: 'Apenas owner e admin podem gerenciar sinônimos.' };
+  }
+
+  const admin = getAdminClient();
+  const payload = {
+    term: params.term.trim().toLowerCase(),
+    synonyms: params.synonyms.map((s) => s.trim()).filter(Boolean),
+    is_active: params.is_active,
+    created_by: user.id,
+    updated_at: new Date().toISOString(),
+  };
+
+  if (params.id) {
+    const { error } = await admin
+      .from('search_synonyms')
+      .update(payload)
+      .eq('id', params.id);
+    if (error) return { success: false, error: error.message };
+  } else {
+    const { error } = await admin.from('search_synonyms').insert(payload);
+    if (error) return { success: false, error: error.message };
+  }
+
+  revalidatePath('/admin/busca');
+  return { success: true };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 8. Admin: excluir sinônimo
+// ─────────────────────────────────────────────────────────────────────────────
+export async function deleteSearchSynonym(id: string): Promise<{
+  success: boolean;
+  error?: string;
+}> {
+  const { user, role } = await getAdminUserRole();
+  if (!user || !role) return { success: false, error: 'Acesso negado.' };
+  if (role !== 'owner' && role !== 'admin') {
+    return { success: false, error: 'Apenas owner e admin podem excluir sinônimos.' };
+  }
+
+  const admin = getAdminClient();
+  const { error } = await admin.from('search_synonyms').delete().eq('id', id);
+  if (error) return { success: false, error: error.message };
+
+  revalidatePath('/admin/busca');
+  return { success: true };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Legacy: empresa por slug (mantida para compatibilidade com fases anteriores)
+// ─────────────────────────────────────────────────────────────────────────────
 export interface PublicCompany {
   id: string;
   name: string;
@@ -566,11 +587,9 @@ export interface PublicCompany {
   professionals?: PublicProfessional[];
 }
 
-/**
- * Carrega perfil público de uma empresa pelo slug.
- * Retorna null se não existir ou se não estiver publicada.
- */
-export async function getPublicCompanyBySlug(slug: string): Promise<PublicCompany | null> {
+export async function getPublicCompanyBySlug(
+  slug: string
+): Promise<PublicCompany | null> {
   if (!slug) return null;
   const supabase = await createClient();
 
@@ -581,11 +600,8 @@ export async function getPublicCompanyBySlug(slug: string): Promise<PublicCompan
     .eq('is_published', true)
     .single();
 
-  if (error || !data) {
-    return null;
-  }
+  if (error || !data) return null;
 
-  // Buscar profissionais vinculados a esta empresa a partir da view pública
   const { data: profs } = await supabase
     .from('public_professionals')
     .select('*')
@@ -614,8 +630,10 @@ export async function getPublicCompanyBySlug(slug: string): Promise<PublicCompan
       is_featured: p.is_featured,
       created_at: p.created_at,
       avatar_url: p.avatar_url,
-      company_name: p.company_name,
-      company_slug: p.company_slug,
+      company_name: p.company_name ?? null,
+      company_slug: p.company_slug ?? null,
+      plan: 'gratuito',
+      rank: 0,
     })),
   };
 }

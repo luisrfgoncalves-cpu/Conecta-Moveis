@@ -110,6 +110,18 @@ export default async function EncontrarProfissionaisPage({ searchParams }: PageP
               <h3 className="text-xl font-bold text-white">
                 Nenhum profissional encontrado com os filtros atuais
               </h3>
+              {result.suggestion && (
+                <div className="p-3.5 rounded-xl bg-orange-500/10 border border-orange-500/30 text-sm text-slate-200 inline-block">
+                  <span>Você quis dizer: </span>
+                  <Link
+                    href={`/encontrar-profissionais?termo=${encodeURIComponent(result.suggestion)}`}
+                    className="font-bold text-orange-400 hover:text-orange-300 underline underline-offset-2"
+                  >
+                    {result.suggestion}
+                  </Link>
+                  ?
+                </div>
+              )}
               <p className="text-sm text-slate-400 max-w-md mx-auto leading-relaxed">
                 Tente ajustar os termos da busca, selecionar outra categoria ou remover filtros específicos de cidade para ver mais resultados.
               </p>
