@@ -194,3 +194,4 @@ export async function getPublishedProfilesForServiceCity(
 
   return { municipio, professionals, total: count || professionals.length };
 }
+

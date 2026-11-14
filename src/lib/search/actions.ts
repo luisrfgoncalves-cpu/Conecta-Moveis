@@ -46,6 +46,8 @@ export interface PublicProfessional {
   specialties?: { id: string; name: string; slug: string; category_slug?: string }[];
   service_regions?: { city: string; state: string; neighborhood: string | null }[];
   portfolio?: PublicPortfolioItem[];
+  external_link?: string | null;
+  external_link_label?: string | null;
 }
 
 export interface PublicPortfolioImage {
@@ -54,6 +56,7 @@ export interface PublicPortfolioImage {
   thumb_url: string | null;
   sort_order: number;
   is_demo: boolean;
+  image_type?: 'trabalho_realizado' | 'ilustrativa';
 }
 
 export interface PublicPortfolioItem {
@@ -388,7 +391,7 @@ async function buildFullProfile(
     supabase
       .from('portfolio_items')
       .select(
-        'id, title, description, portfolio_images!inner(id, image_url, thumb_url, sort_order, is_demo, status)'
+        'id, title, description, portfolio_images!inner(id, image_url, thumb_url, sort_order, is_demo, status, image_type)'
       )
       .eq('profile_id', base.id),
   ]);
@@ -407,6 +410,7 @@ async function buildFullProfile(
         sort_order: number;
         is_demo: boolean;
         status: string;
+        image_type?: 'trabalho_realizado' | 'ilustrativa';
       }>)
         .filter((img) => img.status === 'approved')
         .sort((a, b) => a.sort_order - b.sort_order)
@@ -416,6 +420,7 @@ async function buildFullProfile(
           thumb_url: img.thumb_url,
           sort_order: img.sort_order,
           is_demo: img.is_demo,
+          image_type: img.image_type || 'trabalho_realizado',
         }));
       return { id: item.id, title: item.title, description: item.description, images: approvedImages };
     })

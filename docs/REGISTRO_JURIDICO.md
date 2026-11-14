@@ -206,3 +206,25 @@ Este documento registra todas as avaliações do Gate de Isenção ao longo das 
 
 
 
+
+---
+
+### J-012 — Fotos de Apresentação, Upload Avançado e Blindagem de Direitos Autorais (Fase 24)
+- **Data**: 2026-11-14
+- **Fase**: Fase 24 — Fotos de Apresentação e Upload Avançado
+- **Funcionalidade ou Texto**: Sistema completo de fotos de apresentação substituindo o conceito de galeria genérica; compressão e conversão cliente com suporte nativo a HEIC (iPhone) e WebP; metas de 1280px (<=250KB) e thumbnail 400px (~30KB); hash perceptual (dHash) para detecção de duplicatas entre perfis; declaração de autoria e consentimento de terceiros por foto; classificação obrigatória da imagem ("foto de trabalho realizado" vs "imagem ilustrativa" com rótulo ostensivo conforme CDC art. 37); link externo HTTPS com `rel="noopener nofollow ugc"`; rotina de limpeza de arquivos órfãos do Storage e alerta a 70% de capacidade; renomeação de `/painel/portfolio` para `/painel/fotos` com redirecionamento permanente.
+- **Regras e Normas Envolvidas**: R6 (revisão prévia antes de veiculação pública), R7 (qualquer ajuste por ação do próprio anunciante mantendo original até salvar), R11 (minimização: descarte obrigatório de dados EXIF e geolocalização no servidor), R16 (registro no Gate de Isenção), R20 (moderação por conformidade: triagem automática apenas prioriza a fila humana, nunca aprova nem remove sozinha); CDC (Lei 8.078/1990, art. 37 — vedação de publicidade enganosa através do rótulo obrigatório em artes ilustrativas); Lei de Direitos Autorais (Lei 9.610/1998, arts. 7º e 79 — autoria e cessão de fotos); Código Civil (arts. 20 e 21 — direitos de imagem e privacidade de terceiros).
+- **Risco**: Médio (risco de veiculação de fotos de terceiros sem autorização, fotos de clientes ou ambientes residenciais com dados identificáveis, ou fotos ilustrativas vendidas como trabalho real).
+- **Decisão Tomada**:
+  1. **Princípio do Anunciante Ativo (Regra R7)**: Todo processamento gráfico ou recorte respeita a autonomia do anunciante. A imagem original permanece intacta na interface até confirmação expressa do envio.
+  2. **Classificação da Imagem e Rótulo Ostensivo (CDC art. 37)**: Toda foto passa a ter classificação obrigatória: ou "Trabalho realizado" ou "Imagem ilustrativa". As imagens conceituais ou 3D recebem rótulo visual discreto e permanente no perfil ("Imagem ilustrativa"), evitando induzir o consumidor a erro sobre o resultado real do serviço.
+  3. **Declaração de Autoria e Termo de Imagem de Terceiros**: O anunciante é obrigado a assinalar, antes do upload, a declaração de que é o autor ou detém autorização legítima e que eventuais pessoas identificáveis consentiram com a veiculação, acompanhada de aviso de boas práticas (evitar expor placas, fachadas com números e rostos).
+  4. **dHash Apenas como Alerta Humano**: O cálculo do dHash perceptual detecta similaridade entre fotos de anunciantes diferentes, mas **nunca remove nem bloqueia automaticamente**, gerando alerta para triagem por moderador humano para evitar censura indevida de móveis padronizados.
+  5. **Triagem Automática Sem Decisão Sozinha**: Qualquer mecanismo algorítmico de triagem atua unicamente para priorizar a fila de análise humana; o status inicial de qualquer foto enviada é impreterivelmente `pending`.
+  6. **Links Externos Seguros (Item 10)**: Links de sites ou redes sociais do anunciante são restritos a HTTPS, com rel `noopener nofollow ugc` e aviso expresso de responsabilidade exclusiva do titular pelo conteúdo externo.
+  7. **Limpeza Periódica de Órfãos**: Rotina automatizada e auditável em `orphan_cleanup_log` para purgar arquivos residuais não referenciados em banco de dados após 2 horas de criação.
+- **Quem Decidiu**: Usuário (solicitações e diretrizes formais da Fase 24 em 2026-11-14).
+- **Evidência**: `supabase/migrations/20261114000003_fotos_apresentacao.sql`, `src/lib/images/clientProcessor.ts`, `src/lib/portfolio/processor.ts`, `src/lib/profile/externalLink.ts`, `src/lib/portfolio/orphans.ts`, `src/components/fotos/ImageUploader.tsx`, `src/app/painel/fotos/`, `src/__tests__/fotos_apresentacao.test.ts`.
+- **Pendência para o Advogado**:
+  - Validar os termos formais da declaração de autoria e a extensão da solidariedade caso um anunciante afirme falsamente a autoria de foto pertencente a terceiro.
+  - Avaliar se o rótulo "Imagem ilustrativa" atende plenamente ao padrão de informação clara e ostensiva exigido pelo PROCON/CDC para móveis planejados e marcenaria sob medida.

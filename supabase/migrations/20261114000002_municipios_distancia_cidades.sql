@@ -225,3 +225,4 @@ CREATE POLICY "Municipios sao publicos para leitura"
 ON public.municipios FOR SELECT
 TO anon, authenticated
 USING (true);
+

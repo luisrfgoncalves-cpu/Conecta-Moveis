@@ -9,10 +9,62 @@ export interface ProcessedPortfolioImage {
   width: number;
   height: number;
   mimeType: 'image/webp';
+  dhash: string;
 }
 
 /**
- * Validação rigorosa de magic bytes (assinatura real do arquivo).
+ * Gera dHash (Difference Hash) perceptual de 64 bits a partir de um buffer de imagem.
+ * Implementação própria pura sem dependências externas adicionais.
+ * Redimensiona para 9x8 em tons de cinza, compara pixels adjacentes e gera string hex de 16 caracteres.
+ */
+export async function generateDHash(imageBuffer: Buffer): Promise<string> {
+  try {
+    const { data } = await sharp(imageBuffer)
+      .resize(9, 8, { fit: 'fill' })
+      .grayscale()
+      .raw()
+      .toBuffer({ resolveWithObject: true });
+
+    let bits = '';
+    for (let row = 0; row < 8; row++) {
+      for (let col = 0; col < 8; col++) {
+        const left = data[row * 9 + col];
+        const right = data[row * 9 + col + 1];
+        bits += left < right ? '1' : '0';
+      }
+    }
+
+    // Converte os 64 bits para 16 caracteres hexadecimais
+    let hex = '';
+    for (let i = 0; i < 64; i += 4) {
+      hex += parseInt(bits.slice(i, i + 4), 2).toString(16);
+    }
+    return hex;
+  } catch {
+    return '0000000000000000'; // fallback seguro em caso de imagem mono-pixel ou erro
+  }
+}
+
+/**
+ * Calcula a distância de Hamming entre dois dHashes (0 a 64).
+ * Distância 0 = imagens idênticas.
+ * Distância <= 10 = imagens visualmente muito similares (alerta de duplicata para análise humana).
+ */
+export function hammingDistance(hash1: string, hash2: string): number {
+  if (!hash1 || !hash2 || hash1.length !== hash2.length) return 64;
+  let dist = 0;
+  for (let i = 0; i < hash1.length; i++) {
+    const bits1 = parseInt(hash1[i], 16).toString(2).padStart(4, '0');
+    const bits2 = parseInt(hash2[i], 16).toString(2).padStart(4, '0');
+    for (let j = 0; j < 4; j++) {
+      if (bits1[j] !== bits2[j]) dist++;
+    }
+  }
+  return dist;
+}
+
+/**
+ * Validação rigorosa de magic bytes (assinatura real dos primeiros bytes).
  * Rejeita categoricamente executáveis (MZ/PE, ELF, scripts) mesmo que renomeados para .jpg/.png.
  */
 export function validateImageMagicBytes(buffer: Buffer): { valid: boolean; detectedFormat?: string } {
@@ -56,20 +108,34 @@ export function validateImageMagicBytes(buffer: Buffer): { valid: boolean; detec
     return { valid: true, detectedFormat: 'image/webp' };
   }
 
+  // HEIC / HEIF (caixa 'ftyp' com brands 'heic', 'mif1', etc.)
+  if (buffer.length >= 12) {
+    const ftyp = buffer.toString('ascii', 4, 8);
+    if (ftyp === 'ftyp') {
+      const brand = buffer.toString('ascii', 8, 12).toLowerCase();
+      if (['heic', 'heis', 'hevc', 'hevx', 'mif1', 'msf1'].includes(brand)) {
+        return { valid: true, detectedFormat: 'image/heic' };
+      }
+    }
+  }
+
   return { valid: false, detectedFormat: 'unknown' };
 }
 
 /**
  * Pipeline de processamento de imagem no servidor:
  * 1. Remove EXIF e metadados de geolocalização.
- * 2. Normaliza orientação (auto-rotate).
- * 3. Redimensiona versão completa para até 1600 px (lado maior) em WebP otimizado.
- * 4. Redimensiona miniatura para até 480 px (lado maior) em WebP otimizado.
+ * 2. Normaliza orientação (auto-rotate pelo EXIF original).
+ * 3. Redimensiona versão completa para até 1280 px (lado maior) em WebP otimizado (alvo até 250 KB).
+ * 4. Redimensiona miniatura para até 400 px (lado maior) em WebP otimizado (alvo cerca de 30 KB).
+ * 5. Calcula dHash perceptual para detecção de duplicatas.
  */
 export async function processPortfolioImage(inputBuffer: Buffer): Promise<ProcessedPortfolioImage> {
   const magic = validateImageMagicBytes(inputBuffer);
   if (!magic.valid) {
-    throw new Error(`Arquivo inválido ou corrompido: formato detectado (${magic.detectedFormat || 'desconhecido'}) não permitido.`);
+    throw new Error(
+      `Arquivo inválido ou não autorizado: formato detectado (${magic.detectedFormat || 'desconhecido'}) não permitido.`
+    );
   }
 
   if (inputBuffer.length > PORTFOLIO_CONFIG.MAX_FILE_SIZE_BYTES) {
@@ -83,14 +149,14 @@ export async function processPortfolioImage(inputBuffer: Buffer): Promise<Proces
     throw new Error('Não foi possível ler as dimensões da imagem.');
   }
 
-  // Dimensões mínimas razoáveis para fotos de projetos
-  if (metadata.width < 100 || metadata.height < 100) {
-    throw new Error('A imagem é muito pequena. Dimensões mínimas: 100x100 px.');
+  // Dimensões mínimas razoáveis para fotos de apresentação
+  if (metadata.width < 50 || metadata.height < 50) {
+    throw new Error('A imagem é muito pequena. Dimensões mínimas: 50x50 px.');
   }
 
-  // 1. Versão Completa (Max 1600 px, sem EXIF, WebP Q82)
+  // 1. Versão Completa (Max 1280 px, sem EXIF, WebP Q80 — meta <= 250 KB)
   const fullBuffer = await sharp(inputBuffer)
-    .rotate() // Aplica orientação EXIF antes de remover
+    .rotate() // Aplica orientação EXIF antes de descartar metadados
     .resize({
       width: PORTFOLIO_CONFIG.MAX_IMAGE_DIMENSION,
       height: PORTFOLIO_CONFIG.MAX_IMAGE_DIMENSION,
@@ -102,7 +168,7 @@ export async function processPortfolioImage(inputBuffer: Buffer): Promise<Proces
 
   const fullMeta = await sharp(fullBuffer).metadata();
 
-  // 2. Miniatura (Max 480 px, sem EXIF, WebP Q75)
+  // 2. Miniatura (Max 400 px, sem EXIF, WebP Q70 — meta cerca de 30 KB)
   const thumbBuffer = await sharp(inputBuffer)
     .rotate()
     .resize({
@@ -114,6 +180,9 @@ export async function processPortfolioImage(inputBuffer: Buffer): Promise<Proces
     .webp({ quality: PORTFOLIO_CONFIG.THUMB_WEBP_QUALITY, effort: 4 })
     .toBuffer();
 
+  // 3. dHash perceptual gerado a partir do thumbnail
+  const dhash = await generateDHash(thumbBuffer);
+
   return {
     fullBuffer,
     thumbBuffer,
@@ -122,6 +191,6 @@ export async function processPortfolioImage(inputBuffer: Buffer): Promise<Proces
     width: fullMeta.width || metadata.width,
     height: fullMeta.height || metadata.height,
     mimeType: 'image/webp',
+    dhash,
   };
 }
-

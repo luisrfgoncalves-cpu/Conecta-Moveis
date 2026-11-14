@@ -124,12 +124,12 @@ export function UserNavDropdown({ user }: UserNavDropdownProps) {
             </Link>
 
             <Link
-              href="/painel/portfolio"
+              href="/painel/fotos"
               onClick={() => setIsOpen(false)}
               className="flex items-center gap-2.5 px-3 py-2 rounded-xl hover:text-white hover:bg-white/10 transition-colors"
             >
               <Images className="w-4 h-4 text-amber-400" />
-              Meus Projetos / Fotos
+              Fotos de Apresentação
             </Link>
 
             <Link

@@ -22,6 +22,10 @@ export interface PortfolioItemWithImages {
     sort_order: number;
     status: 'pending' | 'approved' | 'rejected';
     is_demo: boolean;
+    image_type?: 'trabalho_realizado' | 'ilustrativa';
+    dhash?: string | null;
+    authorship_declared?: boolean;
+    thumbhash_data?: string | null;
     created_at: string;
   }[];
 }
@@ -99,6 +103,10 @@ export async function getMyPortfolioData(): Promise<{
         sort_order,
         status,
         is_demo,
+        image_type,
+        dhash,
+        authorship_declared,
+        thumbhash_data,
         created_at
       )
     `)
@@ -145,6 +153,10 @@ export async function getMyPortfolioData(): Promise<{
         sort_order: img.sort_order,
         status: img.status,
         is_demo: img.is_demo,
+        image_type: img.image_type || 'trabalho_realizado',
+        dhash: img.dhash || null,
+        authorship_declared: img.authorship_declared || false,
+        thumbhash_data: img.thumbhash_data || null,
         created_at: img.created_at,
       })),
     };
@@ -328,6 +340,8 @@ export async function uploadPortfolioPhotos(formData: FormData): Promise<{ succe
   }
 
   const isDemo = formData.get('is_demo') === 'true';
+  const imageType = (formData.get('image_type') as string) || 'trabalho_realizado';
+  const authorshipDeclared = formData.get('authorship_declared') === 'true';
 
   // Buscar perfil profissional e verificar se o item pertence a ele
   const { data: profile } = await supabase
@@ -457,6 +471,9 @@ export async function uploadPortfolioPhotos(formData: FormData): Promise<{ succe
       sort_order: nextSortOrder++,
       status: 'pending',
       is_demo: isDemo,
+      image_type: imageType,
+      authorship_declared: authorshipDeclared,
+      dhash: processed.dhash || null,
     });
 
     if (dbErr) {
@@ -466,6 +483,7 @@ export async function uploadPortfolioPhotos(formData: FormData): Promise<{ succe
     uploaded++;
   }
 
+  revalidatePath('/painel/fotos');
   revalidatePath('/painel/portfolio');
   return { success: true, uploadedCount: uploaded };
 }

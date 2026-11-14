@@ -30,6 +30,7 @@ import {
   deletePortfolioProject,
   updatePortfolioProject,
 } from '@/lib/portfolio/actions';
+import { processImagePipeline } from '@/lib/images/clientProcessor';
 import { CATEGORIES_CATALOG } from '@/lib/profile/schemas';
 
 interface PortfolioManagerProps {
@@ -69,58 +70,7 @@ export function PortfolioManager({ initialItems, storage }: PortfolioManagerProp
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDemoUpload, setIsDemoUpload] = useState(false);
 
-  // Helper para redimensionamento e compressão cliente para WebP (alvo max 1600 px e até 400 KB)
-  const compressClientImage = async (file: File): Promise<File> => {
-    return new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = (event) => {
-        const img = new window.Image();
-        img.src = event.target?.result as string;
-        img.onload = () => {
-          const maxDim = 1600;
-          let width = img.width;
-          let height = img.height;
 
-          if (width > maxDim || height > maxDim) {
-            if (width > height) {
-              height = Math.round((height * maxDim) / width);
-              width = maxDim;
-            } else {
-              width = Math.round((width * maxDim) / height);
-              height = maxDim;
-            }
-          }
-
-          const canvas = document.createElement('canvas');
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext('2d');
-          if (ctx) {
-            ctx.drawImage(img, 0, 0, width, height);
-          }
-
-          canvas.toBlob(
-            (blob) => {
-              if (blob) {
-                const compressedFile = new File([blob], file.name.replace(/\.[^.]+$/, '.webp'), {
-                  type: 'image/webp',
-                  lastModified: Date.now(),
-                });
-                resolve(compressedFile);
-              } else {
-                resolve(file);
-              }
-            },
-            'image/webp',
-            0.82
-          );
-        };
-        img.onerror = () => resolve(file);
-      };
-      reader.onerror = () => resolve(file);
-    });
-  };
 
   // Selecionar fotos para o formulário de CRIAÇÃO
   const handleCreateFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -189,8 +139,8 @@ export function PortfolioManager({ initialItems, storage }: PortfolioManagerProp
 
         setUploadProgress(40);
         for (const file of createFiles) {
-          const compressed = await compressClientImage(file);
-          uploadFormData.append('files', compressed);
+          const processed = await processImagePipeline(file);
+          uploadFormData.append('files', processed.file);
         }
 
         setUploadProgress(70);
@@ -254,11 +204,11 @@ export function PortfolioManager({ initialItems, storage }: PortfolioManagerProp
       formData.append('itemId', itemId);
       formData.append('is_demo', String(isDemoUpload));
 
-      // Compressão cliente
+      // Compressão cliente e conversão HEIC automática
       setUploadProgress(40);
       for (let i = 0; i < selectedFiles.length; i++) {
-        const compressed = await compressClientImage(selectedFiles[i]);
-        formData.append('files', compressed);
+        const processed = await processImagePipeline(selectedFiles[i]);
+        formData.append('files', processed.file);
       }
 
       setUploadProgress(70);
@@ -873,6 +823,11 @@ export function PortfolioManager({ initialItems, storage }: PortfolioManagerProp
                             <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-purple-500/90 text-white backdrop-blur-md">
                               <Sparkles className="w-2.5 h-2.5" />
                               Demo
+                            </span>
+                          )}
+                          {img.image_type === 'ilustrativa' && (
+                            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-500/90 text-white backdrop-blur-md">
+                              Ilustrativa
                             </span>
                           )}
                         </div>

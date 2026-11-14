@@ -13,6 +13,7 @@ import {
   AlertTriangle,
   Star,
   CheckCircle2,
+  Globe,
 } from 'lucide-react';
 import { getPublicProfessionalBySlug } from '@/lib/search/actions';
 import { createClient } from '@/lib/supabase/server';
@@ -331,12 +332,35 @@ export default async function ProfissionalPublicPage({ params }: PageProps) {
           </div>
         )}
 
-        {/* Galeria de Portfólio — Apenas imagens approved, carregamento preguiçoso */}
+        {/* Link Externo do Anunciante (Site ou Rede Social) */}
+        {professional.external_link && (
+          <div className="space-y-3 pt-2 border-t border-white/10">
+            <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300">
+              Site ou Rede Social do Anunciante
+            </h2>
+            <div>
+              <a
+                href={professional.external_link}
+                target="_blank"
+                rel="noopener nofollow ugc"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-orange-400 text-xs font-bold border border-white/10 transition"
+              >
+                <Globe className="w-4 h-4 text-orange-400" />
+                <span>{professional.external_link_label || 'Acessar página externa do anunciante'}</span>
+              </a>
+              <p className="text-[11px] text-slate-400 mt-1.5 leading-relaxed">
+                O conteúdo de sites e redes externas é de responsabilidade exclusiva do anunciante.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Fotos de Apresentação — Apenas imagens approved, carregamento preguiçoso */}
         {professional.portfolio && professional.portfolio.length > 0 && (
           <div className="space-y-5 pt-2 border-t border-white/10">
             <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
               <Star className="w-4 h-4 text-orange-400" />
-              Portfólio de Projetos ({professional.portfolio.length} {professional.portfolio.length === 1 ? 'projeto' : 'projetos'})
+              Fotos de Apresentação ({professional.portfolio.length} {professional.portfolio.length === 1 ? 'projeto' : 'projetos'})
             </h2>
             <div className="space-y-6">
               {professional.portfolio.map((portfolioItem) => (
@@ -358,8 +382,15 @@ export default async function ProfissionalPublicPage({ params }: PageProps) {
                           loading="lazy"
                           sizes="(max-width: 640px) 50vw, 33vw"
                         />
+                        {img.image_type === 'ilustrativa' && (
+                          <div className="absolute top-2 left-2 z-10">
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-950/80 text-blue-300 border border-blue-500/30 backdrop-blur-md">
+                              Imagem ilustrativa
+                            </span>
+                          </div>
+                        )}
                         {img.is_demo && (
-                          <div className="absolute bottom-2 left-2">
+                          <div className="absolute bottom-2 left-2 z-10">
                             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-purple-500/90 text-white backdrop-blur-md">
                               <Sparkles className="w-2.5 h-2.5" />
                               Demonstração

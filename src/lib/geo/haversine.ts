@@ -59,3 +59,4 @@ export function findNearestMunicipio(
 
   return { municipio: nearest, distance_km: minDistance };
 }
+

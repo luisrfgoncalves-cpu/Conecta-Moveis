@@ -43,3 +43,4 @@ export const ProfessionalWithDistanceSchema = z.object({
   avatar_url: z.string().nullable(),
 });
 export type ProfessionalWithDistance = z.infer<typeof ProfessionalWithDistanceSchema>;
+

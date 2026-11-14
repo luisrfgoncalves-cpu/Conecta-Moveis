@@ -174,17 +174,17 @@ describe('FASE 7 — Portfólio: processPortfolioImage — Limite de Tamanho', (
 // TESTES: CONFIGURAÇÃO DE LIMITES DO PORTFÓLIO
 // ============================================================
 
-describe('FASE 7 — Portfólio: Configuração e Limites', () => {
-  it('o limite provisório de fotos por perfil deve ser 6', () => {
-    expect(PORTFOLIO_CONFIG.MAX_PHOTOS_PER_PROFILE).toBe(6);
+describe('FASE 7/24 — Portfólio / Fotos de Apresentação: Configuração e Limites', () => {
+  it('o limite padrão do plano gratuito deve ser 3 fotos de apresentação', () => {
+    expect(PORTFOLIO_CONFIG.MAX_PHOTOS_PER_PROFILE).toBe(3);
   });
 
-  it('a dimensão máxima da versão completa deve ser 1600 px', () => {
-    expect(PORTFOLIO_CONFIG.MAX_IMAGE_DIMENSION).toBe(1600);
+  it('a dimensão máxima da versão completa deve ser 1280 px (Fase 24)', () => {
+    expect(PORTFOLIO_CONFIG.MAX_IMAGE_DIMENSION).toBe(1280);
   });
 
-  it('a dimensão da miniatura deve ser 480 px', () => {
-    expect(PORTFOLIO_CONFIG.THUMB_IMAGE_DIMENSION).toBe(480);
+  it('a dimensão da miniatura deve ser 400 px (Fase 24)', () => {
+    expect(PORTFOLIO_CONFIG.THUMB_IMAGE_DIMENSION).toBe(400);
   });
 
   it('os buckets devem estar corretamente configurados', () => {

@@ -245,3 +245,4 @@ Execution Time: 0.141 ms
 | `20261113000007_curadoria_conformidade.sql` | Fase 21 | Curadoria e conformidade |
 | `20261114000001_busca_inteligente.sql` | Fase 22 | FTS + trigrama + sinônimos + autocomplete |
 | `20261114000002_municipios_distancia_cidades.sql` | Fase 23 | Municípios IBGE + Haversine + raio |
+

@@ -23,7 +23,7 @@ import {
 const navItems = [
   { href: '/painel', label: 'Painel', icon: LayoutDashboard },
   { href: '/painel/perfil', label: 'Meu Perfil', icon: User },
-  { href: '/painel/portfolio', label: 'Portfólio', icon: Images },
+  { href: '/painel/fotos', label: 'Fotos de Apresentação', icon: Images },
   { href: '/painel/solicitacoes', label: 'Solicitações', icon: MessageSquare },
   { href: '/painel/favoritos', label: 'Favoritos', icon: Heart },
   { href: '/painel/avaliacoes', label: 'Avaliações', icon: Star },
