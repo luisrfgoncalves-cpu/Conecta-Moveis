@@ -87,3 +87,22 @@ Este documento registra todas as avaliações do Gate de Isenção ao longo das 
   - Confirmar se a decisão de não registrar navegação anônima está alinhada à estratégia de cookies e à necessidade legal de rastreabilidade.
   - Aprovar o Plano de Resposta a Incidentes e nomear o Encarregado (DPO) formalmente.
 
+---
+
+### J-006 — Arquitetura de Configurações, Limites e Encaixes de Upgrade (Fase 18)
+- **Data**: 2026-11-13
+- **Fase**: Fase 18 — Arquitetura de Configuração e de Upgrade
+- **Funcionalidade ou Texto**: Sistema de duas camadas para tetos técnicos (`infra_profiles`) e limites comerciais (`entitlements`), registro tipado de configurações com Zod e histórico de rollback, feature flags com travas de infraestrutura e revisão jurídica obrigatória, simulador de capacidade no painel administrativo, adaptadores modulares para armazenamento, busca, e-mail e rate limit, e política de bloqueio brando (não destrutivo) em caso de redução de limites.
+- **Regras e Normas Envolvidas**: R1, R2, R16; CDC arts. 30, 31, 35 e 51; LGPD arts. 6º, 33 (transferência internacional); Marco Civil art. 15.
+- **Risco**: Médio (impacto em promessas contratuais comerciais para anunciantes, retenção de dados e segurança de infraestrutura).
+- **Decisão Tomada**:
+  1. **Região da Infraestrutura**: O projeto Supabase permanece provisionado na região padrão da AWS Virginia (`us-east-1`) e as funções da Vercel em Washington D.C. (`iad1`), amparados pelos DPAs de ambos os fornecedores e com zero dados reais de clientes no momento. A eventual migração para São Paulo (`sa-east-1` / `gru1`) fica documentada e planejada no `docs/UPGRADE_PLAYBOOK.md` para execução futura com autorização expressa do proprietário.
+  2. **Duas Camadas de Limites**: O sistema impede que planos comerciais prometam capacidade de armazenamento ou fotos que excedam o teto do perfil técnico ativo (`infra_profile`), evitando propaganda enganosa ou descumprimento de oferta (CDC art. 30 e 35).
+  3. **Política de Redução Não Destrutiva**: Em caso de redução administrativa de limites comerciais (ex: diminuir fotos do plano de 10 para 5), o conteúdo pré-existente do anunciante é integralmente preservado (bloqueio brando/grandfathering), nunca sofrendo exclusão sumária.
+  4. **Travas em Feature Flags**: Funcionalidades reguladas que envolvam responsabilidade ou termos legais exigem vínculo com um ID formal de aprovação deste registro (ex: J-001 a J-006).
+- **Quem Decidiu**: Usuário (Opção B formalizada no diálogo da Fase 18).
+- **Evidência**: `supabase/migrations/20261113000004_config_architecture_and_upgrade.sql`, `src/lib/config/`, `src/lib/adapters/`, `src/app/admin/configuracoes/`, `docs/UPGRADE_PLAYBOOK.md`.
+- **Pendência para o Advogado**:
+  - Validar as cláusulas de bloqueio brando para assegurar respeito aos direitos adquiridos de anunciantes que assinaram planos com limites anteriores.
+  - Avaliar se a documentação do DPA da AWS/Vercel atende integralmente às exigências de transferência internacional antes do início da cobrança comercial em produção.
+

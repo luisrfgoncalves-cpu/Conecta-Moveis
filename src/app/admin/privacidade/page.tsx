@@ -24,3 +24,4 @@ export default async function AdminPrivacidadePage() {
 
   return <AdminPrivacidadeClient initialRequests={requests || []} />;
 }
+

@@ -368,3 +368,4 @@ export function AdminPrivacidadeClient({ initialRequests }: AdminPrivacidadeClie
     </div>
   );
 }
+
