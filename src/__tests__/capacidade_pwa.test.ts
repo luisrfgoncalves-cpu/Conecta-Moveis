@@ -64,3 +64,4 @@ describe('Fase 26 — Capacidade para 300 Usuários, Backup e PWA Mínimo', () =
     });
   });
 });
+

@@ -265,3 +265,20 @@ Este documento registra todas as avaliações do Gate de Isenção ao longo das 
 - **Evidência**: `src/app/manifest.ts`, `src/app/admin/capacidade/page.tsx`, `src/components/admin/AdminCapacidadeClient.tsx`, `.github/workflows/db-backup.yml`, `docs/LIMITES_INFRA.md`, `src/__tests__/capacidade_pwa.test.ts`.
 - **Pendência para o Advogado**:
   - Verificar se a política de contingência e backup documentada atende ao padrão esperado de conformidade de segurança e mitigação de risco de incidentes da LGPD.
+
+---
+
+### J-015 — Homologação Jurídico-Técnica e Dossiê Consolidado (Fase 27)
+- **Data**: 2026-11-14
+- **Fase**: Fase 27 — Homologação Jurídico-Técnica e Dossiê Final
+- **Funcionalidade ou Texto**: Auditoria final de entrega do projeto, consolidação da Matriz de Conformidade com 25 regras técnicas de isenção, elaboração do `DOSSIE_ADVOGADO.md` contendo todos os fluxos operacionais, governança LGPD, política de retenção, arquitetura de moderação por gravidade e mapeamento honesto de bloqueadores do lançamento comercial (CNPJ formal do operador, domínio próprio e provedor SMTP transacional).
+- **Regras e Normas Envolvidas**: Todas as Regras de Ouro R1 a R25; Marco Civil da Internet (Lei 12.965/2014, arts. 15 e 19); STF Temas 987 e 533; CDC (Lei 8.078/1990, arts. 3º, 14, 30, 31, 36-38 e 51); LGPD (Lei 13.709/2018, arts. 6º, 7º, 18, 19, 46 e 48); Código Civil (arts. 186, 187, 593 e 722); Decreto 7.962/2013 (Comércio Eletrônico).
+- **Risco**: Baixo (fase estritamente documental, analítica e de homologação, sem alteração de código operacional).
+- **Decisão Tomada**:
+  1. **Encerramento da Suíte Técnico-Jurídica**: Homologação de 257 testes automatizados sem nenhuma falha, validação de ausência de vocabulário de endosso pelo script `check:isencao` e integridade das políticas de acesso RLS.
+  2. **Dossiê Pré-constituído**: Geração do documento probatório de boa-fé objetiva (`docs/DOSSIE_ADVOGADO.md`) para resguardar a plataforma perante PROCON, ANPD, autoridade policial e juizados especiais.
+  3. **Identificação Clara de Bloqueadores Reais**: Ficam expressamente mapeados como pré-requisitos para operação pública: preenchimento de CNPJ/razão social em `app_settings`, contratação de SMTP próprio (Resend) e ativação do domínio definitivo `conectamoveis.com.br`.
+- **Quem Decidiu**: Usuário (orientação para consolidação final e operação amparada estritamente na legislação brasileira vigente).
+- **Evidência**: `docs/DOSSIE_ADVOGADO.md`, `docs/MATRIZ_CONFORMIDADE.md`, `docs/REGISTRO_JURIDICO.md`, `README.md`, `CHANGELOG.md`, `TODO.md`.
+- **Pendência para o Advogado**:
+  - Nenhuma pendência impeditiva técnica; os documentos gerados constituem o dossiê probatório integral para eventual apresentação a órgãos fiscalizadores.

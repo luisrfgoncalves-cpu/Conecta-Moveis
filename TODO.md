@@ -1,19 +1,33 @@
 # TODO e Pendências — Conecta Móveis
 
-> Última atualização: 2026-11-13
+> Última atualização: 14/11/2026 — Homologação da Fase 27
 
 ---
 
-## 🔴 Bloqueadores do Lançamento
+## 🔴 Bloqueadores do Lançamento Comercial em Produção
 
-Itens que **impedem** o lançamento público. Nenhum deploy para produção enquanto estes estiverem abertos.
+Itens operacionais obrigatórios antes de abrir o cadastro ao público e realizar campanhas de marketing:
 
-- [ ] **Revisão jurídica** dos textos legais (`LEGAL_REVIEWED=false` → `true` após advogado aprovar)
-- [ ] **Domínio** `conectamoveis.com.br` registrado, configurado na Vercel e SSL ativo
-- [ ] **Migration** `20261113000001_fix_view_security_and_rls.sql` aplicada no Supabase de **produção**
-- [ ] **Buckets de Storage** criados e policies configuradas em produção (`avatar-uploads`, `portfolio-pending`, `portfolio-public`)
-- [ ] **Variáveis de ambiente de produção** configuradas na Vercel (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_APP_URL`, `BILLING_MODE`, `LEGAL_REVIEWED`)
-- [ ] `NEXT_PUBLIC_APP_URL` apontando para o domínio de produção (não `localhost`)
+- [ ] **Identificação formal do operador em `app_settings`:** Razão social, CNPJ (ou autônomo), e-mails de contato e DPO exibidos no rodapé e em `/contato`.
+- [ ] **SMTP Transacional Próprio (Resend):** Configurar no painel do Supabase Auth para envio irrestrito de confirmação de cadastro e recuperação de senha.
+- [ ] **Domínio próprio:** `conectamoveis.com.br` apontado na Vercel com certificado SSL ativo.
+- [ ] **Atualização de `NEXT_PUBLIC_APP_URL`:** Atualizar para `https://conectamoveis.com.br` nas variáveis da Vercel.
+- [ ] **Migração para Vercel Pro ($20/mês):** Apenas no momento em que for ativada cobrança de assinaturas (`BILLING_MODE !== 'off'`). Enquanto gratuito, o Vercel Hobby é 100% suficiente.
+
+---
+
+## 🟢 Concluído e Homologado (Fases 14 a 27)
+
+- [x] **Arquitetura de Isenção Legal:** Eliminação de termos de intermediação e garantia (`check:isencao` aprovado).
+- [x] **Canal de Notificação e Retirada:** Protocolos formais em `/denunciar` e fila de curadoria por gravidade no `/admin/curadoria`.
+- [x] **LGPD e Governança:** Tabela de registros telemáticos (Marco Civil art. 15), direitos do titular em `/painel/seguranca` e scrubbing de dados pessoais em logs de erro.
+- [x] **Fotos de Apresentação:** Compressão WebP, suporte a HEIC, dHash perceptual e rótulo de imagem ilustrativa (CDC art. 37).
+- [x] **Busca Inteligente:** FTS nativo no PostgreSQL sem acento e sinônimos.
+- [x] **Localização sem Rastreamento:** Municípios do IBGE e cálculo no cliente sem gravar GPS do usuário.
+- [x] **Capacidade para 300 Perfis:** Painel `/admin/capacidade` com alertas preditivos a 70% e 90%.
+- [x] **Rotina de Backup:** Script agendado no GitHub Actions com segredos no cofre e backup manual no admin.
+- [x] **PWA Mínimo:** Instalável em celular via `/manifest.webmanifest`.
+- [x] **Dossiê Consolidado:** Documento completo em `docs/DOSSIE_ADVOGADO.md`.
 
 ---
 

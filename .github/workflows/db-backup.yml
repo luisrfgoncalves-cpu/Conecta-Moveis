@@ -36,3 +36,4 @@ jobs:
           name: conecta-moveis-postgres-backup
           path: ${{ env.BACKUP_FILE }}
           retention-days: 30
+

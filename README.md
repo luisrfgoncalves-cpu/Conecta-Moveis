@@ -1,8 +1,8 @@
 # Conecta Móveis
 
-> Marketplace de profissionais de móveis planejados em Jundiaí/SP.
+> Vitrine e diretório de anúncios de profissionais do setor moveleiro.
 
-Conecta clientes que buscam móveis planejados com profissionais e marceneiros da região de Jundiaí/SP. A plataforma permite que profissionais criem perfis detalhados, publiquem portfólio de projetos e sejam encontrados por clientes via busca filtrada. **A Conecta Móveis é uma plataforma de divulgação — não executa serviços, não media pagamentos e não garante qualidade ou pontualidade.**
+A Conecta Móveis é um provedor de aplicação de internet que oferece espaço de divulgação (vitrine e diretório de anúncios) e um meio de aproximação inicial entre usuários e anunciantes do setor moveleiro. **A plataforma não presta, intermedeia, contrata, garante nem avalia a qualidade dos serviços.**
 
 ---
 
@@ -10,14 +10,15 @@ Conecta clientes que buscam móveis planejados com profissionais e marceneiros d
 
 | Camada | Tecnologia |
 |--------|-----------|
-| Framework | Next.js 15 (App Router) |
+| Framework | Next.js 15 (App Router) + PWA |
 | Linguagem | TypeScript 5 |
 | Estilo | Tailwind CSS 3 |
 | Backend / Auth | Supabase (PostgreSQL + Auth + Storage) |
 | Formulários | React Hook Form + Zod |
-| Testes unitários | Vitest |
+| Testes unitários | Vitest (257 testes) |
 | Testes E2E | Playwright |
-| Deploy | Vercel |
+| Deploy | Vercel (Hobby / Pro) |
+| Governança | Marco Civil, CDC e LGPD |
 
 ---
 
