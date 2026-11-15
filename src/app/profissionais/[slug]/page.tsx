@@ -26,6 +26,7 @@ import { WhatsAppTracker } from '@/components/contact/WhatsAppTracker';
 import { ReviewsSection } from '@/components/reviews/ReviewsSection';
 import { PlatformNotice } from '@/components/legal/PlatformNotice';
 import { getProfileReviews, checkReviewEligibility } from '@/lib/reviews/actions';
+import { isFeatureFlagActive } from '@/lib/config/actions';
 import { BackButton } from '@/components/navigation/BackButton';
 import { Breadcrumbs } from '@/components/navigation/Breadcrumbs';
 
@@ -85,9 +86,20 @@ export default async function ProfissionalPublicPage({ params }: PageProps) {
   const isLoggedIn = !!user;
   const favStatus = user ? await isFavorite(professional.id) : false;
 
-  // Avaliações e elegibilidade
-  const { reviews, stats } = await getProfileReviews(professional.id);
-  const eligibility = user ? await checkReviewEligibility(professional.id) : { eligible: false, reason: 'Faça login para avaliar.' };
+  // Avaliações e elegibilidade (somente se feature flag ligada)
+  const reviewsEnabled = await isFeatureFlagActive('reviews_enabled');
+  const defaultStats = {
+    totalCount: 0,
+    averageOverall: 0,
+    criteriaAverages: { quality: 0, punctuality: 0, communication: 0, organization: 0, commitment: 0 },
+    distribution: { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 },
+  };
+  const { reviews, stats } = reviewsEnabled
+    ? await getProfileReviews(professional.id)
+    : { reviews: [], stats: defaultStats };
+  const eligibility = (user && reviewsEnabled)
+    ? await checkReviewEligibility(professional.id)
+    : { eligible: false, reason: 'Avaliações não disponíveis no momento.' };
   const isOwner = user ? user.id === (professional as any).user_id : false;
 
   const profileUrl = `${process.env.NEXT_PUBLIC_SITE_URL ?? 'https://conecta-moveis.vercel.app'}/profissionais/${slug}`;
@@ -413,18 +425,20 @@ export default async function ProfissionalPublicPage({ params }: PageProps) {
           </div>
         )}
 
-        {/* Seção de Avaliações Reais */}
-        <ReviewsSection
-          profileId={professional.id}
-          professionalName={professional.display_name}
-          initialReviews={reviews}
-          initialStats={stats}
-          isLoggedIn={isLoggedIn}
-          eligible={eligibility.eligible}
-          contactRequestId={eligibility.contactRequestId}
-          eligibilityReason={eligibility.reason}
-          isOwner={isOwner}
-        />
+        {/* Seção de Avaliações (apenas se reviews_enabled estiver ativa) */}
+        {reviewsEnabled && (
+          <ReviewsSection
+            profileId={professional.id}
+            professionalName={professional.display_name}
+            initialReviews={reviews}
+            initialStats={stats}
+            isLoggedIn={isLoggedIn}
+            eligible={eligibility.eligible}
+            contactRequestId={eligibility.contactRequestId}
+            eligibilityReason={eligibility.reason}
+            isOwner={isOwner}
+          />
+        )}
       </div>
 
       {/* Formulário de Solicitação de Contato */}

@@ -68,6 +68,10 @@ export default async function PlanosPage() {
           Transparência e Regras da Plataforma
         </h2>
 
+        <div className="p-4 rounded-2xl bg-orange-500/10 border border-orange-500/20 text-xs text-orange-200 leading-relaxed">
+          <strong>Política de Preços e Transparência:</strong> Alterações de planos e preços serão comunicadas com antecedência mínima de 30 dias (prazo a homologar formalmente com assessoria jurídica) e não se aplicam a períodos já contratados.
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-slate-300 leading-relaxed">
           <div className="space-y-2">
             <h3 className="font-bold text-white flex items-center gap-1.5">

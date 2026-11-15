@@ -410,3 +410,35 @@ export async function checkSoftLimitEnforcement(currentCount: number, allowedLim
     isGrandfathered,
   };
 }
+
+/**
+ * 9. Helper público para consulta de Feature Flag
+ */
+export async function isFeatureFlagActive(key: string): Promise<boolean> {
+  try {
+    const flags = await getFeatureFlags();
+    const flag = flags.find((f) => f.key === key);
+    return flag?.state === 'ligado';
+  } catch {
+    const defaultFlag = FEATURE_FLAGS_REGISTRY[key];
+    return defaultFlag?.state === 'ligado';
+  }
+}
+
+/**
+ * 10. Helper público para obter valor de System Setting
+ */
+export async function getSystemSettingValue<T = unknown>(key: string): Promise<T | null> {
+  try {
+    const settings = await getSystemSettings();
+    const item = settings.find((s) => s.key === key);
+    if (item && item.value !== undefined) {
+      return item.value as T;
+    }
+  } catch {
+    // Fallback
+  }
+  const defaultSetting = SYSTEM_SETTINGS_REGISTRY[key];
+  return (defaultSetting ? defaultSetting.value : null) as T | null;
+}
+

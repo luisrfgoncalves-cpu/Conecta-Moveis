@@ -9,17 +9,20 @@ export interface OperatorSettings {
   emailAutoridades: string;
   emailNotificacoes: string;
   isPending: boolean;
+  canEnableCommercialBilling: boolean;
 }
 
 export function getOperatorSettings(): OperatorSettings {
   const cnpj = (process.env.OPERATOR_CNPJ || process.env.NEXT_PUBLIC_OPERATOR_CNPJ || '').trim();
   const razaoSocial = (process.env.OPERATOR_RAZAO_SOCIAL || process.env.NEXT_PUBLIC_OPERATOR_RAZAO_SOCIAL || '').trim();
-  
-  const isPending = !cnpj || cnpj.toLowerCase() === 'pendente';
+
+  // O operador é considerado em formalização se o CNPJ não tiver pelo menos 14 caracteres numéricos/formatados válidos
+  const cleanCnpj = cnpj.replace(/\D/g, '');
+  const isPending = cleanCnpj.length !== 14 || cnpj.toLowerCase() === 'pendente';
 
   return {
-    razaoSocial: razaoSocial || (isPending ? 'Conecta Móveis — Identificação do Operador Pendente' : 'Conecta Móveis'),
-    cnpj: cnpj || (isPending ? 'CNPJ Pendente' : ''),
+    razaoSocial: isPending ? 'Operador: em processo de formalização' : (razaoSocial || 'Conecta Móveis'),
+    cnpj: isPending ? 'Em processo de formalização' : cnpj,
     endereco: process.env.OPERATOR_ENDERECO || 'Jundiaí - SP',
     cidade: 'Jundiaí',
     estado: 'SP',
@@ -28,6 +31,7 @@ export function getOperatorSettings(): OperatorSettings {
     emailAutoridades: process.env.OPERATOR_EMAIL_AUTORIDADES || 'autoridades@conectamoveis.com.br',
     emailNotificacoes: process.env.OPERATOR_EMAIL_NOTIFICACOES || 'notificacoes@conectamoveis.com.br',
     isPending,
+    canEnableCommercialBilling: !isPending,
   };
 }
 

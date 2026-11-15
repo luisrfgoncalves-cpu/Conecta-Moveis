@@ -102,14 +102,25 @@ export function Footer() {
 
           <div className="space-y-3">
             <h4 className="font-bold text-white mb-3 text-sm tracking-wide">Operador</h4>
+            {op.isPending ? (
+              <p className="text-xs text-slate-300 leading-relaxed">
+                <strong>Operador:</strong> em processo de formalização
+              </p>
+            ) : (
+              <>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  <strong>Razão Social:</strong> {op.razaoSocial}
+                </p>
+                <p className="text-xs text-slate-300 leading-relaxed">
+                  <strong>CNPJ:</strong> {op.cnpj}
+                </p>
+              </>
+            )}
             <p className="text-xs text-slate-300 leading-relaxed">
-              <strong>Razão Social:</strong> {op.razaoSocial}
-            </p>
-            <p className="text-xs text-slate-300 leading-relaxed">
-              <strong>CNPJ:</strong>{' '}
-              <span className={op.isPending ? 'text-amber-400 font-medium' : ''}>
-                {op.cnpj}
-              </span>
+              <strong>Contato:</strong>{' '}
+              <a href={`mailto:${op.emailAtendimento}`} className="hover:text-orange-400 transition-colors">
+                {op.emailAtendimento}
+              </a>
             </p>
             <p className="text-xs text-slate-400 leading-relaxed">
               Operação em Jundiaí/SP — Espaço de divulgação e aproximação autônoma.

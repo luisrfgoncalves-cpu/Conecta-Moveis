@@ -1,13 +1,27 @@
 import { Hero } from '@/components/ui/Hero';
 import { SearchBox } from '@/components/ui/SearchBox';
-import { Card } from '@/components/ui/Card';
 import { Alert } from '@/components/ui/Feedback';
 import { FaqSection } from '@/components/ui/FaqSection';
 import { ProCtaSection } from '@/components/ui/ProCtaSection';
-import { Sparkles, Layers, ShieldCheck, ArrowRight, Zap, Users, MessageSquare } from 'lucide-react';
+import { Sparkles, Layers, ShieldCheck, ArrowRight, Zap, Users, MessageSquare, PlusCircle } from 'lucide-react';
 import Link from 'next/link';
+import { getShowcaseData } from '@/lib/search/actions';
+import { getSystemSettingValue } from '@/lib/config/actions';
+import { ProfessionalCard } from '@/components/search/ProfessionalCard';
 
-export default function HomePage() {
+export const dynamic = 'force-dynamic';
+
+export default async function HomePage() {
+  const [{ totalCount, profiles }, showPublicCounter, minPublicCounter] = await Promise.all([
+    getShowcaseData(),
+    getSystemSettingValue<boolean>('show_public_counter'),
+    getSystemSettingValue<number>('min_public_counter'),
+  ]);
+
+  const shouldShowCounter = Boolean(
+    showPublicCounter && totalCount >= (minPublicCounter ?? 20)
+  );
+
   return (
     <div className="w-full space-y-20 pb-24">
       {/* Hero Principal com Luzes Neon */}
@@ -20,23 +34,25 @@ export default function HomePage() {
 
       {/* Barra de Métricas em Tempo Real do Polo Moveleiro com Alto Contraste */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="glass-panel rounded-2xl p-5 sm:p-7 grid grid-cols-1 sm:grid-cols-3 gap-6 border border-white/15 text-center sm:text-left shadow-xl">
-          <div className="flex items-center gap-4 sm:border-r sm:border-white/15 sm:pr-6">
-            <div className="w-12 h-12 rounded-2xl bg-orange-500/20 text-orange-400 flex items-center justify-center shrink-0 border border-orange-500/30">
-              <Users className="w-6 h-6" />
+        <div className={`glass-panel rounded-2xl p-5 sm:p-7 grid grid-cols-1 ${shouldShowCounter ? 'sm:grid-cols-3' : 'sm:grid-cols-2'} gap-6 border border-white/15 text-center sm:text-left shadow-xl`}>
+          {shouldShowCounter && (
+            <div className="flex items-center gap-4 sm:border-r sm:border-white/15 sm:pr-6">
+              <div className="w-12 h-12 rounded-2xl bg-orange-500/20 text-orange-400 flex items-center justify-center shrink-0 border border-orange-500/30">
+                <Users className="w-6 h-6" />
+              </div>
+              <div>
+                <div className="text-2xl font-black text-white">{totalCount} Profissionais</div>
+                <div className="text-xs text-slate-200 font-medium">Cadastrados em Jundiaí e região</div>
+              </div>
             </div>
-            <div>
-              <div className="text-2xl font-black text-white">+120 Profissionais</div>
-              <div className="text-xs text-slate-200 font-medium">Em Jundiaí e cidades do entorno</div>
-            </div>
-          </div>
+          )}
 
           <div className="flex items-center gap-4 sm:border-r sm:border-white/15 sm:px-6">
             <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/30">
               <Zap className="w-6 h-6" />
             </div>
             <div>
-              <div className="text-2xl font-black text-white">Zero Taxa</div>
+              <div className="text-2xl font-black text-white">Sem comissão</div>
               <div className="text-xs text-slate-200 font-medium">Sem comissão sobre serviços prestados</div>
             </div>
           </div>
@@ -63,7 +79,7 @@ export default function HomePage() {
         </Alert>
       </div>
 
-      {/* Vitrine Estilo Streaming / Fileira 1: Montagem e Marcenaria */}
+      {/* Vitrine Estilo Streaming / Perfis em Exibição */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-white/15 pb-5">
           <div>
@@ -72,10 +88,10 @@ export default function HomePage() {
               Vitrine em Destaque
             </div>
             <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-              Especialistas em Evidência em Jundiaí/SP
+              Perfis em exibição
             </h2>
             <p className="text-sm text-slate-200 mt-1">
-              Portfólios com acabamento profissional e perfis catalogados na região.
+              Fotos de apresentação e profissionais cadastrados na região.
             </p>
           </div>
 
@@ -88,39 +104,37 @@ export default function HomePage() {
           </Link>
         </div>
 
-        {/* Grade com Informações Humanizadas e Botão Direto de WhatsApp */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <Card
-            title="Montagem Especializada de Cozinha Planejada e Iluminação"
-            professionalName="Carlos Silva • Montador Autônomo"
-            category="Montador de Móveis"
-            location="Jundiaí - SP (Vila Arens e Centro)"
-            imageUrl="/images/portfolio-cozinha.svg"
-            experience="Responde em até 1 hora"
-            tags={['Cozinhas', 'Ferragens Blum', 'LED Embutido']}
-            isDemo={true}
-          />
-          <Card
-            title="Marcenaria Fina: Dormitórios, Closets e Painéis Ripados"
-            professionalName="Marcenaria Oliveira & Design"
-            category="Marceneiro"
-            location="Jundiaí - SP (Eloy Chaves e Medeiros)"
-            imageUrl="/images/portfolio-closet.svg"
-            experience="12 anos de atuação"
-            tags={['Closets', 'Portas Reflecta', 'Ripados']}
-            isDemo={true}
-          />
-          <Card
-            title="Painéis de Home Theater em Grande Formato com Marmorato"
-            professionalName="Studio Móveis Jundiaí"
-            category="Marcenaria & Projetos"
-            location="Jundiaí e Itupeva - SP"
-            imageUrl="/images/portfolio-painel.svg"
-            experience="Atendimento presencial"
-            tags={['Painéis TV', 'Marmorato', 'Fita LED']}
-            isDemo={true}
-          />
-        </div>
+        {/* Grade de Perfis Reais ou Estado Vazio Honesto */}
+        {profiles.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {profiles.map((prof) => (
+              <ProfessionalCard key={prof.id} professional={prof} />
+            ))}
+          </div>
+        ) : (
+          <div className="glass-panel p-10 sm:p-14 rounded-3xl border border-white/10 text-center space-y-4">
+            <div className="w-14 h-14 rounded-2xl bg-orange-500/10 border border-orange-500/20 text-orange-400 flex items-center justify-center mx-auto">
+              <Sparkles className="w-7 h-7" />
+            </div>
+            <div className="max-w-md mx-auto space-y-2">
+              <h3 className="text-xl font-bold text-white">
+                Os primeiros perfis estão chegando
+              </h3>
+              <p className="text-sm text-slate-300 leading-relaxed">
+                Seja um dos primeiros a publicar o seu perfil e divulgar seu trabalho em Jundiaí e região.
+              </p>
+            </div>
+            <div className="pt-2">
+              <Link
+                href="/criar-conta"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl btn-neon text-xs font-black uppercase tracking-wider shadow-lg"
+              >
+                <PlusCircle className="w-4 h-4" />
+                <span>Publicar Meu Perfil</span>
+              </Link>
+            </div>
+          </div>
+        )}
       </section>
 
       {/* Seção CTA para Atrair Novos Profissionais (Two-Sided Marketplace) */}
@@ -136,9 +150,9 @@ export default function HomePage() {
               <div className="w-12 h-12 rounded-2xl bg-orange-500/20 border border-orange-500/40 flex items-center justify-center text-orange-400">
                 <Layers className="w-6 h-6" />
               </div>
-              <h3 className="font-extrabold text-white text-lg">Catálogo Visual</h3>
+              <h3 className="font-extrabold text-white text-lg">Regras públicas</h3>
               <p className="text-xs text-slate-200 leading-relaxed font-medium">
-                Fotos de serviços reais aprovadas manualmente, permitindo avaliar a precisão e o acabamento dos profissionais.
+                Fotos publicadas pelos anunciantes e analisadas quanto às regras da plataforma.
               </p>
             </div>
 
@@ -146,9 +160,9 @@ export default function HomePage() {
               <div className="w-12 h-12 rounded-2xl bg-sky-500/20 border border-sky-500/40 flex items-center justify-center text-sky-400">
                 <ShieldCheck className="w-6 h-6" />
               </div>
-              <h3 className="font-extrabold text-white text-lg">Transparência Total</h3>
+              <h3 className="font-extrabold text-white text-lg">Direto no WhatsApp</h3>
               <p className="text-xs text-slate-200 leading-relaxed font-medium">
-                Sem depoimentos fakes ou notas manipuladas. Avaliações com base em contato prévio de verdade.
+                Contato rápido e direto entre clientes e prestadores para orçamentos independentes.
               </p>
             </div>
 
@@ -158,7 +172,7 @@ export default function HomePage() {
               </div>
               <h3 className="font-extrabold text-white text-lg">Livre de Comissões</h3>
               <p className="text-xs text-slate-200 leading-relaxed font-medium">
-                Nenhum percentual ou porcentagem é retido sobre o trabalho executado pelos prestadores de serviço.
+                A plataforma não recebe pagamento pelos serviços e não cobra comissão sobre eles.
               </p>
             </div>
           </div>

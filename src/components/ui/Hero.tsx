@@ -25,7 +25,7 @@ export function Hero() {
 
           {/* Subtítulo com Branco Neve e Alto Contraste */}
           <p className="text-base sm:text-lg text-slate-100 leading-relaxed font-medium max-w-2xl drop-shadow-md">
-            Catálogo aberto para você localizar montadores autônomos, marceneiros sob medida e marcenarias. Conexão direta, sem taxa de intermediação e sem promessas ilusórias.
+            Catálogo aberto para você localizar montadores autônomos, marceneiros sob medida e marcenarias. Conexão direta, sem intermediação e sem promessas ilusórias.
           </p>
 
           {/* Botões com Relevo 3D e Borda Glass */}
@@ -61,7 +61,7 @@ export function Hero() {
                 <Shield className="w-4 h-4" />
                 Sem Intermediação
               </div>
-              <p className="text-xs text-slate-200 mt-1.5 leading-snug">A plataforma não retém dinheiro nem cobra taxa de serviço.</p>
+              <p className="text-xs text-slate-200 mt-1.5 leading-snug">A plataforma não recebe pagamento pelos serviços e não cobra comissão sobre eles.</p>
             </div>
             <div className="col-span-2 sm:col-span-1 p-4 rounded-2xl bg-slate-900/85 border border-white/10 backdrop-blur-xl shadow-xl">
               <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold">

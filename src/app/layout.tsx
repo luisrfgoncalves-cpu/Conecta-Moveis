@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     template: '%s | Conecta Móveis',
   },
   description:
-    'Encontre marceneiros, montadores e especialistas em móveis planejados em Jundiaí e região. Compare perfis, portfólios e solicite contato com segurança.',
+    'Encontre marceneiros, montadores e profissionais de móveis planejados em Jundiaí e região. Compare perfis, fotos de apresentação e solicite contato com segurança.',
   icons: {
     icon: '/brand/favicon.png',
   },
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     siteName: 'Conecta Móveis',
     title: 'Conecta Móveis — Profissionais de Móveis em Jundiaí e Região',
     description:
-      'Encontre marceneiros, montadores e especialistas em móveis planejados em Jundiaí e região. Compare perfis, portfólios e solicite contato com segurança.',
+      'Encontre marceneiros, montadores e profissionais de móveis planejados em Jundiaí e região. Compare perfis, fotos de apresentação e solicite contato com segurança.',
     images: [
       {
         url: '/og-default.jpg',
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Conecta Móveis — Profissionais de Móveis em Jundiaí e Região',
     description:
-      'Encontre marceneiros, montadores e especialistas em móveis planejados em Jundiaí e região. Compare perfis, portfólios e solicite contato com segurança.',
+      'Encontre marceneiros, montadores e profissionais de móveis planejados em Jundiaí e região. Compare perfis, fotos de apresentação e solicite contato com segurança.',
     images: ['/og-default.jpg'],
   },
 };
@@ -59,14 +59,19 @@ export default function RootLayout({
         
         {/* IMAGEM DE FUNDO EM ALTA DEFINIÇÃO E VISIBILIDADE REAL (65% OPACIDADE) */}
         <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-          <Image
-            src="/images/background-full.jpg"
-            alt="Ambiente planejado com iluminação aconchegante"
-            fill
-            priority
-            quality={95}
-            className="object-cover object-center opacity-65 scale-100"
-          />
+          <picture>
+            <source media="(max-width: 768px)" srcSet="/images/background-mobile.webp" type="image/webp" />
+            <source media="(min-width: 769px)" srcSet="/images/background-desktop.webp" type="image/webp" />
+            {/* Fallback padrão */}
+            <Image
+              src="/images/background-desktop.webp"
+              alt="Ambiente planejado com iluminação aconchegante"
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover object-center opacity-65 scale-100"
+            />
+          </picture>
           {/* Overlay suave escurecido apenas o suficiente para contraste perfeito */}
           <div className="absolute inset-0 bg-gradient-to-b from-[#07090f]/50 via-[#07090f]/60 to-[#07090f]/80" />
         </div>

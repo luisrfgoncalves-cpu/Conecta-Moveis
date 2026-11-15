@@ -101,3 +101,4 @@ Antes de abrir a plataforma para cobrança de assinaturas ou campanhas de tráfe
 ## 5. Declaração de Auditoria e Encerramento
 
 Todas as 25 diretrizes do Guia de Execução foram implementadas e verificadas. O sistema conta com **257 testes automatizados passando com 100% de sucesso**, script de verificação de isenção (`check:isencao`) integrado ao build e ausência total de termos de intermediação ou promessas de garantia.
+

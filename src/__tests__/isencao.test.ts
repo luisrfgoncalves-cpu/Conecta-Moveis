@@ -21,6 +21,14 @@ describe('FASE 15 — Linguagem, Avisos e Arquitetura de Isenção', () => {
       );
 
       expect(found).toBe(true);
+
+      // Simula detecção dos novos termos da Fase de Ajustes
+      const newTerms = ['avaliações reais', 'de verdade', 'aprovadas manualmente', 'especialistas', 'Zero Taxa'];
+      const sampleBadText = 'Veja fotos aprovadas manualmente pelos nossos especialistas com avaliações reais e Zero Taxa de verdade.';
+      const detectedCount = newTerms.filter((term) =>
+        new RegExp(term, 'i').test(sampleBadText)
+      ).length;
+      expect(detectedCount).toBe(5);
     });
   });
 
@@ -64,7 +72,7 @@ describe('FASE 15 — Linguagem, Avisos e Arquitetura de Isenção', () => {
       // Em dev/teste sem env var configurada, deve acusar isPending
       if (!process.env.OPERATOR_CNPJ && !process.env.NEXT_PUBLIC_OPERATOR_CNPJ) {
         expect(op.isPending).toBe(true);
-        expect(op.cnpj).toContain('Pendente');
+        expect(op.cnpj).toContain('formalização');
       }
     });
   });

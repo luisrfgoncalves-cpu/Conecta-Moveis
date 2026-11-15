@@ -12,6 +12,7 @@ import {
   Users,
 } from 'lucide-react';
 import { getPublicCompanyBySlug } from '@/lib/search/actions';
+import { isFeatureFlagActive } from '@/lib/config/actions';
 import { ProfessionalCard } from '@/components/search/ProfessionalCard';
 import { PlatformNotice } from '@/components/legal/PlatformNotice';
 
@@ -51,6 +52,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function EmpresaPublicPage({ params }: PageProps) {
   const { slug } = await params;
   const company = await getPublicCompanyBySlug(slug);
+  const reviewsEnabled = await isFeatureFlagActive('reviews_enabled');
 
   if (!company) {
     notFound();
@@ -166,19 +168,21 @@ export default async function EmpresaPublicPage({ params }: PageProps) {
           </div>
         )}
 
-        {/* Seção de Avaliações */}
-        <div className="space-y-3 pt-2 border-t border-white/10">
-          <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
-            <Star className="w-4 h-4 text-amber-400" />
-            Avaliações e Reputação
-          </h2>
-          <div className="p-5 rounded-2xl bg-white/5 border border-white/10 text-center">
-            <p className="text-sm font-semibold text-slate-300">Sem avaliações ainda</p>
-            <p className="text-xs text-slate-400 mt-1">
-              As avaliações serão liberadas após a conclusão de serviços comprovados através da plataforma.
-            </p>
+        {/* Seção de Avaliações (condicionada à flag reviews_enabled) */}
+        {reviewsEnabled && (
+          <div className="space-y-3 pt-2 border-t border-white/10">
+            <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
+              <Star className="w-4 h-4 text-amber-400" />
+              Avaliações e Reputação
+            </h2>
+            <div className="p-5 rounded-2xl bg-white/5 border border-white/10 text-center">
+              <p className="text-sm font-semibold text-slate-300">Sem avaliações ainda</p>
+              <p className="text-xs text-slate-400 mt-1">
+                As avaliações serão liberadas após a conclusão de serviços comprovados através da plataforma.
+              </p>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
