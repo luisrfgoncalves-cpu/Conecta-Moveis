@@ -6,8 +6,9 @@ const strictCheck = process.env.STRICT_OPERATOR_CHECK === 'true';
 const billingMode = (process.env.BILLING_MODE || 'off').toLowerCase().trim();
 
 const cnpj = (process.env.OPERATOR_CNPJ || process.env.NEXT_PUBLIC_OPERATOR_CNPJ || '').trim();
+const razaoSocial = (process.env.OPERATOR_RAZAO_SOCIAL || process.env.NEXT_PUBLIC_OPERATOR_RAZAO_SOCIAL || '').trim();
 const cleanCnpj = cnpj.replace(/\D/g, '');
-const isPending = cleanCnpj.length !== 14 || cnpj.toLowerCase() === 'pendente';
+const isPending = cleanCnpj.length !== 14 || cnpj.toLowerCase() === 'pendente' || razaoSocial.length === 0;
 
 if (billingMode !== 'off' && isPending) {
   console.error('\n❌ BLOQUEADOR: Não é permitido ativar cobrança comercial (BILLING_MODE !== off) sem CNPJ formal válido do operador.');

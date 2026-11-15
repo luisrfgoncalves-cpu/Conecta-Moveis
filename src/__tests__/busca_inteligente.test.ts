@@ -17,7 +17,7 @@ vi.mock('next/cache', () => ({
 // Mock de autenticação e banco de dados
 let mockUser: { id: string; email: string } | null = {
   id: 'admin-123',
-  email: 'admin@conectamoveis.com.br',
+  email: 'admin@example.com',
 };
 let mockRole: string | null = 'owner';
 
@@ -340,7 +340,7 @@ vi.mock('@supabase/supabase-js', () => ({
 
 describe('FASE 22 — Busca Inteligente Nativa no Postgres', () => {
   beforeEach(() => {
-    mockUser = { id: 'admin-123', email: 'admin@conectamoveis.com.br' };
+    mockUser = { id: 'admin-123', email: 'admin@example.com' };
     mockRole = 'owner';
     mockNoResultsDB = [];
   });

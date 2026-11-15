@@ -6,47 +6,64 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { ConditionalShellWrapper } from '@/components/layout/ConditionalShellWrapper';
 
+import { getBrandConfig } from '@/lib/config/brand';
+
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
   variable: '--font-plus-jakarta',
   display: 'swap',
 });
 
-export const metadata: Metadata = {
-  title: {
-    default: 'Conecta Móveis — Profissionais de Móveis em Jundiaí e Região',
-    template: '%s | Conecta Móveis',
-  },
-  description:
-    'Encontre marceneiros, montadores e profissionais de móveis planejados em Jundiaí e região. Compare perfis, fotos de apresentação e solicite contato com segurança.',
-  icons: {
-    icon: '/brand/favicon.png',
-  },
-  openGraph: {
-    type: 'website',
-    locale: 'pt_BR',
-    url: 'https://conectamoveis.com.br',
-    siteName: 'Conecta Móveis',
-    title: 'Conecta Móveis — Profissionais de Móveis em Jundiaí e Região',
-    description:
-      'Encontre marceneiros, montadores e profissionais de móveis planejados em Jundiaí e região. Compare perfis, fotos de apresentação e solicite contato com segurança.',
-    images: [
-      {
-        url: '/og-default.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'Conecta Móveis — Plataforma de Profissionais Moveleiros',
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Conecta Móveis — Profissionais de Móveis em Jundiaí e Região',
-    description:
-      'Encontre marceneiros, montadores e profissionais de móveis planejados em Jundiaí e região. Compare perfis, fotos de apresentação e solicite contato com segurança.',
-    images: ['/og-default.jpg'],
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const brand = getBrandConfig();
+
+  return {
+    metadataBase: new URL(brand.baseUrl),
+    title: {
+      default: `${brand.name} — ${brand.slogan}`,
+      template: `%s | ${brand.name}`,
+    },
+    description: `Encontre marceneiros, montadores e profissionais de móveis em ${brand.focusRegion}. Compare perfis e fotos de apresentação.`,
+    icons: {
+      icon: '/brand/favicon.png',
+    },
+    robots: brand.brandProvisional
+      ? {
+          index: false,
+          follow: false,
+          googleBot: {
+            index: false,
+            follow: false,
+          },
+        }
+      : {
+          index: true,
+          follow: true,
+        },
+    openGraph: {
+      type: 'website',
+      locale: 'pt_BR',
+      url: brand.baseUrl,
+      siteName: brand.name,
+      title: `${brand.name} — ${brand.slogan}`,
+      description: `Encontre marceneiros, montadores e profissionais de móveis em ${brand.focusRegion}.`,
+      images: [
+        {
+          url: '/og-default.jpg',
+          width: 1200,
+          height: 630,
+          alt: `${brand.name} — ${brand.slogan}`,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${brand.name} — ${brand.slogan}`,
+      description: `Encontre marceneiros, montadores e profissionais de móveis em ${brand.focusRegion}.`,
+      images: ['/og-default.jpg'],
+    },
+  };
+}
 
 export default function RootLayout({
   children,

@@ -33,10 +33,10 @@ test.describe('Fase Ajuste — Textos, Dados Fictícios e Conformidade', () => {
     await page.goto('/');
     await page.waitForLoadState('domcontentloaded');
 
-    const section = page.locator('section').filter({ hasText: /Perfis em exibição|Vitrine em Destaque/i });
+    const section = page.locator('section').filter({ hasText: /Perfis em exibição/i }).first();
     await expect(section).toBeVisible();
 
-    const emptyState = page.getByText('Os primeiros perfis estão chegando');
+    const emptyState = page.getByText('Os primeiros perfis estão chegando').first();
     const realCards = page.locator('a[href^="/profissionais/"]');
 
     const isEmpty = await emptyState.isVisible();
@@ -45,7 +45,7 @@ test.describe('Fase Ajuste — Textos, Dados Fictícios e Conformidade', () => {
     // Deve ser um ou outro (honesto)
     expect(isEmpty || hasCards).toBe(true);
     if (isEmpty) {
-      await expect(page.getByRole('link', { name: /Cadastrar meu perfil|Cadastrar Perfil/i })).toBeVisible();
+      await expect(page.locator('a[href="/criar-conta"]').first()).toBeVisible();
     }
   });
 
@@ -93,5 +93,18 @@ test.describe('Fase Ajuste — Textos, Dados Fictícios e Conformidade', () => {
 
     const firstSrcset = await sources.first().getAttribute('srcset');
     expect(firstSrcset).toMatch(/background-(mobile|desktop)\.webp/);
+  });
+
+  test('header e footer exibem o logotipo dinâmico e robots contém noindex no modo provisório', async ({ page }) => {
+    await page.goto('/');
+    await page.waitForLoadState('domcontentloaded');
+
+    // Header possui BrandLogo com SVG
+    const headerLogo = page.locator('header').locator('svg').first();
+    await expect(headerLogo).toBeVisible();
+
+    // Meta robots contém noindex enquanto brand_provisional
+    const robotsMeta = page.locator('meta[name="robots"]');
+    await expect(robotsMeta).toHaveAttribute('content', /noindex/i);
   });
 });

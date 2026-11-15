@@ -1,9 +1,16 @@
 import { MetadataRoute } from 'next';
 import { createClient } from '@/lib/supabase/server';
-
-const BASE_URL = 'https://conectamoveis.com.br';
+import { getBrandConfig } from '@/lib/config/brand';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const brand = getBrandConfig();
+
+  // Enquanto brand_provisional for verdadeiro: sitemap vazio (R0.4)
+  if (brand.brandProvisional) {
+    return [];
+  }
+
+  const BASE_URL = brand.baseUrl;
   const staticRoutes: MetadataRoute.Sitemap = [
     {
       url: `${BASE_URL}/`,

@@ -186,7 +186,7 @@ export function NotificarConteudoClient() {
                 type="url"
                 value={targetUrl}
                 onChange={(e) => setTargetUrl(e.target.value)}
-                placeholder="https://conectamoveis.com.br/profissionais/..."
+                placeholder="https://.../profissionais/..."
                 className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-white/15 text-white text-xs focus:border-orange-500 focus:outline-none font-mono"
               />
             </div>

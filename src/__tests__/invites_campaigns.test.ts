@@ -11,7 +11,7 @@ import { signUp } from '../lib/auth/actions';
 // Mock de autenticação e banco de dados
 let mockUser: { id: string; email: string } | null = {
   id: 'user-admin',
-  email: 'admin@conectamoveis.com.br',
+  email: 'admin@example.com',
 };
 let mockRole: string | null = 'admin';
 
@@ -186,7 +186,7 @@ vi.mock('next/cache', () => ({
 describe('Fase 20 — Convites, Degustações, Campanhas e Slugs', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockUser = { id: 'admin-user', email: 'admin@conectamoveis.com.br' };
+    mockUser = { id: 'admin-user', email: 'admin@example.com' };
     mockRole = 'admin';
     mockSignupMode = 'somente_convite';
     mockRedemptions = [];

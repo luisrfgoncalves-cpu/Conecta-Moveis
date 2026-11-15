@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import { AdminConvitesClient } from '@/components/admin/AdminConvitesClient';
 import { listInviteLinks } from '@/lib/invites/actions';
 import { getAdminUserRole } from '@/lib/admin/actions';
+import { getBrandConfig } from '@/lib/config/brand';
 
 export const metadata = { title: 'Convites & Campanhas — Admin' };
 
@@ -19,7 +20,7 @@ export default async function AdminConvitesPage() {
   }
 
   const res = await listInviteLinks();
-  const appBaseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://conectamoveis.com.br';
+  const appBaseUrl = getBrandConfig().baseUrl;
 
   return (
     <div className="space-y-6">

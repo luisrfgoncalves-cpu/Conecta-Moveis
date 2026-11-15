@@ -61,10 +61,12 @@ describe('FASE 15 — Linguagem, Avisos e Arquitetura de Isenção', () => {
   describe('Identificação do Operador e Canais de Atendimento (Regra R13)', () => {
     it('retorna os 4 canais obrigatórios de comunicação (atendimento, titulares, notificações, autoridades)', () => {
       const op = getOperatorSettings();
-      expect(op.emailAtendimento).toContain('@');
-      expect(op.emailTitulares).toContain('@');
-      expect(op.emailNotificacoes).toContain('@');
-      expect(op.emailAutoridades).toContain('@');
+      // Conforme R0.4, canais não configurados exibem "em implantação" ou e-mail válido
+      const isValidChannel = (ch: string) => ch === 'em implantação' || ch.includes('@');
+      expect(isValidChannel(op.emailAtendimento)).toBe(true);
+      expect(isValidChannel(op.emailTitulares)).toBe(true);
+      expect(isValidChannel(op.emailNotificacoes)).toBe(true);
+      expect(isValidChannel(op.emailAutoridades)).toBe(true);
     });
 
     it('sinaliza status pendente fora de produção quando CNPJ não configurado', () => {
