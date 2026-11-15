@@ -18,18 +18,18 @@ export function getOperatorSettings(): OperatorSettings {
 
   // O operador é considerado em formalização se o CNPJ não tiver pelo menos 14 caracteres numéricos/formatados válidos
   const cleanCnpj = cnpj.replace(/\D/g, '');
-  const isPending = cleanCnpj.length !== 14 || cnpj.toLowerCase() === 'pendente';
+  const isPending = cleanCnpj.length !== 14 || cnpj.toLowerCase() === 'pendente' || razaoSocial.length === 0;
 
   return {
-    razaoSocial: isPending ? 'Operador: em processo de formalização' : (razaoSocial || 'Conecta Móveis'),
+    razaoSocial: isPending ? 'Operador: em processo de formalização' : (razaoSocial || 'Operador: em processo de formalização'),
     cnpj: isPending ? 'Em processo de formalização' : cnpj,
     endereco: process.env.OPERATOR_ENDERECO || 'Jundiaí - SP',
     cidade: 'Jundiaí',
     estado: 'SP',
-    emailAtendimento: process.env.OPERATOR_EMAIL_ATENDIMENTO || 'atendimento@conectamoveis.com.br',
-    emailTitulares: process.env.OPERATOR_EMAIL_TITULARES || 'titulares@conectamoveis.com.br',
-    emailAutoridades: process.env.OPERATOR_EMAIL_AUTORIDADES || 'autoridades@conectamoveis.com.br',
-    emailNotificacoes: process.env.OPERATOR_EMAIL_NOTIFICACOES || 'notificacoes@conectamoveis.com.br',
+    emailAtendimento: process.env.OPERATOR_EMAIL_ATENDIMENTO || process.env.SUPPORT_EMAIL || 'em implantação',
+    emailTitulares: process.env.OPERATOR_EMAIL_TITULARES || 'em implantação',
+    emailAutoridades: process.env.OPERATOR_EMAIL_AUTORIDADES || 'em implantação',
+    emailNotificacoes: process.env.OPERATOR_EMAIL_NOTIFICACOES || 'em implantação',
     isPending,
     canEnableCommercialBilling: !isPending,
   };

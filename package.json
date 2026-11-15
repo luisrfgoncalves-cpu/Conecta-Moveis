@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit",
     "check:isencao": "node scripts/check-isencao.mjs",
     "check:operator": "node scripts/check-operator-production.mjs",
+    "brand:audit": "node scripts/brand-audit.mjs",
     "test": "vitest run --testTimeout=15000",
     "test:e2e": "playwright test"
   },

@@ -13,7 +13,7 @@ import { STANDARD_COMPLIANCE_REASONS } from '../lib/curadoria/reasons';
 // Mock de autenticação e banco de dados
 let mockUser: { id: string; email: string } | null = {
   id: 'moderator-123',
-  email: 'moderador@conectamoveis.com.br',
+  email: 'moderador@example.com',
 };
 let mockRole: string | null = 'moderator';
 
@@ -147,7 +147,7 @@ vi.mock('next/cache', () => ({
 describe('Fase 21 — Curadoria de Conformidade e Moderação Reforçada', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockUser = { id: 'moderator-123', email: 'moderador@conectamoveis.com.br' };
+    mockUser = { id: 'moderator-123', email: 'moderador@example.com' };
     mockRole = 'moderator';
 
     mockProfiles = [

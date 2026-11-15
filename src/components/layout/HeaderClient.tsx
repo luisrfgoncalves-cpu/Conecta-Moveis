@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { sounds } from '@/lib/sound';
+import { BrandLogo } from '@/components/brand/BrandLogo';
 import {
   Sparkles,
   Compass,
@@ -40,23 +40,8 @@ export function HeaderClient({ currentUser }: HeaderClientProps) {
   return (
     <header className="sticky top-0 z-50 w-full bg-slate-950/85 backdrop-blur-xl border-b border-white/10 shadow-lg shadow-black/40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 sm:h-24 flex items-center justify-between gap-4">
-        {/* LOGO OFICIAL */}
-        <Link
-          href="/"
-          className="flex items-center focus:outline-none focus:ring-2 focus:ring-orange-500 rounded-xl p-1 transition flex-shrink-0"
-          onClick={() => sounds.playClick()}
-        >
-          <div className="relative">
-            <Image
-              src="/brand/logo-conecta-moveis.png"
-              alt="Conecta Móveis"
-              width={220}
-              height={70}
-              priority
-              className="h-12 sm:h-14 w-auto object-contain hover:scale-[1.02] transition-transform duration-200"
-            />
-          </div>
-        </Link>
+        {/* LOGO DINÂMICO DA MARCA */}
+        <BrandLogo href="/" />
 
         {/* Navegação Desktop Principal */}
         <nav className="hidden lg:flex items-center gap-1 bg-white/5 p-1 rounded-2xl border border-white/10 backdrop-blur-md">

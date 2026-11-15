@@ -9,6 +9,7 @@ import type { PublicProfessional } from '@/lib/search/actions';
 import { Breadcrumbs } from '@/components/navigation/Breadcrumbs';
 import { PlatformNotice } from '@/components/legal/PlatformNotice';
 import { Alert } from '@/components/ui/Feedback';
+import { getBrandConfig } from '@/lib/config/brand';
 
 export const revalidate = 3600; // Cache e regeneração periódica (ISR de 1h) para economizar execução
 
@@ -93,7 +94,7 @@ export default async function ServicoMunicipioPage({ params }: PageProps) {
           addressRegion: p.state,
           addressCountry: 'BR',
         },
-        url: `https://conectamoveis.com.br/profissionais/${p.slug}`,
+        url: `${getBrandConfig().baseUrl}/profissionais/${p.slug}`,
       },
     })),
   };

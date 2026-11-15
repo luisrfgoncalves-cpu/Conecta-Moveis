@@ -1,10 +1,12 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import { PlatformNotice } from '@/components/legal/PlatformNotice';
 import { getOperatorSettings } from '@/lib/config/operator';
+import { getBrandConfig } from '@/lib/config/brand';
+import { BrandLogo } from '@/components/brand/BrandLogo';
 
 export function Footer() {
   const op = getOperatorSettings();
+  const brand = getBrandConfig();
 
   return (
     <footer className="border-t border-white/10 bg-slate-950/95 backdrop-blur-md py-14 text-sm relative">
@@ -14,17 +16,9 @@ export function Footer() {
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="space-y-4">
-            <Link href="/" className="inline-block">
-              <Image
-                src="/brand/logo-conecta-moveis.png"
-                alt="Conecta Móveis"
-                width={200}
-                height={66}
-                className="h-11 w-auto object-contain"
-              />
-            </Link>
+            <BrandLogo href="/" />
             <p className="text-xs text-slate-300 leading-relaxed">
-              Catálogo de divulgação e conexão direta para o setor moveleiro de Jundiaí/SP e região metropolitana.
+              Catálogo de divulgação e conexão direta para o setor moveleiro de {brand.focusRegion}.
             </p>
           </div>
 
@@ -118,18 +112,22 @@ export function Footer() {
             )}
             <p className="text-xs text-slate-300 leading-relaxed">
               <strong>Contato:</strong>{' '}
-              <a href={`mailto:${op.emailAtendimento}`} className="hover:text-orange-400 transition-colors">
-                {op.emailAtendimento}
-              </a>
+              {op.emailAtendimento === 'em implantação' ? (
+                <span className="text-slate-400">Canal em implantação</span>
+              ) : (
+                <a href={`mailto:${op.emailAtendimento}`} className="hover:text-orange-400 transition-colors">
+                  {op.emailAtendimento}
+                </a>
+              )}
             </p>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Operação em Jundiaí/SP — Espaço de divulgação e aproximação autônoma.
+              Operação em {brand.focusRegion} — Espaço de divulgação e aproximação autônoma.
             </p>
           </div>
         </div>
 
         <div className="pt-6 border-t border-white/10 flex flex-col md:flex-row items-center justify-between text-xs text-slate-400 gap-4">
-          <p>© {new Date().getFullYear()} Conecta Móveis. Todos os direitos reservados.</p>
+          <p>© {new Date().getFullYear()} {brand.name}. Todos os direitos reservados.</p>
           <p className="text-slate-300">Desenvolvido com foco em alto desempenho, acessibilidade e isenção documental.</p>
         </div>
       </div>

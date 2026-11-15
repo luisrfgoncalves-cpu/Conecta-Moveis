@@ -2,13 +2,14 @@ import { redirect, notFound } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 import Link from 'next/link';
-import Image from 'next/image';
 import {
   Users, FileImage, Building2, Flag, Star,
   Tag, CreditCard, FileText, LayoutDashboard, LogOut, ArrowLeft, Globe, Database, Shield, Settings,
-  Ticket, ShieldCheck, Search, HardDrive,
+  Ticket, ShieldCheck, Search, HardDrive, AlertTriangle,
 } from 'lucide-react';
 import { signOut } from '@/lib/auth/actions';
+import { getBrandConfig } from '@/lib/config/brand';
+import { BrandLogo } from '@/components/brand/BrandLogo';
 
 const adminNav = [
   { href: '/admin', label: 'Visão geral', icon: LayoutDashboard },
@@ -59,20 +60,14 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     redirect('/');
   }
 
+  const brand = getBrandConfig();
+
   return (
     <div className="min-h-screen flex flex-col lg:flex-row">
       <aside className="w-full lg:w-64 glass-panel border-r border-white/10 flex-shrink-0">
         <div className="p-6 border-b border-white/10">
-          <Link href="/" aria-label="Ir para o início">
-            <Image
-              src="/brand/logo-conecta-moveis.png"
-              alt="Conecta Móveis"
-              width={140}
-              height={36}
-              className="h-8 w-auto"
-            />
-          </Link>
-          <div className="mt-2 inline-block px-2 py-0.5 rounded-md bg-orange-500/20 border border-orange-500/40 text-orange-400 text-xs font-black uppercase tracking-wider">
+          <BrandLogo href="/" size="sm" />
+          <div className="mt-3 inline-block px-2 py-0.5 rounded-md bg-orange-500/20 border border-orange-500/40 text-orange-400 text-xs font-black uppercase tracking-wider">
             {roleRow.role}
           </div>
         </div>
@@ -120,7 +115,27 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         </nav>
       </aside>
 
-      <main className="flex-1 p-6 lg:p-10" id="main-content">
+      <main className="flex-1 p-6 lg:p-10 space-y-6" id="main-content">
+        {brand.brandProvisional && (
+          <div
+            role="alert"
+            className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-200 text-xs flex items-center justify-between gap-3 shadow-lg"
+          >
+            <div className="flex items-center gap-2.5">
+              <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0" aria-hidden="true" />
+              <span>
+                <strong>Aviso interno: Marca Provisória Ativa.</strong> O site está operando com{' '}
+                <code className="bg-black/30 px-1.5 py-0.5 rounded text-amber-300">noindex</code> global e sitemap vazio para proteger o domínio e o SEO pré-lançamento.
+              </span>
+            </div>
+            <Link
+              href="/admin/configuracoes"
+              className="px-3 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 font-bold tracking-wide transition shrink-0"
+            >
+              Configurar Marca
+            </Link>
+          </div>
+        )}
         {children}
       </main>
     </div>

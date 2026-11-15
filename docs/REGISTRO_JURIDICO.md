@@ -300,3 +300,20 @@ Este documento registra todas as avaliações do Gate de Isenção ao longo das 
 - **Evidência**: `src/app/page.tsx`, `src/components/layout/Footer.tsx`, `src/components/ui/FaqSection.tsx`, `scripts/check-isencao.mjs`, `public/images/`.
 - **Pendência para o Advogado**:
   - Homologar o prazo exato (ex: 30 dias) para notificação prévia de alteração de planos aos anunciantes cadastrados na fase de lançamento.
+
+---
+
+### J-017 — Configuração Central de Marca, Domínio e Isolamento Provisório (Bloco 0)
+- **Data**: 2026-11-15
+- **Fase**: Ajuste Final Pré-Divulgação — Bloco 0 (Marca, Domínio e Configuração Central)
+- **Funcionalidade ou Texto**: Criação de centralizador tipado de marca (`src/lib/config/brand.ts` e registro de configurações) cobrindo: nome, nome curto, slogan, região de foco, URL base, e-mails de atendimento/titulares/notificações/autoridades, razão social, CNPJ e a flag `brand_provisional`; script `npm run brand:audit` para auditoria estrita de referências fixas no código; substituição de imagens de logo por SVG paramétrico/tipográfico dinâmico; bloqueio de indexação pública (noindex global e sitemap vazio) enquanto `brand_provisional` estiver ativo; canais de contato não configurados exibem "em implantação"; bloqueio rigoroso de ativação de cobranças comerciais enquanto o operador estiver em formalização.
+- **Regras e Normas Envolvidas**: R13 (identificação do operador), R16 (Gate de Isenção), R17 (responsabilidade nos termos da lei); CDC (arts. 30, 31, 37); Decreto 7.962/2013 (Comércio Eletrônico); Marco Civil da Internet (art. 19).
+- **Risco**: Baixo (reestruturação arquitetural de constantes e governança de metadados, sem risco de regressão de negócio).
+- **Decisão Tomada**:
+  1. **Centralização e Desacoplamento de Marca**: Todo o frontend, layouts, e-mails, metadados e termos de uso passam a ler de um único objeto de configuração tipado, permitindo alteração de nome fantasia ou domínio sem refatoração de código.
+  2. **Proteção de Indexação Precoce**: Manter `brand_provisional = true`, ativando meta tag `noindex, nofollow` e sitemap restrito para impedir indexação pública com domínio ou marca não definitivos.
+  3. **Identificação Honesta**: Canais de atendimento ausentes exibem "em implantação", impedindo falsas expectativas do usuário ou promessas fictícias.
+- **Quem Decidiu**: Usuário (orientação para proteção antes de compras de domínio ou divulgação externa).
+- **Evidência**: `src/lib/config/brand.ts`, `scripts/brand-audit.mjs`, `src/app/robots.ts`, `src/app/sitemap.ts`, `src/components/layout/Header.tsx`, `src/components/layout/Footer.tsx`.
+- **Pendência para o Advogado**:
+  - Definição final da denominação social, marca definitiva a ser submetida ao INPI e e-mail formal do encarregado de dados (DPO/LGPD).

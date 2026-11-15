@@ -16,7 +16,7 @@ function makeSupabaseMock(currentUserId: string | null = 'admin-user-001') {
   return {
     auth: {
       getUser: vi.fn().mockResolvedValue({
-        data: { user: currentUserId ? { id: currentUserId, email: 'admin@conectamoveis.com.br' } : null },
+        data: { user: currentUserId ? { id: currentUserId, email: 'admin@example.com' } : null },
         error: null,
       }),
     },

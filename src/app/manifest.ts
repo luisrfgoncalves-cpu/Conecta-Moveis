@@ -1,11 +1,14 @@
 import type { MetadataRoute } from 'next';
+import { getBrandConfig } from '@/lib/config/brand';
 
 export default function manifest(): MetadataRoute.Manifest {
+  const brand = getBrandConfig();
+
   return {
-    name: 'Conecta Móveis — Vitrine de Profissionais Moveleiros',
-    short_name: 'Conecta Móveis',
+    name: `${brand.name} — Vitrine de Profissionais Moveleiros`,
+    short_name: brand.shortName,
     description:
-      'Vitrine independente para aproximação direta entre clientes e profissionais do setor moveleiro.',
+      `Vitrine independente para aproximação direta entre clientes e profissionais do setor moveleiro em ${brand.focusRegion}.`,
     start_url: '/',
     display: 'standalone',
     background_color: '#0f172a',

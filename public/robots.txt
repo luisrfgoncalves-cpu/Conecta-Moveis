@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /painel
-Disallow: /admin
-Disallow: /api
-Sitemap: https://conectamoveis.com.br/sitemap.xml
