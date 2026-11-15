@@ -666,3 +666,68 @@ export async function getPublicCompanyBySlug(
     })),
   };
 }
+
+/**
+ * 11. Obter contagem de perfis publicados e perfis para a Vitrine da Home
+ */
+export async function getShowcaseData(): Promise<{
+  totalCount: number;
+  profiles: PublicProfessional[];
+}> {
+  const admin = getAdminClient();
+  try {
+    const { count, error: countErr } = await admin
+      .from('professional_profiles')
+      .select('id', { count: 'exact', head: true })
+      .eq('is_published', true)
+      .eq('is_suspended', false);
+
+    const totalCount = countErr ? 0 : (count || 0);
+
+    if (totalCount === 0) {
+      return { totalCount: 0, profiles: [] };
+    }
+
+    // Buscar até 6 perfis reais em ordem rotativa (destaques pagos primeiro, depois criados)
+    const { data: rows, error: selectErr } = await admin
+      .from('professional_profiles')
+      .select(
+        'id, display_name, slug, bio, city, state, whatsapp, phone, is_featured, created_at, avatar_url, companies(name, slug)'
+      )
+      .eq('is_published', true)
+      .eq('is_suspended', false)
+      .order('is_featured', { ascending: false })
+      .order('created_at', { ascending: false })
+      .limit(6);
+
+    if (selectErr || !rows) {
+      return { totalCount, profiles: [] };
+    }
+
+    const profiles: PublicProfessional[] = rows.map((p) => {
+      const comp = Array.isArray(p.companies) ? p.companies[0] : p.companies;
+      return {
+        id: p.id,
+        display_name: p.display_name,
+        slug: p.slug,
+        bio: p.bio,
+        city: p.city,
+        state: p.state,
+        whatsapp: p.whatsapp,
+        phone: p.phone,
+        is_featured: Boolean(p.is_featured),
+        created_at: p.created_at,
+        avatar_url: p.avatar_url,
+        company_name: comp?.name ?? null,
+        company_slug: comp?.slug ?? null,
+        plan: p.is_featured ? 'pro' : 'gratuito',
+        rank: 0,
+      };
+    });
+
+    return { totalCount, profiles };
+  } catch {
+    return { totalCount: 0, profiles: [] };
+  }
+}
+

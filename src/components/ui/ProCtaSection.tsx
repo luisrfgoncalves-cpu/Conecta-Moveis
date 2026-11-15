@@ -1,7 +1,12 @@
 import Link from 'next/link';
 import { Sparkles, ArrowRight, CheckCircle2, ShieldCheck } from 'lucide-react';
+import { getSystemSettingValue } from '@/lib/config/actions';
 
-export function ProCtaSection() {
+export async function ProCtaSection() {
+  const launchFreeText =
+    (await getSystemSettingValue<string>('launch_free_text')) ||
+    'Cadastro gratuito no período de lançamento. Mudanças de planos e preços serão comunicadas com antecedência.';
+
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="relative rounded-3xl overflow-hidden glass-card p-8 sm:p-14 border border-orange-500/30">
@@ -22,18 +27,18 @@ export function ProCtaSection() {
           </h2>
 
           <p className="text-sm sm:text-base text-slate-200 leading-relaxed font-normal">
-            Crie sua vitrine profissional digital e receba solicitações de novos clientes diretamente no seu WhatsApp. Não cobramos comissão, nem mensalidade oculta no lançamento.
+            Crie sua vitrine profissional digital e receba solicitações de novos clientes diretamente no seu WhatsApp. {launchFreeText}
           </p>
 
           {/* Vantagens Claras */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 text-xs font-semibold text-slate-200">
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-              <span>Portfólio com fotos em alta resolução</span>
+              <span>Fotos de apresentação do seu trabalho</span>
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-              <span>Receba contatos no WhatsApp sem taxa</span>
+              <span>Receba contatos no WhatsApp, sem comissão sobre os serviços</span>
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
@@ -41,7 +46,7 @@ export function ProCtaSection() {
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-              <span>Selo de perfil ativo e avaliações reais</span>
+              <span>Perfil com indicadores automáticos de preenchimento</span>
             </div>
           </div>
 
@@ -50,12 +55,12 @@ export function ProCtaSection() {
               href="/criar-conta"
               className="px-8 py-4 btn-neon text-sm uppercase tracking-wider font-extrabold flex items-center justify-center gap-2 shadow-2xl"
             >
-              <span>Cadastrar Meu Perfil Grátis</span>
+              <span>Cadastrar Perfil</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
             <div className="flex items-center justify-center gap-2 text-xs text-slate-300">
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              <span>Sem fidelidade • Sem cartão de crédito</span>
+              <span>Sem cobrança inicial • Período de lançamento</span>
             </div>
           </div>
 

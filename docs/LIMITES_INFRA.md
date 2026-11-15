@@ -88,6 +88,30 @@ Registrar em `/admin` e agir imediatamente quando qualquer condição for atingi
 
 ---
 
+## 5. Peso das Imagens da Home — Medição Antes/Depois (Fase Ajuste)
+
+### Contexto
+A imagem de fundo da home estava sendo servida como um único JPEG pedido em 3840 px com qualidade 95, sem `srcset`.
+
+### Resultado
+
+| Variante | Formato | Dimensão | Tamanho em disco | Redução |
+| :--- | :--- | :--- | :--- | :--- |
+| **Original** | JPEG | 3840 px | **355,1 KB** | — |
+| **Desktop WebP** | WebP | 1920 px | **140,8 KB** | −60,4% |
+| **Mobile WebP** | WebP | 960 px | **50,6 KB** | −85,8% |
+
+### Implementação
+
+- Variantes geradas off-line com `sharp` (script `scripts/generate-webp.mjs`)  
+- `src/app/layout.tsx` agora usa `<picture>` com `<source media="(max-width:960px)" srcset="/images/background-mobile.webp">` e fallback para `background-desktop.webp`  
+- Nenhuma transformação sob demanda da Vercel Image Optimization para esta imagem  
+- `alt` e overlay de contraste preservados
+
+> **Meta atingida:** desktop ≤ 250 KB ✅ · mobile ≤ 120 KB ✅
+
+---
+
 ## 4. Medição de Dimensionamento para 300 Profissionais (Fase 26)
 
 Dimensionamento aferido para a arquitetura WebP com metas de compressão cliente da Fase 24:
@@ -103,5 +127,5 @@ Dimensionamento aferido para a arquitetura WebP com metas de compressão cliente
 
 ---
 
-*Atualizado em: 14/11/2026 — Fase 26 (Segurança de Cotas e PWA)*
+*Atualizado em: 15/11/2026 — Fase Ajuste (Correção de Textos, Dados Fictícios e Peso da Home)*
 

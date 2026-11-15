@@ -136,7 +136,7 @@ export function ProfessionalCard({ professional }: ProfessionalCardProps) {
 
       {/* Ação Inferior */}
       <div className="mt-5 pt-4 border-t border-white/10 flex items-center justify-between">
-        <span className="text-[11px] text-slate-400">Sem avaliações ainda</span>
+        <span className="text-[11px] text-slate-400">Perfil cadastrado</span>
         <Link
           href={`/profissionais/${professional.slug}`}
           className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-orange-400 hover:text-orange-300 group-hover:translate-x-0.5 transition"

@@ -6,7 +6,13 @@ const FORBIDDEN_TERMS = [
   'garantia', 'garantido', 'sem risco', '100%', 'melhor', 'melhores', 'top',
   'recomendado', 'recomendamos', 'confiável', 'verificado', 'certificado',
   'aprovado', 'selecionado', 'oficial', 'parceiro', 'nossos profissionais',
-  'nossa equipe', 'orçamento', 'preço', 'valor', 'R$'
+  'nossa equipe', 'orçamento', 'preço', 'valor', 'R$',
+  'avaliações reais', 'de verdade', 'aprovadas manualmente', 'especialistas',
+  'acabamento profissional', 'alta resolução', 'Zero Taxa', 'Perfil Ativo'
+];
+
+const FORBIDDEN_PATTERNS = [
+  /\+\d+\s+profissionais/i
 ];
 
 const ALLOWLIST_PATTERNS = [
@@ -60,6 +66,7 @@ const ALLOWLIST_PATTERNS = [
   /inviolável/i,
   /termo\s+verificado/i,
   /conteúdo\s+verificado/i,
+  /perfil\s+ativo\s+da\s+infraestrutura/i,
   /valor\s+é\s+debitado/i,
   /valor\s+anterior/i,
   /aprovado\s+provisoriamente/i
@@ -151,6 +158,19 @@ export function runCheckIsencao(targetDir = 'src') {
               file: filePath.replace(/\\/g, '/'),
               line: index + 1,
               term,
+              text: line.trim()
+            });
+          }
+        }
+      }
+
+      for (const pattern of FORBIDDEN_PATTERNS) {
+        if (pattern.test(line)) {
+          if (!isTechnicalOrAllowed(line, '+N Profissionais', filePath)) {
+            violations.push({
+              file: filePath.replace(/\\/g, '/'),
+              line: index + 1,
+              term: '+N Profissionais',
               text: line.trim()
             });
           }

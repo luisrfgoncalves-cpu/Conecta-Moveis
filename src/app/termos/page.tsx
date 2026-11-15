@@ -95,8 +95,11 @@ export default function TermosPage() {
 
         <section>
           <h2 className="text-lg font-bold text-white mb-2">9. Alterações e Aceite de Termos</h2>
-          <p>
+          <p className="mb-2">
             Quaisquer alterações materiais nestes termos serão avisadas aos usuários cadastrados e demandarão novo aceite para prosseguimento do uso. O histórico e versões anteriores dos documentos podem ser consultados no rodapé legal da plataforma.
+          </p>
+          <p>
+            Alterações de planos e preços serão comunicadas com antecedência mínima de 30 dias (prazo a homologar formalmente com assessoria jurídica) e não se aplicam a períodos já contratados.
           </p>
         </section>
 

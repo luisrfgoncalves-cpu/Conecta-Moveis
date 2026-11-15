@@ -282,3 +282,21 @@ Este documento registra todas as avaliações do Gate de Isenção ao longo das 
 - **Evidência**: `docs/DOSSIE_ADVOGADO.md`, `docs/MATRIZ_CONFORMIDADE.md`, `docs/REGISTRO_JURIDICO.md`, `README.md`, `CHANGELOG.md`, `TODO.md`.
 - **Pendência para o Advogado**:
   - Nenhuma pendência impeditiva técnica; os documentos gerados constituem o dossiê probatório integral para eventual apresentação a órgãos fiscalizadores.
+
+---
+
+### J-016 — Correção de Textos, Eliminação de Dados Fictícios e Peso da Home
+- **Data**: 2026-11-14
+- **Fase**: Ajuste Especial — Correção de Textos, Dados Fictícios e Peso da Home
+- **Funcionalidade ou Texto**: Remoção de métricas fictícias estáticas (+120 profissionais, anos de atuação, tempos de resposta inventados); condicionamento do contador público a dados reais do banco com flag e teto mínimo; estado vazio honesto na vitrine quando sem perfis reais; eliminação de cards de demonstração em produção; substituição de termos de endosso/qualidade pela tabela oficial neutra; cláusula de resguardo sobre gratuidade de lançamento e comunicação prévia de alterações de planos/preços; identificação do operador no rodapé como "em processo de formalização" com bloqueio estrito de faturamento enquanto não houver CNPJ; geração de variantes WebP pré-otimizadas da imagem de fundo da Home (desktop e mobile); FAQ 100% legível e acessível; atualização da trava `check:isencao`.
+- **Regras e Normas Envolvidas**: R3 e R4 (ausência de endosso e contratação direta), R5 (ordenação neutra), R13 (identificação do operador), R16 (Gate de Isenção); CDC (Lei 8.078/1990, art. 30 e 37 — publicidade enganosa por dados fictícios); Marco Civil da Internet (art. 19).
+- **Risco**: Baixo (refinamento de textos e otimização de ativos, sem quebra de regras de negócio).
+- **Decisão Tomada**:
+  1. **Veracidade Estrita (CDC art. 37)**: Proibição de números fictícios no frontend. Se não houver perfis reais suficientes cadastrados, exibe-se convite honesto para pioneiros.
+  2. **Gratuidade Condicional e Futura Cobrança**: Ajuste dos textos de gratuidade para vincular ao período de lançamento com aviso prévio de alterações, viabilizando transição comercial futura sem quebra de expectativa do consumidor.
+  3. **Identificação Operacional Segura**: Rodapé exibe "Operador: em processo de formalização" e e-mail real, mantendo bloqueio automático de monetização no backend até formalização fiscal.
+  4. **Performance e Acessibilidade**: Otimização estática de imagens sem sobrecarga de CDN e garantia de acessibilidade no FAQ.
+- **Quem Decidiu**: Usuário (orientação para transparência absoluta e resguardo comercial/jurídico).
+- **Evidência**: `src/app/page.tsx`, `src/components/layout/Footer.tsx`, `src/components/ui/FaqSection.tsx`, `scripts/check-isencao.mjs`, `public/images/`.
+- **Pendência para o Advogado**:
+  - Homologar o prazo exato (ex: 30 dias) para notificação prévia de alteração de planos aos anunciantes cadastrados na fase de lançamento.
