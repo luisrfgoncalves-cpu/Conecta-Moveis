@@ -86,14 +86,14 @@ export default function ContrateComSegurancaPage() {
         <div className="glass-panel p-6 rounded-3xl border border-white/10 space-y-3">
           <h3 className="text-base font-bold text-white flex items-center gap-2">
             <PhoneCall className="w-4 h-4 text-purple-400" />
-            4. Onde Buscar Apoio em Jundiaí/SP
+            4. Onde Buscar Apoio
           </h3>
           <p className="text-xs text-slate-400 leading-relaxed">
-            Caso não haja acordo entre as partes, os canais oficiais de proteção do consumidor e conciliação são:
+            Caso não haja acordo amigável entre as partes, os canais oficiais de proteção do consumidor e conciliação são:
           </p>
           <ul className="text-xs text-slate-300 space-y-1.5">
-            <li><strong>Procon Jundiaí:</strong> R. Barão de Jundiaí, 1093 - Centro | Tel: (11) 4521-2244</li>
-            <li><strong>Juizado Especial Cível (JEC):</strong> Fórum de Jundiaí para causas de até 20 salários mínimos sem advogado.</li>
+            <li><strong>Procon da sua cidade:</strong> Consulte o site da prefeitura do seu município para orientações e atendimento.</li>
+            <li><strong>Juizado Especial Cível (JEC):</strong> Consulte o fórum da sua comarca para causas de menor complexidade.</li>
           </ul>
         </div>
       </div>

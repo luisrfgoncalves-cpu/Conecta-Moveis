@@ -89,7 +89,7 @@ export default function TermosPage() {
         <section>
           <h2 className="text-lg font-bold text-white mb-2">8. Responsabilidade Legal da Plataforma</h2>
           <p>
-            A Conecta Móveis responde pelos seus próprios atos e deveres legais impostos pelo Marco Civil da Internet (Lei 12.965/2014) e pela LGPD (Lei 13.709/2018), incluindo segurança dos dados, atendimento a ordens judiciais e guarda de logs de conexão e acesso a aplicações nos termos da lei.
+            A Conecta Móveis responde pelos seus próprios atos e deveres legais impostos pelo Marco Civil da Internet (Lei 12.965/2014) e pela LGPD (Lei 13.709/2018), incluindo segurança dos dados, atendimento a ordens judiciais e guarda de registros de acesso a aplicações nos termos da lei.
           </p>
         </section>
 

@@ -108,7 +108,7 @@ export const professionalProfileSchema = z.object({
   bio: z
     .string()
     .min(80, 'Apresentação profissional deve ter pelo menos 80 caracteres para detalhar seus diferenciais e serviços')
-    .max(800, 'Apresentação profissional pode ter no máximo 800 caracteres'),
+    .max(600, 'Apresentação profissional pode ter no máximo 600 caracteres'),
   city: z
     .string()
     .min(2, 'Informe a cidade de atuação')

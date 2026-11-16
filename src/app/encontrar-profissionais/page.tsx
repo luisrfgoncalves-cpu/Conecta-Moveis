@@ -4,6 +4,7 @@ import { UserX, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Alert } from '@/components/ui/Feedback';
 import { PlatformNotice } from '@/components/legal/PlatformNotice';
 import { searchProfessionals, SearchFilters as FilterType } from '@/lib/search/actions';
+import { isFeatureFlagActive } from '@/lib/config/actions';
 import { SearchFilters } from '@/components/search/SearchFilters';
 import { ProfessionalCard } from '@/components/search/ProfessionalCard';
 import { BackButton } from '@/components/navigation/BackButton';
@@ -33,7 +34,10 @@ export default async function EncontrarProfissionaisPage({ searchParams }: PageP
     page: typeof resolvedParams.page === 'string' ? Number(resolvedParams.page) || 1 : 1,
   };
 
-  const result = await searchProfessionals(filters);
+  const [result, reviewsEnabled] = await Promise.all([
+    searchProfessionals(filters),
+    isFeatureFlagActive('reviews_enabled'),
+  ]);
 
   // Helper para gerar URLs de paginação mantendo filtros existentes
   const getPaginationUrl = (newPage: number) => {
@@ -97,6 +101,7 @@ export default async function EncontrarProfissionaisPage({ searchParams }: PageP
             especialidade: filters.especialidade,
             ordenacao: filters.ordenacao,
           }}
+          reviewsEnabled={reviewsEnabled}
         />
 
         {/* Grade de Resultados */}

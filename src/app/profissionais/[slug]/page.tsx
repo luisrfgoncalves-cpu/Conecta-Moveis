@@ -197,13 +197,16 @@ export default async function ProfissionalPublicPage({ params }: PageProps) {
                 <ShieldCheck className="w-3.5 h-3.5" />
                 E-mail confirmado
               </span>
-              <span
-                title="Informação automática; não é recomendação."
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-sky-500/10 text-sky-400 border border-sky-500/20"
-              >
-                <Sparkles className="w-3.5 h-3.5" />
-                Perfil completo
-              </span>
+              {/* Selo "Perfil com fotos" — só mostra se tiver bio suficiente E ao menos uma foto aprovada */}
+              {professional.bio && professional.bio.length >= 80 && professional.portfolio && professional.portfolio.length > 0 && (
+                <span
+                  title="Informação automática; não é recomendação."
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-sky-500/10 text-sky-400 border border-sky-500/20"
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  Perfil com fotos
+                </span>
+              )}
               {isNew() && (
                 <span
                   title="Informação automática; não é recomendação."
@@ -257,7 +260,7 @@ export default async function ProfissionalPublicPage({ params }: PageProps) {
             <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300">
               Apresentação Profissional
             </h2>
-            <p className="text-sm text-slate-200 leading-relaxed whitespace-pre-line">
+            <p className="text-sm text-slate-200 leading-relaxed whitespace-pre-line break-words">
               {professional.bio}
             </p>
           </div>

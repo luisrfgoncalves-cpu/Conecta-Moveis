@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { MapPin, Building, ShieldCheck, Sparkles, Clock, ArrowRight } from 'lucide-react';
+import { MapPin, Building, ShieldCheck, Clock, ArrowRight } from 'lucide-react';
 import { PublicProfessional } from '@/lib/search/actions';
 
 interface ProfessionalCardProps {
@@ -89,13 +89,6 @@ export function ProfessionalCard({ professional }: ProfessionalCardProps) {
             <ShieldCheck className="w-3 h-3" />
             E-mail confirmado
           </span>
-          <span
-            title="Informação automática; não é recomendação."
-            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-medium bg-sky-500/10 text-sky-400 border border-sky-500/20"
-          >
-            <Sparkles className="w-3 h-3" />
-            Perfil completo
-          </span>
           {isNew() && (
             <span
               title="Informação automática; não é recomendação."
@@ -109,7 +102,7 @@ export function ProfessionalCard({ professional }: ProfessionalCardProps) {
 
         {/* Bio Curta */}
         {professional.bio && (
-          <p className="text-xs text-slate-300 line-clamp-3 leading-relaxed">
+          <p className="text-xs text-slate-300 line-clamp-3 leading-relaxed break-words">
             {professional.bio}
           </p>
         )}
