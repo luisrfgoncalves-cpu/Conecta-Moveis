@@ -31,7 +31,7 @@ export default function PoliticaAssinaturaPage() {
         <section>
           <h2 className="text-lg font-bold text-white mb-2">1. Natureza da Assinatura: Locação de Espaço Digital</h2>
           <p>
-            Os planos de assinatura da Conecta Móveis destinam-se exclusivamente a ampliar o espaço de fotos de portfólio e a posição de exibição na vitrine do diretório. A contratação de um plano não confere qualquer garantia de captação de clientes, volume de orçamentos ou faturamento, dependendo exclusivamente do mercado e do relacionamento direto entre consumidor e anunciante.
+            Os planos de assinatura da Conecta Móveis destinam-se exclusivamente a ampliar o espaço de fotos de apresentação e a posição de exibição na vitrine do diretório. A contratação de um plano não confere qualquer garantia de captação de clientes, volume de orçamentos ou faturamento, dependendo exclusivamente do mercado e do relacionamento direto entre consumidor e anunciante.
           </p>
         </section>
 

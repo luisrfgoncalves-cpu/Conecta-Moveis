@@ -15,17 +15,17 @@ export function Hero() {
           <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider bg-orange-500/20 border border-orange-400/50 text-orange-200 shadow-2xl backdrop-blur-xl max-w-full">
             <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-orange-400 animate-pulse shrink-0" />
             <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-orange-300 shrink-0" />
-            <span className="truncate">Polo Regional: Jundiaí e Região / SP</span>
+            <span className="truncate">Jundiaí e Região / SP</span>
           </div>
 
           {/* Título de Alto Impacto Otimizado para Mobile */}
           <h1 className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight leading-[1.15] text-white drop-shadow-xl break-words">
-            A Rede Direta do Setor <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-300 to-orange-500">Moveleiro</span>
+            Encontre montadores e marceneiros em <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-300 to-orange-500">Jundiaí e região</span>
           </h1>
 
           {/* Subtítulo com Branco Neve e Alto Contraste */}
           <p className="text-sm sm:text-lg text-slate-100 leading-relaxed font-medium max-w-2xl drop-shadow-md">
-            Catálogo aberto para você localizar montadores autônomos, marceneiros sob medida e marcenarias. Conexão direta, sem intermediação e sem promessas ilusórias.
+            Catálogo aberto para você encontrar montadores autônomos, marceneiros sob medida e marcenarias. Conexão direta e sem intermediação.
           </p>
 
           {/* Botões com Relevo 3D e Borda Glass */}

@@ -10,15 +10,15 @@ const faqs = [
   },
   {
     q: 'A plataforma cobra alguma taxa ou comissão sobre os serviços?',
-    a: 'Não. O Conecta Móveis não retém nenhuma porcentagem, não cobra comissões dos profissionais nem dos clientes sobre os valores dos serviços executados. O catálogo é livre e direto.',
+    a: 'Não. O Conecta Móveis não recebe pagamento pelos serviços e não cobra comissão sobre eles, nem de quem procura nem dos profissionais. O catálogo é livre e direto.',
   },
   {
     q: 'Como posso cadastrar meu perfil ou a minha marcenaria?',
-    a: 'Qualquer profissional ou empresa do setor moveleiro com atuação em Jundiaí e região pode criar seu cadastro gratuito, preencher suas especialidades, definir sua área de atendimento e enviar fotos do seu portfólio de serviços para aprovação.',
+    a: 'Qualquer profissional ou empresa do setor moveleiro com atuação em Jundiaí e região pode criar seu cadastro gratuito, preencher suas especialidades, definir sua área de atendimento e enviar fotos de apresentação de serviços para aprovação.',
   },
   {
     q: 'A plataforma oferece garantia sobre o serviço realizado?',
-    a: 'Não. A plataforma atua estritamente como um canal digital de divulgação e aproximação. A execução, qualidade, prazos e garantias são de responsabilidade exclusiva do prestador de serviço contratado.',
+    a: 'Não. A plataforma atua estritamente como um canal digital de divulgação e aproximação. A execução, prazos e entendimentos são combinados diretamente entre você e o profissional autônomo ou empresa.',
   },
 ];
 

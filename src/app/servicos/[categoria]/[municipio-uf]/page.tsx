@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   const title = `${catName} em ${municipio.nome} - ${municipio.uf} | Conecta Móveis`;
-  const description = `Encontre ${catName.toLowerCase()} atuantes em ${municipio.nome}/${municipio.uf}. Veja fotos de portfólio e solicite contato diretamente com os anunciantes cadastrados.`;
+  const description = `Encontre ${catName.toLowerCase()} atuantes em ${municipio.nome}/${municipio.uf}. Veja fotos de apresentação e solicite contato diretamente com os anunciantes cadastrados.`;
 
   return {
     title,

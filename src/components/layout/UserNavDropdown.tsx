@@ -46,7 +46,7 @@ export function UserNavDropdown({ user }: UserNavDropdownProps) {
           onClick={() => sounds.playClick()}
           className="hidden sm:inline-flex px-4 py-2 rounded-xl text-xs font-bold text-white bg-orange-500 hover:bg-orange-600 transition-colors shadow-md shadow-orange-500/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 shrink-0"
         >
-          Cadastre-se
+          Criar conta
         </Link>
       </div>
     );

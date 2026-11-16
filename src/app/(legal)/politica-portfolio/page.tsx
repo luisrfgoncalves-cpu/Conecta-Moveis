@@ -6,7 +6,7 @@ import { LegalBanner } from "@/components/legal/LegalBanner";
 export const metadata: Metadata = {
   title: "Política de Conteúdo e Fotos de Apresentação | Conecta Móveis",
   description:
-    "Regras e exigências para envio de fotos, imagens de portfólio e direitos autorais na Conecta Móveis.",
+    "Regras e exigências para envio de fotos, fotos de apresentação e direitos autorais na Conecta Móveis.",
 };
 
 export default function PoliticaPortfolioPage() {
@@ -45,7 +45,7 @@ export default function PoliticaPortfolioPage() {
         <section>
           <h2 className="text-lg font-bold text-white mb-2">3. Licença de Exibição</h2>
           <p>
-            Ao carregar imagens na plataforma, o anunciante outorga à Conecta Móveis uma licença gratuita, não exclusiva, irrevogável durante a vigência do anúncio e limitada ao território nacional, unicamente para exibição do portfólio no site, aplicativo e canais oficiais de divulgação da vitrine.
+            Ao carregar imagens na plataforma, o anunciante outorga à Conecta Móveis uma licença gratuita, não exclusiva, irrevogável durante a vigência do anúncio e limitada ao território nacional, unicamente para exibição das fotos de apresentação no site, aplicativo e canais oficiais de divulgação da vitrine.
           </p>
         </section>
 

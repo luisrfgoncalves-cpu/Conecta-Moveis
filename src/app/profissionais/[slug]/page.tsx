@@ -48,7 +48,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const title = `${professional.display_name} — Profissional em ${professional.city}`;
   const description = professional.bio
     ? professional.bio.slice(0, 155) + (professional.bio.length > 155 ? '...' : '')
-    : `Veja o perfil de ${professional.display_name}, prestador em ${professional.city} - ${professional.state} no setor moveleiro.`;
+    : `Veja o perfil de ${professional.display_name}, profissional em ${professional.city} - ${professional.state} no setor moveleiro.`;
 
   return {
     title,
@@ -223,12 +223,12 @@ export default async function ProfissionalPublicPage({ params }: PageProps) {
         {/* Aviso Fixo da Plataforma */}
         <PlatformNotice />
 
-        {/* Aviso Obrigatório aos Contratantes */}
+        {/* Aviso Obrigatório */}
         <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-start gap-3">
           <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
           <div className="text-xs text-amber-200/90 leading-relaxed">
             <strong className="text-amber-300 block font-bold mb-0.5">
-              Aviso aos Contratantes:
+              Aviso:
             </strong>
             Este perfil é publicado pelo anunciante. A presença na plataforma não representa garantia da qualidade, prazo ou resultado do serviço.
           </div>
@@ -310,7 +310,7 @@ export default async function ProfissionalPublicPage({ params }: PageProps) {
         {(professional.whatsapp || professional.phone) && (
           <div className="space-y-3 pt-2 border-t border-white/10">
             <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300">
-              Contatos Autorizados
+              Contato
             </h2>
             {isLoggedIn ? (
               <div className="flex flex-wrap gap-3">
@@ -333,8 +333,8 @@ export default async function ProfissionalPublicPage({ params }: PageProps) {
             ) : (
               <div className="p-4 rounded-xl bg-white/5 border border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                 <div className="text-xs text-slate-400">
-                  <span className="font-semibold text-white block mb-0.5">Proteção de Contato (Anti-Spam / LGPD):</span>
-                  Para visualizar o WhatsApp e telefone do anunciante, faça login na sua conta gratuita.
+                  <span className="font-semibold text-white block mb-0.5">Contato protegido:</span>
+                  Entre na sua conta gratuita para ver o WhatsApp. Isso protege os profissionais de mensagens indesejadas.
                 </div>
                 <Link
                   href={`/entrar?redirect=/profissionais/${slug}`}

@@ -64,7 +64,7 @@ export function SearchBox() {
             className="block text-xs font-bold uppercase tracking-wider text-slate-200 mb-2 flex items-center gap-1.5"
           >
             <MapPin className="w-4 h-4 text-sky-400" />
-            Polo Regional
+            Cidade ou bairro
           </label>
           <input
             id="search-city"

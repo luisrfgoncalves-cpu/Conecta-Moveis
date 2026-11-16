@@ -30,7 +30,7 @@ export default function ComoOrdenamosOsResultadosPage() {
           Princípio da Neutralidade e Rotatividade
         </h2>
         <p className="text-xs text-slate-300 leading-relaxed">
-          A Conecta Móveis não cria rankings subjetivos de &quot;melhores profissionais&quot;, nem endossa qualquer prestador cadastrado. Para assegurar oportunidade igualitária a todos os anunciantes e neutralidade perante o consumidor, aplicamos os seguintes critérios objetivos:
+          A Conecta Móveis não cria rankings subjetivos de &quot;melhores profissionais&quot;, nem endossa qualquer profissional ou empresa cadastrada. Para assegurar oportunidade igualitária a todos os anunciantes e neutralidade perante quem procura, aplicamos os seguintes critérios objetivos:
         </p>
       </div>
 
@@ -84,7 +84,7 @@ export default function ComoOrdenamosOsResultadosPage() {
           </p>
           <ul className="text-slate-400 space-y-1 list-disc list-inside pt-1">
             <li><strong>Mais recentes:</strong> Ordena pela data de cadastro do perfil.</li>
-            <li><strong>Perfil mais completo:</strong> Prioriza perfis com portfólio de fotos de trabalhos e descrição detalhada.</li>
+            <li><strong>Perfil mais completo:</strong> Prioriza perfis com fotos de apresentação de trabalhos e descrição detalhada.</li>
             <li><strong>Melhor avaliados:</strong> Ordena pelas notas médias atribuídas livremente por outros usuários com interação registrada.</li>
           </ul>
         </div>

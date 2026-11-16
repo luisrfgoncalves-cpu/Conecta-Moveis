@@ -68,7 +68,7 @@ export function Footer() {
               </li>
               <li>
                 <Link href="/contrate-com-seguranca" className="text-slate-300 hover:text-orange-400 transition">
-                  Orientações de Segurança
+                  Dicas de segurança
                 </Link>
               </li>
               <li>

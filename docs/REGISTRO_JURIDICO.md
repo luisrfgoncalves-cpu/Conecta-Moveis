@@ -370,3 +370,34 @@ ot-found.tsx (404) e error.tsx com interface amigável, ícones, atalho para bus
 - **Evidência**: src/lib/search/actions.ts, src/components/search/ProfessionalCard.tsx, src/app/encontrar-profissionais/page.tsx, src/components/auth/SignInForm.tsx, src/components/contact/ContactForm.tsx, src/components/plans/PlansClient.tsx, src/lib/plans/actions.ts, src/components/takedown/NotificarConteudoClient.tsx, src/lib/takedown/actions.ts, src/app/not-found.tsx, src/app/error.tsx, src/__tests__/bloco2_fluxo_links.test.ts.
 - **Pendência para o Advogado**:
   - Validar se o canal anônimo de denúncias para crimes graves atende aos requisitos operacionais e de guarda de logs do Marco Civil da Internet (art. 15).
+
+---
+
+### J-020 — Padronização de Linguagem, Glossário Anticomissões e SEO Neutro (Bloco 3)
+- **Data**: 16/11/2026
+- **Fase**: Ajuste Final Pré-Divulgação — Bloco 3 (Textos, Glossário e SEO)
+- **Funcionalidade ou Texto**:
+  1. **(3.1)** Padronização de papéis e vocabulário: Adotado "profissional" para anunciantes e "você" / "quem procura" para os usuários em busca de serviços, eliminando "contratante", "contratado" e "prestador". A expressão "fotos de apresentação" substituiu "portfólio" em todas as áreas públicas do site e na documentação legal. "Cadastre-se" foi padronizado para "Criar conta". O termo "catálogo" foi consolidado para designar o diretório de anúncios.
+  2. **(3.2)** Aplicação da tabela De/Para:
+     - "A Rede Direta do Setor Moveleiro" → "Encontre montadores e marceneiros em Jundiaí e região".
+     - "localizar" → "encontrar"; termos "sem promessas ilusórias" e "sem barreiras" removidos.
+     - "Nenhum percentual ou porcentagem" / "Zero Taxa" → "Sem comissão sobre serviços" e "A plataforma não recebe pagamento pelos serviços e não cobra comissão sobre eles".
+     - "Aviso aos Contratantes" → "Aviso"; "Avaliações e Reputação" → "Avaliações".
+     - "Contatos Autorizados" → "Contato"; "Proteção de Contato (Anti-Spam / LGPD)" → "Entre na sua conta gratuita para ver o WhatsApp. Isso protege os profissionais de mensagens indesejadas.".
+     - "Transparência e Responsabilidade Civil" → "O que a plataforma faz e não faz"; "Aviso de Isenção" → "Aviso importante".
+     - "Polo Regional" → "Cidade ou bairro"; "Orientações de Segurança para Contratação" → "Dicas para combinar o serviço com segurança" (link do rodapé: "Dicas de segurança").
+     - Concordância gramatical de busca: "Exibindo X a Y de Z profissionais" com singular "profissional" quando Z = 1.
+     - Jargão do setor traduzido para leigos em `CATEGORIES_CATALOG`: "Renderização Fotorrealista" → "Imagens 3D realistas"; "Planta Técnica de Fabricação" → "Projeto técnico para fábrica"; "Usinagem CNC" → "Corte e furação por CNC"; "Grandes Lotes e Franquias" → "Produção em grande volume" (mantendo slugs inalterados).
+     - Categorias atualizadas: "Marceneiro (autônomo)" e "Marcenaria e fábrica".
+     - Resumos executivos amigáveis ("Em resumo:") adicionados no topo de `/termos`, `/privacidade` e `/funcao-da-plataforma`.
+  3. **(3.3)** SEO e Metadados Neutros: Verificação e padronização dos títulos para evitar duplicações de marca e expressões promocionais; remoção de "com segurança" das descrições de páginas públicas.
+- **Regras e Normas Envolvidas**: R3, R4 (ausência de endosso e imparcialidade); R5 (neutralidade na busca); R16 (Gate de Isenção); R17 (responsabilidade legal clara); CDC arts. 30, 31, 36 e 37 (informação clara, proibição de promessas de resultado); Marco Civil da Internet art. 19.
+- **Risco**: Baixo (harmonização e padronização textual cirúrgica; sem alterações em bancos de dados ou rotas).
+- **Decisão Tomada**:
+  1. **Eliminação de vocabulário de intermediação**: A eliminação de "prestador", "contratante" e "contratado" reforça jurídica e semanticamente que a plataforma não participa do contrato ou prestação do serviço.
+  2. **Tradução de jargão para linguagem leiga**: Aproximação do consumidor final mantendo integridade técnica dos slugs no banco de dados e APIs.
+  3. **Resumos executivos**: Apresentação de pontos essenciais em linguagem simples antes do texto normativo integral melhora a transparência exigida pelo CDC e pela LGPD.
+- **Quem Decidiu**: Usuário (aprovação do escopo de execução do Bloco 3).
+- **Evidência**: `src/lib/profile/schemas.ts`, `src/components/ui/Hero.tsx`, `src/components/ui/SearchBox.tsx`, `src/components/ui/ProCtaSection.tsx`, `src/components/ui/FaqSection.tsx`, `src/components/reviews/ReviewsSection.tsx`, `src/components/layout/Footer.tsx`, `src/components/layout/UserNavDropdown.tsx`, `src/components/profile/ProfileWizard.tsx`, `src/app/page.tsx`, `src/app/como-funciona/page.tsx`, `src/app/encontrar-profissionais/page.tsx`, `src/app/profissionais/[slug]/page.tsx`, `src/app/empresas/[slug]/page.tsx`, `src/app/contrate-com-seguranca/page.tsx`, `src/app/como-ordenamos-os-resultados/page.tsx`, `src/app/planos/page.tsx`, `src/app/termos/page.tsx`, `src/app/privacidade/page.tsx`, `src/app/funcao-da-plataforma/page.tsx`, `src/app/painel/page.tsx`, `src/app/painel/assinatura/page.tsx`, `src/app/servicos/[categoria]/[municipio-uf]/page.tsx`, `src/app/(legal)/politica-portfolio/page.tsx`, `src/app/(legal)/politica-assinatura/page.tsx`.
+- **Pendência para o Advogado**:
+  - Homologar as caixas de resumo executivo ("Em resumo:") nas páginas jurídicas para assegurar conformidade plena com o dever de informação clara do CDC (art. 6º, III).

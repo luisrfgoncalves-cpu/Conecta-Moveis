@@ -16,7 +16,7 @@ export default function ComoFuncionaPage() {
           Como Funciona o Conecta Móveis
         </h1>
         <p className="text-sm sm:text-base text-slate-200 leading-relaxed max-w-2xl">
-          Entenda de forma transparente como aproximamos clientes e prestadores do setor moveleiro em Jundiaí e região.
+          Entenda de forma transparente como aproximamos quem procura e os profissionais do setor moveleiro em Jundiaí e região.
         </p>
       </div>
 
@@ -26,9 +26,9 @@ export default function ComoFuncionaPage() {
           <div className="w-12 h-12 rounded-xl bg-orange-500/20 border border-orange-500/30 text-orange-400 flex items-center justify-center">
             <Search className="w-6 h-6" />
           </div>
-          <h3 className="font-extrabold text-white text-base">1. Localize</h3>
+          <h3 className="font-extrabold text-white text-base">1. Encontre</h3>
           <p className="text-xs text-slate-200 leading-relaxed font-medium">
-            Pesquise por especialidade (montagem, marcenaria sob medida, projetos 3D) e confira fotos de serviços já executados.
+            Pesquise por especialidade (montagem, marcenaria sob medida, projetos 3D) e confira fotos de apresentação de serviços.
           </p>
         </div>
 
@@ -38,7 +38,7 @@ export default function ComoFuncionaPage() {
           </div>
           <h3 className="font-extrabold text-white text-base">2. Conecte</h3>
           <p className="text-xs text-slate-200 leading-relaxed font-medium">
-            Inicie contato direto com o profissional pelo WhatsApp ou enviando uma mensagem curta pela plataforma, sem barreiras.
+            Inicie contato direto com o profissional pelo WhatsApp ou enviando uma mensagem curta pela plataforma.
           </p>
         </div>
 
@@ -57,14 +57,14 @@ export default function ComoFuncionaPage() {
       <div className="glass-card p-8 rounded-3xl border border-orange-500/30 relative overflow-hidden space-y-4">
         <div className="flex items-center gap-3 text-orange-400">
           <ShieldAlert className="w-6 h-6 shrink-0" />
-          <h2 className="text-lg font-black text-white">Transparência e Responsabilidade Civil</h2>
+          <h2 className="text-lg font-black text-white">O que a plataforma faz e não faz</h2>
         </div>
         <div className="space-y-3 text-xs sm:text-sm text-slate-200 leading-relaxed">
           <p>
-            O <strong>Conecta Móveis</strong> opera como catálogo de divulgação e aproximação. A plataforma <strong>não atua como prestadora</strong>, não estabelece tabelas de preços, não emite orçamentos vinculantes e não oferece garantia sobre prazos ou qualidade das entregas.
+            O <strong>Conecta Móveis</strong> opera como catálogo de divulgação e aproximação. A plataforma <strong>não atua como fornecedora nem executora dos serviços</strong>, não estabelece tabelas de preços, não emite orçamentos e não oferece garantia sobre prazos ou qualidade das entregas.
           </p>
           <p>
-            Toda a negociação, formalização e execução é de exclusiva responsabilidade entre o cliente e o profissional contratado.
+            Toda a negociação, formalização e execução é de exclusiva responsabilidade entre você e o profissional escolhido.
           </p>
         </div>
       </div>

@@ -130,12 +130,12 @@ export default async function EmpresaPublicPage({ params }: PageProps) {
         {/* Aviso Fixo da Plataforma */}
         <PlatformNotice />
 
-        {/* Aviso Obrigatório aos Contratantes */}
+        {/* Aviso Obrigatório */}
         <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-start gap-3">
           <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
           <div className="text-xs text-amber-200/90 leading-relaxed">
             <strong className="text-amber-300 block font-bold mb-0.5">
-              Aviso aos Contratantes:
+              Aviso:
             </strong>
             Este perfil é publicado pelo anunciante. A presença na plataforma não representa garantia da qualidade, prazo ou resultado do serviço.
           </div>

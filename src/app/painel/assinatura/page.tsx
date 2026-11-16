@@ -40,7 +40,7 @@ export default async function PainelAssinaturaPage() {
       <div>
         <h1 className="text-2xl font-black text-white">Minha Assinatura</h1>
         <p className="text-slate-400 text-sm mt-1">
-          Acompanhe seu plano ativo, cotas de portfólio e métricas de desempenho.
+          Acompanhe seu plano ativo, cotas de fotos de apresentação e métricas de desempenho.
         </p>
       </div>
 

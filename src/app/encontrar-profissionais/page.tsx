@@ -89,7 +89,7 @@ export default async function EncontrarProfissionaisPage({ searchParams }: PageP
 
       {/* Aviso Legal Obrigatório da Plataforma */}
       <Alert type="legal">
-        <strong className="text-white font-bold block mb-1">Aviso aos Contratantes:</strong>
+        <strong className="text-white font-bold block mb-1">Aviso:</strong>
         Este perfil é publicado pelo anunciante. A presença na plataforma não representa garantia da qualidade, prazo ou resultado do serviço.
       </Alert>
 
@@ -149,7 +149,8 @@ export default async function EncontrarProfissionaisPage({ searchParams }: PageP
               <div className="text-xs text-slate-400">
                 Exibindo <span className="text-white font-semibold">{startRecord}</span> a{' '}
                 <span className="text-white font-semibold">{endRecord}</span> de{' '}
-                <span className="text-white font-semibold">{result.total}</span> profissionais
+                <span className="text-white font-semibold">{result.total}</span>{' '}
+                {result.total === 1 ? 'profissional' : 'profissionais'}
               </div>
 
               {/* Grid 12 por página */}

@@ -23,6 +23,17 @@ export default function TermosPage() {
 
       <LegalBanner />
 
+      {/* Caixa de Resumo Executivo em Linguagem Simples */}
+      <div className="glass-panel p-5 sm:p-6 rounded-2xl border border-sky-500/20 bg-sky-950/20 text-xs sm:text-sm text-slate-200 space-y-2">
+        <h2 className="text-base font-bold text-sky-400">Em resumo:</h2>
+        <ul className="list-disc pl-5 space-y-1 text-slate-300">
+          <li>A Conecta Móveis é um catálogo digital de aproximação para você encontrar profissionais e empresas de móveis em Jundiaí e região.</li>
+          <li>Não somos fornecedores nem executores dos serviços, não intermediamos pagamentos e não cobramos comissão sobre os serviços combinados.</li>
+          <li>Negociação, contratos, preços e prazos são tratados diretamente entre você e o profissional escolhido.</li>
+          <li>O cadastro de anunciantes é restrito a maiores de 18 anos e todo conteúdo publicado é de responsabilidade de quem o envia.</li>
+        </ul>
+      </div>
+
       <div className="space-y-6 text-sm text-slate-200 leading-relaxed">
         <div className="p-4 rounded-xl bg-orange-500/10 border border-orange-500/20 text-orange-200 text-xs">
           <strong>Declaração Oficial:</strong> A Conecta Móveis é um provedor de aplicação de internet que oferece espaço de divulgação (vitrine e diretório de anúncios) e meio de aproximação inicial entre usuários e anunciantes do setor moveleiro. Não é fornecedora, prestadora, corretora, representante nem garantidora de serviços.
@@ -51,14 +62,14 @@ export default function TermosPage() {
             A presença de qualquer profissional, empresa ou anúncio nesta plataforma <strong>não constitui recomendação, seleção, homologação ou atestado de idoneidade</strong> por parte da Conecta Móveis.
           </p>
           <p className="mt-2">
-            A plataforma não verifica previamente a competência técnica dos anunciantes nem garante a qualidade, a pontualidade ou o resultado dos serviços. Orientações preventivas e canais de proteção podem ser consultados em <Link href="/contrate-com-seguranca" className="text-orange-400 underline">Orientações de Segurança</Link>.
+            A plataforma não verifica previamente a competência técnica dos anunciantes nem garante a qualidade, a pontualidade ou o resultado dos serviços. Orientações preventivas e canais de proteção podem ser consultados em <Link href="/contrate-com-seguranca" className="text-orange-400 underline">Dicas de segurança</Link>.
           </p>
         </section>
 
         <section>
           <h2 className="text-lg font-bold text-white mb-2">4. Responsabilidade do Anunciante e Direitos de Propriedade</h2>
           <p>
-            O anunciante é o único e integral responsável pelas informações, fotos, portfólios, marcas, prazos e orçamentos que publicar, bem como pela execução dos serviços prestados.
+            O anunciante é o único e integral responsável pelas informações, fotos, apresentações, marcas, prazos e orçamentos que publicar, bem como pela execução dos serviços prestados.
           </p>
           <p className="mt-2">
             O anunciante declara e garante ser o titular exclusivo dos direitos autorais de todas as fotos e imagens de projetos enviadas, ou que possui expressa autorização legal de autores e clientes. O anunciante concede à Conecta Móveis licença limitada, não exclusiva, gratuita e revogável exclusivamente para veicular as imagens na vitrine do anúncio.

@@ -72,7 +72,7 @@ export default async function HomePage() {
       {/* Aviso Institucional e Legal Transparente com Leitura Cristalina */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <Alert type="legal">
-          <strong className="text-white font-extrabold text-sm block mb-1.5">Aviso Institucional de Segurança e LGPD:</strong>
+          <strong className="text-white font-extrabold text-sm block mb-1.5">Aviso da plataforma:</strong>
           <span className="text-slate-200 font-normal">
             Este catálogo é publicado diretamente pelos profissionais e empresas cadastrados. A plataforma não atua como prestadora nem garantidora de montagens, fabricações ou orçamentos. A negociação e a solicitação de contato são livres e diretas entre você e o anunciante.
           </span>
@@ -162,7 +162,7 @@ export default async function HomePage() {
               </div>
               <h3 className="font-extrabold text-white text-lg">Direto no WhatsApp</h3>
               <p className="text-xs text-slate-200 leading-relaxed font-medium">
-                Contato rápido e direto entre clientes e prestadores para orçamentos independentes.
+                Contato rápido e direto entre quem procura e os profissionais para orçamentos independentes.
               </p>
             </div>
 

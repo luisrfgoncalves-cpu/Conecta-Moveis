@@ -80,7 +80,7 @@ export default async function PlanosPage() {
             </h3>
             <p>
               <strong>Não.</strong> Todo orçamento, negociação, agenda e recebimento de valores
-              ocorre diretamente entre o profissional e o cliente contratante, sem comissões ou taxas ocultas.
+              ocorre diretamente entre você e o profissional, sem comissões ou taxas ocultas.
             </p>
           </div>
 

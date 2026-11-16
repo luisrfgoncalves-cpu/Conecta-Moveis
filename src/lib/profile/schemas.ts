@@ -17,7 +17,7 @@ export const CATEGORIES_CATALOG = [
   },
   {
     id: 'c2222222-2222-2222-2222-222222222222',
-    name: 'Marceneiro',
+    name: 'Marceneiro (autônomo)',
     slug: 'marceneiro',
     description: 'Marcenaria fina, sob medida e restauração.',
     icon: 'Sparkles',
@@ -43,13 +43,13 @@ export const CATEGORIES_CATALOG = [
   },
   {
     id: 'c4444444-4444-4444-4444-444444444444',
-    name: 'Marcenaria',
+    name: 'Marcenaria e fábrica',
     slug: 'marcenaria',
     description: 'Fábricas e oficinas de médio e grande porte.',
     icon: 'Hammer',
     specialties: [
-      { id: '5a6bf4d7-7f11-4152-9749-e4d6ff193b9f', name: 'Usinagem CNC', slug: 'usinagem-cnc' },
-      { id: 'e819f860-a376-4634-a757-4f0760f38b50', name: 'Grandes Lotes e Franquias', slug: 'grandes-lotes' },
+      { id: '5a6bf4d7-7f11-4152-9749-e4d6ff193b9f', name: 'Corte e furação por CNC', slug: 'usinagem-cnc' },
+      { id: 'e819f860-a376-4634-a757-4f0760f38b50', name: 'Produção em grande volume', slug: 'grandes-lotes' },
       { id: 'e9c38eb3-2d2e-4787-8d6c-1b7cfbd975eb', name: 'Corte e Fita de Borda', slug: 'corte-borda' },
     ],
   },
@@ -61,8 +61,8 @@ export const CATEGORIES_CATALOG = [
     icon: 'Ruler',
     specialties: [
       { id: 'fd4dcb30-5e4f-4fd1-9eee-141d370615a2', name: 'Projeto 3D / Promob', slug: 'projeto-promob' },
-      { id: '251ff6c0-fa2b-40c2-a354-795e54a43389', name: 'Renderização Fotorrealista', slug: 'render-fotorrealista' },
-      { id: 'fcb855df-6539-43e8-8088-262fcb95e6fb', name: 'Planta Técnica de Fabricação', slug: 'planta-tecnica' },
+      { id: '251ff6c0-fa2b-40c2-a354-795e54a43389', name: 'Imagens 3D realistas', slug: 'render-fotorrealista' },
+      { id: 'fcb855df-6539-43e8-8088-262fcb95e6fb', name: 'Projeto técnico para fábrica', slug: 'planta-tecnica' },
     ],
   },
   {

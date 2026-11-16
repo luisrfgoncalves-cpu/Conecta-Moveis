@@ -24,6 +24,16 @@ export default function FuncaoDaPlataformaPage() {
         </p>
       </div>
 
+      {/* Resumo Executivo em Linguagem Simples */}
+      <div className="glass-panel p-5 sm:p-6 rounded-2xl border border-sky-500/20 bg-sky-950/20 text-xs sm:text-sm text-slate-200 space-y-2">
+        <h2 className="text-base font-bold text-sky-400">Em resumo:</h2>
+        <ul className="list-disc pl-5 space-y-1 text-slate-300">
+          <li>A Conecta Móveis funciona como catálogo para divulgar montadores, marceneiros e oficinas da região de Jundiaí.</li>
+          <li>A plataforma não executa serviços, não elabora orçamentos e não cobra comissão sobre acordos fechados.</li>
+          <li>A execução do trabalho, combinados e prazos são tratados diretamente entre você e o anunciante.</li>
+        </ul>
+      </div>
+
       {/* Declaração Oficial */}
       <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-white/10 space-y-4">
         <h2 className="text-base font-bold text-white flex items-center gap-2">
@@ -89,7 +99,7 @@ export default function FuncaoDaPlataformaPage() {
       </div>
 
       <div className="p-4 rounded-2xl bg-white/5 border border-white/10 text-xs text-slate-400">
-        Para orientações práticas sobre contratação direta, contratos e precauções, acesse nossa página de <Link href="/contrate-com-seguranca" className="text-orange-400 hover:underline">orientações de segurança</Link>.
+        Para orientações práticas sobre contratação direta, contratos e precauções, acesse nossa página de <Link href="/contrate-com-seguranca" className="text-orange-400 hover:underline">dicas de segurança</Link>.
       </div>
     </div>
   );

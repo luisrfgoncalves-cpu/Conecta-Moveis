@@ -623,7 +623,7 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
           <div>
             <h2 className="text-xl font-black text-white">Sua Identidade Pública</h2>
             <p className="text-xs text-slate-400 mt-1">
-              Como seu nome e sua apresentação aparecerão para os contratantes.
+              Como seu nome e sua apresentação aparecerão para quem procura os serviços.
             </p>
           </div>
 

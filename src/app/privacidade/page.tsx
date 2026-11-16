@@ -26,6 +26,16 @@ export default function PrivacidadePage() {
 
       <LegalBanner />
 
+      {/* Caixa de Resumo Executivo em Linguagem Simples */}
+      <div className="glass-panel p-5 sm:p-6 rounded-2xl border border-sky-500/20 bg-sky-950/20 text-xs sm:text-sm text-slate-200 space-y-2">
+        <h2 className="text-base font-bold text-sky-400">Em resumo:</h2>
+        <ul className="list-disc pl-5 space-y-1 text-slate-300">
+          <li>Coletamos apenas o mínimo necessário para criar a sua conta (e-mail e senha) e permitir que os perfis publiquem seus serviços.</li>
+          <li>Não pedimos CPF de consumidores, dados de cartão de crédito nem localização em tempo real.</li>
+          <li>Você tem direito a confirmar, corrigir, exportar ou excluir seus dados a qualquer momento pelo painel ou pelo nosso canal de atendimento de titulares.</li>
+        </ul>
+      </div>
+
       <div className="space-y-6 text-sm text-slate-200 leading-relaxed">
         <div className="p-4 rounded-xl bg-orange-500/10 border border-orange-500/20 text-orange-200 text-xs">
           <strong>Compromisso de Privacidade:</strong> A Conecta Móveis preza pela transparência, minimização na coleta de dados e respeito intransigente aos direitos fundamentais de liberdade e privacidade dos usuários e anunciantes do setor moveleiro de Jundiaí e região.
@@ -48,7 +58,7 @@ export default function PrivacidadePage() {
           </p>
           <ul className="list-disc pl-5 mt-2 space-y-1 text-slate-300">
             <li><strong>Usuários cadastrados:</strong> E-mail e senha criptografada em hash seguro (o formulário inicial não exige nome completo);</li>
-            <li><strong>Anunciantes e Profissionais:</strong> Nome comercial ou razão social, especialidades moveleiras, cidades de atuação, fotos de portfólio autoral e meios de contato comerciais (WhatsApp/telefone fornecidos voluntariamente);</li>
+            <li><strong>Anunciantes e Profissionais:</strong> Nome comercial ou razão social, especialidades moveleiras, cidades de atuação, fotos de apresentação autorais e meios de contato comerciais (WhatsApp/telefone fornecidos voluntariamente);</li>
             <li><strong>Registros Técnicos Obrigatórios:</strong> Endereço IP, data e hora de conexões e ações críticas de autenticação, em observância estrita ao art. 15 do Marco Civil da Internet (Lei 12.965/2014).</li>
           </ul>
         </section>

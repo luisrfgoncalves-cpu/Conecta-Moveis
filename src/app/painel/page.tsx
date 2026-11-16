@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 const quickLinks = [
   { href: '/painel/perfil', label: 'Completar perfil profissional', icon: User, desc: 'Adicione bio, especialidades e regiões de atendimento' },
-  { href: '/painel/portfolio', label: 'Enviar fotos de portfólio', icon: Images, desc: 'Fotos aprovadas ficam visíveis no seu perfil público' },
+  { href: '/painel/fotos', label: 'Enviar fotos de apresentação', icon: Images, desc: 'Fotos aprovadas ficam visíveis no seu perfil público' },
   { href: '/painel/solicitacoes', label: 'Ver solicitações recebidas', icon: MessageSquare, desc: 'Contatos de clientes interessados nos seus serviços' },
   { href: '/painel/avaliacoes', label: 'Minhas avaliações', icon: Star, desc: 'Visualize e responda avaliações de clientes' },
   { href: '/painel/seguranca', label: 'Segurança da conta', icon: ShieldCheck, desc: 'Altere senha ou baixe seus dados' },

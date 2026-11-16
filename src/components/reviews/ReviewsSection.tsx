@@ -75,7 +75,7 @@ export function ReviewsSection({
         <div>
           <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
             <Star className="w-4 h-4 text-amber-400" />
-            Avaliações e Reputação
+            Avaliações
           </h2>
           {stats.totalCount > 0 ? (
             <p className="text-xs text-slate-400 mt-1">
