@@ -211,7 +211,7 @@ export function SignUpForm() {
               {...register('ageDeclaration')}
             />
             <label htmlFor="ageDeclaration" className="text-xs text-slate-400 leading-relaxed cursor-pointer">
-              Declaro que tenho 18 anos ou mais e que possuo plena capacidade civil para utilizar e anunciar na plataforma.
+              Declaro que tenho 18 anos ou mais e que possuo plena capacidade civil para utilizar a plataforma.
             </label>
           </div>
           {errors.ageDeclaration && (

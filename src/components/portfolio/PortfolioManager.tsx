@@ -420,7 +420,7 @@ export function PortfolioManager({ initialItems, storage }: PortfolioManagerProp
           <div className="flex items-center justify-between pb-3 border-b border-white/10">
             <h3 className="text-base font-bold text-white flex items-center gap-2">
               <FolderPlus className="w-5 h-5 text-orange-400" />
-              Criar Novo Projeto de Portfólio
+              Criar Novo Álbum de Fotos
             </h3>
             <button
               type="button"
@@ -601,10 +601,9 @@ export function PortfolioManager({ initialItems, storage }: PortfolioManagerProp
           <div className="w-14 h-14 mx-auto rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-slate-400">
             <Layers className="w-7 h-7" />
           </div>
-          <h4 className="text-base font-bold text-white">Nenhum projeto cadastrado no portfólio</h4>
+          <h4 className="text-base font-bold text-white">Nenhum álbum de fotos cadastrado</h4>
           <p className="text-xs text-slate-400 max-w-md mx-auto leading-relaxed">
-            Cadastre seu primeiro projeto acima e adicione até 6 fotos com boa iluminação para atrair
-            clientes em Jundiaí e região.
+            Cadastre seu primeiro álbum acima e adicione fotos de apresentação com boa iluminação para demonstrar seus serviços em Jundiaí e região.
           </p>
         </div>
       ) : (

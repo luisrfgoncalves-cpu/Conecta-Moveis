@@ -19,20 +19,9 @@ import {
   ShieldAlert,
   Globe,
   Eye,
+  PlusCircle,
+  Search,
 } from 'lucide-react';
-
-const navItems = [
-  { href: '/painel', label: 'Painel', icon: LayoutDashboard },
-  { href: '/painel/perfil', label: 'Meu Perfil', icon: User },
-  { href: '/painel/fotos', label: 'Fotos de Apresentação', icon: Images },
-  { href: '/painel/solicitacoes', label: 'Solicitações', icon: MessageSquare },
-  { href: '/painel/favoritos', label: 'Favoritos', icon: Heart },
-  { href: '/painel/avaliacoes', label: 'Avaliações', icon: Star },
-  { href: '/painel/assinatura', label: 'Assinatura', icon: CreditCard },
-  { href: '/painel/empresas', label: 'Empresa', icon: Building2 },
-  { href: '/painel/configuracoes', label: 'Configurações', icon: Settings },
-  { href: '/painel/seguranca', label: 'Segurança', icon: ShieldCheck },
-];
 
 export default async function PainelLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
@@ -40,7 +29,7 @@ export default async function PainelLayout({ children }: { children: React.React
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Segunda linha de defesa — middleware já redireciona, mas garantimos aqui
+  // Redireciona se não autenticado
   if (!user) redirect('/entrar');
 
   const { data: profile } = await supabase
@@ -49,27 +38,53 @@ export default async function PainelLayout({ children }: { children: React.React
     .eq('id', user.id)
     .single();
 
-  // Verificar se o usuário possui papel de moderador ou administrador
+  // Cliente admin para checar papéis e existência de perfil profissional
   const adminClient = createSupabaseClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
     { auth: { autoRefreshToken: false, persistSession: false } }
   );
 
-  const { data: roleRow } = await adminClient
-    .from('user_roles')
-    .select('role')
-    .eq('user_id', user.id)
-    .in('role', ['admin', 'moderator'])
-    .maybeSingle();
+  const [{ data: roleRow }, { data: profRow }] = await Promise.all([
+    adminClient
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', user.id)
+      .in('role', ['admin', 'moderator'])
+      .maybeSingle(),
+    adminClient
+      .from('professional_profiles')
+      .select('slug')
+      .eq('user_id', user.id)
+      .maybeSingle(),
+  ]);
 
   const isAdminOrMod = !!roleRow;
+  const hasProfessionalProfile = !!profRow;
 
-  const { data: profRow } = await adminClient
-    .from('professional_profiles')
-    .select('slug')
-    .eq('user_id', user.id)
-    .maybeSingle();
+  // Itens de navegação contextuais conforme Bloco 6.2
+  // Com perfil: Meu anúncio, Fotos de apresentação, Contatos recebidos, Minhas avaliações, Meu plano, Minha conta, Segurança
+  // Sem perfil: Início, Favoritos, Pedidos de contato enviados, Alertas, Minha conta e privacidade, botão "Quero divulgar meu trabalho"
+  const navItems = hasProfessionalProfile
+    ? [
+        { href: '/painel', label: 'Painel', icon: LayoutDashboard },
+        { href: '/painel/perfil', label: 'Meu Anúncio', icon: User },
+        { href: '/painel/fotos', label: 'Fotos de Apresentação', icon: Images },
+        { href: '/painel/solicitacoes', label: 'Contatos Recebidos', icon: MessageSquare },
+        { href: '/painel/avaliacoes', label: 'Avaliações', icon: Star },
+        { href: '/painel/assinatura', label: 'Meu Plano', icon: CreditCard },
+        { href: '/painel/empresas', label: 'Empresa', icon: Building2 },
+        { href: '/painel/configuracoes', label: 'Minha Conta', icon: Settings },
+        { href: '/painel/seguranca', label: 'Segurança', icon: ShieldCheck },
+      ]
+    : [
+        { href: '/painel', label: 'Início', icon: LayoutDashboard },
+        { href: '/encontrar-profissionais', label: 'Buscar Profissionais', icon: Search },
+        { href: '/painel/favoritos', label: 'Favoritos', icon: Heart },
+        { href: '/painel/solicitacoes', label: 'Pedidos Enviados', icon: MessageSquare },
+        { href: '/painel/configuracoes', label: 'Minha Conta e Privacidade', icon: Settings },
+        { href: '/painel/seguranca', label: 'Segurança', icon: ShieldCheck },
+      ];
 
   async function handleSignOut() {
     'use server';
@@ -108,7 +123,7 @@ export default async function PainelLayout({ children }: { children: React.React
           </div>
         </div>
 
-        {/* Navegação */}
+        {/* Navegação contextual */}
         <nav aria-label="Menu do painel" className="p-4">
           <ul className="space-y-1">
             {isAdminOrMod && (
@@ -122,6 +137,19 @@ export default async function PainelLayout({ children }: { children: React.React
                 </Link>
               </li>
             )}
+
+            {!hasProfessionalProfile && (
+              <li className="mb-3 pb-3 border-b border-white/10">
+                <Link
+                  href="/painel/perfil"
+                  className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 transition shadow-md"
+                >
+                  <PlusCircle className="w-4 h-4 flex-shrink-0" />
+                  <span>Quero divulgar meu trabalho</span>
+                </Link>
+              </li>
+            )}
+
             {navItems.map(({ href, label, icon: Icon }) => (
               <li key={href}>
                 <Link
@@ -173,4 +201,3 @@ export default async function PainelLayout({ children }: { children: React.React
     </div>
   );
 }
-

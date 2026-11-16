@@ -450,4 +450,34 @@ ot-found.tsx (404) e error.tsx com interface amigável, ícones, atalho para bus
 - **Pendência para o Advogado**:
   - Validar os textos explicativos das trilhas em `/como-funciona` e da proposta de valor em `/para-profissionais`.
 
+---
+
+### J-023 — Contas, Intenção do Usuário e Painéis Contextuais (Bloco 6)
+- **Data**: 16/11/2026
+- **Fase**: Ajuste Final Pré-Divulgação — Bloco 6 (Contas, Intenção e Painéis)
+- **Funcionalidade ou Texto**:
+  1. **(6.1) Desacoplamento de Aceite e Tela de Intenção**:
+     - No formulário de cadastro (`SignUpForm.tsx`), a declaração de maioridade foi ajustada para *"Declaro que tenho 18 anos ou mais e que possuo plena capacidade civil para utilizar a plataforma"*, deixando de misturar compulsoriamente os verbos *"utilizar e anunciar"*.
+     - Criação da tela `/painel/intencao` com cartões de intenção clara: *"Encontrar um profissional"*, *"Divulgar meu trabalho"* e *"Os dois"*.
+     - Criação da tabela `user_preferences` via migration SQL para armazenar a preferência declarada sem conceder papéis ou privilégios de segurança de forma precoce.
+  2. **(6.2) Painel Adaptativo por Contexto**:
+     - Menu lateral e página inicial do painel (`/painel/layout.tsx` e `/painel/page.tsx`) agora se adaptam dinamicamente se o usuário possui ou não perfil profissional publicado:
+       - **Sem perfil profissional:** Início, Buscar Profissionais, Favoritos, Pedidos Enviados, Minha Conta e Privacidade, Segurança, acompanhados de banner e botão de destaque *"Quero divulgar meu trabalho"*.
+       - **Com perfil profissional:** Painel, Meu Anúncio, Fotos de Apresentação, Contatos Recebidos, Avaliações, Meu Plano, Empresa, Minha Conta, Segurança e botão *"Ver como visitante"*.
+     - `/admin` mantido isolado e acessível exclusivamente para administradores/moderadores.
+  3. **(6.3) Login com Menos Atrito e Propostas**:
+     - Retorno consistente via parâmetro `redirect` com validação estrita anti-open-redirect.
+     - Registro da proposta de login por link mágico (Magic Link) e Google OAuth para aprovação prévia do proprietário.
+  4. **(6.4) Fotos de Apresentação e Limpeza de Vocabulário**:
+     - Substituição de termos residuais de "portfólio" por "álbum de fotos" na interface do painel (`PortfolioManager.tsx`).
+     - Limites padronizados conforme o registro de configurações da plataforma.
+- **Regras e Normas Envolvidas**: R3, R4 (imparcialidade e transparência); R16 (Gate de Isenção); R18 (ausência de intermediação privada); LGPD art. 6º, 7º (finalidade e transparência da coleta); CDC arts. 30 e 31.
+- **Risco**: Baixo (adequação de UX pós-cadastro e isolamento contextual de painéis).
+- **Decisão Tomada**: A preferência de intenção não confere status privilegiado no banco de dados, servindo estritamente como guia de navegação amigável e desoneração de obrigações de anúncio para o usuário que apenas deseja buscar serviços.
+- **Quem Decidiu**: Usuário (orientação para execução cirúrgica do Bloco 6 e deploy de produção).
+- **Evidência**: `src/components/auth/SignUpForm.tsx`, `src/app/painel/intencao/page.tsx`, `src/app/painel/intencao/IntencaoCards.tsx`, `src/lib/preferences/actions.ts`, `src/app/painel/layout.tsx`, `src/app/painel/page.tsx`, `src/components/portfolio/PortfolioManager.tsx`, `supabase/migrations/20261116000002_user_preferences.sql`.
+- **Pendência para o Advogado**:
+  - Homologar a separação do consentimento entre navegação e anúncio de serviços.
+
+
 
