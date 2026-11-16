@@ -6,7 +6,7 @@ import { BackButton } from '@/components/navigation/BackButton';
 import { BrandLogo } from '@/components/brand/BrandLogo';
 
 export const metadata: Metadata = {
-  title: 'Criar conta — Conecta Móveis',
+  title: 'Criar conta — Vitrine Moveleira',
   description: 'Crie sua conta grátis e conecte-se a profissionais do setor moveleiro.',
 };
 

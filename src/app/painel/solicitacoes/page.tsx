@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 import { getMyContactRequests } from '@/lib/contact/actions';
 import { SolicitacoesManager } from '@/components/contact/SolicitacoesManager';
 
-export const metadata = { title: 'Solicitações de Contato — Conecta Móveis' };
+export const metadata = { title: 'Solicitações de Contato — Vitrine Moveleira' };
 
 export default async function SolicitacoesPage() {
   const supabase = await createClient();

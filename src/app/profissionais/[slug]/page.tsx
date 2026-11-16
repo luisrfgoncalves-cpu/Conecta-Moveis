@@ -57,7 +57,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description,
       type: 'profile',
       locale: 'pt_BR',
-      siteName: 'Conecta Móveis',
+      siteName: 'Vitrine Moveleira',
       images: professional.avatar_url
         ? [{ url: professional.avatar_url, width: 400, height: 400, alt: professional.display_name }]
         : [{ url: '/og-default.jpg', width: 1200, height: 630 }],
@@ -101,7 +101,7 @@ export default async function ProfissionalPublicPage({ params }: PageProps) {
     : { eligible: false, reason: 'Avaliações não disponíveis no momento.' };
   const isOwner = user ? user.id === (professional as any).user_id : false;
 
-  const profileUrl = `${process.env.NEXT_PUBLIC_SITE_URL ?? 'https://conecta-moveis.vercel.app'}/profissionais/${slug}`;
+  const profileUrl = `${process.env.NEXT_PUBLIC_SITE_URL ?? 'https://vitrine-moveleira.vercel.app'}/profissionais/${slug}`;
 
   const isNew = () => {
     const createdDate = new Date(professional.created_at);
@@ -226,7 +226,7 @@ export default async function ProfissionalPublicPage({ params }: PageProps) {
             <strong className="text-amber-300 block font-bold mb-0.5">
               Aviso da Plataforma:
             </strong>
-            A Conecta Móveis é um catálogo de conexão direta. A contratação, orçamentos e pagamentos são combinados diretamente entre cliente e profissional. Este anúncio é publicado pelo anunciante e não representa garantia da plataforma sobre prazo ou execução.
+            A Vitrine Moveleira é um catálogo de conexão direta. A contratação, orçamentos e pagamentos são combinados diretamente entre cliente e profissional. Este anúncio é publicado pelo anunciante e não representa garantia da plataforma sobre prazo ou execução.
           </div>
         </div>
 
@@ -239,7 +239,7 @@ export default async function ProfissionalPublicPage({ params }: PageProps) {
           />
           <ShareButton
             url={profileUrl}
-            title={`${professional.display_name} — ${professional.city}/${professional.state} | Conecta Móveis`}
+            title={`${professional.display_name} — ${professional.city}/${professional.state} | Vitrine Moveleira`}
           />
           <div className="ml-auto">
             <ReportButton

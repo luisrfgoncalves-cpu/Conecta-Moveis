@@ -4,9 +4,9 @@ import { LEGAL_VERSION, LEGAL_DATE } from "@/lib/legal/config";
 import { LegalBanner } from "@/components/legal/LegalBanner";
 
 export const metadata: Metadata = {
-  title: "Termos de Uso e Condições Gerais | Conecta Móveis",
+  title: "Termos de Uso e Condições Gerais | Vitrine Moveleira",
   description:
-    "Termos de uso da plataforma Conecta Móveis — vitrine de anúncios e aproximação no setor moveleiro em Jundiaí e região.",
+    "Termos de uso da plataforma Vitrine Moveleira — vitrine de anúncios e aproximação no setor moveleiro em Jundiaí e região.",
 };
 
 export default function TermosPage() {
@@ -27,7 +27,7 @@ export default function TermosPage() {
       <div className="glass-panel p-5 sm:p-6 rounded-2xl border border-sky-500/20 bg-sky-950/20 text-xs sm:text-sm text-slate-200 space-y-2">
         <h2 className="text-base font-bold text-sky-400">Em resumo:</h2>
         <ul className="list-disc pl-5 space-y-1 text-slate-300">
-          <li>A Conecta Móveis é um catálogo digital de aproximação para você encontrar profissionais e empresas de móveis em Jundiaí e região.</li>
+          <li>A Vitrine Moveleira é um catálogo digital de aproximação para você encontrar profissionais e empresas de móveis em Jundiaí e região.</li>
           <li>Não somos fornecedores nem executores dos serviços, não intermediamos pagamentos e não cobramos comissão sobre os serviços combinados.</li>
           <li>Negociação, contratos, preços e prazos são tratados diretamente entre você e o profissional escolhido.</li>
           <li>O cadastro de anunciantes é restrito a maiores de 18 anos e todo conteúdo publicado é de responsabilidade de quem o envia.</li>
@@ -36,13 +36,13 @@ export default function TermosPage() {
 
       <div className="space-y-6 text-sm text-slate-200 leading-relaxed">
         <div className="p-4 rounded-xl bg-orange-500/10 border border-orange-500/20 text-orange-200 text-xs">
-          <strong>Declaração Oficial:</strong> A Conecta Móveis é um provedor de aplicação de internet que oferece espaço de divulgação (vitrine e diretório de anúncios) e meio de aproximação inicial entre usuários e anunciantes do setor moveleiro. Não é fornecedora, prestadora, corretora, representante nem garantidora de serviços.
+          <strong>Declaração Oficial:</strong> A Vitrine Moveleira é um provedor de aplicação de internet que oferece espaço de divulgação (vitrine e diretório de anúncios) e meio de aproximação inicial entre usuários e anunciantes do setor moveleiro. Não é fornecedora, prestadora, corretora, representante nem garantidora de serviços.
         </div>
 
         <section>
           <h2 className="text-lg font-bold text-white mb-2">1. Natureza e Função da Plataforma</h2>
           <p>
-            A Conecta Móveis opera exclusivamente como catálogo e vitrine de divulgação regional (Jundiaí e cidades vizinhas). A plataforma não presta serviços de montagem, marcenaria ou reparos, não intermedeia pagamentos, não retém valores e não cobra qualquer comissão ou porcentagem sobre negócios eventualmente pactuados entre as partes.
+            A Vitrine Moveleira opera exclusivamente como catálogo e vitrine de divulgação regional (Jundiaí e cidades vizinhas). A plataforma não presta serviços de montagem, marcenaria ou reparos, não intermedeia pagamentos, não retém valores e não cobra qualquer comissão ou porcentagem sobre negócios eventualmente pactuados entre as partes.
           </p>
           <p className="mt-2">
             Saiba mais em detalhes na nossa página <Link href="/funcao-da-plataforma" className="text-orange-400 underline">Função e Limites da Plataforma</Link>.
@@ -52,14 +52,14 @@ export default function TermosPage() {
         <section>
           <h2 className="text-lg font-bold text-white mb-2">2. Requisitos de Acesso e Trava de Idade</h2>
           <p>
-            O uso dos serviços, cadastro de perfil ou anúncio na Conecta Móveis é <strong>estritamente restrito a pessoas com 18 anos ou mais</strong> ou pessoas jurídicas regularmente constituídas. Ao criar uma conta, você declara expressamente possuir plena capacidade civil.
+            O uso dos serviços, cadastro de perfil ou anúncio na Vitrine Moveleira é <strong>estritamente restrito a pessoas com 18 anos ou mais</strong> ou pessoas jurídicas regularmente constituídas. Ao criar uma conta, você declara expressamente possuir plena capacidade civil.
           </p>
         </section>
 
         <section>
           <h2 className="text-lg font-bold text-white mb-2">3. Não Endosso, Sem Avaliação e Sem Garantia</h2>
           <p>
-            A presença de qualquer profissional, empresa ou anúncio nesta plataforma <strong>não constitui recomendação, seleção, homologação ou atestado de idoneidade</strong> por parte da Conecta Móveis.
+            A presença de qualquer profissional, empresa ou anúncio nesta plataforma <strong>não constitui recomendação, seleção, homologação ou atestado de idoneidade</strong> por parte da Vitrine Moveleira.
           </p>
           <p className="mt-2">
             A plataforma não verifica previamente a competência técnica dos anunciantes nem garante a qualidade, a pontualidade ou o resultado dos serviços. Orientações preventivas e canais de proteção podem ser consultados em <Link href="/contrate-com-seguranca" className="text-orange-400 underline">Dicas de segurança</Link>.
@@ -72,14 +72,14 @@ export default function TermosPage() {
             O anunciante é o único e integral responsável pelas informações, fotos, apresentações, marcas, prazos e orçamentos que publicar, bem como pela execução dos serviços prestados.
           </p>
           <p className="mt-2">
-            O anunciante declara e garante ser o titular exclusivo dos direitos autorais de todas as fotos e imagens de projetos enviadas, ou que possui expressa autorização legal de autores e clientes. O anunciante concede à Conecta Móveis licença limitada, não exclusiva, gratuita e revogável exclusivamente para veicular as imagens na vitrine do anúncio.
+            O anunciante declara e garante ser o titular exclusivo dos direitos autorais de todas as fotos e imagens de projetos enviadas, ou que possui expressa autorização legal de autores e clientes. O anunciante concede à Vitrine Moveleira licença limitada, não exclusiva, gratuita e revogável exclusivamente para veicular as imagens na vitrine do anúncio.
           </p>
         </section>
 
         <section>
           <h2 className="text-lg font-bold text-white mb-2">5. Direito de Regresso</h2>
           <p>
-            Caso a Conecta Móveis venha a responder administrativa ou judicialmente por qualquer dano, infração autoral, inadimplemento ou ato ilícito praticado pelo anunciante ou originado de seu conteúdo, a plataforma exercerá integralmente o <strong>direito de regresso</strong> contra o anunciante responsável, incluindo custas e honorários advocatícios.
+            Caso a Vitrine Moveleira venha a responder administrativa ou judicialmente por qualquer dano, infração autoral, inadimplemento ou ato ilícito praticado pelo anunciante ou originado de seu conteúdo, a plataforma exercerá integralmente o <strong>direito de regresso</strong> contra o anunciante responsável, incluindo custas e honorários advocatícios.
           </p>
         </section>
 
@@ -100,7 +100,7 @@ export default function TermosPage() {
         <section>
           <h2 className="text-lg font-bold text-white mb-2">8. Responsabilidade Legal da Plataforma</h2>
           <p>
-            A Conecta Móveis responde pelos seus próprios atos e deveres legais impostos pelo Marco Civil da Internet (Lei 12.965/2014) e pela LGPD (Lei 13.709/2018), incluindo segurança dos dados, atendimento a ordens judiciais e guarda de registros de acesso a aplicações nos termos da lei.
+            A Vitrine Moveleira responde pelos seus próprios atos e deveres legais impostos pelo Marco Civil da Internet (Lei 12.965/2014) e pela LGPD (Lei 13.709/2018), incluindo segurança dos dados, atendimento a ordens judiciais e guarda de registros de acesso a aplicações nos termos da lei.
           </p>
         </section>
 

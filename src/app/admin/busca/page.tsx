@@ -6,7 +6,7 @@ import { AdminBuscaClient } from '@/components/admin/AdminBuscaClient';
 import { Search } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Busca Inteligente & Sinônimos | Admin Conecta Móveis',
+  title: 'Busca Inteligente & Sinônimos | Admin Vitrine Moveleira',
   description: 'Gerenciamento de sinônimos de busca e monitoramento de termos sem resultado.',
 };
 

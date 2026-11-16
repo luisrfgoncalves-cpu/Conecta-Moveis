@@ -7,7 +7,7 @@ import { Eye } from 'lucide-react';
 import { ProfileWizard } from '@/components/profile/ProfileWizard';
 
 export const metadata: Metadata = {
-  title: 'Meu Perfil Profissional — Painel Conecta Móveis',
+  title: 'Meu Perfil Profissional — Painel Vitrine Moveleira',
   description: 'Complete e edite seu perfil para ser encontrado por clientes em Jundiaí e região.',
 };
 

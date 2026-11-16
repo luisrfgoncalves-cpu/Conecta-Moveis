@@ -12,7 +12,7 @@ const faqs = [
   {
     category: 'Para Quem Procura Serviços',
     q: 'A plataforma cobra alguma taxa para eu consultar os profissionais?',
-    a: 'Não. O Conecta Móveis é gratuito para visitantes e contratantes. Você pode navegar, ver as fotos de apresentação dos serviços e iniciar conversas com quantos profissionais quiser sem pagar taxa de uso.',
+    a: 'Não. O Vitrine Moveleira é gratuito para visitantes e contratantes. Você pode navegar, ver as fotos de apresentação dos serviços e iniciar conversas com quantos profissionais quiser sem pagar taxa de uso.',
   },
   {
     category: 'Para Quem Procura Serviços',
@@ -22,7 +22,7 @@ const faqs = [
   {
     category: 'Para Quem Procura Serviços',
     q: 'A plataforma oferece garantia de execução ou qualidade dos serviços?',
-    a: 'Não. O Conecta Móveis atua estritamente como um catálogo de divulgação e aproximação local. A plataforma não participa das negociações, não executa serviços e não oferece garantia sobre o resultado, cabendo a cada anunciante a responsabilidade pelo seu trabalho.',
+    a: 'Não. O Vitrine Moveleira atua estritamente como um catálogo de divulgação e aproximação local. A plataforma não participa das negociações, não executa serviços e não oferece garantia sobre o resultado, cabendo a cada anunciante a responsabilidade pelo seu trabalho.',
   },
   {
     category: 'Para Quem Procura Serviços',
@@ -36,13 +36,13 @@ const faqs = [
   },
   {
     category: 'Para Profissionais e Marcenarias',
-    q: 'A Conecta Móveis cobra comissão ou porcentagem sobre os serviços fechados?',
+    q: 'A Vitrine Moveleira cobra comissão ou porcentagem sobre os serviços fechados?',
     a: 'Zero comissão. A plataforma não retém nenhuma porcentagem sobre os atendimentos que você fechar. Todo o rendimento combinado com seus clientes fica integralmente com você.',
   },
   {
     category: 'Para Profissionais e Marcenarias',
     q: 'Preciso ter CNPJ para anunciar meus serviços no catálogo?',
-    a: 'Não é obrigatório. Profissionais autônomos que atuam como pessoa física, microempreendedores (MEI) e marcenarias de todos os portes podem criar perfil e divulgar seus trabalhos no Conecta Móveis.',
+    a: 'Não é obrigatório. Profissionais autônomos que atuam como pessoa física, microempreendedores (MEI) e marcenarias de todos os portes podem criar perfil e divulgar seus trabalhos no Vitrine Moveleira.',
   },
   {
     category: 'Para Profissionais e Marcenarias',
@@ -70,7 +70,7 @@ export function FaqSection() {
           Perguntas Frequentes sobre a Plataforma
         </h2>
         <p className="text-xs sm:text-sm text-slate-300">
-          Tudo o que você precisa saber sobre o funcionamento do Conecta Móveis.
+          Tudo o que você precisa saber sobre o funcionamento do Vitrine Moveleira.
         </p>
       </div>
 

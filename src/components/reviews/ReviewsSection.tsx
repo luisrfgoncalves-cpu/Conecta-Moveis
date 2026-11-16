@@ -79,13 +79,13 @@ export function ReviewsSection({
           </h2>
           {stats.totalCount > 0 ? (
             <p className="text-xs text-slate-400 mt-1">
-              Avaliações de usuários com interação registrada no Conecta Móveis.
+              Avaliações de usuários com interação registrada no Vitrine Moveleira.
             </p>
           ) : (
             <p className="text-xs text-slate-400 mt-1">Sem avaliações ainda.</p>
           )}
           <p className="text-[11px] text-slate-500 mt-1 italic">
-            Opinião do usuário. A Conecta Móveis não verifica nem endossa avaliações; a publicação segue regras públicas.
+            Opinião do usuário. A Vitrine Moveleira não verifica nem endossa avaliações; a publicação segue regras públicas.
           </p>
         </div>
 
@@ -177,7 +177,7 @@ export function ReviewsSection({
         <div className="p-6 rounded-2xl bg-white/5 border border-white/10 text-center">
           <p className="text-sm font-semibold text-slate-300">Sem avaliações ainda</p>
           <p className="text-xs text-slate-400 mt-1 max-w-md mx-auto">
-            As avaliações no Conecta Móveis exigem solicitação prévia de contato para garantir que refletem interações reais.
+            As avaliações no Vitrine Moveleira exigem solicitação prévia de contato para garantir que refletem interações reais.
           </p>
         </div>
       )}

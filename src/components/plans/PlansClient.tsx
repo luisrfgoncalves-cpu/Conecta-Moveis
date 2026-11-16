@@ -161,7 +161,7 @@ export function PlansClient({
                     {!isPro && !isEnterprise && <UserCheck className="w-5 h-5 text-slate-400" />}
                   </div>
                   <p className="text-xs text-slate-400 mt-2 min-h-[32px]">
-                    {plan.description || 'Plano de visibilidade no Conecta Móveis.'}
+                    {plan.description || 'Plano de visibilidade no Vitrine Moveleira.'}
                   </p>
                 </div>
 

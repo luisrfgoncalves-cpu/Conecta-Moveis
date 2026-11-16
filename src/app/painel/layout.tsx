@@ -99,8 +99,8 @@ export default async function PainelLayout({ children }: { children: React.React
         <div className="p-6 border-b border-white/10">
           <Link href="/" aria-label="Ir para o início">
             <Image
-              src="/brand/logo-conecta-moveis.png"
-              alt="Conecta Móveis"
+              src="/brand/logo-vitrine-moveleira.png"
+              alt="Vitrine Moveleira"
               width={140}
               height={36}
               className="h-8 w-auto"

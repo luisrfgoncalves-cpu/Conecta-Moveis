@@ -37,6 +37,21 @@ class SoundManager {
   public playClick() {
     if (!this.enabled) return;
     try {
+      if (typeof window !== 'undefined') {
+        const audio = new Audio('/brand/vitrine-moveleira-sfx.mp3');
+        audio.volume = 0.45;
+        audio.play().catch(() => {
+          this.playSynthesized();
+        });
+        return;
+      }
+    } catch {
+      this.playSynthesized();
+    }
+  }
+
+  private playSynthesized() {
+    try {
       this.initCtx();
       if (!this.ctx) return;
       if (this.ctx.state === 'suspended') {

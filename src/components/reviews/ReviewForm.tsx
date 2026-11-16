@@ -81,7 +81,7 @@ export function ReviewForm({ contactRequestId, professionalName, onSuccess }: Re
         </div>
         <h4 className="text-base font-bold text-white">Avaliação Publicada!</h4>
         <p className="text-xs text-slate-300">
-          Obrigado por contribuir com a comunidade do Conecta Móveis.
+          Obrigado por contribuir com a comunidade do Vitrine Moveleira.
         </p>
       </div>
     );

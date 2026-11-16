@@ -472,7 +472,7 @@ export async function exportDatabaseBackup(): Promise<{
       metadata: {
         exportedAt: new Date().toISOString(),
         exportedBy: user.id,
-        platform: 'Conecta Móveis Jundiaí',
+        platform: 'Vitrine Moveleira Jundiaí',
         counts: {
           profiles: profilesRes.data?.length || 0,
           professional_profiles: profProfilesRes.data?.length || 0,

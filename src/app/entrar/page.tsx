@@ -6,8 +6,8 @@ import { BackButton } from '@/components/navigation/BackButton';
 import { BrandLogo } from '@/components/brand/BrandLogo';
 
 export const metadata: Metadata = {
-  title: 'Entrar — Conecta Móveis',
-  description: 'Acesse sua conta na plataforma Conecta Móveis.',
+  title: 'Entrar — Vitrine Moveleira',
+  description: 'Acesse sua conta na plataforma Vitrine Moveleira.',
 };
 
 export default function EntrarPage() {

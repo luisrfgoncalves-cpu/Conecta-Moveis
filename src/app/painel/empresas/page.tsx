@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 import { CompanyForm } from '@/components/profile/CompanyForm';
 
 export const metadata: Metadata = {
-  title: 'Minha Empresa — Painel Conecta Móveis',
+  title: 'Minha Empresa — Painel Vitrine Moveleira',
   description: 'Gerencie os dados cadastrais da sua marcenaria, loja ou showroom de móveis.',
 };
 

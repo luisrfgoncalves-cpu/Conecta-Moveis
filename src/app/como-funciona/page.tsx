@@ -10,9 +10,9 @@ import { Alert } from '@/components/ui/Feedback';
 import { ComoFuncionaOnboarding } from '@/components/onboarding/ComoFuncionaOnboarding';
 
 export const metadata: Metadata = {
-  title: 'Como Funciona | Conecta Móveis',
+  title: 'Como Funciona | Vitrine Moveleira',
   description:
-    'Entenda como funciona o Conecta Móveis para quem procura serviços e para quem anuncia montagem, marcenaria e projetos em Jundiaí e região.',
+    'Entenda como funciona o Vitrine Moveleira para quem procura serviços e para quem anuncia montagem, marcenaria e projetos em Jundiaí e região.',
 };
 
 export default function ComoFuncionaPage() {
@@ -25,7 +25,7 @@ export default function ComoFuncionaPage() {
           <BackButton fallback="/" label="Voltar à tela anterior" />
         </div>
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight">
-          Como Funciona o Conecta Móveis
+          Como Funciona o Vitrine Moveleira
         </h1>
         <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-2xl">
           Somos um catálogo aberto do polo moveleiro de Jundiaí e região. Conheça as duas formas de utilizar a plataforma.
@@ -35,7 +35,7 @@ export default function ComoFuncionaPage() {
       {/* Alerta de Função e Transparência */}
       <Alert type="legal">
         <strong className="text-white font-bold block mb-1">O que a plataforma faz e não faz:</strong>
-        A Conecta Móveis oferece espaço de divulgação e catálogo aberto. Não intermediamos negócios, não somos empregadores, não cobramos comissão e não recebemos pagamentos por serviços. Valores, prazos e condições são combinados diretamente entre você e o profissional.
+        A Vitrine Moveleira oferece espaço de divulgação e catálogo aberto. Não intermediamos negócios, não somos empregadores, não cobramos comissão e não recebemos pagamentos por serviços. Valores, prazos e condições são combinados diretamente entre você e o profissional.
       </Alert>
 
       {/* Trilha 1: Para quem procura profissionais */}

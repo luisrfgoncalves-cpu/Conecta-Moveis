@@ -4,7 +4,7 @@ import { LEGAL_VERSION, LEGAL_DATE } from "@/lib/legal/config";
 import { LegalBanner } from "@/components/legal/LegalBanner";
 
 export const metadata: Metadata = {
-  title: "Regras de Notificação e Retirada | Conecta Móveis",
+  title: "Regras de Notificação e Retirada | Vitrine Moveleira",
   description:
     "Procedimento formal para notificação de conteúdos ilícitos, prazos, contestação e custódia probatória.",
 };

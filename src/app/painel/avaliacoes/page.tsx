@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 import { getMyReviewsData } from '@/lib/reviews/actions';
 import { AvaliacoesManager } from '@/components/reviews/AvaliacoesManager';
 
-export const metadata = { title: 'Avaliações — Conecta Móveis' };
+export const metadata = { title: 'Avaliações — Vitrine Moveleira' };
 
 export default async function AvaliacoesPage() {
   const supabase = await createClient();

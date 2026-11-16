@@ -36,8 +36,8 @@ export function SplashScreen() {
 
       <div className="relative z-10 flex flex-col items-center space-y-6">
         <Image
-          src="/brand/logo-conecta-moveis.png"
-          alt="Conecta Móveis"
+          src="/brand/logo-vitrine-moveleira.png"
+          alt="Vitrine Moveleira"
           width={280}
           height={60}
           priority

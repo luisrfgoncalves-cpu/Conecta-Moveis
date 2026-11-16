@@ -4,9 +4,9 @@ import { LEGAL_VERSION, LEGAL_DATE } from "@/lib/legal/config";
 import { LegalBanner } from "@/components/legal/LegalBanner";
 
 export const metadata: Metadata = {
-  title: "Política de Planos e Assinatura | Conecta Móveis",
+  title: "Política de Planos e Assinatura | Vitrine Moveleira",
   description:
-    "Diretrizes para aquisição de espaço de anúncio, planos mensais e ausência de comissões na Conecta Móveis.",
+    "Diretrizes para aquisição de espaço de anúncio, planos mensais e ausência de comissões na Vitrine Moveleira.",
 };
 
 export default function PoliticaAssinaturaPage() {
@@ -31,14 +31,14 @@ export default function PoliticaAssinaturaPage() {
         <section>
           <h2 className="text-lg font-bold text-white mb-2">1. Natureza da Assinatura: Locação de Espaço Digital</h2>
           <p>
-            Os planos de assinatura da Conecta Móveis destinam-se exclusivamente a ampliar o espaço de fotos de apresentação e a posição de exibição na vitrine do diretório. A contratação de um plano não confere qualquer garantia de captação de clientes, volume de orçamentos ou faturamento, dependendo exclusivamente do mercado e do relacionamento direto entre consumidor e anunciante.
+            Os planos de assinatura da Vitrine Moveleira destinam-se exclusivamente a ampliar o espaço de fotos de apresentação e a posição de exibição na vitrine do diretório. A contratação de um plano não confere qualquer garantia de captação de clientes, volume de orçamentos ou faturamento, dependendo exclusivamente do mercado e do relacionamento direto entre consumidor e anunciante.
           </p>
         </section>
 
         <section>
           <h2 className="text-lg font-bold text-white mb-2">2. Ausência Total de Comissão ou Intermediação Financeira</h2>
           <p>
-            A Conecta Móveis jamais cobra percentual, comissão, taxa de sucesso ou qualquer valor atrelado aos negócios acordados entre o cliente e o profissional. Todo e qualquer pagamento relativo à execução dos serviços moveleiros é pactuado diretamente entre as partes, sem participação ou retenção por parte da Conecta Móveis.
+            A Vitrine Moveleira jamais cobra percentual, comissão, taxa de sucesso ou qualquer valor atrelado aos negócios acordados entre o cliente e o profissional. Todo e qualquer pagamento relativo à execução dos serviços moveleiros é pactuado diretamente entre as partes, sem participação ou retenção por parte da Vitrine Moveleira.
           </p>
         </section>
 

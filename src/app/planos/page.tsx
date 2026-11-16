@@ -6,9 +6,9 @@ import { BackButton } from '@/components/navigation/BackButton';
 import { Breadcrumbs } from '@/components/navigation/Breadcrumbs';
 
 export const metadata = {
-  title: 'Planos e Visibilidade — Conecta Móveis',
+  title: 'Planos e Visibilidade — Vitrine Moveleira',
   description:
-    'Conheça os planos de visibilidade do Conecta Móveis para montadores, marceneiros e lojas em Jundiaí e região.',
+    'Conheça os planos de visibilidade do Vitrine Moveleira para montadores, marceneiros e lojas em Jundiaí e região.',
 };
 
 export default async function PlanosPage() {

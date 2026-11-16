@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { ArrowLeft, ShieldAlert, FileText, CheckCircle, Scale, PhoneCall } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Dicas para combinar o serviço com segurança — Conecta Móveis',
+  title: 'Dicas para combinar o serviço com segurança — Vitrine Moveleira',
   description: 'Recomendações neutras e boas práticas para clientes e profissionais ao negociar e solicitar serviços de marcenaria e montagem.',
 };
 
@@ -30,7 +30,7 @@ export default function ContrateComSegurancaPage() {
           <h2 className="text-base font-bold text-white">Aviso importante</h2>
         </div>
         <p className="text-xs text-slate-300 leading-relaxed">
-          A Conecta Móveis opera exclusivamente como espaço de divulgação e aproximação inicial. A plataforma não participa, não fiscaliza e não garante as negociações, orçamentos, contratos ou serviços combinados entre as partes. Estas recomendações visam a segurança mútua de quem procura e dos profissionais que anunciam.
+          A Vitrine Moveleira opera exclusivamente como espaço de divulgação e aproximação inicial. A plataforma não participa, não fiscaliza e não garante as negociações, orçamentos, contratos ou serviços combinados entre as partes. Estas recomendações visam a segurança mútua de quem procura e dos profissionais que anunciam.
         </p>
       </div>
 

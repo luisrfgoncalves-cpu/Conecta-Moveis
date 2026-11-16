@@ -6,7 +6,7 @@ import { BackButton } from '@/components/navigation/BackButton';
 import { Breadcrumbs } from '@/components/navigation/Breadcrumbs';
 
 export const metadata: Metadata = {
-  title: 'Categorias de Serviços | Conecta Móveis',
+  title: 'Categorias de Serviços | Vitrine Moveleira',
   description: 'Explore as categorias de profissionais e empresas do setor moveleiro: montadores, marceneiros, lojas de planejados, projetistas 3D e parceiros.',
 };
 

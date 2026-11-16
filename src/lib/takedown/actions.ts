@@ -197,7 +197,7 @@ export async function exportEvidencePackage(noticeId: string): Promise<{
     hashSha256: hash,
     generatedAt: new Date().toISOString(),
     chainOfCustody: {
-      platform: 'Conecta Móveis Jundiaí',
+      platform: 'Vitrine Moveleira Jundiaí',
       jurisdiction: 'Comarca de Jundiaí/SP — Brasil',
       officerResponsibleId: user.id,
     },

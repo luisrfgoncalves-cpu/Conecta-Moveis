@@ -4,7 +4,7 @@ import { Mail, Shield, Building, AlertCircle, FileText, ArrowLeft } from 'lucide
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Canais de Contato e Identificação do Operador — Conecta Móveis',
+  title: 'Canais de Contato e Identificação do Operador — Vitrine Moveleira',
   description: 'Canais de atendimento ao usuário, privacidade e titulares de dados, notificações judiciais e dados do operador.',
 };
 
@@ -23,7 +23,7 @@ export default function ContatoPage() {
         </Link>
         <h1 className="text-3xl font-black text-white">Canais de Contato e Identificação do Operador</h1>
         <p className="text-sm text-slate-400 mt-2">
-          Informações institucionais e canais oficiais de comunicação da plataforma Conecta Móveis.
+          Informações institucionais e canais oficiais de comunicação da plataforma Vitrine Moveleira.
         </p>
       </div>
 

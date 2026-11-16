@@ -4,7 +4,7 @@ import { NotificarConteudoClient } from '@/components/takedown/NotificarConteudo
 import { NotificarConteudoSkeleton } from '@/components/takedown/NotificarConteudoSkeleton';
 
 export const metadata: Metadata = {
-  title: 'Notificação de Conteúdo e Retirada — Conecta Móveis',
+  title: 'Notificação de Conteúdo e Retirada — Vitrine Moveleira',
   description: 'Canal de envio de notificações extrajudiciais, violações de direitos autorais ou infrações de termos.',
 };
 

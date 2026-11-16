@@ -12,7 +12,7 @@ import { Alert } from '@/components/ui/Feedback';
 import { OnboardingTrigger } from '@/components/onboarding/OnboardingTrigger';
 
 export const metadata: Metadata = {
-  title: 'Divulgue seu Trabalho | Para Profissionais | Conecta Móveis',
+  title: 'Divulgue seu Trabalho | Para Profissionais | Vitrine Moveleira',
   description:
     'Publique seu perfil profissional e fotos de apresentação no catálogo do polo moveleiro de Jundiaí e região. Cadastro gratuito no período de lançamento.',
 };
@@ -43,7 +43,7 @@ export default function ParaProfissionaisPage() {
       {/* Aviso Legal de Função */}
       <Alert type="legal">
         <strong className="text-white font-bold block mb-1">O que a plataforma faz e não faz:</strong>
-        A Conecta Móveis oferece espaço de divulgação e catálogo aberto. Não intermediamos negócios, não prometemos clientes ou resultados financeiros e não participamos de orçamentos, contratos ou pagamentos. Os valores acordados são 100% seus.
+        A Vitrine Moveleira oferece espaço de divulgação e catálogo aberto. Não intermediamos negócios, não prometemos clientes ou resultados financeiros e não participamos de orçamentos, contratos ou pagamentos. Os valores acordados são 100% seus.
       </Alert>
 
       {/* Benefícios Reais e Já Existentes */}

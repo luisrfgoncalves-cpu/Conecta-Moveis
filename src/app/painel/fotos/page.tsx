@@ -8,7 +8,7 @@ import { ArrowLeft, Camera, ShieldCheck } from 'lucide-react';
 import { Alert } from '@/components/ui/Feedback';
 
 export const metadata: Metadata = {
-  title: 'Fotos de Apresentação — Painel Conecta Móveis',
+  title: 'Fotos de Apresentação — Painel Vitrine Moveleira',
   description: 'Gerencie as fotos de apresentação do seu perfil profissional.',
 };
 

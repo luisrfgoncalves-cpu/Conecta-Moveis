@@ -137,7 +137,7 @@ describe('Fase 16 — Canal de Notificação e Retirada (Takedown)', () => {
     expect(res.packageData).toBeDefined();
     expect(res.packageData?.protocol).toBe('NOT-2026-000042');
     expect(res.packageData?.hashSha256).toBeDefined();
-    expect(res.packageData?.chainOfCustody.platform).toBe('Conecta Móveis Jundiaí');
+    expect(res.packageData?.chainOfCustody.platform).toBe('Vitrine Moveleira Jundiaí');
     expect(res.packageData?.chainOfCustody.jurisdiction).toContain('Jundiaí/SP');
   });
 });

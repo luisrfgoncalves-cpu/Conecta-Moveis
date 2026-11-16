@@ -87,7 +87,7 @@ export function WhatsAppTracker({ profileId, whatsapp }: WhatsAppTrackerProps) {
             </div>
 
             <p className="text-xs text-slate-300 leading-relaxed">
-              Você vai conversar diretamente com o anunciante, fora da Conecta Móveis. Preço, prazo, contrato e pagamento são combinados somente entre vocês. Antes de fechar negócio, peça contrato por escrito, confira referências e evite pagar todo o valor adiantado.
+              Você vai conversar diretamente com o anunciante, fora da Vitrine Moveleira. Preço, prazo, contrato e pagamento são combinados somente entre vocês. Antes de fechar negócio, peça contrato por escrito, confira referências e evite pagar todo o valor adiantado.
             </p>
 
             <div className="flex items-center justify-end gap-3 pt-2 border-t border-white/10">

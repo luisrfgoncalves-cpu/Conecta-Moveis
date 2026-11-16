@@ -27,7 +27,7 @@ describe('BLOCO 0 — Configuração Central de Marca e Domínio', () => {
     delete process.env.NEXT_PUBLIC_BRAND_PROVISIONAL;
 
     const brand = getBrandConfig();
-    expect(brand.name).toBe('Conecta Móveis');
+    expect(brand.name).toBe('Vitrine Moveleira');
     expect(brand.brandProvisional).toBe(true);
     expect(brand.focusCity).toBe('Jundiaí');
     expect(brand.focusState).toBe('SP');

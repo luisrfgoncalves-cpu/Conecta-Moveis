@@ -5,9 +5,9 @@ import { LegalBanner } from "@/components/legal/LegalBanner";
 import { getOperatorSettings } from "@/lib/config/operator";
 
 export const metadata: Metadata = {
-  title: "Política de Privacidade e Proteção de Dados | Conecta Móveis",
+  title: "Política de Privacidade e Proteção de Dados | Vitrine Moveleira",
   description:
-    "Declaração completa de privacidade, direitos dos titulares e tratamento de dados pessoais da Conecta Móveis nos termos da LGPD.",
+    "Declaração completa de privacidade, direitos dos titulares e tratamento de dados pessoais da Vitrine Moveleira nos termos da LGPD.",
 };
 
 export default function PrivacidadePage() {
@@ -38,13 +38,13 @@ export default function PrivacidadePage() {
 
       <div className="space-y-6 text-sm text-slate-200 leading-relaxed">
         <div className="p-4 rounded-xl bg-orange-500/10 border border-orange-500/20 text-orange-200 text-xs">
-          <strong>Compromisso de Privacidade:</strong> A Conecta Móveis preza pela transparência, minimização na coleta de dados e respeito intransigente aos direitos fundamentais de liberdade e privacidade dos usuários e anunciantes do setor moveleiro de Jundiaí e região.
+          <strong>Compromisso de Privacidade:</strong> A Vitrine Moveleira preza pela transparência, minimização na coleta de dados e respeito intransigente aos direitos fundamentais de liberdade e privacidade dos usuários e anunciantes do setor moveleiro de Jundiaí e região.
         </div>
 
         <section>
           <h2 className="text-lg font-bold text-white mb-2">1. Identificação do Controlador e do Encarregado</h2>
           <p>
-            O controlador dos seus dados pessoais é o operador da plataforma Conecta Móveis (Razão Social: <strong>{op.razaoSocial}</strong>, CNPJ: <strong>{op.cnpj}</strong>, sediado na Comarca de Jundiaí/SP).
+            O controlador dos seus dados pessoais é o operador da plataforma Vitrine Moveleira (Razão Social: <strong>{op.razaoSocial}</strong>, CNPJ: <strong>{op.cnpj}</strong>, sediado na Comarca de Jundiaí/SP).
           </p>
           <p className="mt-2">
             O canal de atendimento do nosso <strong>Responsável pela proteção de dados (encarregado)</strong> é o e-mail: <a href={`mailto:${op.emailTitulares}`} className="text-orange-400 underline">{op.emailTitulares}</a>.
@@ -125,7 +125,7 @@ export default function PrivacidadePage() {
         <section>
           <h2 className="text-lg font-bold text-white mb-2">8. Proteção aos Direitos de Crianças e Adolescentes</h2>
           <p>
-            A plataforma Conecta Móveis destina-se <strong>exclusivamente a maiores de 18 anos</strong>. Não coletamos intencionalmente informações de menores. Contas identificadas como pertencentes a menores de idade são imediatamente suspensas e seus dados expurgados.
+            A plataforma Vitrine Moveleira destina-se <strong>exclusivamente a maiores de 18 anos</strong>. Não coletamos intencionalmente informações de menores. Contas identificadas como pertencentes a menores de idade são imediatamente suspensas e seus dados expurgados.
           </p>
         </section>
 

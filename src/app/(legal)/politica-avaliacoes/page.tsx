@@ -4,9 +4,9 @@ import { LEGAL_VERSION, LEGAL_DATE } from "@/lib/legal/config";
 import { LegalBanner } from "@/components/legal/LegalBanner";
 
 export const metadata: Metadata = {
-  title: "Política de Avaliações | Conecta Móveis",
+  title: "Política de Avaliações | Vitrine Moveleira",
   description:
-    "Diretrizes para avaliações e comentários públicos sobre anunciantes na plataforma Conecta Móveis.",
+    "Diretrizes para avaliações e comentários públicos sobre anunciantes na plataforma Vitrine Moveleira.",
 };
 
 export default function PoliticaAvaliacoesPage() {
@@ -25,7 +25,7 @@ export default function PoliticaAvaliacoesPage() {
 
       <div className="space-y-6 text-sm text-slate-200 leading-relaxed">
         <div className="p-4 rounded-xl bg-orange-500/10 border border-orange-500/20 text-orange-200 text-xs">
-          <strong>Aviso de Isenção:</strong> As avaliações e comentários refletem exclusivamente a opinião subjetiva de quem os redigiu. A Conecta Móveis não atesta a veracidade dos relatos, não seleciona nem certifica anunciantes com base em notas e não se responsabiliza pelas interações entre usuários.
+          <strong>Aviso de Isenção:</strong> As avaliações e comentários refletem exclusivamente a opinião subjetiva de quem os redigiu. A Vitrine Moveleira não atesta a veracidade dos relatos, não seleciona nem certifica anunciantes com base em notas e não se responsabiliza pelas interações entre usuários.
         </div>
 
         <section>

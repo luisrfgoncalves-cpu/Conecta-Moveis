@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { ArrowLeft, Shield, CheckCircle2, XCircle } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Função e Limites da Plataforma — Conecta Móveis',
-  description: 'Conheça o escopo institucional da Conecta Móveis como catálogo e vitrine de divulgação do setor moveleiro.',
+  title: 'Função e Limites da Plataforma — Vitrine Moveleira',
+  description: 'Conheça o escopo institucional da Vitrine Moveleira como catálogo e vitrine de divulgação do setor moveleiro.',
 };
 
 export default function FuncaoDaPlataformaPage() {
@@ -20,7 +20,7 @@ export default function FuncaoDaPlataformaPage() {
         </Link>
         <h1 className="text-3xl font-black text-white">Função e Limites da Plataforma</h1>
         <p className="text-sm text-slate-400 mt-2">
-          Declaração oficial sobre o papel da Conecta Móveis, nossa atuação como vitrine de divulgação e nossos deveres legais.
+          Declaração oficial sobre o papel da Vitrine Moveleira, nossa atuação como vitrine de divulgação e nossos deveres legais.
         </p>
       </div>
 
@@ -28,7 +28,7 @@ export default function FuncaoDaPlataformaPage() {
       <div className="glass-panel p-5 sm:p-6 rounded-2xl border border-sky-500/20 bg-sky-950/20 text-xs sm:text-sm text-slate-200 space-y-2">
         <h2 className="text-base font-bold text-sky-400">Em resumo:</h2>
         <ul className="list-disc pl-5 space-y-1 text-slate-300">
-          <li>A Conecta Móveis funciona como catálogo para divulgar montadores, marceneiros e oficinas da região de Jundiaí.</li>
+          <li>A Vitrine Moveleira funciona como catálogo para divulgar montadores, marceneiros e oficinas da região de Jundiaí.</li>
           <li>A plataforma não executa serviços, não elabora orçamentos e não cobra comissão sobre acordos fechados.</li>
           <li>A execução do trabalho, combinados e prazos são tratados diretamente entre você e o anunciante.</li>
         </ul>
@@ -41,16 +41,16 @@ export default function FuncaoDaPlataformaPage() {
           Declaração Institucional de Função
         </h2>
         <p className="text-sm text-slate-200 leading-relaxed font-serif">
-          A Conecta Móveis é um provedor de aplicação de internet que oferece espaço de divulgação (vitrine e diretório de anúncios) e um meio de aproximação inicial entre usuários e anunciantes do setor moveleiro. Não é fornecedora, prestadora, corretora, representante, empregadora, garantidora nem intermediadora da contratação ou do pagamento dos serviços. Não participa da negociação, do preço, do prazo, da execução, da entrega nem da qualidade. Não verifica, avalia nem endossa anunciantes, informações, fotos ou avaliações, que são de responsabilidade de quem os publica. A plataforma responde pelos seus próprios atos e deveres legais: segurança, dados pessoais, moderação, atendimento de notificações e cumprimento de ordens judiciais.
+          A Vitrine Moveleira é um provedor de aplicação de internet que oferece espaço de divulgação (vitrine e diretório de anúncios) e um meio de aproximação inicial entre usuários e anunciantes do setor moveleiro. Não é fornecedora, prestadora, corretora, representante, empregadora, garantidora nem intermediadora da contratação ou do pagamento dos serviços. Não participa da negociação, do preço, do prazo, da execução, da entrega nem da qualidade. Não verifica, avalia nem endossa anunciantes, informações, fotos ou avaliações, que são de responsabilidade de quem os publica. A plataforma responde pelos seus próprios atos e deveres legais: segurança, dados pessoais, moderação, atendimento de notificações e cumprimento de ordens judiciais.
         </p>
       </div>
 
-      {/* O que o Conecta Móveis é e o que não é */}
+      {/* O que o Vitrine Moveleira é e o que não é */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="glass-panel p-6 rounded-3xl border border-emerald-500/20 bg-emerald-950/10 space-y-4">
           <h3 className="text-base font-bold text-emerald-400 flex items-center gap-2">
             <CheckCircle2 className="w-5 h-5" />
-            O que a Conecta Móveis é:
+            O que a Vitrine Moveleira é:
           </h3>
           <ul className="text-xs text-slate-300 space-y-3">
             <li className="flex items-start gap-2">
@@ -75,7 +75,7 @@ export default function FuncaoDaPlataformaPage() {
         <div className="glass-panel p-6 rounded-3xl border border-red-500/20 bg-red-950/10 space-y-4">
           <h3 className="text-base font-bold text-red-400 flex items-center gap-2">
             <XCircle className="w-5 h-5" />
-            O que a Conecta Móveis NÃO é:
+            O que a Vitrine Moveleira NÃO é:
           </h3>
           <ul className="text-xs text-slate-300 space-y-3">
             <li className="flex items-start gap-2">

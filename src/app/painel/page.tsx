@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Painel — Conecta Móveis',
+  title: 'Painel — Vitrine Moveleira',
 };
 
 export default async function PainelPage() {

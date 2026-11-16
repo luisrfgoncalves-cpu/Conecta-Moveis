@@ -5,7 +5,7 @@ import { UpdateEmailForm } from '@/components/auth/UpdateEmailForm';
 import { Mail } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Configurações — Painel Conecta Móveis',
+  title: 'Configurações — Painel Vitrine Moveleira',
 };
 
 export default async function ConfiguracoesPage() {

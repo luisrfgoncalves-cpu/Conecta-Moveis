@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { ArrowLeft, SlidersHorizontal, Sparkles, Clock } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Como Ordenamos os Resultados — Conecta Móveis',
-  description: 'Critérios objetivos de ordenação, neutralidade algorítmica e rotulagem de anúncios na plataforma Conecta Móveis.',
+  title: 'Como Ordenamos os Resultados — Vitrine Moveleira',
+  description: 'Critérios objetivos de ordenação, neutralidade algorítmica e rotulagem de anúncios na plataforma Vitrine Moveleira.',
 };
 
 export default function ComoOrdenamosOsResultadosPage() {
@@ -30,7 +30,7 @@ export default function ComoOrdenamosOsResultadosPage() {
           Princípio da Neutralidade e Rotatividade
         </h2>
         <p className="text-xs text-slate-300 leading-relaxed">
-          A Conecta Móveis não cria rankings subjetivos de &quot;melhores profissionais&quot;, nem endossa qualquer profissional ou empresa cadastrada. Para assegurar oportunidade igualitária a todos os anunciantes e neutralidade perante quem procura, aplicamos os seguintes critérios objetivos:
+          A Vitrine Moveleira não cria rankings subjetivos de &quot;melhores profissionais&quot;, nem endossa qualquer profissional ou empresa cadastrada. Para assegurar oportunidade igualitária a todos os anunciantes e neutralidade perante quem procura, aplicamos os seguintes critérios objetivos:
         </p>
       </div>
 

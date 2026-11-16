@@ -6,7 +6,7 @@ import { Users, Database, HardDrive, Flag, AlertTriangle, ShieldAlert, Star } fr
 import { getStorageAndDatabaseUsage } from '@/lib/admin/actions';
 
 export const metadata: Metadata = {
-  title: 'Admin — Conecta Móveis',
+  title: 'Admin — Vitrine Moveleira',
 };
 
 export default async function AdminPage() {

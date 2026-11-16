@@ -35,12 +35,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!municipio || total === 0) {
     return {
-      title: 'Serviço não encontrado | Conecta Móveis',
+      title: 'Serviço não encontrado | Vitrine Moveleira',
       robots: { index: false, follow: false },
     };
   }
 
-  const title = `${catName} em ${municipio.nome} - ${municipio.uf} | Conecta Móveis`;
+  const title = `${catName} em ${municipio.nome} - ${municipio.uf} | Vitrine Moveleira`;
   const description = `Encontre ${catName.toLowerCase()} atuantes em ${municipio.nome}/${municipio.uf}. Veja fotos de apresentação e solicite contato diretamente com os anunciantes cadastrados.`;
 
   return {
@@ -154,7 +154,7 @@ export default async function ServicoMunicipioPage({ params }: PageProps) {
           <ShieldCheck className="w-4 h-4 text-orange-400 flex-shrink-0 mt-0.5" />
           <div className="text-xs text-slate-300">
             <strong className="text-white font-bold block mb-0.5">Informação de Neutralidade Técnica:</strong>
-            Os perfis listados são publicados exclusivamente pelos anunciantes. A ordenação é neutra e rotativa, sem qualquer seleção editorial, endosso institucional ou aferição de conformidade técnica por parte da Conecta Móveis.
+            Os perfis listados são publicados exclusivamente pelos anunciantes. A ordenação é neutra e rotativa, sem qualquer seleção editorial, endosso institucional ou aferição de conformidade técnica por parte da Vitrine Moveleira.
           </div>
         </div>
       </Alert>

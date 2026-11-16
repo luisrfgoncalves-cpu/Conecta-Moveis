@@ -4,9 +4,9 @@ import { LEGAL_VERSION, LEGAL_DATE } from "@/lib/legal/config";
 import { LegalBanner } from "@/components/legal/LegalBanner";
 
 export const metadata: Metadata = {
-  title: "Política de Conteúdo e Fotos de Apresentação | Conecta Móveis",
+  title: "Política de Conteúdo e Fotos de Apresentação | Vitrine Moveleira",
   description:
-    "Regras e exigências para envio de fotos, fotos de apresentação e direitos autorais na Conecta Móveis.",
+    "Regras e exigências para envio de fotos, fotos de apresentação e direitos autorais na Vitrine Moveleira.",
 };
 
 export default function PoliticaPortfolioPage() {
@@ -25,7 +25,7 @@ export default function PoliticaPortfolioPage() {
 
       <div className="space-y-6 text-sm text-slate-200 leading-relaxed">
         <div className="p-4 rounded-xl bg-orange-500/10 border border-orange-500/20 text-orange-200 text-xs">
-          <strong>Aviso de Autoria:</strong> Todas as fotografias e mídias veiculadas nos perfis são de inteira responsabilidade do anunciante que as carregou. A Conecta Móveis não endossa nem atesta a autenticidade das obras exibidas.
+          <strong>Aviso de Autoria:</strong> Todas as fotografias e mídias veiculadas nos perfis são de inteira responsabilidade do anunciante que as carregou. A Vitrine Moveleira não endossa nem atesta a autenticidade das obras exibidas.
         </div>
 
         <section>
@@ -45,14 +45,14 @@ export default function PoliticaPortfolioPage() {
         <section>
           <h2 className="text-lg font-bold text-white mb-2">3. Licença de Exibição</h2>
           <p>
-            Ao carregar imagens na plataforma, o anunciante outorga à Conecta Móveis uma licença gratuita, não exclusiva, irrevogável durante a vigência do anúncio e limitada ao território nacional, unicamente para exibição das fotos de apresentação no site, aplicativo e canais oficiais de divulgação da vitrine.
+            Ao carregar imagens na plataforma, o anunciante outorga à Vitrine Moveleira uma licença gratuita, não exclusiva, irrevogável durante a vigência do anúncio e limitada ao território nacional, unicamente para exibição das fotos de apresentação no site, aplicativo e canais oficiais de divulgação da vitrine.
           </p>
         </section>
 
         <section>
           <h2 className="text-lg font-bold text-white mb-2">4. Direito de Regresso e Indenização</h2>
           <p>
-            Em caso de reclamação formal ou processo judicial por violação de propriedade intelectual decorrente de foto publicada pelo anunciante, a Conecta Móveis exercerá seu direito de regresso contra o anunciante para reaver todas as despesas decorrentes.
+            Em caso de reclamação formal ou processo judicial por violação de propriedade intelectual decorrente de foto publicada pelo anunciante, a Vitrine Moveleira exercerá seu direito de regresso contra o anunciante para reaver todas as despesas decorrentes.
           </p>
         </section>
 

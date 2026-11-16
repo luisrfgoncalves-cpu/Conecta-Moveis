@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server';
 import { IntencaoCards } from './IntencaoCards';
 
 export const metadata: Metadata = {
-  title: 'O que você quer fazer? — Conecta Móveis',
+  title: 'O que você quer fazer? — Vitrine Moveleira',
   description: 'Escolha como deseja aproveitar a plataforma.',
 };
 

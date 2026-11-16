@@ -22,17 +22,17 @@ export interface BrandConfig {
 
 export function getBrandConfig(): BrandConfig {
   const brandProvisional = process.env.NEXT_PUBLIC_BRAND_PROVISIONAL !== 'false';
-  const name = (process.env.NEXT_PUBLIC_BRAND_NAME || 'Conecta Móveis').trim();
-  const shortName = (process.env.NEXT_PUBLIC_BRAND_SHORT_NAME || name).trim();
+  const name = (process.env.NEXT_PUBLIC_BRAND_NAME || 'Vitrine Moveleira').trim();
+  const shortName = (process.env.NEXT_PUBLIC_BRAND_SHORT_NAME || 'Vitrine Moveleira').trim();
   const slogan = (
     process.env.NEXT_PUBLIC_BRAND_SLOGAN ||
-    'Encontre montadores e marceneiros em Jundiaí e região'
+    'Montadores, marceneiros e lojas perto de você'
   ).trim();
   const focusRegion = (process.env.NEXT_PUBLIC_BRAND_FOCUS_REGION || 'Jundiaí e região').trim();
   const focusCity = (process.env.NEXT_PUBLIC_BRAND_FOCUS_CITY || 'Jundiaí').trim();
   const focusState = (process.env.NEXT_PUBLIC_BRAND_FOCUS_STATE || 'SP').trim();
   const gender: 'a' | 'o' = (process.env.NEXT_PUBLIC_BRAND_GENDER as 'a' | 'o') || 'a';
-  const logoUrl = (process.env.NEXT_PUBLIC_BRAND_LOGO_URL || '/brand/logo-conecta-moveis.svg').trim();
+  const logoUrl = (process.env.NEXT_PUBLIC_BRAND_LOGO_URL || '/brand/vitrine-moveleira-logo.svg').trim();
 
   // Base URL: VERCEL_URL / NEXT_PUBLIC_APP_URL / fallback seguro
   let baseUrl = (

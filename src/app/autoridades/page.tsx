@@ -4,7 +4,7 @@ import { ArrowLeft, Shield, Mail, Scale, Lock } from 'lucide-react';
 import { getOperatorSettings } from '@/lib/config/operator';
 
 export const metadata: Metadata = {
-  title: 'Canal de Autoridades e Ordens Judiciais — Conecta Móveis',
+  title: 'Canal de Autoridades e Ordens Judiciais — Vitrine Moveleira',
   description: 'Canal exclusivo para o recebimento e cumprimento de ofícios, requisições policiais e ordens judiciais.',
 };
 
@@ -36,7 +36,7 @@ export default function AutoridadesPage() {
           Procedimento de Cumprimento e Cadeia de Custódia
         </h2>
         <p className="text-xs text-slate-300 leading-relaxed">
-          A Conecta Móveis coopera estritamente com as autoridades públicas no combate a fraudes, crimes cibernéticos e infrações legais, em estrito cumprimento ao Marco Civil da Internet (Lei 12.965/2014) e à Lei Geral de Proteção de Dados (Lei 13.709/2018).
+          A Vitrine Moveleira coopera estritamente com as autoridades públicas no combate a fraudes, crimes cibernéticos e infrações legais, em estrito cumprimento ao Marco Civil da Internet (Lei 12.965/2014) e à Lei Geral de Proteção de Dados (Lei 13.709/2018).
         </p>
         <p className="text-xs text-slate-300 leading-relaxed">
           Todo conteúdo sob investigação é preservado com carimbo de data/hora, endereço de IP de origem e cálculo de integridade criptográfica <strong>Hash SHA-256</strong> para resguardar a cadeia de custódia da evidência digital.

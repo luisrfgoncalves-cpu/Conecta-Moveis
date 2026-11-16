@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 import { AdminBackupClient } from '@/components/admin/AdminBackupClient';
 
-export const metadata = { title: 'Backup & Dados — Admin Conecta Móveis' };
+export const metadata = { title: 'Backup & Dados — Admin Vitrine Moveleira' };
 
 export default async function AdminBackupPage() {
   const supabase = await createClient();

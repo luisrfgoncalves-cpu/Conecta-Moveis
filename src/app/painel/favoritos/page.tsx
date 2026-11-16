@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/server';
 import { getMyFavorites } from '@/lib/favorites/actions';
 import { Heart, MapPin, ArrowRight } from 'lucide-react';
 
-export const metadata = { title: 'Favoritos — Conecta Móveis' };
+export const metadata = { title: 'Favoritos — Vitrine Moveleira' };
 
 export default async function FavoritosPage() {
   const supabase = await createClient();

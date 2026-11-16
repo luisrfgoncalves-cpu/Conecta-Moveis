@@ -14,7 +14,7 @@ import { Breadcrumbs } from '@/components/navigation/Breadcrumbs';
 import { OnboardingTrigger } from '@/components/onboarding/OnboardingTrigger';
 
 export const metadata: Metadata = {
-  title: 'Encontrar Profissionais e Empresas | Conecta Móveis',
+  title: 'Encontrar Profissionais e Empresas | Vitrine Moveleira',
   description: 'Busque montadores de móveis, marceneiros sob medida, projetistas 3D e lojas de planejados em Jundiaí e região.',
 };
 

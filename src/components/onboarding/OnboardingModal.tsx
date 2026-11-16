@@ -165,7 +165,7 @@ export function OnboardingModal({
     >
       {/* Região oculta para leitores de tela anunciarem a mudança de passo */}
       <div className="sr-only" aria-live="polite" aria-atomic="true">
-        {`Apresentação do Conecta Móveis. ${track.label}. Tela ${currentStep.stepNumber} de ${currentStep.totalSteps}: ${currentStep.title}`}
+        {`Apresentação do Vitrine Moveleira. ${track.label}. Tela ${currentStep.stepNumber} de ${currentStep.totalSteps}: ${currentStep.title}`}
       </div>
 
       <div

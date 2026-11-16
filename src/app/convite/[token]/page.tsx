@@ -7,7 +7,7 @@ import { InviteRedeemClient } from './InviteRedeemClient';
 import { AlertCircle } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Resgate de Convite — Conecta Móveis',
+  title: 'Resgate de Convite — Vitrine Moveleira',
   robots: {
     index: false,
     follow: false,
@@ -33,8 +33,8 @@ export default async function InvitePage({ params }: InvitePageProps) {
     <main className="min-h-screen flex flex-col items-center justify-center px-4 py-16">
       <Link href="/" className="mb-8 block" aria-label="Voltar para a página inicial">
         <Image
-          src="/brand/logo-conecta-moveis.png"
-          alt="Conecta Móveis"
+          src="/brand/logo-vitrine-moveleira.png"
+          alt="Vitrine Moveleira"
           width={180}
           height={48}
           className="h-10 w-auto"

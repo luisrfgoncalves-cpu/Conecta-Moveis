@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="560" height="400" viewBox="0 0 560 400" role="img" aria-labelledby="title desc">
+  <title id="title">Ícone Vitrine Moveleira</title>
+  <desc id="desc">Casa em degradê laranja e dourado com um sofá branco no interior.</desc>
+  <defs>
+    <linearGradient id="house" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#ff4b0b"/><stop offset=".52" stop-color="#ff8a00"/><stop offset="1" stop-color="#ffd52a"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ff6508"/><stop offset=".48" stop-color="#ff9d08"/><stop offset="1" stop-color="#ffd52a"/>
+    </linearGradient>
+    <linearGradient id="white" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#e9edf2"/>
+    </linearGradient>
+  </defs>
+  <path d="M43 190 L278 30 L511 190" fill="none" stroke="url(#house)" stroke-width="47" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M94 174 V302 Q94 316 109 316 H448 Q463 316 463 302 V174" fill="none" stroke="url(#house)" stroke-width="39" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M396 83 H438 Q450 83 450 96 V144 H396 Z" fill="url(#gold)"/>
+  <g fill="url(#white)" stroke="#f8fafc" stroke-width="5" stroke-linejoin="round">
+    <path d="M171 205 Q171 184 192 184 H250 Q272 184 272 205 V245 Q272 258 258 258 H185 Q171 258 171 244 Z"/>
+    <path d="M284 205 Q284 184 306 184 H364 Q385 184 385 205 V244 Q385 258 371 258 H298 Q284 258 284 245 Z"/>
+    <path d="M158 229 Q136 229 136 253 V286 Q136 300 151 300 H405 Q420 300 420 286 V253 Q420 229 398 229 Q385 229 385 246 V270 H171 V246 Q171 229 158 229 Z"/>
+    <path d="M151 291 H405 V314 H151 Z"/>
+    <path d="M158 310 L153 327 H169 L176 310 M397 310 L404 327 H388 L381 310" stroke-width="4"/>
+  </g>
+  <path d="M27 354 Q274 287 535 354 L509 374 Q277 326 48 374 Z" fill="url(#gold)"/>
+  <path d="M31 374 Q278 326 530 374" fill="none" stroke="#ffb21a" stroke-width="5" stroke-linecap="round"/>
+</svg>

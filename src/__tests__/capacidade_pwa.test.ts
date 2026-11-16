@@ -6,8 +6,8 @@ describe('Fase 26 — Capacidade para 300 Usuários, Backup e PWA Mínimo', () =
     it('deve gerar manifesto válido com nome, tema e modo standalone', () => {
       const data = manifest();
 
-      expect(data.name).toBe('Conecta Móveis — Vitrine de Profissionais Moveleiros');
-      expect(data.short_name).toBe('Conecta Móveis');
+      expect(data.name).toBe('Vitrine Moveleira — Vitrine de Profissionais Moveleiros');
+      expect(data.short_name).toBe('Vitrine Moveleira');
       expect(data.display).toBe('standalone');
       expect(data.theme_color).toBe('#f97316');
       expect(data.background_color).toBe('#0f172a');

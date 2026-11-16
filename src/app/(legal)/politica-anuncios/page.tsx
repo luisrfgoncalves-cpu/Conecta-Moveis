@@ -4,9 +4,9 @@ import { LEGAL_VERSION, LEGAL_DATE } from "@/lib/legal/config";
 import { LegalBanner } from "@/components/legal/LegalBanner";
 
 export const metadata: Metadata = {
-  title: "Política de Anúncios e Destaques | Conecta Móveis",
+  title: "Política de Anúncios e Destaques | Vitrine Moveleira",
   description:
-    "Regras para publicação de anúncios, vitrines e posições de destaque na plataforma Conecta Móveis.",
+    "Regras para publicação de anúncios, vitrines e posições de destaque na plataforma Vitrine Moveleira.",
 };
 
 export default function PoliticaAnunciosPage() {
@@ -25,13 +25,13 @@ export default function PoliticaAnunciosPage() {
 
       <div className="space-y-6 text-sm text-slate-200 leading-relaxed">
         <div className="p-4 rounded-xl bg-orange-500/10 border border-orange-500/20 text-orange-200 text-xs">
-          <strong>Aviso Importante:</strong> A Conecta Móveis é uma vitrine de anúncios que aproxima pessoas e profissionais. Não presta, intermedeia, contrata, garante nem avalia a qualidade dos serviços. Informações, fotos e avaliações são de responsabilidade de quem as publica.
+          <strong>Aviso Importante:</strong> A Vitrine Moveleira é uma vitrine de anúncios que aproxima pessoas e profissionais. Não presta, intermedeia, contrata, garante nem avalia a qualidade dos serviços. Informações, fotos e avaliações são de responsabilidade de quem as publica.
         </div>
 
         <section>
           <h2 className="text-lg font-bold text-white mb-2">1. Escopo Setorial e Finalidade</h2>
           <p>
-            A Conecta Móveis destina-se exclusivamente a profissionais e empresas atuantes no setor moveleiro e marcenaria na região de Jundiaí/SP e cidades adjacentes. É proibida a publicação de anúncios fora desse nicho ou que desvirtuem o caráter informativo do diretório.
+            A Vitrine Moveleira destina-se exclusivamente a profissionais e empresas atuantes no setor moveleiro e marcenaria na região de Jundiaí/SP e cidades adjacentes. É proibida a publicação de anúncios fora desse nicho ou que desvirtuem o caráter informativo do diretório.
           </p>
         </section>
 
@@ -45,7 +45,7 @@ export default function PoliticaAnunciosPage() {
         <section>
           <h2 className="text-lg font-bold text-white mb-2">3. Não Endosso e Natureza da Vitrine</h2>
           <p>
-            A publicação de um perfil ou a compra de um espaço de destaque não constitui selo de aprovação, recomendação, certificação ou validação técnica por parte da Conecta Móveis. O anunciante é inteiramente responsável por suas declarações comerciais e pela execução dos serviços que realizar.
+            A publicação de um perfil ou a compra de um espaço de destaque não constitui selo de aprovação, recomendação, certificação ou validação técnica por parte da Vitrine Moveleira. O anunciante é inteiramente responsável por suas declarações comerciais e pela execução dos serviços que realizar.
           </p>
         </section>
 
@@ -61,7 +61,7 @@ export default function PoliticaAnunciosPage() {
           <ul className="list-disc pl-5 space-y-1.5 text-slate-300">
             <li>Publicar informações falsas, induvidosas ou contatos de terceiros sem autorização prévia;</li>
             <li>Utilizar fotografias ou projetos de móveis de terceiros sem expressa titularidade de direitos autorais;</li>
-            <li>Prometer garantias vinculadas ao nome da Conecta Móveis;</li>
+            <li>Prometer garantias vinculadas ao nome da Vitrine Moveleira;</li>
             <li>Praticar condutas discriminatórias ou ilegais na prestação do serviço.</li>
           </ul>
         </section>

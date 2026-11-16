@@ -6,7 +6,7 @@ import { LGPDRequestSection } from '@/components/auth/LGPDRequestSection';
 import { Lock, Download, Trash2 } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Segurança — Painel Conecta Móveis',
+  title: 'Segurança — Painel Vitrine Moveleira',
 };
 
 export default async function SegurancaPage() {

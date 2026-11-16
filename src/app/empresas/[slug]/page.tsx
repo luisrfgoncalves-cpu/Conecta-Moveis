@@ -26,13 +26,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!company) {
     return {
-      title: 'Empresa não encontrada | Conecta Móveis',
+      title: 'Empresa não encontrada | Vitrine Moveleira',
       description: 'A empresa solicitada não foi encontrada ou não está publicada.',
     };
   }
 
   const titleName = company.trade_name || company.name;
-  const title = `${titleName} — Empresa do Setor Moveleiro | Conecta Móveis`;
+  const title = `${titleName} — Empresa do Setor Moveleiro | Vitrine Moveleira`;
   const description = company.description
     ? company.description.slice(0, 155) + '...'
     : `Conheça a empresa ${titleName} no catálogo do setor moveleiro de Jundiaí e região.`;
