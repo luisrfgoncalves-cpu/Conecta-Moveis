@@ -27,26 +27,26 @@ export async function ProCtaSection() {
           </h2>
 
           <p className="text-sm sm:text-base text-slate-200 leading-relaxed font-normal">
-            Divulgue seus serviços moveleiros na plataforma para ser encontrado por quem procura profissionais na sua cidade. {launchFreeText}
+            Divulgue seus serviços de montagem ou fabricação de móveis. Os clientes encontram o seu perfil e falam direto no seu WhatsApp. {launchFreeText}
           </p>
 
           {/* Vantagens Claras e Sem Jargões */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 text-xs sm:text-sm font-semibold text-slate-200">
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-              <span>Fotos de apresentação dos seus trabalhos</span>
+              <span>Exponha fotos dos serviços que você já realizou</span>
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-              <span>Contato direto no WhatsApp, sem comissão sobre os serviços</span>
+              <span>Receba contatos de clientes diretamente no seu WhatsApp</span>
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-              <span>Divulgação para quem procura serviços em Jundiaí e região</span>
+              <span>Divulgue seu trabalho e especialidades na sua cidade</span>
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-              <span>Cadastro simples e rápido sem burocracia</span>
+              <span>Sem comissão sobre serviços: o pagamento é 100% seu</span>
             </div>
           </div>
 

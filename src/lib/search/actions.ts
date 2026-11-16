@@ -146,9 +146,22 @@ export async function searchProfessionals(
         const from = offset;
         const to = from + PAGE_SIZE - 1;
         let q = supabase.from('public_professionals').select('*', { count: 'exact' });
-        if (filters.termo) q = q.or(`display_name.ilike.%${filters.termo}%,bio.ilike.%${filters.termo}%`);
+
+        if (filters.termo) {
+          const t = filters.termo.trim();
+          let cityTerm = t;
+          if (t.toLowerCase() === 'jundiai') cityTerm = 'Jundiaí';
+          q = q.or(`display_name.ilike.%${t}%,bio.ilike.%${t}%,city.ilike.%${cityTerm}%`);
+        }
+
         if (filters.uf) q = q.eq('state', filters.uf.toUpperCase());
-        if (filters.cidade) q = q.ilike('city', `%${filters.cidade}%`);
+
+        if (filters.cidade) {
+          let c = filters.cidade.trim();
+          if (c.toLowerCase() === 'jundiai') c = 'Jundiaí';
+          q = q.ilike('city', `%${c}%`);
+        }
+
         q = q.range(from, to);
         const { data: viewData, count: viewCount } = await q;
         if (viewData) {

@@ -22,8 +22,22 @@ export function SearchBox() {
     e.preventDefault();
     sounds.playClick();
     const params = new URLSearchParams();
-    if (term.trim()) params.set('termo', term.trim());
-    if (city.trim()) params.set('cidade', city.trim());
+
+    let cleanTerm = term.trim();
+    let cleanCity = city.trim();
+
+    // Inteligência de busca: se o usuário digitou uma cidade no campo de busca geral
+    const termNorm = cleanTerm.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    const knownCities = ['jundiai', 'varzea paulista', 'varzea', 'itupeva', 'louveira', 'vinhedo', 'cabreuva', 'campo limpo paulista', 'campo limpo'];
+    
+    if (knownCities.includes(termNorm) && !cleanCity) {
+      cleanCity = cleanTerm;
+      cleanTerm = '';
+    }
+
+    if (cleanTerm) params.set('termo', cleanTerm);
+    if (cleanCity) params.set('cidade', cleanCity);
+
     router.push(`/encontrar-profissionais?${params.toString()}`);
   };
 
