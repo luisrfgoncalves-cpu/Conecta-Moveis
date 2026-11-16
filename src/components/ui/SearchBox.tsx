@@ -90,13 +90,13 @@ export function SearchBox() {
           />
         </div>
 
-        {/* Botão de Disparo */}
+        {/* Botão de Disparo 3D Neon */}
         <div className="flex items-end">
           <button
             type="submit"
-            className="w-full md:w-auto px-8 py-3.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-sm font-bold flex items-center justify-center gap-2 transition shadow-lg shadow-orange-500/20"
+            className="w-full md:w-auto px-8 py-3.5 btn-neon text-sm font-black uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-xl min-h-[48px]"
           >
-            <SlidersHorizontal className="w-4 h-4" />
+            <SlidersHorizontal className="w-4 h-4 shrink-0" />
             <span>Buscar</span>
           </button>
         </div>

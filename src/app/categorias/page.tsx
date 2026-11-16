@@ -51,17 +51,17 @@ export default function CategoriasPage() {
                 </div>
 
                 <div>
-                  <h2 className="text-xl font-bold text-white group-hover:text-orange-400 transition">
+                  <h2 className="text-xl font-black text-white group-hover:text-orange-400 transition">
                     {cat.name}
                   </h2>
-                  <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                  <p className="text-xs sm:text-sm text-slate-200 mt-1 leading-relaxed font-normal">
                     {cat.description}
                   </p>
                 </div>
 
                 {/* Especialidades da Categoria */}
-                <div className="pt-3 border-t border-white/5 space-y-2">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                <div className="pt-3 border-t border-white/10 space-y-2">
+                  <span className="text-xs font-bold uppercase tracking-wider text-slate-300">
                     Especialidades ({cat.specialties.length}):
                   </span>
                   <div className="flex flex-wrap gap-1.5">
@@ -69,7 +69,7 @@ export default function CategoriasPage() {
                       <Link
                         key={spec.id}
                         href={`/encontrar-profissionais?categoria=${cat.slug}&especialidade=${spec.slug}`}
-                        className="inline-block px-2.5 py-1 rounded-lg text-xs font-medium bg-white/5 hover:bg-white/15 text-slate-300 hover:text-white border border-white/10 transition"
+                        className="inline-block px-2.5 py-1 rounded-lg text-xs font-medium bg-white/10 hover:bg-orange-500/20 text-slate-100 hover:text-white border border-white/20 hover:border-orange-500/40 transition"
                       >
                         {spec.name}
                       </Link>
@@ -82,7 +82,7 @@ export default function CategoriasPage() {
               <div className="mt-6 pt-4 border-t border-white/10">
                 <Link
                   href={`/encontrar-profissionais?categoria=${cat.slug}`}
-                  className="w-full inline-flex items-center justify-between text-xs font-bold uppercase tracking-wider text-orange-400 hover:text-orange-300 transition"
+                  className="w-full py-2.5 px-4 rounded-xl btn-glass inline-flex items-center justify-between text-xs font-bold uppercase tracking-wider text-orange-400 hover:text-orange-300 transition"
                 >
                   <span>Ver profissionais ({cat.name})</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

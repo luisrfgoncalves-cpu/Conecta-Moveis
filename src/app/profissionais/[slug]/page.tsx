@@ -24,7 +24,6 @@ import { ReportButton } from '@/components/reports/ReportButton';
 import { ContactForm } from '@/components/contact/ContactForm';
 import { WhatsAppTracker } from '@/components/contact/WhatsAppTracker';
 import { ReviewsSection } from '@/components/reviews/ReviewsSection';
-import { PlatformNotice } from '@/components/legal/PlatformNotice';
 import { getProfileReviews, checkReviewEligibility } from '@/lib/reviews/actions';
 import { isFeatureFlagActive } from '@/lib/config/actions';
 import { BackButton } from '@/components/navigation/BackButton';
@@ -220,17 +219,14 @@ export default async function ProfissionalPublicPage({ params }: PageProps) {
           </div>
         </div>
 
-        {/* Aviso Fixo da Plataforma */}
-        <PlatformNotice />
-
-        {/* Aviso Obrigatório */}
+        {/* Aviso Obrigatório e de Plataforma Integrados */}
         <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-start gap-3">
           <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
-          <div className="text-xs text-amber-200/90 leading-relaxed">
+          <div className="text-xs sm:text-sm text-amber-100 leading-relaxed">
             <strong className="text-amber-300 block font-bold mb-0.5">
-              Aviso:
+              Aviso da Plataforma:
             </strong>
-            Este perfil é publicado pelo anunciante. A presença na plataforma não representa garantia da qualidade, prazo ou resultado do serviço.
+            A Conecta Móveis é um catálogo de conexão direta. A contratação, orçamentos e pagamentos são combinados diretamente entre cliente e profissional. Este anúncio é publicado pelo anunciante e não representa garantia da plataforma sobre prazo ou execução.
           </div>
         </div>
 
@@ -254,32 +250,34 @@ export default async function ProfissionalPublicPage({ params }: PageProps) {
           </div>
         </div>
 
-        {/* Sobre o Profissional (Bio) */}
+        {/* Sobre o Profissional (Bio com Proteção Extrema contra Estouro de Texto) */}
         {professional.bio && (
           <div className="space-y-3 pt-2 border-t border-white/10">
-            <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300">
+            <h2 className="text-sm sm:text-base font-bold uppercase tracking-wider text-slate-100">
               Apresentação Profissional
             </h2>
-            <p className="text-sm text-slate-200 leading-relaxed whitespace-pre-line break-words">
-              {professional.bio}
-            </p>
+            <div className="p-4 sm:p-5 rounded-2xl bg-slate-900/80 border border-white/15">
+              <p className="text-sm sm:text-base text-slate-100 leading-relaxed whitespace-pre-line text-safe-wrap">
+                {professional.bio}
+              </p>
+            </div>
           </div>
         )}
 
         {/* Especialidades */}
         {professional.specialties && professional.specialties.length > 0 && (
           <div className="space-y-3 pt-2 border-t border-white/10">
-            <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300">
+            <h2 className="text-sm sm:text-base font-bold uppercase tracking-wider text-slate-100">
               Especialidades e Atuação
             </h2>
             <div className="flex flex-wrap gap-2">
               {professional.specialties.map((spec) => (
                 <span
                   key={spec.id}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-white/5 text-slate-200 border border-white/10"
+                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-white/10 text-slate-100 border border-white/20 shadow-sm"
                 >
-                  <CheckCircle2 className="w-3.5 h-3.5 text-orange-400" />
-                  {spec.name}
+                  <CheckCircle2 className="w-4 h-4 text-orange-400 shrink-0" />
+                  <span>{spec.name}</span>
                 </span>
               ))}
             </div>

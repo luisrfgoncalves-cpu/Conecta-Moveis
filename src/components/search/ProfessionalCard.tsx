@@ -52,7 +52,7 @@ export function ProfessionalCard({ professional, isOwner }: ProfessionalCardProp
             <div className="flex items-center gap-2">
               <Link
                 href={`/profissionais/${professional.slug}`}
-                className="text-lg font-bold text-white hover:text-orange-400 transition truncate"
+                className="text-lg font-black text-white hover:text-orange-400 transition truncate"
               >
                 {professional.display_name}
               </Link>
@@ -77,13 +77,13 @@ export function ProfessionalCard({ professional, isOwner }: ProfessionalCardProp
             </div>
 
             {professional.company_name && (
-              <p className="text-xs text-slate-400 flex items-center gap-1 mt-0.5 truncate">
-                <Building className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+              <p className="text-xs sm:text-sm text-slate-200 flex items-center gap-1.5 mt-0.5 truncate font-medium">
+                <Building className="w-3.5 h-3.5 text-slate-300 shrink-0" />
                 <span>{professional.company_name}</span>
               </p>
             )}
 
-            <p className="text-xs text-slate-400 flex items-center gap-1 mt-1">
+            <p className="text-xs sm:text-sm text-slate-100 flex items-center gap-1.5 mt-1 font-semibold">
               <MapPin className="w-3.5 h-3.5 text-sky-400 shrink-0" />
               <span>
                 {professional.city} - {professional.state}
@@ -112,9 +112,9 @@ export function ProfessionalCard({ professional, isOwner }: ProfessionalCardProp
           )}
         </div>
 
-        {/* Bio Curta */}
+        {/* Bio Curta com proteção anti-estouro */}
         {professional.bio && (
-          <p className="text-xs text-slate-300 line-clamp-3 leading-relaxed break-words">
+          <p className="text-xs sm:text-sm text-slate-200 line-clamp-3 leading-relaxed text-safe-wrap font-normal">
             {professional.bio}
           </p>
         )}
@@ -125,13 +125,13 @@ export function ProfessionalCard({ professional, isOwner }: ProfessionalCardProp
             {professional.specialties.slice(0, 3).map((spec) => (
               <span
                 key={spec.id}
-                className="px-2 py-0.5 rounded-lg text-[11px] font-medium bg-white/5 text-slate-300 border border-white/10"
+                className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-white/10 text-slate-100 border border-white/20"
               >
                 {spec.name}
               </span>
             ))}
             {professional.specialties.length > 3 && (
-              <span className="px-1.5 py-0.5 text-[10px] text-slate-400 font-semibold">
+              <span className="px-2 py-1 rounded-lg text-xs text-orange-300 font-bold bg-orange-500/10 border border-orange-500/20">
                 +{professional.specialties.length - 3}
               </span>
             )}
@@ -141,10 +141,10 @@ export function ProfessionalCard({ professional, isOwner }: ProfessionalCardProp
 
       {/* Ação Inferior */}
       <div className="mt-5 pt-4 border-t border-white/10 flex items-center justify-between">
-        <span className="text-[11px] text-slate-400">Publicado pelo anunciante</span>
+        <span className="text-xs text-slate-300 font-medium">Publicado pelo anunciante</span>
         <Link
           href={`/profissionais/${professional.slug}`}
-          className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-orange-400 hover:text-orange-300 group-hover:translate-x-0.5 transition"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-orange-500/20 hover:bg-orange-500 text-orange-300 hover:text-white border border-orange-500/40 text-xs font-black uppercase tracking-wider transition shadow-sm group-hover:scale-105"
         >
           <span>Ver perfil</span>
           <ArrowRight className="w-3.5 h-3.5" />

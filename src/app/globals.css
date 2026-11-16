@@ -29,26 +29,65 @@ body {
   background-attachment: fixed;
 }
 
-/* Glassmorphism Aprimorado */
+/* Superfícies Sólidas com Alto Contraste Solar e Borda LED */
 .glass-panel {
-  background: rgba(12, 16, 25, 0.72);
+  background: rgba(13, 19, 31, 0.94);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
 }
 
 .glass-card {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%), rgba(12, 16, 26, 0.85);
+  background: linear-gradient(135deg, rgba(26, 35, 54, 0.96) 0%, rgba(13, 19, 31, 0.98) 100%);
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.8), 0 0 1px rgba(255, 255, 255, 0.2);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .glass-card:hover {
-  transform: translateY(-5px);
-  border-color: rgba(255, 107, 0, 0.45);
-  box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.9), 0 0 30px rgba(255, 107, 0, 0.25);
+  transform: translateY(-4px);
+  border-color: rgba(255, 107, 0, 0.55);
+  box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.9), 0 0 25px rgba(255, 107, 0, 0.25);
+}
+
+/* Utilitário anti-estouro de texto para mobile */
+.text-safe-wrap {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  hyphens: auto;
+}
+
+/* Botão de Retorno 3D com Micro-LED e Chanfro Tátil */
+.btn-back-3d {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.9rem;
+  min-height: 40px;
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  color: #ffffff;
+  font-size: 0.8125rem;
+  font-weight: 800;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 107, 0, 0.35);
+  box-shadow: 0 3px 0 #020617, 0 6px 14px -2px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 12px rgba(255, 107, 0, 0.25);
+  transition: all 0.15s ease-in-out;
+  cursor: pointer;
+}
+
+.btn-back-3d:hover {
+  background: linear-gradient(180deg, #334155 0%, #1e293b 100%);
+  border-color: rgba(255, 122, 24, 0.65);
+  box-shadow: 0 4px 0 #020617, 0 10px 20px -2px rgba(255, 107, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 0 18px rgba(255, 107, 0, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn-back-3d:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #020617, 0 3px 6px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 /* Botão Neon com Chanfro 3D e Shimmer */

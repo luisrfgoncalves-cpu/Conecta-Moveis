@@ -23,9 +23,9 @@ export function BrandLogo({
   const useImage = (variant === 'image' || variant === 'auto') && Boolean(brand.logoUrl);
 
   const imageSizes = {
-    sm: 'h-11 sm:h-13 max-w-[190px]',
-    md: 'h-13 sm:h-16 md:h-18 max-w-[240px] sm:max-w-[310px] md:max-w-[360px]',
-    lg: 'h-16 sm:h-20 md:h-24 max-w-[280px] sm:max-w-[360px] md:max-w-[420px]',
+    sm: 'h-10 sm:h-12 w-auto max-w-[170px] sm:max-w-[200px]',
+    md: 'h-11 sm:h-14 md:h-16 w-auto max-w-[200px] sm:max-w-[280px] md:max-w-[340px]',
+    lg: 'h-14 sm:h-18 md:h-22 w-auto max-w-[240px] sm:max-w-[340px] md:max-w-[400px]',
   };
 
   const iconSizes = {
@@ -44,15 +44,15 @@ export function BrandLogo({
 
   if (useImage && brand.logoUrl) {
     content = (
-      <div className={`inline-flex items-center group ${className}`}>
-        <div className="relative">
+      <div className={`inline-flex items-center group shrink-0 ${className}`}>
+        <div className="relative flex items-center">
           <Image
             src={brand.logoUrl}
             alt={brand.name}
             width={340}
             height={100}
             priority
-            className={`${imageSizes[size]} w-auto object-contain group-hover:scale-[1.02] transition-transform duration-200`}
+            className={`${imageSizes[size]} object-contain drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] group-hover:scale-[1.02] transition-transform duration-200`}
           />
         </div>
       </div>
