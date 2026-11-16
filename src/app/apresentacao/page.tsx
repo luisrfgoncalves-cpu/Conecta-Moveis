@@ -125,16 +125,9 @@ export default function ApresentacaoPage() {
             <a href="#interativo" className="hidden md:inline-block text-xs font-bold text-slate-300 hover:text-white transition">
               Simulador
             </a>
-            <a href="#faq" className="hidden sm:inline-block text-xs font-bold text-slate-300 hover:text-white transition">
+            <a href="#faq" className="text-xs font-bold text-slate-300 hover:text-white transition">
               Dúvidas
             </a>
-            <Link
-              href="/"
-              className="btn-super-led px-4 sm:px-6 py-2.5 rounded-xl text-xs sm:text-sm font-black uppercase tracking-wider text-white flex items-center gap-2"
-            >
-              <span>Acessar o App</span>
-              <ArrowUpRight className="w-4 h-4" />
-            </Link>
           </div>
         </div>
       </header>
@@ -167,7 +160,7 @@ export default function ApresentacaoPage() {
         <div className="max-w-4xl mx-auto mb-10">
           <div className="mb-4">
             <h2 className="text-lg sm:text-2xl font-black text-white tracking-tight">
-              Assista em 1 Minuto: Como Funciona a Vitrine moveleira
+              Como Funciona a Vitrine moveleira
             </h2>
           </div>
 
@@ -182,17 +175,6 @@ export default function ApresentacaoPage() {
                 <source src="/videos/vitrine-moveleira-apresentacao.mp4" type="video/mp4" />
                 Seu navegador não suporta vídeos em HTML5.
               </video>
-            </div>
-
-            <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400 px-3">
-              <span className="flex items-center gap-1.5">
-                <Clock className="w-3.5 h-3.5 text-orange-400" />
-                <span>Duração rápida: ~1 minuto</span>
-              </span>
-              <span className="flex items-center gap-1.5">
-                <Video className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Apresentação rápida em alta definição</span>
-              </span>
             </div>
           </div>
         </div>

@@ -13,11 +13,9 @@ export const metadata: Metadata = {
 export default function EntrarPage() {
   return (
     <main className="min-h-screen flex flex-col items-center justify-center px-4 py-12 relative">
-      <div className="absolute top-6 left-6 sm:top-10 sm:left-10">
+      <div className="w-full max-w-md mx-auto mb-6 flex items-center justify-between">
         <BackButton fallback="/" label="Voltar ao início" />
-      </div>
-      <div className="mb-8">
-        <BrandLogo href="/" size="md" />
+        <BrandLogo href="/" size="sm" />
       </div>
       <Suspense fallback={<SignInFormSkeleton />}>
         <SignInForm />

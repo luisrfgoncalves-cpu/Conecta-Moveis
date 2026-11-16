@@ -12,7 +12,12 @@ export function ConditionalShellWrapper({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const isDashboardOrAdmin = pathname?.startsWith('/painel') || pathname?.startsWith('/admin');
+  const isDashboardOrAdmin = 
+    pathname?.startsWith('/painel') || 
+    pathname?.startsWith('/admin') || 
+    pathname?.startsWith('/entrar') || 
+    pathname?.startsWith('/criar-conta') || 
+    pathname?.startsWith('/apresentacao');
 
   return (
     <>
