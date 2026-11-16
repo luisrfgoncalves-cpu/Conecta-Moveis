@@ -317,3 +317,32 @@ Este documento registra todas as avaliações do Gate de Isenção ao longo das 
 - **Evidência**: `src/lib/config/brand.ts`, `scripts/brand-audit.mjs`, `src/app/robots.ts`, `src/app/sitemap.ts`, `src/components/layout/Header.tsx`, `src/components/layout/Footer.tsx`.
 - **Pendência para o Advogado**:
   - Definição final da denominação social, marca definitiva a ser submetida ao INPI e e-mail formal do encarregado de dados (DPO/LGPD).
+
+
+---
+
+### J-018 — Integridade de Dados, Afirmações e Conformidade LGPD (Bloco 1)
+- **Data**: 15/11/2026
+- **Fase**: Ajuste Final Pré-Divulgação — Bloco 1 (Integridade de Dados e Afirmações)
+- **Funcionalidade ou Texto**:
+  1. **(1.2)** Redução do limite máximo de bio de 800 para 600 caracteres em professionalProfileSchema; adição de reak-words (Tailwind) nos elementos de exibição de bio em cards e página de perfil, prevenindo overflow por palavras longas.
+  2. **(1.3)** Remoção do selo "Perfil completo" incondicional dos cards de busca (ausência de dados de portfólio na query de listagem torna o critério objetivo impossível de verificar nessa camada). Na página de perfil completo, o selo foi renomeado para "Perfil com fotos" e agora é exibido apenas se io.length >= 80 E portfolio.length > 0.
+  3. **(1.6)** Remoção do endereço e telefone específicos do Procon Jundiaí da página /contrate-com-seguranca; substituição por "Procon da sua cidade (consulte o site da prefeitura)". Referência ao Juizado Especial Cível mantida em texto genérico sem endereço — pendente confirmação do usuário para inclusão.
+  4. **(1.7)** Remoção de afirmações de conformidade não verificadas: "Em conformidade com a LGPD" (subtítulo de Privacidade); "Cumpre a LGPD e o Marco Civil da Internet com seriedade" (Função da Plataforma); "para impedir fotos impróprias, ofensas e fraudes" substituído por "analisa denúncias e conteúdos conforme regras públicas e uniformes da plataforma". Substituição de "DPO" por "Encarregado" / "Responsável pela proteção de dados (encarregado)" em toda Política de Privacidade; "logs de conexão e acesso a aplicações" → "registros de acesso a aplicações"; campo de coleta corrigido para refletir o formulário real (sem nome completo no cadastro inicial); subprocessadores e rotinas de retenção marcados como "(em implantação)" onde não estão operacionais.
+  5. **(1.8)** Faixa "Versão Preliminar" substituída em produção por "Documento em revisão. Última atualização: dd/mm/aaaa"; data agora lida de LEGAL_DATE (config centralizada, formato dd/mm/aaaa).
+  6. **(1.9)** Flag eviews_enabled já existia em src/lib/config/registry.ts. Padrão: desligada. Critério "Por Avaliação dos Usuários" em SearchFilters agora é condicional à prop eviewsEnabled. Página /encontrar-profissionais busca o valor real da flag em paralelo com os resultados de busca. A ReviewsSection completa (incluindo textos "Sem avaliações ainda" e "interações reais") já é ocultada quando eviewsEnabled = false pela lógica condicional existente na página de perfil.
+- **Regras e Normas Envolvidas**: R3, R4 (ausência de endosso); R16 (Gate de Isenção); R17; R27 (avaliações por flag); LGPD arts. 6º, 46 e 50 (minimização, honestidade sobre implementação); CDC arts. 30, 31 e 37 (publicidade enganosa, informação verdadeira).
+- **Risco**: Baixo (correções de texto e validação de dados; sem mudança de regras de negócio ou schema de banco).
+- **Decisão Tomada**:
+  1. **Bio 600 chars**: Redução do limite máximo para evitar apresentações desnecessariamente longas e manter consistência com a spec.
+  2. **Selo no card removido**: Sem has_photos na query de listagem, qualquer selo baseado em portfólio seria inverídico; opção mais segura é remover do card e manter só no perfil completo.
+  3. **Procon genérico**: Referência a endereço específico de Procon Jundiaí removida; informação genérica preserva utilidade sem criar obrigação de manutenção de dados de terceiros.
+  4. **JEC**: Mantido em texto genérico sem endereço — aguarda confirmação do usuário para incluir referência ao Juizado Especial Cível.
+  5. **Encarregado vs DPO**: LGPD usa "encarregado" (art. 41); "DPO" é termo GDPR. Substituição alinha a terminologia à lei nacional.
+  6. **Retenção "em implantação"**: Rotinas automáticas de expurgo (90 dias e 6 meses) listadas como planejadas/em implantação enquanto não houver confirmação de que os jobs estão efetivamente rodando em produção.
+- **Quem Decidiu**: Usuário (bloco de correções aprovado para execução com supervisão técnica).
+- **Evidência**: src/lib/profile/schemas.ts, src/components/search/ProfessionalCard.tsx, src/app/profissionais/[slug]/page.tsx, src/app/contrate-com-seguranca/page.tsx, src/app/funcao-da-plataforma/page.tsx, src/app/privacidade/page.tsx, src/app/termos/page.tsx, src/components/legal/LegalBanner.tsx, src/lib/legal/config.ts, src/components/search/SearchFilters.tsx, src/app/encontrar-profissionais/page.tsx.
+- **Pendência para o Advogado**:
+  - Confirmar prazo e forma da rotina de expurgo automático de registros de acesso (6 meses — Marco Civil art. 15).
+  - Revisar se "Responsável pela proteção de dados (encarregado)" satisfaz plenamente o art. 41 da LGPD quanto à identificação pública.
+  - Confirmar se a referência ao JEC deve ser mantida com indicação de localização genérica ou removida.

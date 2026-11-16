@@ -53,11 +53,11 @@ export default function FuncaoDaPlataformaPage() {
             </li>
             <li className="flex items-start gap-2">
               <span className="text-emerald-400 font-bold">•</span>
-              <span><strong>Operador de dados responsável:</strong> Cumpre a LGPD e o Marco Civil da Internet com seriedade, privacidade e segurança técnica.</span>
+              <span><strong>Tratamento de dados responsável:</strong> Observa as diretrizes da LGPD e do Marco Civil da Internet com privacidade e segurança técnica.</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="text-emerald-400 font-bold">•</span>
-              <span><strong>Moderador de conformidade:</strong> Aplica regras públicas e uniformes para impedir fotos impróprias, ofensas e fraudes.</span>
+              <span><strong>Moderação de conformidade:</strong> Analisa denúncias e conteúdos conforme regras públicas e uniformes da plataforma.</span>
             </li>
           </ul>
         </div>

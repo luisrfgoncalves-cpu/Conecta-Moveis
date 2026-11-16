@@ -15,9 +15,10 @@ interface SearchFiltersProps {
     especialidade?: string;
     ordenacao?: string;
   };
+  reviewsEnabled?: boolean;
 }
 
-export function SearchFilters({ currentFilters }: SearchFiltersProps) {
+export function SearchFilters({ currentFilters, reviewsEnabled = false }: SearchFiltersProps) {
   const router = useRouter();
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -234,7 +235,7 @@ export function SearchFilters({ currentFilters }: SearchFiltersProps) {
                   <option value="rotativa">Ordem Rotativa (Padrão)</option>
                   <option value="recentes">Mais Recentes</option>
                   <option value="completos">Perfil Mais Completo</option>
-                  <option value="avaliacoes">Por Avaliação dos Usuários</option>
+                  {reviewsEnabled && <option value="avaliacoes">Por Avaliação dos Usuários</option>}
                 </select>
                 <Link
                   href="/como-ordenamos-os-resultados"
@@ -409,7 +410,7 @@ export function SearchFilters({ currentFilters }: SearchFiltersProps) {
                 <option value="rotativa">Ordem Rotativa (Padrão)</option>
                 <option value="recentes">Mais Recentes</option>
                 <option value="completos">Perfil Mais Completo</option>
-                <option value="avaliacoes">Por Avaliação dos Usuários</option>
+                {reviewsEnabled && <option value="avaliacoes">Por Avaliação dos Usuários</option>}
               </select>
               <Link
                 href="/como-ordenamos-os-resultados"

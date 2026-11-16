@@ -20,7 +20,7 @@ export default function PrivacidadePage() {
           Política de Privacidade e Proteção de Dados
         </h1>
         <p className="text-xs text-slate-400">
-          Versão {LEGAL_VERSION} — Atualizado em {LEGAL_DATE} · Em conformidade com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018 - LGPD)
+          Versão {LEGAL_VERSION} — Atualizado em {LEGAL_DATE}
         </p>
       </div>
 
@@ -32,12 +32,12 @@ export default function PrivacidadePage() {
         </div>
 
         <section>
-          <h2 className="text-lg font-bold text-white mb-2">1. Identificação do Controlador e do Encarregado (DPO)</h2>
+          <h2 className="text-lg font-bold text-white mb-2">1. Identificação do Controlador e do Encarregado</h2>
           <p>
             O controlador dos seus dados pessoais é o operador da plataforma Conecta Móveis (Razão Social: <strong>{op.razaoSocial}</strong>, CNPJ: <strong>{op.cnpj}</strong>, sediado na Comarca de Jundiaí/SP).
           </p>
           <p className="mt-2">
-            O canal de atendimento do nosso <strong>Encarregado pelo Tratamento de Dados Pessoais (DPO)</strong> é o e-mail: <a href={`mailto:${op.emailTitulares}`} className="text-orange-400 underline">{op.emailTitulares}</a>.
+            O canal de atendimento do nosso <strong>Responsável pela proteção de dados (encarregado)</strong> é o e-mail: <a href={`mailto:${op.emailTitulares}`} className="text-orange-400 underline">{op.emailTitulares}</a>.
           </p>
         </section>
 
@@ -47,7 +47,7 @@ export default function PrivacidadePage() {
             Coletamos apenas as informações estritamente necessárias para o funcionamento da vitrine digital. <strong>Nunca solicitamos nem armazenamos números de CPF de consumidores, dados de cartão de crédito, contas bancárias ou localização residencial em tempo real.</strong>
           </p>
           <ul className="list-disc pl-5 mt-2 space-y-1 text-slate-300">
-            <li><strong>Usuários cadastrados:</strong> Nome, e-mail e senha criptografada em hash seguro;</li>
+            <li><strong>Usuários cadastrados:</strong> E-mail e senha criptografada em hash seguro (o formulário inicial não exige nome completo);</li>
             <li><strong>Anunciantes e Profissionais:</strong> Nome comercial ou razão social, especialidades moveleiras, cidades de atuação, fotos de portfólio autoral e meios de contato comerciais (WhatsApp/telefone fornecidos voluntariamente);</li>
             <li><strong>Registros Técnicos Obrigatórios:</strong> Endereço IP, data e hora de conexões e ações críticas de autenticação, em observância estrita ao art. 15 do Marco Civil da Internet (Lei 12.965/2014).</li>
           </ul>
@@ -70,18 +70,18 @@ export default function PrivacidadePage() {
             Para garantir a estabilidade e segurança técnica dos serviços, utilizamos infraestrutura de computação em nuvem de fornecedores de renome global, operando sob contratos que garantem proteção equivalente à legislação brasileira:
           </p>
           <ul className="list-disc pl-5 mt-2 space-y-1.5 text-slate-300">
-            <li><strong>Supabase Inc.:</strong> Banco de dados relacional PostgreSQL seguro e autenticação de usuários (servidores situados prioritariamente na região América do Sul / Estados Unidos sob cláusulas contratuais padrão);</li>
+            <li><strong>Supabase Inc.:</strong> Banco de dados relacional PostgreSQL seguro e autenticação de usuários (servidores situados na região América do Sul / Estados Unidos sob cláusulas contratuais padrão);</li>
             <li><strong>Vercel Inc.:</strong> Hospedagem da aplicação web e processamento de rotas com rede global de entrega de conteúdo (CDN);</li>
-            <li><strong>Serviço SMTP (Resend/Transactional):</strong> Envio exclusivo de e-mails transacionais (confirmação de conta e redefinição de senha).</li>
+            <li><strong>Serviço SMTP (Transactional):</strong> Envio de e-mails transacionais (em implantação / quando configurado).</li>
           </ul>
         </section>
 
         <section>
-          <h2 className="text-lg font-bold text-white mb-2">5. Prazos de Retenção e Expurgo Automático</h2>
+          <h2 className="text-lg font-bold text-white mb-2">5. Prazos de Retenção e Expurgo de Dados</h2>
           <p>Não mantemos dados pessoais por tempo indeterminado:</p>
           <ul className="list-disc pl-5 mt-2 space-y-1 text-slate-300">
-            <li><strong>Solicitações de contato e mensagens privadas:</strong> Expurgo automático em <strong>90 dias</strong>;</li>
-            <li><strong>Registros de conexão e acesso a aplicações:</strong> Expurgo automático em <strong>6 meses exatos</strong>, exceto se houver ordem de preservação legal (<em>legal hold</em>);</li>
+            <li><strong>Solicitações de contato e mensagens privadas:</strong> Expurgo planejado em <strong>90 dias</strong> (rotina em implantação operacional);</li>
+            <li><strong>Registros de acesso a aplicações:</strong> Retenção de <strong>6 meses</strong> nos termos do Marco Civil da Internet (rotina de expurgo em implantação operacional), exceto se houver ordem de preservação legal (<em>legal hold</em>);</li>
             <li><strong>Notificações de conteúdo e dossiês de infração:</strong> Retidos pelo prazo prescricional de até 5 anos para instrução de autoridades judiciais;</li>
             <li><strong>Contas de usuários:</strong> Retidas durante a atividade da conta. Mediante solicitação de encerramento, os dados são excluídos ou anonimizados em até 30 dias.</li>
           </ul>
@@ -90,7 +90,7 @@ export default function PrivacidadePage() {
         <section>
           <h2 className="text-lg font-bold text-white mb-2">6. Direitos do Titular de Dados (Art. 18 da LGPD)</h2>
           <p>
-            Você pode exercer diretamente seus direitos a qualquer momento no seu painel em <Link href="/painel/seguranca" className="text-orange-400 underline">Segurança e Privacidade</Link> ou pelo nosso canal de DPO:
+            Você pode exercer diretamente seus direitos a qualquer momento no seu painel em <Link href="/painel/seguranca" className="text-orange-400 underline">Segurança e Privacidade</Link> ou pelo nosso canal do Encarregado:
           </p>
           <ul className="list-disc pl-5 mt-2 space-y-1 text-slate-300">
             <li>Confirmação da existência de tratamento e acesso aos dados;</li>
