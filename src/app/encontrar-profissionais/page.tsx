@@ -88,14 +88,8 @@ export default async function EncontrarProfissionaisPage({ searchParams }: PageP
         </div>
       </div>
 
-      {/* Aviso Curto Fixo da Plataforma */}
+      {/* Aviso Único e Claro da Plataforma */}
       <PlatformNotice />
-
-      {/* Aviso Legal Obrigatório da Plataforma */}
-      <Alert type="legal">
-        <strong className="text-white font-bold block mb-1">Aviso:</strong>
-        Este perfil é publicado pelo anunciante. A presença na plataforma não representa garantia da qualidade, prazo ou resultado do serviço.
-      </Alert>
 
       {/* Layout de Conteúdo: Filtros + Lista */}
       <div className="flex flex-col lg:flex-row gap-8 items-start">
