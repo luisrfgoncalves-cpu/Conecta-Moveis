@@ -23,21 +23,21 @@ export function BrandLogo({
   const useImage = (variant === 'image' || variant === 'auto') && Boolean(brand.logoUrl);
 
   const imageSizes = {
-    sm: 'h-8 sm:h-9 max-w-[130px]',
-    md: 'h-9 sm:h-11 md:h-13 max-w-[150px] sm:max-w-[210px]',
-    lg: 'h-11 sm:h-14 md:h-16 max-w-[180px] sm:max-w-[240px]',
+    sm: 'h-10 sm:h-12 max-w-[170px]',
+    md: 'h-12 sm:h-14 md:h-16 max-w-[210px] sm:max-w-[270px] md:max-w-[310px]',
+    lg: 'h-14 sm:h-16 md:h-20 max-w-[240px] sm:max-w-[320px] md:max-w-[380px]',
   };
 
   const iconSizes = {
-    sm: 'w-7 h-7',
-    md: 'w-9 h-9 sm:w-10 sm:h-10',
-    lg: 'w-12 h-12 sm:w-14 sm:h-14',
+    sm: 'w-9 h-9',
+    md: 'w-11 h-11 sm:w-13 sm:h-13',
+    lg: 'w-14 h-14 sm:w-16 sm:h-16',
   };
 
   const textSizes = {
-    sm: 'text-base font-extrabold',
-    md: 'text-xl sm:text-2xl font-black',
-    lg: 'text-2xl sm:text-3xl font-black',
+    sm: 'text-lg font-extrabold',
+    md: 'text-2xl sm:text-3xl font-black',
+    lg: 'text-3xl sm:text-4xl font-black',
   };
 
   let content: React.ReactNode;
@@ -49,8 +49,8 @@ export function BrandLogo({
           <Image
             src={brand.logoUrl}
             alt={brand.name}
-            width={220}
-            height={70}
+            width={340}
+            height={100}
             priority
             className={`${imageSizes[size]} w-auto object-contain group-hover:scale-[1.02] transition-transform duration-200`}
           />

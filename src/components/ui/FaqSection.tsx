@@ -5,20 +5,54 @@ import { ChevronDown, HelpCircle } from 'lucide-react';
 
 const faqs = [
   {
-    q: 'Como funciona a contratação de profissionais na plataforma?',
-    a: 'Você navega livremente pelo catálogo, escolhe o montador, marceneiro ou marcenaria de sua preferência e clica para falar diretamente pelo WhatsApp ou enviar uma solicitação pela plataforma. Toda negociação, preço e prazo são combinados diretamente entre você e o profissional, sem intermediários.',
+    category: 'Para Quem Procura Serviços',
+    q: 'Como encontro e entro em contato com um montador ou marceneiro?',
+    a: 'Você acessa livremente o catálogo, utiliza os filtros de cidade, categoria ou especialidade e escolhe o profissional ideal. Ao abrir o perfil, basta clicar no botão de WhatsApp para conversar em tempo real diretamente com ele. Não há cadastro obrigatório para pesquisar nem intermediários.',
   },
   {
-    q: 'A plataforma cobra alguma taxa ou comissão sobre os serviços?',
-    a: 'Não. O Conecta Móveis não recebe pagamento pelos serviços e não cobra comissão sobre eles, nem de quem procura nem dos profissionais. O catálogo é livre e direto.',
+    category: 'Para Quem Procura Serviços',
+    q: 'A plataforma cobra alguma taxa para eu consultar os profissionais?',
+    a: 'Não. O Conecta Móveis é gratuito para visitantes e contratantes. Você pode navegar, ver as fotos de apresentação dos serviços e iniciar conversas com quantos profissionais quiser sem pagar taxa de uso.',
   },
   {
-    q: 'Como posso cadastrar meu perfil ou a minha marcenaria?',
-    a: 'Qualquer profissional ou empresa do setor moveleiro com atuação em Jundiaí e região pode criar seu cadastro gratuito, preencher suas especialidades, definir sua área de atendimento e enviar fotos de apresentação de serviços para aprovação.',
+    category: 'Para Quem Procura Serviços',
+    q: 'Como são combinados preço, prazo e pagamento do serviço?',
+    a: 'Todo acerto financeiro ocorre fora da plataforma. Preço, prazo, contrato e pagamento são combinados exclusivamente e diretamente entre você e o profissional ou empresa que você contatar. Recomendamos sempre solicitar detalhes por escrito antes de iniciar o trabalho.',
   },
   {
-    q: 'A plataforma oferece garantia sobre o serviço realizado?',
-    a: 'Não. A plataforma atua estritamente como um canal digital de divulgação e aproximação. A execução, prazos e entendimentos são combinados diretamente entre você e o profissional autônomo ou empresa.',
+    category: 'Para Quem Procura Serviços',
+    q: 'A plataforma oferece garantia de execução ou qualidade dos serviços?',
+    a: 'Não. O Conecta Móveis atua estritamente como um catálogo de divulgação e aproximação local. A plataforma não participa das negociações, não executa serviços e não oferece garantia sobre o resultado, cabendo a cada anunciante a responsabilidade pelo seu trabalho.',
+  },
+  {
+    category: 'Para Quem Procura Serviços',
+    q: 'Como sei quais cidades ou bairros o profissional atende?',
+    a: 'No perfil de cada anunciante você encontra a cidade-sede e o raio de atendimento detalhado na região de Jundiaí e cidades vizinhas. Você também pode esclarecer o local exato da montagem diretamente pelo WhatsApp.',
+  },
+  {
+    category: 'Para Profissionais e Marcenarias',
+    q: 'Como funciona o cadastro e a divulgação para quem presta serviços?',
+    a: 'Montadores, marceneiros, lojistas e projetistas criam uma conta, preenchem suas especialidades, informam as regiões atendidas e enviam fotos de trabalhos reais para montar sua página pública de apresentação.',
+  },
+  {
+    category: 'Para Profissionais e Marcenarias',
+    q: 'A Conecta Móveis cobra comissão ou porcentagem sobre os serviços fechados?',
+    a: 'Zero comissão. A plataforma não retém nenhuma porcentagem sobre os atendimentos que você fechar. Todo o rendimento combinado com seus clientes fica integralmente com você.',
+  },
+  {
+    category: 'Para Profissionais e Marcenarias',
+    q: 'Preciso ter CNPJ para anunciar meus serviços no catálogo?',
+    a: 'Não é obrigatório. Profissionais autônomos que atuam como pessoa física, microempreendedores (MEI) e marcenarias de todos os portes podem criar perfil e divulgar seus trabalhos no Conecta Móveis.',
+  },
+  {
+    category: 'Para Profissionais e Marcenarias',
+    q: 'Onde e como os clientes entram em contato comigo?',
+    a: 'Os clientes que visitam sua página pública clicam diretamente no botão de WhatsApp cadastrado no seu perfil e iniciam a conversa diretamente no seu aplicativo, além de poderem enviar solicitações de contato pela própria plataforma.',
+  },
+  {
+    category: 'Para Profissionais e Marcenarias',
+    q: 'O cadastro continuará gratuito para profissionais?',
+    a: 'O cadastro no período de lançamento é totalmente gratuito. Caso ocorram futuras implementações de planos opcionais de destaque, qualquer alteração nas condições será informada com total transparência e antecedência aos usuários.',
   },
 ];
 
