@@ -68,24 +68,24 @@ export default async function PainelLayout({ children }: { children: React.React
   // Sem perfil: Início, Favoritos, Pedidos de contato enviados, Alertas, Minha conta e privacidade, botão "Quero divulgar meu trabalho"
   const navItems = hasProfessionalProfile
     ? [
-        { href: '/painel', label: 'Painel', icon: LayoutDashboard },
-        { href: '/painel/perfil', label: 'Meu Anúncio', icon: User },
-        { href: '/painel/fotos', label: 'Fotos de Apresentação', icon: Images },
-        { href: '/painel/solicitacoes', label: 'Contatos Recebidos', icon: MessageSquare },
-        { href: '/painel/avaliacoes', label: 'Avaliações', icon: Star },
-        { href: '/painel/assinatura', label: 'Meu Plano', icon: CreditCard },
-        { href: '/painel/empresas', label: 'Empresa', icon: Building2 },
-        { href: '/painel/configuracoes', label: 'Minha Conta', icon: Settings },
-        { href: '/painel/seguranca', label: 'Segurança', icon: ShieldCheck },
-      ]
+      { href: '/painel', label: 'Painel', icon: LayoutDashboard },
+      { href: '/painel/perfil', label: 'Meu Anúncio', icon: User },
+      { href: '/painel/fotos', label: 'Fotos de Apresentação', icon: Images },
+      { href: '/painel/solicitacoes', label: 'Contatos Recebidos', icon: MessageSquare },
+      { href: '/painel/avaliacoes', label: 'Avaliações', icon: Star },
+      { href: '/painel/assinatura', label: 'Meu Plano', icon: CreditCard },
+      { href: '/painel/empresas', label: 'Empresa', icon: Building2 },
+      { href: '/painel/configuracoes', label: 'Minha Conta', icon: Settings },
+      { href: '/painel/seguranca', label: 'Segurança', icon: ShieldCheck },
+    ]
     : [
-        { href: '/painel', label: 'Início', icon: LayoutDashboard },
-        { href: '/encontrar-profissionais', label: 'Buscar Profissionais', icon: Search },
-        { href: '/painel/favoritos', label: 'Favoritos', icon: Heart },
-        { href: '/painel/solicitacoes', label: 'Pedidos Enviados', icon: MessageSquare },
-        { href: '/painel/configuracoes', label: 'Minha Conta e Privacidade', icon: Settings },
-        { href: '/painel/seguranca', label: 'Segurança', icon: ShieldCheck },
-      ];
+      { href: '/painel', label: 'Início', icon: LayoutDashboard },
+      { href: '/encontrar-profissionais', label: 'Buscar Profissionais', icon: Search },
+      { href: '/painel/favoritos', label: 'Favoritos', icon: Heart },
+      { href: '/painel/solicitacoes', label: 'Pedidos Enviados', icon: MessageSquare },
+      { href: '/painel/configuracoes', label: 'Minha Conta e Privacidade', icon: Settings },
+      { href: '/painel/seguranca', label: 'Segurança', icon: ShieldCheck },
+    ];
 
   async function handleSignOut() {
     'use server';
