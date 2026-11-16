@@ -342,7 +342,7 @@ export default async function ProfissionalPublicPage({ params }: PageProps) {
                     Não cobramos para pesquisar nem para entrar em contato. O cadastro gratuito protege os profissionais contra spams e permite salvar seus favoritos.
                   </p>
                   <div className="flex flex-wrap gap-3 pt-1 text-[11px] sm:text-xs font-semibold text-slate-300">
-                    <span className="flex items-center gap-1 text-emerald-400">✓ 100% Gratuito</span>
+                    <span className="flex items-center gap-1 text-emerald-400">✓ Gratuito</span>
                     <span className="flex items-center gap-1 text-orange-400">✓ Negociação Direta</span>
                     <span className="flex items-center gap-1 text-sky-400">✓ Sem Comissões</span>
                   </div>
