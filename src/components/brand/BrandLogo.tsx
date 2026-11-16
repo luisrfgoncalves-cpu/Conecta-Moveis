@@ -49,10 +49,11 @@ export function BrandLogo({
           <Image
             src={brand.logoUrl}
             alt={brand.name}
-            width={340}
-            height={100}
+            width={580}
+            height={200}
             priority
-            className={`${imageSizes[size]} object-contain drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] group-hover:scale-[1.02] transition-transform duration-200`}
+            unoptimized
+            className={`${imageSizes[size]} object-contain drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)] group-hover:scale-[1.02] transition-transform duration-200`}
           />
         </div>
       </div>
