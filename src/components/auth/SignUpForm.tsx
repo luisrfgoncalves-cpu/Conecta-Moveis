@@ -153,23 +153,9 @@ export function SignUpForm() {
           )}
         </div>
 
-        <div>
-          <label htmlFor="inviteToken" className="block text-sm font-semibold text-slate-300 mb-1.5">
-            Código de convite <span className="text-xs text-slate-400 font-normal">(se houver)</span>
-          </label>
-          <div className="relative">
-            <input
-              id="inviteToken"
-              type="text"
-              autoComplete="off"
-              className="w-full bg-black/30 border border-white/20 rounded-xl px-4 py-3 pl-10 text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500/50 transition font-mono text-sm"
-              placeholder="Cole seu código ou link de convite"
-              {...register('inviteToken')}
-            />
-            <Ticket className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-          </div>
-          <input type="hidden" {...register('campaignRef')} />
-        </div>
+        {/* Convite silencioso em segundo plano */}
+        <input type="hidden" {...register('inviteToken')} />
+        <input type="hidden" {...register('campaignRef')} />
 
         <div>
           <div className="flex items-start gap-3">

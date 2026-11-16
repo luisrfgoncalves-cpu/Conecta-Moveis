@@ -23,9 +23,9 @@ export function BrandLogo({
   const useImage = (variant === 'image' || variant === 'auto') && Boolean(brand.logoUrl);
 
   const imageSizes = {
-    sm: 'h-9 sm:h-11 w-auto max-w-[190px] sm:max-w-[240px]',
-    md: 'h-12 sm:h-16 md:h-18 w-auto max-w-[240px] sm:max-w-[320px] md:max-w-[380px]',
-    lg: 'h-16 sm:h-20 md:h-24 w-auto max-w-[280px] sm:max-w-[380px] md:max-w-[460px]',
+    sm: 'h-10 sm:h-12 w-auto max-w-[210px] sm:max-w-[260px]',
+    md: 'h-13 sm:h-16 md:h-20 w-auto max-w-[260px] sm:max-w-[340px] md:max-w-[420px]',
+    lg: 'h-18 sm:h-22 md:h-28 w-auto max-w-[300px] sm:max-w-[420px] md:max-w-[500px]',
   };
 
   const iconSizes = {

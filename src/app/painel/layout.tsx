@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { signOut } from '@/lib/auth/actions';
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';
+import { BrandLogo } from '@/components/brand/BrandLogo';
 import {
   LayoutDashboard,
   User,
@@ -97,15 +98,7 @@ export default async function PainelLayout({ children }: { children: React.React
       {/* Sidebar */}
       <aside className="w-full lg:w-64 glass-panel border-r border-white/10 flex-shrink-0">
         <div className="p-6 border-b border-white/10">
-          <Link href="/" aria-label="Ir para o início">
-            <Image
-              src="/brand/logo-vitrine-moveleira.png"
-              alt="Vitrine Moveleira"
-              width={140}
-              height={36}
-              className="h-8 w-auto"
-            />
-          </Link>
+          <BrandLogo href="/" size="sm" />
         </div>
 
         {/* Perfil do usuário */}

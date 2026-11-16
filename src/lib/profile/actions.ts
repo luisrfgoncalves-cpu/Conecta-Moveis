@@ -504,3 +504,41 @@ export async function uploadAvatarAction(
     message: 'Imagem enviada e otimizada em WebP com sucesso!',
   };
 }
+
+/**
+ * Exclusão definitiva do perfil pelo próprio profissional (Direito de eliminação LGPD)
+ */
+export async function deleteOwnProfile(): Promise<{ success: boolean; error?: string; message?: string }> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { success: false, error: 'Usuário não autenticado.' };
+
+  const admin = getAdminClient();
+
+  // Buscar perfil existente
+  const { data: prof } = await admin
+    .from('professional_profiles')
+    .select('id, display_name')
+    .eq('user_id', user.id)
+    .maybeSingle();
+
+  if (!prof) return { success: false, error: 'Perfil não encontrado.' };
+
+  // Excluir especialidades e regiões
+  await admin.from('profile_specialties').delete().eq('profile_id', prof.id);
+  await admin.from('service_regions').delete().eq('profile_id', prof.id);
+
+  // Excluir o perfil profissional
+  const { error } = await admin
+    .from('professional_profiles')
+    .delete()
+    .eq('id', prof.id);
+
+  if (error) return { success: false, error: 'Erro ao excluir anúncio.' };
+
+  revalidatePath('/painel');
+  revalidatePath('/painel/perfil');
+  revalidatePath('/encontrar-profissionais');
+
+  return { success: true, message: 'Seu anúncio foi excluído com sucesso.' };
+}

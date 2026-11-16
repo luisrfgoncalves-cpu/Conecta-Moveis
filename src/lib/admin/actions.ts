@@ -355,7 +355,7 @@ export async function adminDeleteProfile(
   profileId: string
 ): Promise<{ success: boolean; error?: string }> {
   const { user, role } = await getAdminUserRole();
-  if (!user || role !== 'admin') return { success: false, error: 'Acesso restrito ao administrador.' };
+  if (!user || (role !== 'admin' && role !== 'owner')) return { success: false, error: 'Acesso restrito ao administrador.' };
 
   const admin = getAdminClient();
 

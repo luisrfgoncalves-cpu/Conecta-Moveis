@@ -10,6 +10,7 @@ import {
   saveProfessionalProfile,
   togglePublishProfile,
   uploadAvatarAction,
+  deleteOwnProfile,
 } from '@/lib/profile/actions';
 import {
   validateClientImageFile,
@@ -426,19 +427,39 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
           )}
         </div>
 
-        {/* Ação de despublicar */}
-        {isPublished && (
-          <div className="flex justify-end">
+        {/* Ações de despublicar e exclusão */}
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
+          <button
+            type="button"
+            disabled={isPending}
+            onClick={() => {
+              if (window.confirm('Tem certeza que deseja excluir seu anúncio definitivamente? Todos os dados, fotos e visualizações serão removidos.')) {
+                startTransition(async () => {
+                  const res = await deleteOwnProfile();
+                  if (res.success) {
+                    window.location.reload();
+                  } else {
+                    setServerError(res.error || 'Erro ao excluir perfil.');
+                  }
+                });
+              }
+            }}
+            className="px-4 py-2.5 rounded-xl bg-red-600/15 text-red-400 border border-red-500/30 text-xs sm:text-sm font-bold hover:bg-red-600/25 transition disabled:opacity-60"
+          >
+            {isPending ? 'Processando...' : 'Excluir Anúncio Definitivamente'}
+          </button>
+
+          {isPublished && (
             <button
               type="button"
               disabled={isPending}
               onClick={() => handleTogglePublish(false)}
-              className="px-5 py-2.5 rounded-xl bg-amber-600/20 text-amber-400 border border-amber-500/30 text-sm font-bold hover:bg-amber-600/30 transition disabled:opacity-60"
+              className="px-5 py-2.5 rounded-xl bg-amber-600/20 text-amber-400 border border-amber-500/30 text-xs sm:text-sm font-bold hover:bg-amber-600/30 transition disabled:opacity-60"
             >
               {isPending ? 'Atualizando...' : 'Despublicar Perfil'}
             </button>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     );
   }
