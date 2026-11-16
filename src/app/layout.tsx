@@ -6,6 +6,7 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { ConditionalShellWrapper } from '@/components/layout/ConditionalShellWrapper';
 import { PwaInstallBanner } from '@/components/pwa/PwaInstallBanner';
+import { BrandIntroSound } from '@/components/brand/BrandIntroSound';
 
 import { getBrandConfig } from '@/lib/config/brand';
 
@@ -104,6 +105,7 @@ export default function RootLayout({
         <ConditionalShellWrapper header={<Header />} footer={<Footer />}>
           {children}
         </ConditionalShellWrapper>
+        <BrandIntroSound />
         <PwaInstallBanner />
       </body>
     </html>

@@ -2,14 +2,11 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { sounds } from '@/lib/sound';
 import { BrandLogo } from '@/components/brand/BrandLogo';
 import {
   Sparkles,
   Compass,
   FileText,
-  Volume2,
-  VolumeX,
   Menu,
   X,
   ShieldCheck,
@@ -29,12 +26,6 @@ interface HeaderClientProps {
 
 export function HeaderClient({ currentUser }: HeaderClientProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [soundActive, setSoundActive] = useState(false);
-
-  const toggleSound = () => {
-    const state = sounds.toggle();
-    setSoundActive(state);
-  };
 
   return (
     <header className="sticky top-0 z-50 w-full bg-slate-950/85 backdrop-blur-xl border-b border-white/10 shadow-lg shadow-black/40">
@@ -47,7 +38,6 @@ export function HeaderClient({ currentUser }: HeaderClientProps) {
           <Link
             href="/"
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-200 hover:text-white hover:bg-white/10 transition"
-            onClick={() => sounds.playClick()}
           >
             <Sparkles className="w-3.5 h-3.5 text-orange-400" />
             Início
@@ -55,7 +45,6 @@ export function HeaderClient({ currentUser }: HeaderClientProps) {
           <Link
             href="/encontrar-profissionais"
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white hover:bg-white/10 transition"
-            onClick={() => sounds.playClick()}
           >
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
             Buscar Profissionais
@@ -63,7 +52,6 @@ export function HeaderClient({ currentUser }: HeaderClientProps) {
           <Link
             href="/categorias"
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white hover:bg-white/10 transition"
-            onClick={() => sounds.playClick()}
           >
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
             Categorias
@@ -71,7 +59,6 @@ export function HeaderClient({ currentUser }: HeaderClientProps) {
           <Link
             href="/como-funciona"
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-white hover:bg-white/10 transition"
-            onClick={() => sounds.playClick()}
           >
             <Compass className="w-3.5 h-3.5 text-sky-400" />
             Como Funciona
@@ -79,7 +66,6 @@ export function HeaderClient({ currentUser }: HeaderClientProps) {
           <Link
             href="/para-profissionais"
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-orange-400 hover:bg-white/10 transition"
-            onClick={() => sounds.playClick()}
           >
             <Briefcase className="w-3.5 h-3.5 text-orange-400" />
             Para Profissionais
@@ -88,31 +74,13 @@ export function HeaderClient({ currentUser }: HeaderClientProps) {
 
         {/* Ações e Identificação de Usuário Logado */}
         <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
-          {/* Efeitos Sonoros Opcionais (oculto no mobile para evitar overflow na barra) */}
-          <button
-            type="button"
-            onClick={toggleSound}
-            aria-label="Alternar sons da interface"
-            className="hidden sm:flex p-2 rounded-xl text-xs font-bold text-slate-300 items-center gap-1.5 hover:text-orange-400 bg-white/5 hover:bg-white/10 border border-white/10 transition-colors"
-            title="Efeitos sonoros"
-          >
-            {soundActive ? (
-              <Volume2 className="w-4 h-4 text-orange-400 animate-pulse" />
-            ) : (
-              <VolumeX className="w-4 h-4 text-slate-400" />
-            )}
-          </button>
-
           {/* Componente Dropdown de Usuário Logado ou Botões de Entrar/Cadastrar */}
           <UserNavDropdown user={currentUser} />
 
           {/* Menu Mobile Toggle */}
           <button
             type="button"
-            onClick={() => {
-              sounds.playClick();
-              setMobileMenuOpen(!mobileMenuOpen);
-            }}
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="lg:hidden p-2 rounded-xl bg-white/5 border border-white/10 text-slate-300 hover:text-white shrink-0"
             aria-label={mobileMenuOpen ? 'Fechar menu' : 'Abrir menu'}
           >
@@ -184,24 +152,6 @@ export function HeaderClient({ currentUser }: HeaderClientProps) {
                 <span>Cadastrar Meu Perfil</span>
               </Link>
             )}
-
-            <button
-              type="button"
-              onClick={toggleSound}
-              className="w-full py-2 px-3 rounded-xl bg-white/5 border border-white/10 text-xs text-slate-300 flex items-center justify-center gap-2"
-            >
-              {soundActive ? (
-                <>
-                  <Volume2 className="w-3.5 h-3.5 text-orange-400" />
-                  <span>Sons ativados</span>
-                </>
-              ) : (
-                <>
-                  <VolumeX className="w-3.5 h-3.5 text-slate-400" />
-                  <span>Ativar sons da navegação</span>
-                </>
-              )}
-            </button>
           </div>
         </div>
       )}
