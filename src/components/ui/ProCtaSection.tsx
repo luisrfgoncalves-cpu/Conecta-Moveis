@@ -27,26 +27,26 @@ export async function ProCtaSection() {
           </h2>
 
           <p className="text-sm sm:text-base text-slate-200 leading-relaxed font-normal">
-            Crie sua vitrine profissional digital e receba solicitações de novos clientes diretamente no seu WhatsApp. {launchFreeText}
+            Divulgue seus serviços moveleiros na plataforma para ser encontrado por quem procura profissionais na sua cidade. {launchFreeText}
           </p>
 
-          {/* Vantagens Claras */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 text-xs font-semibold text-slate-200">
+          {/* Vantagens Claras e Sem Jargões */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 text-xs sm:text-sm font-semibold text-slate-200">
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-              <span>Fotos de apresentação do seu trabalho</span>
+              <span>Fotos de apresentação dos seus trabalhos</span>
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-              <span>Receba contatos no WhatsApp, sem comissão sobre os serviços</span>
+              <span>Contato direto no WhatsApp, sem comissão sobre os serviços</span>
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-              <span>Divulgação em Jundiaí e região</span>
+              <span>Divulgação para quem procura serviços em Jundiaí e região</span>
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-              <span>Perfil com indicadores automáticos de preenchimento</span>
+              <span>Cadastro simples e rápido sem burocracia</span>
             </div>
           </div>
 
@@ -55,7 +55,7 @@ export async function ProCtaSection() {
               href="/criar-conta"
               className="px-8 py-4 btn-neon text-sm uppercase tracking-wider font-extrabold flex items-center justify-center gap-2 shadow-2xl"
             >
-              <span>Cadastrar Perfil</span>
+              <span>Criar anúncio gratuito</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
             <div className="flex items-center justify-center gap-2 text-xs text-slate-300">

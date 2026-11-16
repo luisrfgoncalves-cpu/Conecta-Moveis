@@ -50,7 +50,7 @@ export default async function PainelLayout({ children }: { children: React.React
       .from('user_roles')
       .select('role')
       .eq('user_id', user.id)
-      .in('role', ['admin', 'moderator'])
+      .in('role', ['owner', 'admin', 'moderator'])
       .maybeSingle(),
     adminClient
       .from('professional_profiles')
