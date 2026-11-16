@@ -139,7 +139,7 @@ export default function ApresentacaoPage() {
           </div>
         </div>
 
-        {/* BOTÃO ÚNICO DISPARADO APÓS O VÍDEO (SEM POLUIÇÃO DE SEGUNDO BOTÃO E SEM BOX REPETITIVO) */}
+        {/* BOTÃO ÚNICO DISPARADO: CANTOS ARREDONDADOS E TEXTO OBJETIVO */}
         <div 
           id="cta-container" 
           className={`max-w-md mx-auto mb-8 transition-all duration-700 ease-out ${
@@ -150,10 +150,10 @@ export default function ApresentacaoPage() {
         >
           <Link
             href="/encontrar-profissionais"
-            className="btn-super-led-pulsing w-full py-5 px-8 rounded-2xl text-base sm:text-xl font-black text-white flex items-center justify-center gap-3 uppercase tracking-wider cursor-pointer shadow-2xl"
+            className="btn-super-led-pulsing w-full py-4 sm:py-5 px-8 text-base sm:text-lg font-black text-white flex items-center justify-center gap-3 tracking-wide cursor-pointer shadow-2xl"
           >
-            <span>Entrar no App da Vitrine Agora</span>
-            <ArrowRight className="w-6 h-6" />
+            <span>Conhecer a Vitrine Moveleira</span>
+            <ArrowRight className="w-5 h-5" />
           </Link>
         </div>
       </section>
@@ -163,13 +163,14 @@ export default function ApresentacaoPage() {
         <div className="text-center max-w-3xl mx-auto mb-12">
           <span className="text-xs font-black text-purple-400 uppercase tracking-widest block mb-2">A Realidade do Mercado</span>
           <h2 className="text-2xl sm:text-4xl font-black text-white mb-4">
-            As dificuldades reais na hora de encontrar ou divulgar serviços
+            As dificuldades reais na hora de planejar, montar ou divulgar serviços
           </h2>
           <p className="text-sm sm:text-base text-slate-300">
             Problemas comuns que clientes e profissionais autônomos enfrentam no dia a dia:
           </p>
         </div>
 
+        {/* Grid de 2 Dores (empilhado com clareza em coluna no celular, 2 colunas no PC) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Card Dor do Cliente com Imagem Real */}
           <div className="card-pain-3d p-6 sm:p-7 flex flex-col justify-between">
@@ -177,24 +178,28 @@ export default function ApresentacaoPage() {
               <div className="rounded-2xl overflow-hidden border border-white/20 mb-5 relative aspect-[16/10] shadow-inner">
                 <Image
                   src="/images/apresentacao/dor-cliente.jpg"
-                  alt="Pessoa confusa com montagem de móveis"
+                  alt="Casal com planta no apartamento vazio querendo móveis planejados"
                   fill
                   className="object-cover"
                 />
               </div>
-              <h3 className="text-xl font-black text-white mb-3">Para Quem Precisa de Móveis ou Montagem</h3>
-              <ul className="space-y-3 text-xs sm:text-sm text-slate-200">
+              <h3 className="text-xl font-black text-white mb-4">Para Quem Precisa de Móveis ou Montagem</h3>
+              <ul className="space-y-3.5 text-xs sm:text-sm text-slate-200">
                 <li className="flex items-start gap-2.5">
                   <AlertCircle className="w-4 h-4 text-purple-400 shrink-0 mt-0.5" />
-                  <span><strong className="text-white">Falta de fotos do trabalho:</strong> Pedir indicações e não ter onde ver fotos de serviços já concluídos.</span>
+                  <span><strong>Ficar refém de indicações de terceiros:</strong> Ter que pedir contato em grupos de condomínio ou amigos sem saber se a pessoa é experiente no que você precisa.</span>
                 </li>
                 <li className="flex items-start gap-2.5">
                   <AlertCircle className="w-4 h-4 text-purple-400 shrink-0 mt-0.5" />
-                  <span><strong className="text-white">Demora para receber resposta:</strong> Preencher cadastros longos em sites para aguardar dias por retorno.</span>
+                  <span><strong>Não saber onde procurar profissionais da cidade:</strong> Dificuldade em achar profissionais atuantes que atendam especificamente o seu bairro em Jundiaí e região.</span>
                 </li>
                 <li className="flex items-start gap-2.5">
                   <AlertCircle className="w-4 h-4 text-purple-400 shrink-0 mt-0.5" />
-                  <span><strong className="text-white">Intermediários no caminho:</strong> Plataformas que cobram taxas para liberar o telefone de contato.</span>
+                  <span><strong>Não conhecer a especialidade e fotos de serviços:</strong> Precisar solicitar orçamentos sem poder ver fotos reais de trabalhos concluídos anteriormente.</span>
+                </li>
+                <li className="flex items-start gap-2.5">
+                  <AlertCircle className="w-4 h-4 text-purple-400 shrink-0 mt-0.5" />
+                  <span><strong>Falta de atendimento direto:</strong> Ter que passar por formulários complexos em vez de conversar direto pelo WhatsApp no número do profissional.</span>
                 </li>
               </ul>
             </div>
@@ -206,24 +211,32 @@ export default function ApresentacaoPage() {
               <div className="rounded-2xl overflow-hidden border border-white/20 mb-5 relative aspect-[16/10] shadow-inner">
                 <Image
                   src="/images/apresentacao/dor-profissional.jpg"
-                  alt="Marceneiro autônomo na oficina esperando clientes"
+                  alt="Marceneiro moderno em oficina com MDF olhando celular"
                   fill
                   className="object-cover"
                 />
               </div>
-              <h3 className="text-xl font-black text-white mb-3">Para Marceneiros e Montadores Autônomos</h3>
-              <ul className="space-y-3 text-xs sm:text-sm text-slate-200">
+              <h3 className="text-xl font-black text-white mb-4">Para Marceneiros e Montadores Autônomos</h3>
+              <ul className="space-y-3.5 text-xs sm:text-sm text-slate-200">
                 <li className="flex items-start gap-2.5">
                   <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-                  <span><strong className="text-white">Depender apenas do boca a boca:</strong> Semanas com pouca procura por falta de uma página digital simples.</span>
+                  <span><strong>Depender apenas de indicações e do boca a boca:</strong> Enfrentar semanas sem serviços novos por não ter uma vitrine digital própria no ar.</span>
                 </li>
                 <li className="flex items-start gap-2.5">
                   <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-                  <span><strong className="text-white">Taxas sobre a mão de obra:</strong> Aplicativos que cobram comissão sobre os serviços prestados.</span>
+                  <span><strong>Não saber como anunciar ou gastar caro em anúncios:</strong> Pagar valores elevados no Facebook e depender de terceiros para configurar campanhas que nem sempre trazem clientes.</span>
                 </li>
                 <li className="flex items-start gap-2.5">
                   <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-                  <span><strong className="text-white">Dificuldade de divulgação local:</strong> Custo alto de anúncios na internet sem foco na cidade.</span>
+                  <span><strong>Não ser conhecido na própria região:</strong> Dificuldade para alcançar moradores locais que estão se mudando ou reformando casas e apartamentos na sua cidade.</span>
+                </li>
+                <li className="flex items-start gap-2.5">
+                  <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                  <span><strong>Pagar altas comissões sobre o trabalho:</strong> Ter parte da mão de obra retida por aplicativos intermediários para poder pegar serviços.</span>
+                </li>
+                <li className="flex items-start gap-2.5">
+                  <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                  <span><strong>Falta de contatos parceiros para atender demandas:</strong> Não ter uma rede acessível de outros montadores, marceneiros e parceiros para indicar ou trocar suporte.</span>
                 </li>
               </ul>
             </div>
@@ -243,6 +256,7 @@ export default function ApresentacaoPage() {
           </p>
         </div>
 
+        {/* 4 Pilares Reais com Relevo 3D e Borda LED (Grid 1 coluna no mobile, 2 no tablet, 4 no desktop) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 text-left mb-12">
           <div className="card-3d-led p-5">
             <div className="w-11 h-11 rounded-xl bg-orange-500/20 text-orange-400 flex items-center justify-center mb-4 border border-orange-500/40">
@@ -277,21 +291,21 @@ export default function ApresentacaoPage() {
           </div>
         </div>
 
-        {/* 2 Cards com Fotos Reais de Solução */}
+        {/* 2 Cards de Soluções com Escopo Técnico Completo */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="card-3d-led p-6 flex flex-col justify-between">
             <div>
               <div className="rounded-2xl overflow-hidden border border-white/20 mb-5 relative aspect-[16/10]">
                 <Image
                   src="/images/apresentacao/solucao-montagem.jpg"
-                  alt="Montador profissional alinhando armário com LED"
+                  alt="Montador profissional alinhando armário planejado com precisão"
                   fill
                   className="object-cover"
                 />
               </div>
-              <h3 className="text-xl font-black text-white mb-2">Montagem e Ajustes Técnicos</h3>
+              <h3 className="text-xl font-black text-white mb-2">Montagem e Ajustes de Móveis</h3>
               <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-4">
-                Encontre montadores capacitados para montagem de móveis modulados, regulagem de dobradiças, gavetas e desmontagens com cuidado para mudança.
+                Encontre profissionais capacitados para montagem e desmontagem de móveis convencionais, modulados comprados pela internet ou em lojas, móveis planejados e projetos sob medida, incluindo regulagem precisa de dobradiças, gavetas e fixações seguras.
               </p>
             </div>
             <Link href="/servicos/montador-de-moveis/jundiai-sp" className="inline-flex items-center gap-2 text-xs font-bold text-orange-400 hover:text-orange-300 transition">
@@ -305,14 +319,14 @@ export default function ApresentacaoPage() {
               <div className="rounded-2xl overflow-hidden border border-white/20 mb-5 relative aspect-[16/10]">
                 <Image
                   src="/images/apresentacao/solucao-projetista.jpg"
-                  alt="Projetista 3D renderizando móvel planejado"
+                  alt="Projetista moveleiro desenvolvendo layout 3D de ambientes planejados"
                   fill
                   className="object-cover"
                 />
               </div>
-              <h3 className="text-xl font-black text-white mb-2">Projetos Sob Medida e 3D</h3>
+              <h3 className="text-xl font-black text-white mb-2">Projetos de Móveis e Ambientes Planejados</h3>
               <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-4">
-                Conecte-se com marceneiros e projetistas de ambientes sob medida para residências, cozinhas planejadas e layouts 3D com plantas técnicas.
+                Conecte-se com profissionais e marceneiros dedicados ao atendimento personalizado de ambientes planejados e otimização de espaços para residências e apartamentos, com paginação em desenhos 3D para facilitar a visualização e montagem.
               </p>
             </div>
             <Link href="/servicos/marceneiro/jundiai-sp" className="inline-flex items-center gap-2 text-xs font-bold text-orange-400 hover:text-orange-300 transition">
@@ -323,27 +337,25 @@ export default function ApresentacaoPage() {
         </div>
       </section>
 
-      {/* DOBRA 4: CATEGORIAS OFICIAIS DO CATÁLOGO (TEXTOS NATURAIS DO PRÓPRIO SISTEMA) */}
+      {/* DOBRA 4: CATEGORIAS OFICIAIS DO CATÁLOGO (SEM CARROSSEL: GRADE DIRETA E VISÍVEL NO CELULAR) */}
       <section className="py-14 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto z-10">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <span className="text-xs font-black text-purple-400 uppercase tracking-widest block mb-1">Categorias Oficiais</span>
-            <h2 className="text-2xl sm:text-4xl font-black text-white">Segmentos Disponíveis no App</h2>
-          </div>
-          <span className="text-xs text-slate-400 block sm:hidden">Deslize para o lado 👉</span>
+        <div className="text-center sm:text-left mb-8">
+          <span className="text-xs font-black text-purple-400 uppercase tracking-widest block mb-1">Categorias Oficiais</span>
+          <h2 className="text-2xl sm:text-4xl font-black text-white">Segmentos Disponíveis no App</h2>
         </div>
 
-        <div className="flex overflow-x-auto sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-5 pb-4">
-          <div className="w-[85%] sm:w-auto shrink-0 card-3d-led p-6">
+        {/* Grade 1 coluna no celular, 2 colunas no tablet, 3 colunas no PC (SEM CARROSSEL) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="card-3d-led p-6">
             <div className="w-12 h-12 rounded-2xl bg-orange-500/20 text-orange-400 flex items-center justify-center mb-4 border border-orange-500/40">
               <Wrench className="w-6 h-6" />
             </div>
             <h4 className="text-lg font-black text-white mb-2">Montador de Móveis</h4>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-4">Montagem e desmontagem de móveis modulados e convencionais.</p>
-            <span className="text-[11px] font-bold text-orange-400 bg-orange-500/10 px-3 py-1 rounded-lg border border-orange-500/30">Modulados • Guarda-Roupas • Cozinhas</span>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-4">Montagem e desmontagem de móveis convencionais, modulados e suporte a planejados.</p>
+            <span className="text-[11px] font-bold text-orange-400 bg-orange-500/10 px-3 py-1 rounded-lg border border-orange-500/30">Convencionais • Modulados • Planejados</span>
           </div>
 
-          <div className="w-[85%] sm:w-auto shrink-0 card-3d-led p-6">
+          <div className="card-3d-led p-6">
             <div className="w-12 h-12 rounded-2xl bg-purple-500/20 text-purple-400 flex items-center justify-center mb-4 border border-purple-500/40">
               <Sparkles className="w-6 h-6" />
             </div>
@@ -352,7 +364,7 @@ export default function ApresentacaoPage() {
             <span className="text-[11px] font-bold text-purple-400 bg-purple-500/10 px-3 py-1 rounded-lg border border-purple-500/30">Cozinhas Sob Medida • Painéis • Closets</span>
           </div>
 
-          <div className="w-[85%] sm:w-auto shrink-0 card-3d-led p-6">
+          <div className="card-3d-led p-6">
             <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center mb-4 border border-emerald-500/40">
               <Box className="w-6 h-6" />
             </div>
@@ -361,7 +373,7 @@ export default function ApresentacaoPage() {
             <span className="text-[11px] font-bold text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-lg border border-emerald-500/30">Ambientes Completos • Showrooms</span>
           </div>
 
-          <div className="w-[85%] sm:w-auto shrink-0 card-3d-led p-6">
+          <div className="card-3d-led p-6">
             <div className="w-12 h-12 rounded-2xl bg-purple-500/20 text-purple-400 flex items-center justify-center mb-4 border border-purple-500/40">
               <Hammer className="w-6 h-6" />
             </div>
@@ -370,16 +382,16 @@ export default function ApresentacaoPage() {
             <span className="text-[11px] font-bold text-purple-400 bg-purple-500/10 px-3 py-1 rounded-lg border border-purple-500/30">Corte CNC • Grandes Lotes • Chapas</span>
           </div>
 
-          <div className="w-[85%] sm:w-auto shrink-0 card-3d-led p-6">
+          <div className="card-3d-led p-6">
             <div className="w-12 h-12 rounded-2xl bg-sky-500/20 text-sky-400 flex items-center justify-center mb-4 border border-sky-500/40">
               <Ruler className="w-6 h-6" />
             </div>
             <h4 className="text-lg font-black text-white mb-2">Projetista</h4>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-4">Projetos 3D / Promob, imagens realistas e detalhamento técnico para fábricas.</p>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-4">Projetos de móveis, visualização 3D de ambientes e detalhamento técnico para produção.</p>
             <span className="text-[11px] font-bold text-sky-400 bg-sky-500/10 px-3 py-1 rounded-lg border border-sky-500/30">Promob • Render 3D • Planta Técnica</span>
           </div>
 
-          <div className="w-[85%] sm:w-auto shrink-0 card-3d-led p-6">
+          <div className="card-3d-led p-6">
             <div className="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center mb-4 border border-amber-500/40">
               <Lightbulb className="w-6 h-6" />
             </div>
@@ -489,7 +501,7 @@ export default function ApresentacaoPage() {
             />
             <button 
               type="submit" 
-              className="btn-super-led-pulsing w-full sm:w-auto px-6 py-3.5 rounded-xl text-xs sm:text-sm font-bold text-white shrink-0 cursor-pointer"
+              className="btn-super-led-pulsing w-full sm:w-auto px-8 py-3.5 text-xs sm:text-sm font-bold text-white shrink-0 cursor-pointer"
             >
               Avise-me
             </button>
@@ -597,9 +609,9 @@ export default function ApresentacaoPage() {
           <div className="pt-2">
             <Link
               href="/encontrar-profissionais"
-              className="btn-super-led-pulsing inline-flex items-center gap-2 px-9 py-4 rounded-2xl text-sm font-black text-white"
+              className="btn-super-led-pulsing inline-flex items-center gap-2 px-9 py-4 text-sm font-black text-white"
             >
-              <span>Entrar no App da Vitrine</span>
+              <span>Conhecer a Vitrine Moveleira</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -614,9 +626,9 @@ export default function ApresentacaoPage() {
       <div className="sm:hidden fixed bottom-0 left-0 right-0 z-50 p-3 bg-[#05070d]/95 backdrop-blur-xl border-t border-purple-500/30 shadow-2xl flex items-center">
         <Link
           href="/encontrar-profissionais"
-          className="btn-super-led-pulsing w-full py-4 px-4 rounded-xl text-xs font-black text-white text-center flex items-center justify-center gap-2 shadow-lg uppercase tracking-wider"
+          className="btn-super-led-pulsing w-full py-4 px-4 text-xs font-black text-white text-center flex items-center justify-center gap-2 shadow-lg tracking-wide"
         >
-          <span>Entrar no App da Vitrine Agora</span>
+          <span>Conhecer a Vitrine Moveleira</span>
           <ArrowRight className="w-4 h-4" />
         </Link>
       </div>
