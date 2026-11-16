@@ -53,7 +53,7 @@ export function SearchBox() {
             value={term}
             onChange={(e) => setTerm(e.target.value)}
             placeholder="Ex: Montador de dormitório, marceneiro de cozinha..."
-            className="w-full pl-4 pr-4 py-3.5 rounded-xl bg-slate-950/90 border border-white/20 text-white placeholder:text-slate-500 text-sm focus:border-orange-500 focus:outline-none transition"
+            className="w-full pl-4 pr-4 py-3.5 rounded-xl bg-slate-950/90 border border-white/20 text-white placeholder:text-slate-500 text-base sm:text-sm focus:border-orange-500 focus:outline-none transition"
           />
         </div>
 
@@ -72,7 +72,7 @@ export function SearchBox() {
             value={city}
             onChange={(e) => setCity(e.target.value)}
             placeholder="Jundiaí ou região"
-            className="w-full px-4 py-3.5 rounded-xl bg-slate-950/90 border border-white/20 text-white placeholder:text-slate-500 text-sm focus:border-orange-500 focus:outline-none transition font-semibold"
+            className="w-full px-4 py-3.5 rounded-xl bg-slate-950/90 border border-white/20 text-white placeholder:text-slate-500 text-base sm:text-sm focus:border-orange-500 focus:outline-none transition font-semibold"
           />
         </div>
 
@@ -90,7 +90,7 @@ export function SearchBox() {
 
       {/* Pílulas de Atalho Rápido de Categorias com Alto Contraste */}
       <div className="mt-5 pt-4 border-t border-white/10">
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
           <span className="text-xs font-extrabold text-slate-300 mr-1 uppercase tracking-wider text-[11px]">
             Acesso Rápido:
           </span>
@@ -101,9 +101,9 @@ export function SearchBox() {
                 key={i}
                 type="button"
                 onClick={() => handleCategoryClick(cat.slug)}
-                className="category-pill inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-200 hover:text-white shadow-sm border border-white/15 hover:border-orange-500/50 transition cursor-pointer"
+                className="category-pill inline-flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 rounded-xl text-[11px] sm:text-xs font-semibold text-slate-200 hover:text-white shadow-sm border border-white/15 hover:border-orange-500/50 transition cursor-pointer"
               >
-                <Icon className={`w-3.5 h-3.5 ${cat.color}`} />
+                <Icon className={`w-3.5 h-3.5 ${cat.color} shrink-0`} />
                 <span>{cat.label}</span>
               </button>
             );

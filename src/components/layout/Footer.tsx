@@ -16,7 +16,7 @@ export function Footer() {
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="space-y-4">
-            <BrandLogo href="/" />
+            <BrandLogo href="/" size="sm" />
             <p className="text-xs text-slate-300 leading-relaxed">
               Catálogo de divulgação e conexão direta para o setor moveleiro de {brand.focusRegion}.
             </p>

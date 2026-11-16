@@ -9,6 +9,7 @@ export interface BrandConfig {
   focusState: string;
   gender: 'a' | 'o';
   baseUrl: string;
+  logoUrl?: string;
   brandProvisional: boolean;
   emails: {
     atendimento: string;
@@ -31,6 +32,7 @@ export function getBrandConfig(): BrandConfig {
   const focusCity = (process.env.NEXT_PUBLIC_BRAND_FOCUS_CITY || 'Jundiaí').trim();
   const focusState = (process.env.NEXT_PUBLIC_BRAND_FOCUS_STATE || 'SP').trim();
   const gender: 'a' | 'o' = (process.env.NEXT_PUBLIC_BRAND_GENDER as 'a' | 'o') || 'a';
+  const logoUrl = (process.env.NEXT_PUBLIC_BRAND_LOGO_URL || '/brand/logo-conecta-moveis.png').trim();
 
   // Base URL: VERCEL_URL / NEXT_PUBLIC_APP_URL / fallback seguro
   let baseUrl = (
@@ -59,6 +61,7 @@ export function getBrandConfig(): BrandConfig {
     focusState,
     gender,
     baseUrl,
+    logoUrl,
     brandProvisional,
     emails: {
       atendimento: sanitizeEmail(process.env.SUPPORT_EMAIL || process.env.OPERATOR_EMAIL_ATENDIMENTO || operator.emailAtendimento),

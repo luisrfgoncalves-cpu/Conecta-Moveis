@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Plus_Jakarta_Sans } from 'next/font/google';
 import Image from 'next/image';
 import './globals.css';
@@ -7,6 +7,13 @@ import { Footer } from '@/components/layout/Footer';
 import { ConditionalShellWrapper } from '@/components/layout/ConditionalShellWrapper';
 
 import { getBrandConfig } from '@/lib/config/brand';
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: '#07090f',
+};
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
@@ -72,7 +79,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR" className={`${plusJakarta.variable}`} suppressHydrationWarning>
-      <body className="min-h-screen flex flex-col font-sans antialiased text-slate-100 relative bg-[#07090f]">
+      <body className="min-h-screen flex flex-col font-sans antialiased text-slate-100 relative bg-[#07090f] overflow-x-hidden">
         
         {/* IMAGEM DE FUNDO EM ALTA DEFINIÇÃO E VISIBILIDADE REAL (65% OPACIDADE) */}
         <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">

@@ -9,20 +9,20 @@ export async function ProCtaSection() {
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="relative rounded-3xl overflow-hidden glass-card p-8 sm:p-14 border border-orange-500/30">
+      <div className="relative rounded-3xl overflow-hidden glass-card p-6 sm:p-14 border border-orange-500/30">
         
         {/* Glow Tridimensional de Fundo */}
         <div className="absolute top-0 right-0 w-[450px] h-[450px] bg-gradient-to-bl from-orange-600/25 via-amber-500/10 to-transparent blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-sky-600/10 blur-3xl pointer-events-none" />
 
-        <div className="relative z-10 max-w-3xl space-y-6">
+        <div className="relative z-10 max-w-3xl space-y-5 sm:space-y-6">
           
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-black uppercase tracking-wider bg-orange-500/20 border border-orange-500/40 text-orange-200">
-            <Sparkles className="w-3.5 h-3.5 text-orange-400" />
-            Para Montadores, Marceneiros e Lojistas
+          <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-black uppercase tracking-wider bg-orange-500/20 border border-orange-500/40 text-orange-200">
+            <Sparkles className="w-3.5 h-3.5 text-orange-400 shrink-0" />
+            <span>Para Montadores, Marceneiros e Lojistas</span>
           </div>
 
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight leading-tight">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black text-white tracking-tight leading-tight">
             Você trabalha com móveis em Jundiaí e região?
           </h2>
 
