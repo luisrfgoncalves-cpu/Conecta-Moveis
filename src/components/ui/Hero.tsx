@@ -9,7 +9,7 @@ export function Hero() {
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-orange-600/20 blur-[150px] pointer-events-none rounded-full" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col items-center text-center space-y-6 sm:space-y-8 max-w-3xl mx-auto">
+        <div className="flex flex-col items-center text-center space-y-6 sm:space-y-8 max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-3 duration-700 ease-out">
           
           {/* Badge LED Tecnológica com Alto Contraste */}
           <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider bg-orange-500/20 border border-orange-400/50 text-orange-200 shadow-2xl backdrop-blur-xl max-w-full">
@@ -23,9 +23,9 @@ export function Hero() {
             Encontre montadores e marceneiros em <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-300 to-orange-500">Jundiaí e região</span>
           </h1>
 
-          {/* Subtítulo simples */}
-          <p className="text-sm sm:text-lg text-slate-100 leading-relaxed font-medium max-w-2xl drop-shadow-md">
-            Catálogo aberto para encontrar montadores autônomos, marceneiros sob medida e fábricas. Contato direto pelo WhatsApp, sem intermediação nem comissões.
+          {/* Subtítulo persuasivo com destaques visuais para leitura rápida */}
+          <p className="text-sm sm:text-lg text-slate-200 leading-relaxed font-normal max-w-2xl drop-shadow-md">
+            Catálogo aberto para encontrar <span className="text-white font-semibold">montadores autônomos</span> e <span className="text-white font-semibold">marceneiros perto de você</span>. Veja fotos de serviços, confira especialidades e fale direto pelo <span className="text-amber-300 font-semibold">WhatsApp, sem intermediação nem comissões</span>.
           </p>
 
           {/* Dois caminhos claros: Procurar e Divulgar meu trabalho */}

@@ -13,12 +13,14 @@ CREATE TABLE IF NOT EXISTS public.user_preferences (
 -- RLS
 ALTER TABLE public.user_preferences ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Usuário pode visualizar sua preferência" ON public.user_preferences;
 CREATE POLICY "Usuário pode visualizar sua preferência"
     ON public.user_preferences
     FOR SELECT
     TO authenticated
     USING (auth.uid() = user_id);
 
+DROP POLICY IF EXISTS "Usuário pode inserir/atualizar sua preferência" ON public.user_preferences;
 CREATE POLICY "Usuário pode inserir/atualizar sua preferência"
     ON public.user_preferences
     FOR ALL

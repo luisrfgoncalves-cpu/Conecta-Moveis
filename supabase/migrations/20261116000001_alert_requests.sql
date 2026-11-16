@@ -18,20 +18,22 @@ CREATE INDEX IF NOT EXISTS idx_alert_requests_email_cidade ON public.alert_reque
 ALTER TABLE public.alert_requests ENABLE ROW LEVEL SECURITY;
 
 -- Política de inserção pública (qualquer visitante pode cadastrar alerta com consentimento)
+DROP POLICY IF EXISTS "Permitir inserção pública de alertas com consentimento" ON public.alert_requests;
 CREATE POLICY "Permitir inserção pública de alertas com consentimento"
     ON public.alert_requests
     FOR INSERT
     WITH CHECK (consentimento = true AND email IS NOT NULL);
 
 -- Política de leitura restrita a administradores / operadores internos
+DROP POLICY IF EXISTS "Leitura restrita a administradores" ON public.alert_requests;
 CREATE POLICY "Leitura restrita a administradores"
     ON public.alert_requests
     FOR SELECT
     TO authenticated
     USING (
-        EXISTS (
-            SELECT 1 FROM public.profiles
-            WHERE profiles.id = auth.uid()
-            AND profiles.role = 'admin'
+        public.is_admin() OR EXISTS (
+            SELECT 1 FROM public.user_roles
+            WHERE user_roles.user_id = auth.uid()
+            AND user_roles.role IN ('owner', 'admin')
         )
     );
