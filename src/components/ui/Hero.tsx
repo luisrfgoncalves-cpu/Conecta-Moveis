@@ -23,26 +23,26 @@ export function Hero() {
             Encontre montadores e marceneiros em <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-amber-300 to-orange-500">Jundiaí e região</span>
           </h1>
 
-          {/* Subtítulo com Branco Neve e Alto Contraste */}
+          {/* Subtítulo simples */}
           <p className="text-sm sm:text-lg text-slate-100 leading-relaxed font-medium max-w-2xl drop-shadow-md">
-            Catálogo aberto para você encontrar montadores autônomos, marceneiros sob medida e marcenarias. Conexão direta e sem intermediação.
+            Catálogo aberto para encontrar montadores autônomos, marceneiros sob medida e fábricas. Contato direto pelo WhatsApp, sem intermediação nem comissões.
           </p>
 
-          {/* Botões com Relevo 3D e Borda Glass */}
+          {/* Dois caminhos claros: Procurar e Divulgar meu trabalho */}
           <div className="pt-2 flex flex-col sm:flex-row items-center gap-3 sm:gap-4 w-full sm:w-auto">
             <Link
               href="/encontrar-profissionais"
               className="w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 btn-neon text-xs sm:text-sm tracking-wide uppercase flex items-center justify-center gap-2 shadow-2xl font-black"
             >
               <Zap className="w-4 h-4 fill-white shrink-0" />
-              <span>Ver Perfis Disponíveis</span>
+              <span>Procurar Profissionais</span>
             </Link>
 
             <Link
-              href="/como-funciona"
+              href="/para-profissionais"
               className="w-full sm:w-auto px-6 sm:px-8 py-3.5 sm:py-4 btn-glass text-xs sm:text-sm font-bold text-white rounded-xl flex items-center justify-center gap-2 hover:text-orange-300 transition shadow-xl"
             >
-              <span>Regras e Transparência</span>
+              <span>Divulgar meu trabalho</span>
               <ArrowUpRight className="w-4 h-4 text-orange-400 shrink-0" />
             </Link>
           </div>

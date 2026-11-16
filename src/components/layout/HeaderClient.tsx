@@ -13,7 +13,6 @@ import {
   Menu,
   X,
   ShieldCheck,
-  CreditCard,
   Briefcase,
 } from 'lucide-react';
 import { UserNavDropdown } from './UserNavDropdown';
@@ -78,7 +77,7 @@ export function HeaderClient({ currentUser }: HeaderClientProps) {
             Como Funciona
           </Link>
           <Link
-            href="/planos"
+            href="/para-profissionais"
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-300 hover:text-orange-400 hover:bg-white/10 transition"
             onClick={() => sounds.playClick()}
           >
@@ -158,12 +157,12 @@ export function HeaderClient({ currentUser }: HeaderClientProps) {
             Como Funciona
           </Link>
           <Link
-            href="/planos"
+            href="/para-profissionais"
             className="flex items-center gap-3 py-2 text-slate-200 font-bold border-b border-white/5 text-sm"
             onClick={() => setMobileMenuOpen(false)}
           >
-            <CreditCard className="w-4 h-4 text-orange-400" />
-            Planos e Visibilidade
+            <Briefcase className="w-4 h-4 text-orange-400" />
+            Para Profissionais
           </Link>
           <Link
             href="/termos"

@@ -23,16 +23,26 @@ export default async function HomePage() {
   );
 
   return (
-    <div className="w-full space-y-20 pb-24">
-      {/* Hero Principal com Luzes Neon */}
+    <div className="w-full space-y-16 pb-24">
+      {/* Aviso Curto Acima da Dobra */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+        <Alert type="legal">
+          <strong className="text-white font-extrabold text-xs block mb-1">Aviso da plataforma:</strong>
+          <span className="text-slate-200 text-xs font-normal">
+            Este catálogo é publicado diretamente pelos anunciantes. A plataforma não participa das negociações, orçamentos ou pagamentos, e não garante a execução dos serviços.
+          </span>
+        </Alert>
+      </div>
+
+      {/* Hero Principal com H1 e Subtítulo Simples */}
       <Hero />
 
-      {/* Caixa de Busca com Pílulas Rápidas e Efeito Glass Flutuante */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-14 relative z-20">
+      {/* Caixa de Busca com 'O que você procura', 'Cidade ou bairro' e 'Buscar' */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-20">
         <SearchBox />
       </div>
 
-      {/* Barra de Métricas em Tempo Real do Polo Moveleiro com Alto Contraste */}
+      {/* Barra de Métricas Reais do Polo Moveleiro */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className={`glass-panel rounded-2xl p-5 sm:p-7 grid grid-cols-1 ${shouldShowCounter ? 'sm:grid-cols-3' : 'sm:grid-cols-2'} gap-6 border border-white/15 text-center sm:text-left shadow-xl`}>
           {shouldShowCounter && (
@@ -67,16 +77,6 @@ export default async function HomePage() {
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Aviso Institucional e Legal Transparente com Leitura Cristalina */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <Alert type="legal">
-          <strong className="text-white font-extrabold text-sm block mb-1.5">Aviso da plataforma:</strong>
-          <span className="text-slate-200 font-normal">
-            Este catálogo é publicado diretamente pelos profissionais e empresas cadastrados. A plataforma não atua como prestadora nem garantidora de montagens, fabricações ou orçamentos. A negociação e a solicitação de contato são livres e diretas entre você e o anunciante.
-          </span>
-        </Alert>
       </div>
 
       {/* Vitrine Estilo Streaming / Perfis em Exibição */}

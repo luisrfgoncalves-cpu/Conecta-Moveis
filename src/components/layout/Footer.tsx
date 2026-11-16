@@ -46,6 +46,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/para-profissionais" className="text-slate-300 hover:text-orange-400 transition">
+                  Para Profissionais
+                </Link>
+              </li>
+              <li>
                 <Link href="/planos" className="text-slate-300 hover:text-orange-400 transition">
                   Planos e Visibilidade
                 </Link>

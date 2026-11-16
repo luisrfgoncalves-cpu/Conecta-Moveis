@@ -45,7 +45,7 @@ export function SearchBox() {
             className="block text-xs font-bold uppercase tracking-wider text-slate-200 mb-2 flex items-center gap-1.5"
           >
             <Search className="w-4 h-4 text-orange-400" />
-            Serviço ou Atuação
+            O que você procura
           </label>
           <input
             id="search-term"

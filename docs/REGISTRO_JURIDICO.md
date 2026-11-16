@@ -419,3 +419,35 @@ ot-found.tsx (404) e error.tsx com interface amigável, ícones, atalho para bus
 - **Pendência para o Advogado**:
   - Homologar o texto de consentimento da captura de e-mails para aviso de disponibilidade regional.
 
+---
+
+### J-022 — Home Reestruturada, Navegação em Duas Trilhas e Página Dedicada aos Profissionais (Bloco 5)
+- **Data**: 16/11/2026
+- **Fase**: Ajuste Final Pré-Divulgação — Bloco 5 (Home, Navegação e Página para Profissionais)
+- **Funcionalidade ou Texto**:
+  1. **(5.1) Home Transparente e Sem Promessas**:
+     - H1 padronizado: *"Encontre montadores e marceneiros em Jundiaí e região"*.
+     - Subtítulo simples e objetivo, destacando catálogo aberto e contato direto via WhatsApp.
+     - Busca com rótulos amigáveis: *"O que você procura"*, *"Cidade ou bairro"* e botão *"Buscar"*.
+     - Dois caminhos claros e contrastantes: *"Procurar Profissionais"* e *"Divulgar meu trabalho"*.
+     - Aviso legal discreto e informativo reposicionado no topo da página (acima da dobra), alertando sobre a não-intermediação e ausência de garantia da plataforma.
+  2. **(5.2) Página Dedicada `/para-profissionais`**:
+     - Criada rota institucional `/para-profissionais` detalhando apenas benefícios reais e já operacionais (contato direto no WhatsApp, sem cobrança de comissões sobre serviços, fotos de apresentação).
+     - Passo a passo transparente de cadastro em 3 etapas sem promessas ilusórias de clientes ou ganhos financeiros.
+     - Aviso legal de função e limites da plataforma.
+     - Link para planos comerciais `/planos` incorporado dentro da página.
+     - Menu de navegação principal (Desktop e Mobile) e rodapé atualizados para apontar *"Para Profissionais"* para a nova rota `/para-profissionais`.
+  3. **(5.3) Página "Como Funciona" com Duas Trilhas**:
+     - Reestruturação completa de `/como-funciona` dividida em:
+       - **Trilha 1 (Quem procura):** Busca no catálogo, exigência de login em conta gratuita para visualização do WhatsApp (proteção dos profissionais contra spam/LGPD) e negociação direta.
+       - **Trilha 2 (Quem anuncia):** Criação de conta gratuita no lançamento, publicação de anúncio com fotos de apresentação e recebimento de contatos diretos no WhatsApp.
+     - Caixa de transparência legal com links para dicas de segurança e função da plataforma.
+- **Regras e Normas Envolvidas**: R1, R2 (ausência de intermediação financeira e comissões); R3, R4 (ausência de promessas de resultado ou garantia); R16 (Gate de Isenção); R17 (responsabilidade limitada à divulgação); CDC arts. 30, 31, 36 e 37.
+- **Risco**: Baixo (aprimoramento arquitetural de navegação e transparência informativa; conformidade integral com regras de isenção).
+- **Decisão Tomada**: Todas as chamadas para anunciantes descrevem estritamente a divulgação de vitrine sem prometer captação de clientes ou faturamento, mitigando risco de responsabilização civil por expectativa frustrada.
+- **Quem Decidiu**: Usuário (orientação para execução cuidadosa e cirúrgica do Bloco 5).
+- **Evidência**: `src/components/ui/Hero.tsx`, `src/components/ui/SearchBox.tsx`, `src/app/page.tsx`, `src/app/para-profissionais/page.tsx`, `src/app/como-funciona/page.tsx`, `src/components/layout/HeaderClient.tsx`, `src/components/layout/Footer.tsx`.
+- **Pendência para o Advogado**:
+  - Validar os textos explicativos das trilhas em `/como-funciona` e da proposta de valor em `/para-profissionais`.
+
+
