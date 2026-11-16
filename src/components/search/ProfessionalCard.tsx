@@ -30,7 +30,10 @@ export function ProfessionalCard({ professional, isOwner }: ProfessionalCardProp
       <div className="space-y-4">
         {/* Topo do Card: Avatar + Informações Básicas */}
         <div className="flex items-start gap-4">
-          <div className="relative w-14 h-14 rounded-2xl bg-slate-900 border border-white/20 overflow-hidden flex items-center justify-center shrink-0">
+          <div
+            title={`Foto ou iniciais de ${professional.display_name}`}
+            className="relative w-14 h-14 rounded-2xl bg-slate-900 border border-white/20 overflow-hidden flex items-center justify-center shrink-0"
+          >
             {professional.avatar_url ? (
               <Image
                 src={professional.avatar_url}
@@ -138,7 +141,7 @@ export function ProfessionalCard({ professional, isOwner }: ProfessionalCardProp
 
       {/* Ação Inferior */}
       <div className="mt-5 pt-4 border-t border-white/10 flex items-center justify-between">
-        <span className="text-[11px] text-slate-400">Perfil cadastrado</span>
+        <span className="text-[11px] text-slate-400">Publicado pelo anunciante</span>
         <Link
           href={`/profissionais/${professional.slug}`}
           className="inline-flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-orange-400 hover:text-orange-300 group-hover:translate-x-0.5 transition"

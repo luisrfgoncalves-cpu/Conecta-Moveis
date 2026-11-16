@@ -4,6 +4,8 @@ import { UserX, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Alert } from '@/components/ui/Feedback';
 import { PlatformNotice } from '@/components/legal/PlatformNotice';
 import { searchProfessionals, SearchFilters as FilterType } from '@/lib/search/actions';
+import { listMunicipios } from '@/lib/geo/actions';
+import { AviseMeForm } from '@/components/search/AviseMeForm';
 import { isFeatureFlagActive } from '@/lib/config/actions';
 import { createClient } from '@/lib/supabase/server';
 import { SearchFilters } from '@/components/search/SearchFilters';
@@ -36,10 +38,11 @@ export default async function EncontrarProfissionaisPage({ searchParams }: PageP
   };
 
   const supabase = await createClient();
-  const [{ data: authData }, result, reviewsEnabled] = await Promise.all([
+  const [{ data: authData }, result, reviewsEnabled, municipios] = await Promise.all([
     supabase.auth.getUser().catch(() => ({ data: { user: null } })),
     searchProfessionals(filters),
     isFeatureFlagActive('reviews_enabled'),
+    listMunicipios(filters.uf || 'SP').catch(() => []),
   ]);
   const currentUserId = authData?.user?.id;
 
@@ -106,6 +109,7 @@ export default async function EncontrarProfissionaisPage({ searchParams }: PageP
             ordenacao: filters.ordenacao,
           }}
           reviewsEnabled={reviewsEnabled}
+          municipios={municipios}
         />
 
         {/* Grade de Resultados */}
@@ -134,13 +138,40 @@ export default async function EncontrarProfissionaisPage({ searchParams }: PageP
               <p className="text-sm text-slate-400 max-w-md mx-auto leading-relaxed">
                 Tente ajustar os termos da busca, selecionar outra categoria ou remover filtros específicos de cidade para ver mais resultados.
               </p>
-              <div className="pt-2">
+
+              {/* Sugestões de ampliação */}
+              <div className="flex flex-wrap items-center justify-center gap-2 pt-2 text-xs text-slate-300">
+                <span className="text-slate-400">Sugestões:</span>
+                {filters.cidade && (
+                  <Link
+                    href={`/encontrar-profissionais?${new URLSearchParams({ ...(filters.termo ? { termo: filters.termo } : {}), ...(filters.categoria ? { categoria: filters.categoria } : {}) }).toString()}`}
+                    className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-orange-400 font-semibold transition"
+                  >
+                    Buscar em toda a região
+                  </Link>
+                )}
+                {filters.categoria && (
+                  <Link
+                    href={`/encontrar-profissionais?${new URLSearchParams({ ...(filters.termo ? { termo: filters.termo } : {}), ...(filters.cidade ? { cidade: filters.cidade } : {}) }).toString()}`}
+                    className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-orange-400 font-semibold transition"
+                  >
+                    Ver outras categorias
+                  </Link>
+                )}
                 <Link
                   href="/encontrar-profissionais"
-                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold text-xs uppercase tracking-wider transition"
+                  className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 font-semibold transition"
                 >
                   Limpar todos os filtros
                 </Link>
+              </div>
+
+              {/* Formulário Avise-me quando houver profissional na região */}
+              <div className="pt-6 max-w-md mx-auto">
+                <AviseMeForm
+                  cidadeSugerida={filters.cidade || ''}
+                  categoriaSugerida={filters.categoria || ''}
+                />
               </div>
             </div>
           ) : (

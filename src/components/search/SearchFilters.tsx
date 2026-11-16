@@ -16,14 +16,15 @@ interface SearchFiltersProps {
     ordenacao?: string;
   };
   reviewsEnabled?: boolean;
+  municipios?: { nome: string }[];
 }
 
-export function SearchFilters({ currentFilters, reviewsEnabled = false }: SearchFiltersProps) {
+export function SearchFilters({ currentFilters, reviewsEnabled = false, municipios = [] }: SearchFiltersProps) {
   const router = useRouter();
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [termo, setTermo] = useState(currentFilters.termo || '');
-  const [uf, setUf] = useState(currentFilters.uf || '');
+  const [uf, setUf] = useState(currentFilters.uf || 'SP');
   const [cidade, setCidade] = useState(currentFilters.cidade || '');
   const [categoria, setCategoria] = useState(currentFilters.categoria || '');
   const [especialidade, setEspecialidade] = useState(currentFilters.especialidade || '');
@@ -166,15 +167,30 @@ export function SearchFilters({ currentFilters, reviewsEnabled = false }: Search
                   <label htmlFor="mobile-cidade" className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
                     Cidade
                   </label>
-                  <input
-                    id="mobile-cidade"
-                    aria-label="Cidade"
-                    type="text"
-                    value={cidade}
-                    onChange={(e) => setCidade(e.target.value)}
-                    placeholder="Ex: Jundiaí"
-                    className="w-full px-3 py-2.5 rounded-xl bg-slate-950 border border-white/20 text-white placeholder:text-slate-500 text-sm focus:border-orange-500 focus:outline-none"
-                  />
+                  {municipios.length > 0 ? (
+                    <select
+                      id="mobile-cidade"
+                      aria-label="Cidade"
+                      value={cidade}
+                      onChange={(e) => setCidade(e.target.value)}
+                      className="w-full px-3 py-2.5 rounded-xl bg-slate-950 border border-white/20 text-white text-sm focus:border-orange-500 focus:outline-none"
+                    >
+                      <option value="">Todas as cidades</option>
+                      {municipios.map((m) => (
+                        <option key={m.nome} value={m.nome}>{m.nome}</option>
+                      ))}
+                    </select>
+                  ) : (
+                    <input
+                      id="mobile-cidade"
+                      aria-label="Cidade"
+                      type="text"
+                      value={cidade}
+                      onChange={(e) => setCidade(e.target.value)}
+                      placeholder="Ex: Jundiaí"
+                      className="w-full px-3 py-2.5 rounded-xl bg-slate-950 border border-white/20 text-white placeholder:text-slate-500 text-sm focus:border-orange-500 focus:outline-none"
+                    />
+                  )}
                 </div>
               </div>
 
@@ -254,7 +270,7 @@ export function SearchFilters({ currentFilters, reviewsEnabled = false }: Search
                 className="flex-1 py-3 px-4 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm flex items-center justify-center gap-2 transition"
               >
                 <Check className="w-4 h-4" />
-                Aplicar Filtros
+                Ver resultados
               </button>
               <button
                 type="button"
@@ -338,15 +354,30 @@ export function SearchFilters({ currentFilters, reviewsEnabled = false }: Search
                 <label htmlFor="desktop-cidade" className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
                   Cidade
                 </label>
-                <input
-                  id="desktop-cidade"
-                  aria-label="Cidade"
-                  type="text"
-                  value={cidade}
-                  onChange={(e) => setCidade(e.target.value)}
-                  placeholder="Ex: Jundiaí"
-                  className="w-full px-3 py-2 rounded-xl bg-slate-950/80 border border-white/15 text-white placeholder:text-slate-500 text-xs focus:border-orange-500 focus:outline-none"
-                />
+                {municipios.length > 0 ? (
+                  <select
+                    id="desktop-cidade"
+                    aria-label="Cidade"
+                    value={cidade}
+                    onChange={(e) => setCidade(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl bg-slate-950/80 border border-white/15 text-white text-xs focus:border-orange-500 focus:outline-none"
+                  >
+                    <option value="">Todas as cidades</option>
+                    {municipios.map((m) => (
+                      <option key={m.nome} value={m.nome}>{m.nome}</option>
+                    ))}
+                  </select>
+                ) : (
+                  <input
+                    id="desktop-cidade"
+                    aria-label="Cidade"
+                    type="text"
+                    value={cidade}
+                    onChange={(e) => setCidade(e.target.value)}
+                    placeholder="Ex: Jundiaí"
+                    className="w-full px-3 py-2 rounded-xl bg-slate-950/80 border border-white/15 text-white placeholder:text-slate-500 text-xs focus:border-orange-500 focus:outline-none"
+                  />
+                )}
               </div>
             </div>
 

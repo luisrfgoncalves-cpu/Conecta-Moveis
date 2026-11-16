@@ -401,3 +401,21 @@ ot-found.tsx (404) e error.tsx com interface amigável, ícones, atalho para bus
 - **Evidência**: `src/lib/profile/schemas.ts`, `src/components/ui/Hero.tsx`, `src/components/ui/SearchBox.tsx`, `src/components/ui/ProCtaSection.tsx`, `src/components/ui/FaqSection.tsx`, `src/components/reviews/ReviewsSection.tsx`, `src/components/layout/Footer.tsx`, `src/components/layout/UserNavDropdown.tsx`, `src/components/profile/ProfileWizard.tsx`, `src/app/page.tsx`, `src/app/como-funciona/page.tsx`, `src/app/encontrar-profissionais/page.tsx`, `src/app/profissionais/[slug]/page.tsx`, `src/app/empresas/[slug]/page.tsx`, `src/app/contrate-com-seguranca/page.tsx`, `src/app/como-ordenamos-os-resultados/page.tsx`, `src/app/planos/page.tsx`, `src/app/termos/page.tsx`, `src/app/privacidade/page.tsx`, `src/app/funcao-da-plataforma/page.tsx`, `src/app/painel/page.tsx`, `src/app/painel/assinatura/page.tsx`, `src/app/servicos/[categoria]/[municipio-uf]/page.tsx`, `src/app/(legal)/politica-portfolio/page.tsx`, `src/app/(legal)/politica-assinatura/page.tsx`.
 - **Pendência para o Advogado**:
   - Homologar as caixas de resumo executivo ("Em resumo:") nas páginas jurídicas para assegurar conformidade plena com o dever de informação clara do CDC (art. 6º, III).
+
+---
+
+### J-021 — Busca, Filtros, Cards e Captação de Demanda sem Spam (Bloco 4)
+- **Data**: 16/11/2026
+- **Fase**: Ajuste Final Pré-Divulgação — Bloco 4 (Busca, Filtros e Cards)
+- **Funcionalidade ou Texto**:
+  1. **(4.1) Filtros Pré-selecionados e Responsividade**: UF padrão 'SP', campo de cidade alimentado dinamicamente com `<select>` via base de municípios geográficos; especialidades vinculadas e atualizadas dinamicamente conforme categoria escolhida; no mobile gaveta com botão claro "Ver resultados".
+  2. **(4.2) Cards de Anunciantes**: Texto de bio truncado, foto ou iniciais com atributo descritivo de acessibilidade (`title`), cidade/estado em destaque, exibição de até 3 especialidades com contador residual, rótulo inferior padronizado para "Publicado pelo anunciante" (eliminando jargão ou ambiguidade de endosso).
+  3. **(4.3) Estado Vazio com Sugestões e Formulário "Avise-me"**: Exibição de chips de sugestão para ampliar a busca quando 0 resultados forem encontrados; formulário "Avise-me quando houver profissional" com consentimento explícito LGPD (checkbox obrigatório e link para Política de Privacidade), armazenamento anônimo e idempotente na tabela `alert_requests` com RLS restrito.
+- **Regras e Normas Envolvidas**: R3, R4 (ausência de endosso e imparcialidade); R5 (neutralidade e transparência da busca); R16 (Gate de Isenção); LGPD arts. 7º, I (consentimento) e 6º (transparência e finalidade).
+- **Risco**: Baixo (aprimoramento de UX de busca e captação de lead passivo sem tracking nem cookies).
+- **Decisão Tomada**: Implementação com RLS estrito onde apenas service_role e admins leem requisições de alerta, e proteção silenciosa contra spam e enumeração de e-mails em duplicatas.
+- **Quem Decidiu**: Usuário (orientação para execução cuidadosa do Bloco 4).
+- **Evidência**: `src/components/search/SearchFilters.tsx`, `src/components/search/ProfessionalCard.tsx`, `src/app/encontrar-profissionais/page.tsx`, `src/components/search/AviseMeForm.tsx`, `src/lib/alerts/actions.ts`, `supabase/migrations/20261116000001_alert_requests.sql`, `src/__tests__/bloco4_busca_cards.test.ts`.
+- **Pendência para o Advogado**:
+  - Homologar o texto de consentimento da captura de e-mails para aviso de disponibilidade regional.
+
