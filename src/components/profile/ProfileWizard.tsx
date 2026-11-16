@@ -12,6 +12,7 @@ import {
   uploadAvatarAction,
   deleteOwnProfile,
 } from '@/lib/profile/actions';
+import { resendConfirmationEmail } from '@/lib/auth/actions';
 import {
   validateClientImageFile,
 } from '@/lib/storage/clientImage';
@@ -34,6 +35,8 @@ import {
   Edit3,
   ExternalLink,
   CheckCheck,
+  Mail,
+  MailCheck,
 } from 'lucide-react';
 
 interface Props {
@@ -57,7 +60,7 @@ interface Props {
   isEmailConfirmed: boolean;
 }
 
-export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailConfirmed }: Props) {
+export function ProfileWizard({ initialProfile, userEmail, isEmailConfirmed }: Props) {
   // Se o perfil já existe e está publicado, começa no modo "visualização/edição"
   const hasExistingProfile = !!initialProfile?.id;
   const [isEditMode, setIsEditMode] = useState(!hasExistingProfile);
@@ -66,6 +69,8 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
   const [serverError, setServerError] = useState('');
   const [serverSuccess, setServerSuccess] = useState('');
   const [showLivePreview, setShowLivePreview] = useState(false);
+  const [resendingEmail, setResendingEmail] = useState(false);
+  const [resendEmailSuccess, setResendEmailSuccess] = useState('');
 
   // Estado do formulário
   const [profileId, setProfileId] = useState<string | undefined>(initialProfile?.id);
@@ -218,6 +223,26 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
       return res.data.id;
     }
     return profileId ?? null;
+  }
+
+  // Enviar link de confirmação de e-mail para o profissional
+  async function handleSendConfirmationEmail() {
+    if (!userEmail) {
+      setServerError('E-mail do usuário não identificado.');
+      return;
+    }
+    setResendingEmail(true);
+    setResendEmailSuccess('');
+    try {
+      const res = await resendConfirmationEmail(userEmail);
+      if ('error' in res) {
+        setServerError(res.error);
+      } else {
+        setResendEmailSuccess(res.message || 'Link de confirmação enviado para o seu e-mail!');
+      }
+    } finally {
+      setResendingEmail(false);
+    }
   }
 
   function handleSaveDraft() {
@@ -1023,10 +1048,39 @@ export function ProfileWizard({ initialProfile, userEmail: _userEmail, isEmailCo
               <li className={`flex items-center gap-2 ${whatsapp.trim().length >= 10 ? 'text-emerald-400' : 'text-slate-400'}`}>
                 {whatsapp.trim().length >= 10 ? '✓' : '○'} WhatsApp com DDD {whatsapp.trim().length >= 10 ? '— OK' : '— Pendente acima'}
               </li>
-              <li className={`flex items-center gap-2 ${isEmailConfirmed ? 'text-emerald-400' : 'text-amber-400'}`}>
-                {isEmailConfirmed ? '✓' : '⚠️'} E-mail confirmado {isEmailConfirmed ? '— OK' : '— Verifique sua caixa de entrada'}
+              <li className={`flex flex-col sm:flex-row sm:items-center justify-between gap-2 ${isEmailConfirmed ? 'text-emerald-400' : 'text-amber-400'}`}>
+                <span className="flex items-center gap-2">
+                  {isEmailConfirmed ? '✓' : '⚠️'} E-mail confirmado {isEmailConfirmed ? '— OK' : '— Confirmação necessária para publicar anúncio'}
+                </span>
+                {!isEmailConfirmed && (
+                  <button
+                    type="button"
+                    onClick={handleSendConfirmationEmail}
+                    disabled={resendingEmail}
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 text-xs font-bold transition border border-amber-500/40 disabled:opacity-50 self-start sm:self-auto"
+                  >
+                    {resendingEmail ? (
+                      <>
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        <span>Enviando link…</span>
+                      </>
+                    ) : (
+                      <>
+                        <Mail className="w-3.5 h-3.5" />
+                        <span>Enviar link de confirmação</span>
+                      </>
+                    )}
+                  </button>
+                )}
               </li>
             </ul>
+
+            {resendEmailSuccess && (
+              <div role="status" className="mt-3 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs flex items-center gap-2">
+                <MailCheck className="w-4 h-4 flex-shrink-0" />
+                <span>{resendEmailSuccess}</span>
+              </div>
+            )}
           </div>
 
           {/* Botões de Ação Final */}

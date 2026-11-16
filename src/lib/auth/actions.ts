@@ -104,10 +104,20 @@ export async function signUp(formData: unknown): Promise<ActionResult> {
     }
   }
 
+  // Se o Supabase retornou uma sessão imediata (confirmação desativada ou automática)
+  if (data.session) {
+    revalidatePath('/');
+    return {
+      success: true,
+      redirectTo: '/painel',
+      message: 'Conta criada com sucesso! Bem-vindo(a) à Vitrine Moveleira.',
+    };
+  }
+
   return {
     success: true,
     message:
-      'Conta criada! Verifique seu e-mail e clique no link de confirmação para ativar seu acesso.',
+      'Conta criada com sucesso! Se solicitado, verifique seu e-mail para ativar seu acesso.',
   };
 }
 

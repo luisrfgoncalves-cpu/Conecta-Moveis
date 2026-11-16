@@ -3,13 +3,14 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState, useTransition, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { signUp } from '@/lib/auth/actions';
 import { signUpSchema, type SignUpInput } from '@/lib/auth/schemas';
 import { Eye, EyeOff, Loader2, CheckCircle2, Ticket } from 'lucide-react';
 
 export function SignUpForm() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const [serverError, setServerError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
@@ -40,9 +41,15 @@ export function SignUpForm() {
   function onSubmit(data: SignUpInput) {
     setServerError('');
     startTransition(async () => {
+      // Salvar e-mail no dispositivo
+      if (typeof window !== 'undefined' && data.email) {
+        localStorage.setItem('vm_last_email', data.email.toLowerCase().trim());
+      }
       const result = await signUp(data);
       if ('error' in result) {
         setServerError(result.error);
+      } else if (result.redirectTo) {
+        router.push(result.redirectTo);
       } else {
         setSuccessMessage(result.message ?? 'Conta criada! Verifique seu e-mail.');
       }

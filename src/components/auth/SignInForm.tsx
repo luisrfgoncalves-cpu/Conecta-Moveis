@@ -2,12 +2,12 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState, useTransition } from 'react';
+import { useState, useTransition, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { signIn, resendConfirmationEmail } from '@/lib/auth/actions';
 import { signInSchema, type SignInInput } from '@/lib/auth/schemas';
-import { Eye, EyeOff, Loader2, MailCheck, AlertTriangle } from 'lucide-react';
+import { Eye, EyeOff, Loader2, MailCheck, AlertTriangle, UserCheck } from 'lucide-react';
 
 export function SignInForm() {
   const router = useRouter();
@@ -21,19 +21,39 @@ export function SignInForm() {
   const [resendSuccess, setResendSuccess] = useState('');
   const [isResending, setIsResending] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [savedEmail, setSavedEmail] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
   const {
     register,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
   } = useForm<SignInInput>({
     resolver: zodResolver(signInSchema),
   });
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('vm_last_email');
+      if (stored) {
+        setSavedEmail(stored);
+        setValue('email', stored);
+      }
+    }
+  }, [setValue]);
+
   const emailValue = watch('email');
   const isUnconfirmedEmailError = serverError.toLowerCase().includes('ainda não foi confirmado');
+
+  function handleForgetSavedEmail() {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('vm_last_email');
+    }
+    setSavedEmail(null);
+    setValue('email', '');
+  }
 
   async function handleResendEmail() {
     if (!emailValue || !emailValue.includes('@')) {
@@ -58,6 +78,9 @@ export function SignInForm() {
     setServerError('');
     setResendSuccess('');
     startTransition(async () => {
+      if (typeof window !== 'undefined' && data.email) {
+        localStorage.setItem('vm_last_email', data.email.toLowerCase().trim());
+      }
       const result = await signIn(data);
       if ('error' in result) {
         setServerError(result.error);
@@ -130,9 +153,22 @@ export function SignInForm() {
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
         <div>
-          <label htmlFor="email" className="block text-sm font-semibold text-slate-300 mb-1.5">
-            E-mail
-          </label>
+          <div className="flex justify-between items-center mb-1.5">
+            <label htmlFor="email" className="block text-sm font-semibold text-slate-300">
+              E-mail
+            </label>
+            {savedEmail && (
+              <button
+                type="button"
+                onClick={handleForgetSavedEmail}
+                className="text-xs text-slate-400 hover:text-orange-400 transition inline-flex items-center gap-1"
+                title="Trocar conta ou esquecer este e-mail"
+              >
+                <UserCheck className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Lembrado neste aparelho (Trocar)</span>
+              </button>
+            )}
+          </div>
           <input
             id="email"
             type="email"

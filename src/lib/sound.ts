@@ -5,7 +5,7 @@ class SoundManager {
 
   constructor() {
     if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem('conecta_sounds_enabled');
+      const stored = localStorage.getItem('vm_sounds_enabled') ?? localStorage.getItem('conecta_sounds_enabled');
       this.enabled = stored === 'true';
     }
   }
@@ -26,7 +26,7 @@ class SoundManager {
   public toggle(): boolean {
     this.enabled = !this.enabled;
     if (typeof window !== 'undefined') {
-      localStorage.setItem('conecta_sounds_enabled', String(this.enabled));
+      localStorage.setItem('vm_sounds_enabled', String(this.enabled));
     }
     if (this.enabled) {
       this.playClick();
