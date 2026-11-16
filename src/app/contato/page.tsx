@@ -56,10 +56,10 @@ export default function ContatoPage() {
         </div>
 
         {op.isPending && (
-          <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-300 flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 shrink-0 text-amber-400" />
+          <div className="p-3.5 rounded-xl bg-orange-500/10 border border-orange-500/25 text-xs text-orange-200 flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 shrink-0 text-orange-400" />
             <span>
-              Ambiente preliminar: Dados cadastrais formais de pessoa jurídica em homologação antes do lançamento definitivo.
+              Catálogo de conexão regional independente para profissionais autônomos e clientes do setor moveleiro.
             </span>
           </div>
         )}

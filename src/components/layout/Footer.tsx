@@ -100,34 +100,28 @@ export function Footer() {
           </div>
 
           <div className="space-y-3">
-            <h4 className="font-bold text-white mb-3 text-sm tracking-wide">Operador</h4>
-            {op.isPending ? (
-              <p className="text-xs text-slate-300 leading-relaxed">
-                <strong>Operador:</strong> em processo de formalização
-              </p>
-            ) : (
+            <h4 className="font-bold text-white mb-3 text-sm tracking-wide">Atendimento</h4>
+            <p className="text-xs text-slate-300 leading-relaxed">
+              Catálogo de divulgação e conexão direta entre clientes e profissionais em {brand.focusRegion}.
+            </p>
+            <div className="pt-1">
+              <Link
+                href="/contato"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-500/15 hover:bg-orange-500/25 text-orange-300 hover:text-white border border-orange-500/30 text-xs font-bold transition"
+              >
+                <span>Fale com o Suporte</span>
+              </Link>
+            </div>
+            {!op.isPending && (
               <>
-                <p className="text-xs text-slate-300 leading-relaxed">
+                <p className="text-xs text-slate-400 leading-relaxed mt-2">
                   <strong>Razão Social:</strong> {op.razaoSocial}
                 </p>
-                <p className="text-xs text-slate-300 leading-relaxed">
+                <p className="text-xs text-slate-400 leading-relaxed">
                   <strong>CNPJ:</strong> {op.cnpj}
                 </p>
               </>
             )}
-            <p className="text-xs text-slate-300 leading-relaxed">
-              <strong>Contato:</strong>{' '}
-              {op.emailAtendimento === 'em implantação' ? (
-                <span className="text-slate-400">Canal em implantação</span>
-              ) : (
-                <a href={`mailto:${op.emailAtendimento}`} className="hover:text-orange-400 transition-colors">
-                  {op.emailAtendimento}
-                </a>
-              )}
-            </p>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Operação em {brand.focusRegion} — Catálogo de divulgação independente para montadores e marceneiros.
-            </p>
           </div>
         </div>
 

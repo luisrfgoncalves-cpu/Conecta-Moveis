@@ -304,11 +304,12 @@ export default async function ProfissionalPublicPage({ params }: PageProps) {
           </div>
         )}
 
-        {/* Seção de Contato Público (Opcionais autorizados pelo usuário com proteção anti-scraping para usuários logados) */}
+        {/* Seção de Contato Público com Destaque de Alta Conversão */}
         {(professional.whatsapp || professional.phone) && (
-          <div className="space-y-3 pt-2 border-t border-white/10">
-            <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300">
-              Contato
+          <div className="space-y-4 pt-4 border-t border-white/10">
+            <h2 className="text-sm sm:text-base font-black uppercase tracking-wider text-slate-100 flex items-center gap-2">
+              <Phone className="w-4 h-4 text-orange-400" />
+              Contato Direto com o Profissional
             </h2>
             {isLoggedIn ? (
               <div className="flex flex-wrap gap-3">
@@ -321,24 +322,36 @@ export default async function ProfissionalPublicPage({ params }: PageProps) {
                 {professional.phone && (
                   <a
                     href={`tel:${professional.phone.replace(/\D/g, '')}`}
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-slate-200 text-xs font-bold border border-white/20 transition"
+                    className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white/10 hover:bg-white/15 text-white text-xs sm:text-sm font-bold border border-white/20 transition shadow-md"
                   >
-                    <Phone className="w-4 h-4 text-slate-300" />
-                    <span>Telefone: {professional.phone}</span>
+                    <Phone className="w-4 h-4 text-slate-200" />
+                    <span>Ligar: {professional.phone}</span>
                   </a>
                 )}
               </div>
             ) : (
-              <div className="p-4 rounded-xl bg-white/5 border border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                <div className="text-xs text-slate-400">
-                  <span className="font-semibold text-white block mb-0.5">Contato protegido:</span>
-                  Entre na sua conta gratuita para ver o WhatsApp. Isso protege os profissionais de mensagens indesejadas.
+              <div className="p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-orange-500/10 via-amber-500/5 to-transparent border border-orange-500/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-xl">
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+                    <span className="font-extrabold text-white text-sm sm:text-base">
+                      Crie sua conta grátis para liberar o WhatsApp
+                    </span>
+                  </div>
+                  <p className="text-xs sm:text-sm text-slate-200 max-w-xl leading-relaxed">
+                    Não cobramos para pesquisar nem para entrar em contato. O cadastro gratuito protege os profissionais contra spams e permite salvar seus favoritos.
+                  </p>
+                  <div className="flex flex-wrap gap-3 pt-1 text-[11px] sm:text-xs font-semibold text-slate-300">
+                    <span className="flex items-center gap-1 text-emerald-400">✓ 100% Gratuito</span>
+                    <span className="flex items-center gap-1 text-orange-400">✓ Negociação Direta</span>
+                    <span className="flex items-center gap-1 text-sky-400">✓ Sem Comissões</span>
+                  </div>
                 </div>
                 <Link
-                  href={`/entrar?redirect=/profissionais/${slug}`}
-                  className="px-4 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-bold transition shrink-0"
+                  href={`/criar-conta?redirect=/profissionais/${slug}`}
+                  className="w-full md:w-auto px-6 py-3.5 btn-neon text-xs sm:text-sm font-black uppercase tracking-wider text-center flex items-center justify-center gap-2 shrink-0 shadow-lg"
                 >
-                  Fazer login para ver contato
+                  <span>Liberar WhatsApp Grátis</span>
                 </Link>
               </div>
             )}
