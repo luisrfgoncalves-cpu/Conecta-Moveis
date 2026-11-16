@@ -1,7 +1,6 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import Link from 'next/link';
-import Image from 'next/image';
 import { signOut } from '@/lib/auth/actions';
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 import { BrandLogo } from '@/components/brand/BrandLogo';

@@ -7,7 +7,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { signUp } from '@/lib/auth/actions';
 import { signUpSchema, type SignUpInput } from '@/lib/auth/schemas';
-import { Eye, EyeOff, Loader2, CheckCircle2, Ticket } from 'lucide-react';
+import { Eye, EyeOff, Loader2, CheckCircle2 } from 'lucide-react';
 
 export function SignUpForm() {
   const router = useRouter();

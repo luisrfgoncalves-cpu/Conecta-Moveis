@@ -36,7 +36,10 @@ export default function ApresentacaoPage() {
 
   const handleVideoPlay = () => {
     if (typeof window !== 'undefined' && window.innerWidth <= 768 && videoRef.current) {
-      const vid = videoRef.current as any;
+      const vid = videoRef.current as HTMLVideoElement & {
+        webkitRequestFullscreen?: () => Promise<void>;
+        webkitEnterFullscreen?: () => void;
+      };
       if (vid.requestFullscreen) {
         vid.requestFullscreen().catch(() => {});
       } else if (vid.webkitRequestFullscreen) {
