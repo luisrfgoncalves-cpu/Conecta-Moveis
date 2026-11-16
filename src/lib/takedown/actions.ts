@@ -19,8 +19,8 @@ export interface CreateTakedownInput {
   targetType: 'profile' | 'portfolio_image' | 'review' | 'company';
   targetId?: string;
   description: string;
-  notifierName: string;
-  notifierEmail: string;
+  notifierName?: string;
+  notifierEmail?: string;
   goodFaithDeclaration: boolean;
 }
 
@@ -36,8 +36,9 @@ export async function submitTakedownNotice(input: CreateTakedownInput): Promise<
     return { success: false, error: 'É obrigatório declarar a veracidade e boa-fé das informações fornecidas.' };
   }
 
-  if (!input.notifierName?.trim() || !input.notifierEmail?.trim()) {
-    return { success: false, error: 'Identificação completa do notificante (nome e e-mail) é obrigatória.' };
+  const isAuthorial = input.category === 'copyright_image' || input.category === 'trademark';
+  if (isAuthorial && (!input.notifierName?.trim() || !input.notifierEmail?.trim())) {
+    return { success: false, error: 'Identificação completa do notificante (nome e e-mail) é obrigatória para denúncias de direitos autorais ou marca.' };
   }
 
   if (!input.description || input.description.trim().length < 15) {
@@ -66,8 +67,8 @@ export async function submitTakedownNotice(input: CreateTakedownInput): Promise<
       target_type: input.targetType,
       target_id: input.targetId || null,
       description: input.description.trim(),
-      notifier_name: input.notifierName.trim(),
-      notifier_email: input.notifierEmail.trim(),
+      notifier_name: input.notifierName?.trim() || 'Denunciante Anônimo',
+      notifier_email: input.notifierEmail?.trim() || 'anonimo@denuncia.local',
       good_faith_declaration: true,
       status: 'recebida',
       evidence_snapshot: snapshot,

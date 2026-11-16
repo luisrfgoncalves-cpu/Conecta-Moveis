@@ -26,17 +26,19 @@ export function NotificarConteudoClient() {
   const [errorMsg, setErrorMsg] = useState('');
   const [protocol, setProtocol] = useState<string | null>(null);
 
+  const isAuthorial = category === 'copyright_image' || category === 'trademark';
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setErrorMsg('');
 
     if (!goodFaith) {
-      setErrorMsg('É obrigatório declarar boa-fé e veracidade dos fatos informados.');
+      setErrorMsg('É obrigatório marcar a declaração para prosseguir.');
       return;
     }
 
-    if (!notifierName.trim() || !notifierEmail.trim()) {
-      setErrorMsg('Preencha seu nome e e-mail de contato.');
+    if (isAuthorial && (!notifierName.trim() || !notifierEmail.trim())) {
+      setErrorMsg('Preencha seu nome e e-mail de contato (obrigatórios para violação de direitos autorais ou marca).');
       return;
     }
 
@@ -149,29 +151,29 @@ export function NotificarConteudoClient() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label htmlFor="name-input" className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
-                  Seu Nome Completo
+                  Seu Nome Completo {isAuthorial ? '*' : <span className="text-slate-500 font-normal lowercase">(opcional)</span>}
                 </label>
                 <input
                   id="name-input"
                   type="text"
-                  required
+                  required={isAuthorial}
                   value={notifierName}
                   onChange={(e) => setNotifierName(e.target.value)}
-                  placeholder="Nome do notificante ou procurador"
+                  placeholder={isAuthorial ? 'Nome do titular ou procurador' : 'Seu nome (opcional se desejar resposta)'}
                   className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-white/15 text-white text-xs focus:border-orange-500 focus:outline-none"
                 />
               </div>
               <div>
                 <label htmlFor="email-input" className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1.5">
-                  Seu E-mail de Contato
+                  Seu E-mail de Contato {isAuthorial ? '*' : <span className="text-slate-500 font-normal lowercase">(opcional)</span>}
                 </label>
                 <input
                   id="email-input"
                   type="email"
-                  required
+                  required={isAuthorial}
                   value={notifierEmail}
                   onChange={(e) => setNotifierEmail(e.target.value)}
-                  placeholder="email@exemplo.com"
+                  placeholder={isAuthorial ? 'email@titular.com' : 'email@exemplo.com (opcional)'}
                   className="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-white/15 text-white text-xs focus:border-orange-500 focus:outline-none"
                 />
               </div>
@@ -215,7 +217,15 @@ export function NotificarConteudoClient() {
                   className="mt-0.5 rounded border-white/20 text-orange-500 focus:ring-0 cursor-pointer"
                 />
                 <span className="text-xs text-slate-300 leading-relaxed">
-                  Declaro sob as penas da lei que sou o titular dos direitos alegados ou estou legalmente autorizado a agir em seu nome, prestando estas informações de boa-fé e ciente de que denúncias caluniosas geram responsabilidade civil e criminal.
+                  {isAuthorial ? (
+                    <>
+                      Declaro sob as penas da lei que sou o titular dos direitos alegados ou estou legalmente autorizado a agir em seu nome, prestando estas informações de boa-fé e ciente de que denúncias caluniosas geram responsabilidade civil e criminal.
+                    </>
+                  ) : (
+                    <>
+                      Declaro que presto estas informações de boa-fé e com base na verdade dos fatos, ciente de que denúncias sabidamente falsas geram responsabilidade nos termos da lei.
+                    </>
+                  )}
                 </span>
               </label>
             </div>

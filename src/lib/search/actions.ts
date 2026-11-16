@@ -29,6 +29,7 @@ function getAdminClient() {
 // ─────────────────────────────────────────────────────────────────────────────
 export interface PublicProfessional {
   id: string;
+  user_id?: string;
   display_name: string;
   slug: string;
   bio: string | null;
@@ -228,12 +229,40 @@ export async function searchProfessionals(
   const total = Number(rows[0]?.total_count ?? 0);
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
-  // Busca especialidades dos profissionais retornados (N+1 evitado com IN)
+  // Busca especialidades e user_id dos profissionais retornados (N+1 evitado com IN)
   const pIds = rows.map((r: { id: string }) => r.id);
-  const { data: specs } = await admin
-    .from('profile_specialties')
-    .select('profile_id, specialties(id, name, slug, category_id)')
-    .in('profile_id', pIds);
+  const specPromise = (async () => {
+    try {
+      const res = await admin
+        .from('profile_specialties')
+        .select('profile_id, specialties(id, name, slug, category_id)')
+        .in('profile_id', pIds);
+      return res.data || [];
+    } catch {
+      return [];
+    }
+  })();
+
+  const ownerPromise = (async () => {
+    try {
+      const res = await admin
+        .from('professional_profiles')
+        .select('id, user_id')
+        .in('id', pIds);
+      return res.data || [];
+    } catch {
+      return [];
+    }
+  })();
+
+  const [specs, owners] = await Promise.all([specPromise, ownerPromise]);
+
+  const ownerMap = new Map<string, string>();
+  for (const item of owners || []) {
+    if (item.id && item.user_id) {
+      ownerMap.set(item.id, item.user_id);
+    }
+  }
 
   const specMap = new Map<string, { id: string; name: string; slug: string }[]>();
   for (const item of specs || []) {
@@ -260,6 +289,7 @@ export async function searchProfessionals(
       rank: number;
     }) => ({
       id: r.id,
+      user_id: ownerMap.get(r.id),
       display_name: r.display_name,
       slug: r.slug,
       bio: r.bio,

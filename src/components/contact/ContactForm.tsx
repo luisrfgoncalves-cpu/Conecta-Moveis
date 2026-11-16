@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { MessageCircle } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -39,6 +41,8 @@ export function ContactForm({ profileId, professionalName, isLoggedIn }: Contact
     }
   }
 
+  const pathname = usePathname();
+
   if (!isLoggedIn) {
     return (
       <div className="glass-panel rounded-2xl p-6 text-center space-y-3">
@@ -46,12 +50,12 @@ export function ContactForm({ profileId, professionalName, isLoggedIn }: Contact
         <p className="text-sm text-slate-300">
           Faça login para enviar uma solicitação de contato a <strong>{professionalName}</strong>.
         </p>
-        <a
-          href={`/entrar?next=${encodeURIComponent(typeof window !== 'undefined' ? window.location.pathname : '')}`}
+        <Link
+          href={`/entrar?redirect=${encodeURIComponent(pathname || '')}`}
           className="btn-primary text-sm px-4 py-2 rounded-xl inline-block"
         >
           Entrar para contatar
-        </a>
+        </Link>
       </div>
     );
   }

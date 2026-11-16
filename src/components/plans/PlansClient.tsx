@@ -26,7 +26,7 @@ export function PlansClient({
 
   async function handleAction(plan: PlanItem) {
     if (!isLoggedIn) {
-      router.push(`/entrar?next=/planos`);
+      router.push(`/entrar?redirect=/planos`);
       return;
     }
 
@@ -104,7 +104,7 @@ export function PlansClient({
         <div className="p-4 rounded-2xl bg-sky-500/10 border border-sky-500/20 flex items-center gap-3">
           <Sparkles className="w-5 h-5 text-sky-400 shrink-0" />
           <p className="text-xs text-slate-300">
-            <strong>Fase MVP:</strong> No momento, a plataforma opera sem cobrança online direta.
+            <strong>Período de lançamento:</strong> No momento, a plataforma opera sem cobrança online direta.
             Você pode manifestar interesse nos planos superiores para ter prioridade quando a versão comercial for lançada.
           </p>
         </div>
@@ -131,7 +131,7 @@ export function PlansClient({
       {/* Grade de Planos */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {plans.map((plan) => {
-          const isCurrent = plan.id === currentPlanId;
+          const isCurrent = isLoggedIn && plan.id === currentPlanId;
           const isPro = plan.id === 'pro';
           const isEnterprise = plan.id === 'enterprise';
 
@@ -168,7 +168,7 @@ export function PlansClient({
                 {/* Preço (Sem valores inventados) */}
                 <div className="pt-2 border-t border-white/10">
                   <span className="text-xs text-slate-400 uppercase tracking-wider font-semibold block">
-                    Investimento
+                    Preço
                   </span>
                   <div className="mt-1 flex items-baseline gap-1">
                     <span className="text-2xl font-black text-white">
@@ -185,7 +185,7 @@ export function PlansClient({
                   <li className="flex items-center gap-2">
                     <Check className="w-4 h-4 text-emerald-400 shrink-0" />
                     <span>
-                      Até <strong>{plan.max_photos} fotos</strong> no portfólio
+                      Até <strong>{plan.max_photos} fotos de apresentação</strong>
                     </span>
                   </li>
                   <li className="flex items-center gap-2">
@@ -243,7 +243,7 @@ export function PlansClient({
                   ) : billingMode === 'test' ? (
                     'Mudar para este plano (Teste)'
                   ) : (
-                    'Manifestar interesse'
+                    'Tenho interesse'
                   )}
                 </button>
               </div>
@@ -258,7 +258,7 @@ export function PlansClient({
           <div className="glass-panel p-6 sm:p-8 rounded-3xl max-w-md w-full border border-white/20 space-y-5 animate-in fade-in zoom-in-95 duration-150">
             <div>
               <h3 className="text-lg font-black text-white">
-                Manifestar Interesse: Plano {selectedPlan.name}
+                Tenho Interesse: Plano {selectedPlan.name}
               </h3>
               <p className="text-xs text-slate-300 mt-1">
                 Ainda não estamos processando pagamentos online. Registre seu interesse para ser notificado
@@ -295,7 +295,7 @@ export function PlansClient({
                 className="px-5 py-2.5 rounded-xl text-xs font-bold bg-orange-500 hover:bg-orange-600 text-white transition flex items-center gap-2"
               >
                 {isLoading && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-                Confirmar Interesse
+                Tenho interesse
               </button>
             </div>
           </div>

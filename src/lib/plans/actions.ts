@@ -4,6 +4,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 import { getAdminUserRole, recordAdminLog } from '@/lib/admin/actions';
+import { getSystemSettingValue } from '@/lib/config/actions';
 
 function getAdminClient() {
   return createSupabaseClient(
@@ -114,9 +115,11 @@ export async function getEntitlements(userId: string): Promise<UserEntitlements>
     };
   }
 
-  // 1.3 Se não existir linha de entitlements, buscar do plano base ou padrão free
-  const defaultMaxPhotos = plan?.max_photos ?? 6;
-  const defaultMaxCategories = plan?.max_categories ?? 2;
+  // 1.3 Se não existir linha de entitlements, buscar do plano base ou do registro de configurações
+  const defaultFreePhotos = Number(await getSystemSettingValue<number>('max_photos_free_plan').catch(() => 3)) || 3;
+  const defaultFreeCategories = Number(await getSystemSettingValue<number>('max_categories_free_plan').catch(() => 1)) || 1;
+  const defaultMaxPhotos = plan?.max_photos ?? defaultFreePhotos;
+  const defaultMaxCategories = plan?.max_categories ?? defaultFreeCategories;
   const defaultCanFeature = plan?.allow_featured ?? false;
 
   // Registrar entitlements padrão
@@ -139,9 +142,16 @@ export async function getEntitlements(userId: string): Promise<UserEntitlements>
 }
 
 /**
- * 2. getPlansCatalog - Lista planos ativos do catálogo
+ * 2. getPlansCatalog - Lista planos ativos do catálogo sincronizados com o registro de configurações
  */
 export async function getPlansCatalog(): Promise<PlanItem[]> {
+  const [freePhotos, freeCategories, proPhotos, proCategories] = await Promise.all([
+    getSystemSettingValue<number>('max_photos_free_plan').catch(() => 3),
+    getSystemSettingValue<number>('max_categories_free_plan').catch(() => 1),
+    getSystemSettingValue<number>('max_photos_pro_plan').catch(() => 20),
+    getSystemSettingValue<number>('max_categories_pro_plan').catch(() => 3),
+  ]);
+
   const admin = getAdminClient();
   const { data: plans } = await admin
     .from('plans')
@@ -149,7 +159,58 @@ export async function getPlansCatalog(): Promise<PlanItem[]> {
     .eq('is_active', true)
     .order('max_photos', { ascending: true });
 
-  return (plans as PlanItem[]) || [];
+  if (plans && plans.length > 0) {
+    return (plans as PlanItem[]).map((p) => {
+      if (p.id === 'free') {
+        return {
+          ...p,
+          max_photos: Number(freePhotos) || p.max_photos,
+          max_categories: Number(freeCategories) || p.max_categories,
+        };
+      }
+      if (p.id === 'pro') {
+        return {
+          ...p,
+          max_photos: Number(proPhotos) || p.max_photos,
+          max_categories: Number(proCategories) || p.max_categories,
+        };
+      }
+      return p;
+    });
+  }
+
+  return [
+    {
+      id: 'free',
+      name: 'Gratuito',
+      description: 'Plano inicial para divulgação básica de serviços.',
+      max_photos: Number(freePhotos) || 3,
+      max_categories: Number(freeCategories) || 1,
+      allow_featured: false,
+      price_cents: 0,
+      is_active: true,
+    },
+    {
+      id: 'pro',
+      name: 'Profissional',
+      description: 'Maior visibilidade para quem quer receber mais solicitações de contato.',
+      max_photos: Number(proPhotos) || 20,
+      max_categories: Number(proCategories) || 3,
+      allow_featured: true,
+      price_cents: 0,
+      is_active: true,
+    },
+    {
+      id: 'enterprise',
+      name: 'Empresas e Lojas',
+      description: 'Visibilidade para lojas de planejados, marcenarias e fábricas.',
+      max_photos: 50,
+      max_categories: 6,
+      allow_featured: true,
+      price_cents: 0,
+      is_active: true,
+    },
+  ];
 }
 
 /**

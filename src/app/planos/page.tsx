@@ -47,8 +47,8 @@ export default async function PlanosPage() {
             Planos de Visibilidade Profissional
           </h1>
           <p className="text-sm sm:text-base text-slate-300 leading-relaxed mt-3">
-            Destaque seu trabalho, apresente seu portfólio completo e seja encontrado por clientes que
-            buscam serviços moveleiros de qualidade.
+            Destaque seu trabalho, apresente suas fotos de apresentação e seja encontrado por quem busca
+            montadores e marceneiros na sua região.
           </p>
         </div>
       </div>

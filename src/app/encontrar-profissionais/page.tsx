@@ -5,6 +5,7 @@ import { Alert } from '@/components/ui/Feedback';
 import { PlatformNotice } from '@/components/legal/PlatformNotice';
 import { searchProfessionals, SearchFilters as FilterType } from '@/lib/search/actions';
 import { isFeatureFlagActive } from '@/lib/config/actions';
+import { createClient } from '@/lib/supabase/server';
 import { SearchFilters } from '@/components/search/SearchFilters';
 import { ProfessionalCard } from '@/components/search/ProfessionalCard';
 import { BackButton } from '@/components/navigation/BackButton';
@@ -34,10 +35,13 @@ export default async function EncontrarProfissionaisPage({ searchParams }: PageP
     page: typeof resolvedParams.page === 'string' ? Number(resolvedParams.page) || 1 : 1,
   };
 
-  const [result, reviewsEnabled] = await Promise.all([
+  const supabase = await createClient();
+  const [{ data: authData }, result, reviewsEnabled] = await Promise.all([
+    supabase.auth.getUser().catch(() => ({ data: { user: null } })),
     searchProfessionals(filters),
     isFeatureFlagActive('reviews_enabled'),
   ]);
+  const currentUserId = authData?.user?.id;
 
   // Helper para gerar URLs de paginação mantendo filtros existentes
   const getPaginationUrl = (newPage: number) => {
@@ -151,7 +155,11 @@ export default async function EncontrarProfissionaisPage({ searchParams }: PageP
               {/* Grid 12 por página */}
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                 {result.professionals.map((prof) => (
-                  <ProfessionalCard key={prof.id} professional={prof} />
+                  <ProfessionalCard
+                    key={prof.id}
+                    professional={prof}
+                    isOwner={Boolean(currentUserId && prof.user_id === currentUserId)}
+                  />
                 ))}
               </div>
 
