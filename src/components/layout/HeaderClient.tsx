@@ -38,7 +38,7 @@ export function HeaderClient({ currentUser }: HeaderClientProps) {
 
   return (
     <header className="sticky top-0 z-50 w-full bg-slate-950/85 backdrop-blur-xl border-b border-white/10 shadow-lg shadow-black/40">
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-20 sm:h-24 md:h-26 flex items-center justify-between gap-2 sm:gap-4">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-22 sm:h-26 md:h-28 flex items-center justify-between gap-2 sm:gap-4">
         {/* LOGO DINÂMICO DA MARCA COM AMPLITUDE MÁXIMA */}
         <BrandLogo href="/" size="md" />
 
