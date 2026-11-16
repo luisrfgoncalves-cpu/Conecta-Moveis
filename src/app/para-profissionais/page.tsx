@@ -9,6 +9,7 @@ import {
 import { Breadcrumbs } from '@/components/navigation/Breadcrumbs';
 import { BackButton } from '@/components/navigation/BackButton';
 import { Alert } from '@/components/ui/Feedback';
+import { OnboardingTrigger } from '@/components/onboarding/OnboardingTrigger';
 
 export const metadata: Metadata = {
   title: 'Divulgue seu Trabalho | Para Profissionais | Conecta Móveis',
@@ -140,6 +141,9 @@ export default function ParaProfissionaisPage() {
           </div>
         </div>
       </section>
+
+      {/* Apresentação rápida na primeira visita com intenção de divulgar */}
+      <OnboardingTrigger intent="divulgar" delayMs={600} />
     </div>
   );
 }

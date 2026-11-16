@@ -7,6 +7,7 @@ import {
 import { BackButton } from '@/components/navigation/BackButton';
 import { Breadcrumbs } from '@/components/navigation/Breadcrumbs';
 import { Alert } from '@/components/ui/Feedback';
+import { ComoFuncionaOnboarding } from '@/components/onboarding/ComoFuncionaOnboarding';
 
 export const metadata: Metadata = {
   title: 'Como Funciona | Conecta Móveis',
@@ -84,13 +85,14 @@ export default function ComoFuncionaPage() {
           </div>
         </div>
 
-        <div className="pt-2">
+        <div className="pt-2 flex flex-wrap items-center gap-4">
           <Link
             href="/encontrar-profissionais"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold text-xs uppercase tracking-wider transition"
           >
             <span>Buscar profissionais agora</span>
           </Link>
+          <ComoFuncionaOnboarding variant="track1" />
         </div>
       </section>
 
@@ -148,6 +150,7 @@ export default function ComoFuncionaPage() {
           >
             <span>Ver detalhes para profissionais</span>
           </Link>
+          <ComoFuncionaOnboarding variant="track2" />
           <Link
             href="/planos"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-200 font-bold text-xs transition"
@@ -156,6 +159,9 @@ export default function ComoFuncionaPage() {
           </Link>
         </div>
       </section>
+
+      {/* Caixa de Apresentação Reabrível */}
+      <ComoFuncionaOnboarding variant="box" />
 
       {/* Caixa de Dúvidas e Links Úteis */}
       <div className="glass-card p-8 rounded-3xl border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-6">

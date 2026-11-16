@@ -479,5 +479,36 @@ ot-found.tsx (404) e error.tsx com interface amigável, ícones, atalho para bus
 - **Pendência para o Advogado**:
   - Homologar a separação do consentimento entre navegação e anúncio de serviços.
 
+---
+
+### J-024 — Onboarding Apresentação em Duas Trilhas, Acessibilidade e Isenção (Bloco 7)
+- **Data**: 16/11/2026
+- **Fase**: Ajuste Final Pré-Divulgação — Bloco 7 (Onboarding e Apresentação)
+- **Funcionalidade ou Texto**:
+  1. **(7.1) Apresentação em 3 Telas Curtas por Intenção**:
+     - Criação de componente modal acessível (`src/components/onboarding/OnboardingModal.tsx`) e banco de conteúdos estruturados (`src/components/onboarding/onboardingData.ts`) cobrindo as duas trilhas de uso:
+       - **Trilha Quem Procura:**
+         1. *"Encontre quem monta e fabrica móveis na sua região."*
+         2. *"Veja os perfis e fale direto: preço, prazo e pagamento são combinados só entre vocês."*
+         3. *"A plataforma divulga os profissionais. Não contrata, não cobra comissão e não garante o serviço. Antes de fechar, peça contrato por escrito."*
+       - **Trilha Quem Anuncia:**
+         1. *"Seja encontrado por quem procura montagem e marcenaria na sua cidade."*
+         2. *"Perfil pronto em cerca de 10 minutos: especialidades, região, fotos e WhatsApp."*
+         3. *"Cadastro gratuito no lançamento. Mudanças serão avisadas antes. Sem comissão sobre seus serviços."*
+  2. **(7.2) Acessibilidade Plena e Controle de Visualização**:
+     - Acessível por teclado (fechamento via tecla `Escape`, navegação entre telas por setas direcionais `ArrowLeft`/`ArrowRight`, foco gerenciado).
+     - Leitor de tela com atributo `role="dialog"`, `aria-modal="true"` e avisos dinâmicos em `aria-live="polite"`.
+     - Armazenamento em `localStorage` (`conecta_onboarding_procurar_seen` e `conecta_onboarding_divulgar_seen`), exibindo apenas uma vez na primeira visita e podendo ser pulado instantaneamente sem bloquear a busca de profissionais.
+  3. **(7.3) Reabertura em "Como Funciona"**:
+     - Integração de botões específicos em `/como-funciona` (`src/components/onboarding/ComoFuncionaOnboarding.tsx`) permitindo reabrir a apresentação passo a passo de ambas as trilhas a qualquer momento.
+- **Regras e Normas Envolvidas**: R1, R2 (ausência de comissão e intermediação); R3, R4 (ausência de endosso e garantia); R16 (Gate de Isenção); R17 (responsabilidade limitada à veiculação de anúncios); CDC arts. 6º, III, 30, 31, 36 e 37; LBI (Lei 13.146/2015 - acessibilidade web).
+- **Risco**: Baixo (aprimoramento de experiência inicial de usuário e reforço prévio da isenção de responsabilidade).
+- **Decisão Tomada**: O onboarding funciona como salvaguarda preventiva pedagógica e probatória de boa-fé, informando o usuário desde a primeira visita sobre os limites da plataforma (não contrata, não garante e recomenda contrato por escrito), sem travar ou impedir a utilização do sistema.
+- **Quem Decidiu**: Usuário (orientação para execução cirúrgica do Bloco 7 e deploy de produção).
+- **Evidência**: `src/components/onboarding/OnboardingModal.tsx`, `src/components/onboarding/onboardingData.ts`, `src/components/onboarding/OnboardingTrigger.tsx`, `src/components/onboarding/ComoFuncionaOnboarding.tsx`, `src/app/como-funciona/page.tsx`, `src/app/encontrar-profissionais/page.tsx`, `src/app/para-profissionais/page.tsx`, `src/__tests__/bloco7_onboarding.test.ts`.
+- **Pendência para o Advogado**:
+  - Homologar a recomendação de contrato por escrito logo no terceiro slide da trilha de busca como reforço defensivo contra responsabilidade solidária.
+
+
 
 

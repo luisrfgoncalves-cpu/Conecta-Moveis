@@ -12,6 +12,7 @@ import { SearchFilters } from '@/components/search/SearchFilters';
 import { ProfessionalCard } from '@/components/search/ProfessionalCard';
 import { BackButton } from '@/components/navigation/BackButton';
 import { Breadcrumbs } from '@/components/navigation/Breadcrumbs';
+import { OnboardingTrigger } from '@/components/onboarding/OnboardingTrigger';
 
 export const metadata: Metadata = {
   title: 'Encontrar Profissionais e Empresas | Conecta Móveis',
@@ -242,6 +243,9 @@ export default async function EncontrarProfissionaisPage({ searchParams }: PageP
           )}
         </main>
       </div>
+
+      {/* Apresentação rápida na primeira visita com intenção de busca */}
+      <OnboardingTrigger intent="procurar" delayMs={600} />
     </div>
   );
 }
