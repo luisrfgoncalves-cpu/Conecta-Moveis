@@ -8,7 +8,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: `${brand.name} — Vitrine de Profissionais Moveleiros`,
     short_name: brand.shortName,
     description:
-      `Vitrine independente para aproximação direta entre clientes e profissionais do setor moveleiro em ${brand.focusRegion}.`,
+      `Catálogo aberto para encontrar montadores e marceneiros em ${brand.focusRegion}.`,
     start_url: '/',
     display: 'standalone',
     background_color: '#0f172a',

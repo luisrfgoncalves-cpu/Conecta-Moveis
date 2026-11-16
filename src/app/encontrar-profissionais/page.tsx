@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { UserX, ChevronLeft, ChevronRight } from 'lucide-react';
-import { Alert } from '@/components/ui/Feedback';
 import { PlatformNotice } from '@/components/legal/PlatformNotice';
 import { searchProfessionals, SearchFilters as FilterType } from '@/lib/search/actions';
 import { listMunicipios } from '@/lib/geo/actions';

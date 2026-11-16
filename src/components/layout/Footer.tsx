@@ -126,7 +126,7 @@ export function Footer() {
               )}
             </p>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Operação em {brand.focusRegion} — Espaço de divulgação e aproximação autônoma.
+              Operação em {brand.focusRegion} — Catálogo de divulgação independente para montadores e marceneiros.
             </p>
           </div>
         </div>
