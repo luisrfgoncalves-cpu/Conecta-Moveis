@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { 
@@ -30,32 +30,43 @@ import {
 
 export default function ApresentacaoPage() {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [ctaRevealed, setCtaRevealed] = useState(false);
   const [email, setEmail] = useState('');
   const [city, setCity] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
-  const handleVideoPlay = () => {
-    if (typeof window !== 'undefined' && window.innerWidth <= 768 && videoRef.current) {
-      const vid = videoRef.current as HTMLVideoElement & {
-        webkitRequestFullscreen?: () => Promise<void>;
-        webkitEnterFullscreen?: () => void;
-      };
-      if (vid.requestFullscreen) {
-        vid.requestFullscreen().catch(() => {});
-      } else if (vid.webkitRequestFullscreen) {
-        vid.webkitRequestFullscreen();
-      } else if (vid.webkitEnterFullscreen) {
-        vid.webkitEnterFullscreen();
+  const revealCta = () => {
+    setCtaRevealed(true);
+  };
+
+  const handleVideoProgress = () => {
+    if (videoRef.current && videoRef.current.duration) {
+      if (
+        videoRef.current.currentTime / videoRef.current.duration >= 0.8 ||
+        videoRef.current.currentTime >= 45
+      ) {
+        revealCta();
       }
     }
   };
 
   const handleVideoEnded = () => {
+    revealCta();
     const cta = document.getElementById('cta-container');
     if (cta) {
       cta.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 400 && !ctaRevealed) {
+        revealCta();
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [ctaRevealed]);
 
   const handleLeadSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,7 +82,7 @@ export default function ApresentacaoPage() {
     <div className="min-h-screen bg-[#05070d] text-slate-100 selection:bg-orange-500 selection:text-white pb-24 sm:pb-0">
       
       {/* DOBRA 1: HERO VSL (SEM BARRA FIXA, LOGO INTEGRADO NO FUNDO DO TOPO) */}
-      <section className="relative pt-6 pb-14 sm:pt-10 sm:pb-20 px-4 sm:px-6 lg:px-8 z-10 text-center">
+      <section className="relative pt-6 pb-12 sm:pt-10 sm:pb-16 px-4 sm:px-6 lg:px-8 z-10 text-center">
         
         {/* Topo Integrado: Logo à esquerda e badge discreta */}
         <div className="max-w-6xl mx-auto flex items-center justify-between mb-8 sm:mb-12">
@@ -82,10 +93,10 @@ export default function ApresentacaoPage() {
               width={220}
               height={50}
               priority
-              className="h-12 sm:h-16 w-auto object-contain drop-shadow-[0_4px_16px_rgba(0,0,0,0.9)]"
+              className="h-11 sm:h-16 w-auto object-contain drop-shadow-[0_4px_16px_rgba(0,0,0,0.9)]"
             />
           </Link>
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/40 border border-orange-500/30 shadow-sm backdrop-blur-md">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-950/40 border border-purple-500/40 shadow-sm backdrop-blur-md">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
             <span className="text-[11px] sm:text-xs font-bold text-slate-200">Jundiaí e Região</span>
           </div>
@@ -106,15 +117,15 @@ export default function ApresentacaoPage() {
           <strong className="text-white font-bold">diretamente pelo WhatsApp</strong> com total liberdade.
         </p>
 
-        {/* O VÍDEO CENTRALIZADO COM FULLSCREEN NO CLIQUE */}
-        <div className="max-w-4xl mx-auto mb-8">
+        {/* O VÍDEO CENTRALIZADO COM REPRODUÇÃO VERTICAL NATIVA */}
+        <div className="max-w-4xl mx-auto mb-6">
           <div className="mb-3">
-            <h2 className="text-lg sm:text-2xl font-black text-white tracking-tight">
+            <h2 className="text-base sm:text-xl font-bold text-slate-200 tracking-tight">
               Como Funciona a Vitrine moveleira
             </h2>
           </div>
 
-          <div className="glass-box-3d rounded-3xl p-2.5 sm:p-4 vsl-frame-led relative border border-orange-500/40 shadow-[0_0_50px_-5px_rgba(255,107,0,0.4)]">
+          <div className="card-3d-led rounded-3xl p-2 sm:p-4 vsl-frame-led relative border-2 border-orange-500/60 shadow-[0_0_45px_-5px_rgba(255,107,0,0.45)]">
             <div className="relative rounded-2xl overflow-hidden aspect-video bg-black border border-white/10 flex items-center justify-center">
               <video
                 ref={videoRef}
@@ -122,8 +133,8 @@ export default function ApresentacaoPage() {
                 playsInline
                 poster="/brand/vitrine-moveleira-cover.jpg"
                 preload="metadata"
-                className="w-full h-full object-cover rounded-xl"
-                onPlay={handleVideoPlay}
+                className="w-full h-full object-contain rounded-xl"
+                onTimeUpdate={handleVideoProgress}
                 onEnded={handleVideoEnded}
               >
                 <source src="/videos/vitrine-moveleira-apresentacao.mp4" type="video/mp4" />
@@ -133,8 +144,15 @@ export default function ApresentacaoPage() {
           </div>
         </div>
 
-        {/* BOTÃO DE ALTA CONVERSÃO REVELADO E PULSANTE */}
-        <div id="cta-container" className="max-w-xl mx-auto mb-10">
+        {/* BOTÃO DE ALTA CONVERSÃO COM SURGIMENTO AUTOMÁTICO */}
+        <div 
+          id="cta-container" 
+          className={`max-w-xl mx-auto mb-10 transition-all duration-700 ease-out ${
+            ctaRevealed 
+              ? 'opacity-100 translate-y-0' 
+              : 'opacity-0 translate-y-6 pointer-events-none'
+          }`}
+        >
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/encontrar-profissionais"
@@ -145,7 +163,7 @@ export default function ApresentacaoPage() {
             </Link>
             <Link
               href="/criar-conta"
-              className="w-full sm:w-auto px-7 py-5 rounded-2xl glass-box-3d border border-purple-500/30 hover:border-orange-500/60 text-sm font-bold text-slate-200 hover:text-white transition flex items-center justify-center gap-2"
+              className="w-full sm:w-auto px-7 py-5 rounded-2xl card-3d-led border border-purple-500/40 hover:border-orange-500/70 text-sm font-bold text-slate-200 hover:text-white transition flex items-center justify-center gap-2"
             >
               <Briefcase className="w-4 h-4 text-orange-400" />
               <span>Divulgar Meus Serviços</span>
@@ -161,182 +179,214 @@ export default function ApresentacaoPage() {
         </div>
       </section>
 
-      {/* DOBRA 2: AS DORES REAIS (AGITAÇÃO DO PROBLEMA) */}
-      <section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto z-10">
-        <div className="text-center max-w-3xl mx-auto mb-12">
+      {/* DOBRA 2: DORES REAIS COM CARDS 3D ROXOS VISÍVEIS NO CELULAR */}
+      <section className="py-14 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto z-10">
+        <div className="text-center max-w-3xl mx-auto mb-10">
           <span className="text-xs font-black text-purple-400 uppercase tracking-widest block mb-2">A Realidade do Mercado</span>
           <h2 className="text-2xl sm:text-4xl font-black text-white mb-4">
-            Por que encontrar ou divulgar serviços de marcenaria sempre foi tão frustrante?
+            As dificuldades reais na hora de encontrar ou divulgar serviços
           </h2>
           <p className="text-sm sm:text-base text-slate-300">
-            Seja para encontrar um profissional ou para divulgar a sua mão de obra, o setor moveleiro tradicional sofre com os mesmos obstáculos todos os dias:
+            Problemas comuns que clientes e profissionais autônomos enfrentam no dia a dia:
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Dor do Cliente */}
-          <div className="card-pain rounded-3xl p-6 sm:p-8 relative">
-            <div className="w-12 h-12 rounded-2xl bg-purple-500/20 text-purple-400 flex items-center justify-center mb-5 border border-purple-500/30">
-              <UserX className="w-6 h-6" />
+          <div className="card-pain-3d rounded-3xl p-6 sm:p-8 flex flex-col justify-between">
+            <div>
+              <div className="w-12 h-12 rounded-2xl bg-purple-500/20 text-purple-400 flex items-center justify-center mb-5 border border-purple-500/40">
+                <UserX className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-black text-white mb-4">Para Quem Precisa de Móveis ou Montagem</h3>
+              <ul className="space-y-3.5 text-xs sm:text-sm text-slate-200">
+                <li className="flex items-start gap-2.5">
+                  <AlertCircle className="w-4 h-4 text-purple-400 shrink-0 mt-0.5" />
+                  <span><strong className="text-white">Falta de fotos do trabalho:</strong> Pedir indicações e não ter onde ver previamente fotos de serviços já concluídos.</span>
+                </li>
+                <li className="flex items-start gap-2.5">
+                  <AlertCircle className="w-4 h-4 text-purple-400 shrink-0 mt-0.5" />
+                  <span><strong className="text-white">Demora para receber resposta:</strong> Preencher cadastros longos em sites para aguardar dias por um retorno.</span>
+                </li>
+                <li className="flex items-start gap-2.5">
+                  <AlertCircle className="w-4 h-4 text-purple-400 shrink-0 mt-0.5" />
+                  <span><strong className="text-white">Intermediários no meio do caminho:</strong> Plataformas que cobram taxas para liberar o telefone de contato.</span>
+                </li>
+              </ul>
             </div>
-            <h3 className="text-xl font-black text-white mb-3">Para Quem Precisa de Móveis</h3>
-            <ul className="space-y-3.5 text-xs sm:text-sm text-slate-300">
-              <li className="flex items-start gap-2.5">
-                <AlertCircle className="w-4 h-4 text-purple-400 shrink-0 mt-0.5" />
-                <span><strong className="text-white">Falta de Portfólio Visível:</strong> Pedir indicação em grupos e não ter onde ver fotos de trabalhos anteriores da pessoa.</span>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <AlertCircle className="w-4 h-4 text-purple-400 shrink-0 mt-0.5" />
-                <span><strong className="text-white">Demora nos Orçamentos:</strong> Formulários intermináveis na internet para só depois de dias receber uma resposta genérica.</span>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <AlertCircle className="w-4 h-4 text-purple-400 shrink-0 mt-0.5" />
-                <span><strong className="text-white">Intermediários Inconvenientes:</strong> Plataformas que cobram pedágio e complicam a conversa direta entre as partes.</span>
-              </li>
-            </ul>
           </div>
 
-          {/* Dor do Profissional */}
-          <div className="card-pain rounded-3xl p-6 sm:p-8 relative">
-            <div className="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center mb-5 border border-amber-500/30">
-              <TrendingDown className="w-6 h-6" />
+          <div className="card-pain-3d rounded-3xl p-6 sm:p-8 flex flex-col justify-between">
+            <div>
+              <div className="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center mb-5 border border-amber-500/40">
+                <TrendingDown className="w-6 h-6" />
+              </div>
+              <h3 className="text-xl font-black text-white mb-4">Para Marceneiros e Montadores Autônomos</h3>
+              <ul className="space-y-3.5 text-xs sm:text-sm text-slate-200">
+                <li className="flex items-start gap-2.5">
+                  <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                  <span><strong className="text-white">Depender apenas do boca a boca:</strong> Semanas com pouca procura por falta de uma página digital simples para mostrar seus trabalhos.</span>
+                </li>
+                <li className="flex items-start gap-2.5">
+                  <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                  <span><strong className="text-white">Taxas sobre a mão de obra:</strong> Aplicativos que cobram comissão sobre os serviços prestados ou cobram para você responder um cliente.</span>
+                </li>
+                <li className="flex items-start gap-2.5">
+                  <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                  <span><strong className="text-white">Dificuldade de divulgação local:</strong> Custo elevado de anúncios pagos na internet sem garantia de atingir a própria cidade.</span>
+                </li>
+              </ul>
             </div>
-            <h3 className="text-xl font-black text-white mb-3">Para Marceneiros e Montadores</h3>
-            <ul className="space-y-3.5 text-xs sm:text-sm text-slate-300">
-              <li className="flex items-start gap-2.5">
-                <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-                <span><strong className="text-white">Refém do Boca a Boca:</strong> Meses com alta demanda e meses sem nenhum contato por falta de presença digital.</span>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-                <span><strong className="text-white">Taxas e Comissões Abusivas:</strong> Aplicativos que cobram para você responder um cliente ou retêm percentual da sua mão de obra.</span>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-                <span><strong className="text-white">Custo Alto de Anúncios Próprios:</strong> Ter que pagar agências ou gastar fortunas no Instagram sem saber configurar tráfego local.</span>
-              </li>
-            </ul>
           </div>
         </div>
       </section>
 
-      {/* DOBRA 3: A SOLUÇÃO VITRINE MOVELEIRA (OS 4 PILARES 3D COM LED) */}
-      <section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto z-10">
-        <div className="text-center max-w-3xl mx-auto mb-12">
-          <span className="text-xs font-black text-orange-400 uppercase tracking-widest block mb-2">A Resposta Definitiva</span>
+      {/* DOBRA 3: SOLUÇÕES E BENEFÍCIOS REAIS DO APP COM FOTO REAL */}
+      <section className="py-14 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto z-10">
+        <div className="text-center max-w-3xl mx-auto mb-10">
+          <span className="text-xs font-black text-orange-400 uppercase tracking-widest block mb-2">A Proposta da Plataforma</span>
           <h2 className="text-2xl sm:text-4xl font-black text-white mb-4">
-            A Solução: Um Catálogo Regional Direto e Transparente
+            O que o app da Vitrine Moveleira realmente entrega
           </h2>
           <p className="text-sm sm:text-base text-slate-300">
-            Criamos um ecossistema simples, visual e rápido, focado especificamente na realidade de Jundiaí e cidades vizinhas:
+            Benefícios práticos criados especificamente para a região de Jundiaí e cidades vizinhas:
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 text-left">
-          <div className="glass-box-3d p-5 rounded-2xl border-orange-500/30">
-            <div className="w-11 h-11 rounded-xl bg-orange-500/15 text-orange-400 flex items-center justify-center mb-4 border border-orange-500/30">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 text-left mb-10">
+          <div className="card-3d-led p-5 rounded-2xl border-orange-500/40">
+            <div className="w-11 h-11 rounded-xl bg-orange-500/15 text-orange-400 flex items-center justify-center mb-4 border border-orange-500/40">
               <MessageCircle className="w-5 h-5" />
             </div>
             <h4 className="text-base font-black text-white mb-1.5">WhatsApp Direto</h4>
-            <p className="text-xs text-slate-300 leading-relaxed">Você clica e conversa direto no aplicativo de mensagens com o anunciante. Sem robôs travando o papo.</p>
+            <p className="text-xs text-slate-300 leading-relaxed">Clique para abrir a conversa diretamente no WhatsApp informado pelo anunciante, sem formulários intermediários.</p>
           </div>
 
-          <div className="glass-box-3d p-5 rounded-2xl border-emerald-500/30">
-            <div className="w-11 h-11 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center mb-4 border border-emerald-500/30">
+          <div className="card-3d-led p-5 rounded-2xl border-emerald-500/40">
+            <div className="w-11 h-11 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center mb-4 border border-emerald-500/40">
               <Percent className="w-5 h-5" />
             </div>
-            <h4 className="text-base font-black text-white mb-1.5">Zero Comissão</h4>
-            <p className="text-xs text-slate-300 leading-relaxed">A plataforma não cobra porcentagem sobre o trabalho fechado. O combinado entre as partes fica 100% com elas.</p>
+            <h4 className="text-base font-black text-white mb-1.5">Sem Taxa por Serviço</h4>
+            <p className="text-xs text-slate-300 leading-relaxed">A plataforma não retém comissão sobre serviços fechados. O acerto é 100% direto entre as partes.</p>
           </div>
 
-          <div className="glass-box-3d p-5 rounded-2xl border-purple-500/30">
-            <div className="w-11 h-11 rounded-xl bg-purple-500/15 text-purple-400 flex items-center justify-center mb-4 border border-purple-500/30">
+          <div className="card-3d-led p-5 rounded-2xl border-purple-500/40">
+            <div className="w-11 h-11 rounded-xl bg-purple-500/15 text-purple-400 flex items-center justify-center mb-4 border border-purple-500/40">
               <Camera className="w-5 h-5" />
             </div>
-            <h4 className="text-base font-black text-white mb-1.5">Fotos Informadas</h4>
-            <p className="text-xs text-slate-300 leading-relaxed">Cada profissional cadastra fotos de trabalhos realizados para você analisar o estilo de acabamento antes de chamar.</p>
+            <h4 className="text-base font-black text-white mb-1.5">Fotos dos Anunciantes</h4>
+            <p className="text-xs text-slate-300 leading-relaxed">Espaço dedicado para que cada profissional apresente suas próprias fotos de montagens e móveis realizados.</p>
           </div>
 
-          <div className="glass-box-3d p-5 rounded-2xl border-amber-500/30">
-            <div className="w-11 h-11 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center mb-4 border border-amber-500/30">
+          <div className="card-3d-led p-5 rounded-2xl border-amber-500/40">
+            <div className="w-11 h-11 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center mb-4 border border-amber-500/40">
               <MapPin className="w-5 h-5" />
             </div>
-            <h4 className="text-base font-black text-white mb-1.5">Foco em Jundiaí e Região</h4>
-            <p className="text-xs text-slate-300 leading-relaxed">Filtre por cidades e bairros vizinhos para encontrar quem atende prontamente o seu condomínio ou residência.</p>
+            <h4 className="text-base font-black text-white mb-1.5">Foco Regional</h4>
+            <p className="text-xs text-slate-300 leading-relaxed">Filtros por categorias e cidades para encontrar profissionais que realmente atendem o seu bairro.</p>
+          </div>
+        </div>
+
+        {/* Showcase Visual com Foto Real */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center card-3d-led rounded-3xl p-6 sm:p-8 border-purple-500/40">
+          <div className="space-y-4 text-left">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-purple-500/20 border border-purple-500/40 text-xs font-bold text-purple-300">
+              <Sparkles className="w-4 h-4" />
+              <span>Visualização Prática</span>
+            </div>
+            <h3 className="text-xl sm:text-2xl font-black text-white leading-snug">
+              Móveis planejados, modulados e marcenaria em um só catálogo
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              O aplicativo organiza os perfis por categorias oficiais com fotos, descrição de serviços prestados e canal de mensagem aberto, permitindo que você avalie o portfólio antes de iniciar qualquer conversa.
+            </p>
+            <div className="pt-2">
+              <Link href="/categorias" className="inline-flex items-center gap-2 text-xs font-bold text-orange-400 hover:text-orange-300 transition">
+                <span>Explorar categorias no catálogo</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
+          <div className="rounded-2xl overflow-hidden border border-white/10 shadow-2xl relative aspect-[4/3]">
+            <Image
+              src="/images/apresentacao/cozinha-moderna.jpg"
+              alt="Exemplo de Cozinha Planejada"
+              fill
+              className="object-cover"
+            />
           </div>
         </div>
       </section>
 
-      {/* DOBRA 4: ESPECIALIDADES OFICIAIS DO CATÁLOGO COM PROFUNDIDADE 3D */}
-      <section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto z-10">
+      {/* DOBRA 4: CATEGORIAS OFICIAIS DO CATÁLOGO (TEXTOS NATURAIS DO PRÓPRIO SISTEMA) */}
+      <section className="py-14 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto z-10">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <span className="text-xs font-black text-orange-400 uppercase tracking-widest block mb-1">Estrutura Completa</span>
-            <h2 className="text-2xl sm:text-4xl font-black text-white">Segmentos Atendidos na Vitrine</h2>
+            <span className="text-xs font-black text-purple-400 uppercase tracking-widest block mb-1">Categorias Oficiais</span>
+            <h2 className="text-2xl sm:text-4xl font-black text-white">Segmentos Disponíveis no App</h2>
           </div>
           <span className="text-xs text-slate-400 block sm:hidden">Deslize para o lado 👉</span>
         </div>
 
         <div className="flex overflow-x-auto sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-5 pb-4">
-          <div className="w-[85%] sm:w-auto shrink-0 glass-box-3d rounded-3xl p-6 border-orange-500/30">
-            <div className="w-12 h-12 rounded-2xl bg-orange-500/15 text-orange-400 flex items-center justify-center mb-4 border border-orange-500/30">
+          <div className="w-[85%] sm:w-auto shrink-0 card-3d-led rounded-3xl p-6 border-orange-500/40">
+            <div className="w-12 h-12 rounded-2xl bg-orange-500/15 text-orange-400 flex items-center justify-center mb-4 border border-orange-500/40">
               <Wrench className="w-6 h-6" />
             </div>
-            <h4 className="text-lg font-black text-white mb-2">Montadores de Móveis</h4>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-4">Montagem de móveis comprados na internet, regulagem de dobradiças, portas e desmontagens para mudança.</p>
-            <span className="text-[11px] font-bold text-orange-400 bg-orange-500/10 px-3 py-1 rounded-lg border border-orange-500/25">Guarda-roupas • Cozinhas • Camas</span>
+            <h4 className="text-lg font-black text-white mb-2">Montador de Móveis</h4>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-4">Montagem e desmontagem de móveis modulados e convencionais.</p>
+            <span className="text-[11px] font-bold text-orange-400 bg-orange-500/10 px-3 py-1 rounded-lg border border-orange-500/30">Modulados • Guarda-Roupas • Cozinhas</span>
           </div>
 
-          <div className="w-[85%] sm:w-auto shrink-0 glass-box-3d rounded-3xl p-6 border-amber-500/30">
-            <div className="w-12 h-12 rounded-2xl bg-amber-500/15 text-amber-400 flex items-center justify-center mb-4 border border-amber-500/30">
+          <div className="w-[85%] sm:w-auto shrink-0 card-3d-led rounded-3xl p-6 border-purple-500/40">
+            <div className="w-12 h-12 rounded-2xl bg-purple-500/15 text-purple-400 flex items-center justify-center mb-4 border border-purple-500/40">
               <Sparkles className="w-6 h-6" />
             </div>
-            <h4 className="text-lg font-black text-white mb-2">Marceneiros Autônomos</h4>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-4">Móveis sob medida, adaptações de marcenaria fina, painéis ripados, banheiros e projetos personalizados.</p>
-            <span className="text-[11px] font-bold text-amber-400 bg-amber-500/10 px-3 py-1 rounded-lg border border-amber-500/25">Cozinhas • Closets • Ripados</span>
+            <h4 className="text-lg font-black text-white mb-2">Marceneiro (Autônomo)</h4>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-4">Marcenaria fina, móveis sob medida e adaptações.</p>
+            <span className="text-[11px] font-bold text-purple-400 bg-purple-500/10 px-3 py-1 rounded-lg border border-purple-500/30">Cozinhas Sob Medida • Painéis • Closets</span>
           </div>
 
-          <div className="w-[85%] sm:w-auto shrink-0 glass-box-3d rounded-3xl p-6 border-emerald-500/30">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center mb-4 border border-emerald-500/30">
+          <div className="w-[85%] sm:w-auto shrink-0 card-3d-led rounded-3xl p-6 border-emerald-500/40">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center mb-4 border border-emerald-500/40">
               <Box className="w-6 h-6" />
             </div>
-            <h4 className="text-lg font-black text-white mb-2">Lojas de Planejados</h4>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-4">Showrooms estruturados e empresas para mobiliar apartamentos na planta e residências completas.</p>
-            <span className="text-[11px] font-bold text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-lg border border-emerald-500/25">Ambientes Completos • Showrooms</span>
+            <h4 className="text-lg font-black text-white mb-2">Loja de Planejados</h4>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-4">Showrooms e comércio de mobiliário planejado residencial e corporativo.</p>
+            <span className="text-[11px] font-bold text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-lg border border-emerald-500/30">Ambientes Completos • Showrooms</span>
           </div>
 
-          <div className="w-[85%] sm:w-auto shrink-0 glass-box-3d rounded-3xl p-6 border-purple-500/30">
-            <div className="w-12 h-12 rounded-2xl bg-purple-500/15 text-purple-400 flex items-center justify-center mb-4 border border-purple-500/30">
+          <div className="w-[85%] sm:w-auto shrink-0 card-3d-led rounded-3xl p-6 border-purple-500/40">
+            <div className="w-12 h-12 rounded-2xl bg-purple-500/15 text-purple-400 flex items-center justify-center mb-4 border border-purple-500/40">
               <Hammer className="w-6 h-6" />
             </div>
-            <h4 className="text-lg font-black text-white mb-2">Marcenarias e Fábricas</h4>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-4">Fábricas de médio e grande porte com centro de usinagem CNC, corte e borda de chapas em volume.</p>
-            <span className="text-[11px] font-bold text-purple-400 bg-purple-500/10 px-3 py-1 rounded-lg border border-purple-500/25">Usinagem CNC • Lotes • Estruturas</span>
+            <h4 className="text-lg font-black text-white mb-2">Marcenaria e Fábrica</h4>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-4">Fábricas e oficinas com usinagem por CNC, corte e fita de borda.</p>
+            <span className="text-[11px] font-bold text-purple-400 bg-purple-500/10 px-3 py-1 rounded-lg border border-purple-500/30">Corte CNC • Grandes Lotes • Chapas</span>
           </div>
 
-          <div className="w-[85%] sm:w-auto shrink-0 glass-box-3d rounded-3xl p-6 border-sky-500/30">
-            <div className="w-12 h-12 rounded-2xl bg-sky-500/15 text-sky-400 flex items-center justify-center mb-4 border border-sky-500/30">
+          <div className="w-[85%] sm:w-auto shrink-0 card-3d-led rounded-3xl p-6 border-sky-500/40">
+            <div className="w-12 h-12 rounded-2xl bg-sky-500/15 text-sky-400 flex items-center justify-center mb-4 border border-sky-500/40">
               <Ruler className="w-6 h-6" />
             </div>
-            <h4 className="text-lg font-black text-white mb-2">Projetistas 3D & Promob</h4>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-4">Desenhos técnicos, renderizações 3D realistas e detalhamento para fabricação e montagem de móveis.</p>
-            <span className="text-[11px] font-bold text-sky-400 bg-sky-500/10 px-3 py-1 rounded-lg border border-sky-500/25">Projetos 3D • Render • Plantas</span>
+            <h4 className="text-lg font-black text-white mb-2">Projetista</h4>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-4">Projetos 3D / Promob, imagens realistas e detalhamento técnico para fábricas.</p>
+            <span className="text-[11px] font-bold text-sky-400 bg-sky-500/10 px-3 py-1 rounded-lg border border-sky-500/30">Promob • Render 3D • Planta Técnica</span>
           </div>
 
-          <div className="w-[85%] sm:w-auto shrink-0 glass-box-3d rounded-3xl p-6 border-yellow-500/30">
-            <div className="w-12 h-12 rounded-2xl bg-yellow-500/15 text-yellow-400 flex items-center justify-center mb-4 border border-yellow-500/30">
+          <div className="w-[85%] sm:w-auto shrink-0 card-3d-led rounded-3xl p-6 border-amber-500/40">
+            <div className="w-12 h-12 rounded-2xl bg-amber-500/15 text-amber-400 flex items-center justify-center mb-4 border border-amber-500/40">
               <Lightbulb className="w-6 h-6" />
             </div>
             <h4 className="text-lg font-black text-white mb-2">Parceiros Complementares</h4>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-4">Fitas LED para móveis, serralheria fina, vidraçaria, espelhos, transporte e serviços integrados.</p>
-            <span className="text-[11px] font-bold text-yellow-400 bg-yellow-500/10 px-3 py-1 rounded-lg border border-yellow-500/25">Fita LED • Vidros • Serralheria</span>
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-4">Eletricistas para iluminação LED, serralheiros, vidraceiros e serviços de apoio.</p>
+            <span className="text-[11px] font-bold text-amber-400 bg-amber-500/10 px-3 py-1 rounded-lg border border-amber-500/30">Fita LED • Vidraçaria • Ferragens</span>
           </div>
         </div>
       </section>
 
       {/* DOBRA 5: ISENÇÃO TOTAL E TRANSPARÊNCIA RADICAL */}
-      <section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto z-10">
-        <div className="text-center max-w-3xl mx-auto mb-12">
+      <section className="py-14 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto z-10">
+        <div className="text-center max-w-3xl mx-auto mb-10">
           <span className="text-xs font-black text-emerald-400 uppercase tracking-widest block mb-2">Compromisso Ético</span>
           <h2 className="text-2xl sm:text-4xl font-black text-white mb-4">Divisão Clara de Responsabilidades</h2>
           <p className="text-sm sm:text-base text-slate-300">
@@ -345,7 +395,7 @@ export default function ApresentacaoPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="glass-box-3d p-6 sm:p-8 rounded-3xl border border-emerald-500/30">
+          <div className="card-3d-led p-6 sm:p-8 rounded-3xl border-emerald-500/40">
             <div className="flex items-center gap-3 mb-5">
               <div className="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">
                 <Check className="w-5 h-5" />
@@ -372,7 +422,7 @@ export default function ApresentacaoPage() {
             </ul>
           </div>
 
-          <div className="glass-box-3d p-6 sm:p-8 rounded-3xl border border-rose-500/30">
+          <div className="card-3d-led p-6 sm:p-8 rounded-3xl border-rose-500/40">
             <div className="flex items-center gap-3 mb-5">
               <div className="w-9 h-9 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center font-bold">
                 <AlertTriangle className="w-5 h-5" />
@@ -402,9 +452,9 @@ export default function ApresentacaoPage() {
       </section>
 
       {/* DOBRA 6: CAPTURA ESTRATÉGICA DE LEADS */}
-      <section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto z-10">
-        <div className="glass-box-3d rounded-3xl p-6 sm:p-10 border border-orange-500/40 relative overflow-hidden text-center">
-          <div className="w-12 h-12 rounded-2xl bg-orange-500/20 text-orange-400 flex items-center justify-center mx-auto mb-4 border border-orange-500/30">
+      <section className="py-14 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto z-10">
+        <div className="card-3d-led rounded-3xl p-6 sm:p-10 border-orange-500/40 relative overflow-hidden text-center">
+          <div className="w-12 h-12 rounded-2xl bg-orange-500/20 text-orange-400 flex items-center justify-center mx-auto mb-4 border border-orange-500/40">
             <Bell className="w-6 h-6" />
           </div>
           <h3 className="text-xl sm:text-3xl font-black text-white mb-2">
@@ -415,30 +465,29 @@ export default function ApresentacaoPage() {
           </p>
 
           <form onSubmit={handleLeadSubmit} className="flex flex-col sm:flex-row items-center gap-3 max-w-xl mx-auto">
-            <input
-              type="email"
-              required
+            <input 
+              type="email" 
+              required 
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Seu e-mail"
+              placeholder="Seu e-mail" 
               className="w-full sm:flex-1 bg-black/50 border border-white/20 rounded-xl px-4 py-3.5 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-orange-500 transition shadow-inner"
             />
-            <input
-              type="text"
-              required
+            <input 
+              type="text" 
+              required 
               value={city}
               onChange={(e) => setCity(e.target.value)}
-              placeholder="Sua cidade (ex: Jundiaí)"
+              placeholder="Sua cidade (ex: Jundiaí)" 
               className="w-full sm:w-44 bg-black/50 border border-white/20 rounded-xl px-4 py-3.5 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-orange-500 transition shadow-inner"
             />
-            <button
-              type="submit"
+            <button 
+              type="submit" 
               className="btn-super-led-pulsing w-full sm:w-auto px-6 py-3.5 rounded-xl text-xs sm:text-sm font-bold text-white shrink-0 cursor-pointer"
             >
               Avise-me
             </button>
           </form>
-
           {submitted && (
             <div className="text-xs text-emerald-400 font-bold mt-4">
               ✓ E-mail registrado com sucesso! Você será avisado quando houver novos anúncios.
@@ -451,7 +500,7 @@ export default function ApresentacaoPage() {
       </section>
 
       {/* DOBRA 7: PERGUNTAS FREQUENTES */}
-      <section className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto z-10">
+      <section className="py-14 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto z-10">
         <div className="text-center mb-10">
           <span className="text-xs font-black text-purple-400 uppercase tracking-widest block mb-2">Esclarecimentos Detalhados</span>
           <h2 className="text-2xl sm:text-4xl font-black text-white">Dúvidas Frequentes</h2>
@@ -459,7 +508,7 @@ export default function ApresentacaoPage() {
         </div>
 
         <div className="space-y-3.5">
-          <details className="glass-box-3d rounded-2xl p-4 sm:p-5 border border-white/10 group cursor-pointer" open>
+          <details className="card-3d-led rounded-2xl p-4 sm:p-5 border-white/10 group cursor-pointer" open>
             <summary className="text-xs sm:text-sm font-bold text-white flex items-center justify-between list-none">
               <span>1. O visitante paga alguma coisa para consultar os contatos?</span>
               <ChevronDown className="w-4 h-4 text-orange-400 group-open:rotate-180 transition-transform" />
@@ -469,7 +518,7 @@ export default function ApresentacaoPage() {
             </p>
           </details>
 
-          <details className="glass-box-3d rounded-2xl p-4 sm:p-5 border border-white/10 group cursor-pointer">
+          <details className="card-3d-led rounded-2xl p-4 sm:p-5 border-white/10 group cursor-pointer">
             <summary className="text-xs sm:text-sm font-bold text-white flex items-center justify-between list-none">
               <span>2. A Vitrine Moveleira oferece garantia sobre os serviços anunciados?</span>
               <ChevronDown className="w-4 h-4 text-orange-400 group-open:rotate-180 transition-transform" />
@@ -479,7 +528,7 @@ export default function ApresentacaoPage() {
             </p>
           </details>
 
-          <details className="glass-box-3d rounded-2xl p-4 sm:p-5 border border-white/10 group cursor-pointer">
+          <details className="card-3d-led rounded-2xl p-4 sm:p-5 border-white/10 group cursor-pointer">
             <summary className="text-xs sm:text-sm font-bold text-white flex items-center justify-between list-none">
               <span>3. A plataforma cobra comissões dos profissionais sobre os serviços fechados?</span>
               <ChevronDown className="w-4 h-4 text-orange-400 group-open:rotate-180 transition-transform" />
@@ -489,7 +538,7 @@ export default function ApresentacaoPage() {
             </p>
           </details>
 
-          <details className="glass-box-3d rounded-2xl p-4 sm:p-5 border border-white/10 group cursor-pointer">
+          <details className="card-3d-led rounded-2xl p-4 sm:p-5 border-white/10 group cursor-pointer">
             <summary className="text-xs sm:text-sm font-bold text-white flex items-center justify-between list-none">
               <span>4. Como os pagamentos são realizados? O dinheiro passa pelo site?</span>
               <ChevronDown className="w-4 h-4 text-orange-400 group-open:rotate-180 transition-transform" />
@@ -499,7 +548,7 @@ export default function ApresentacaoPage() {
             </p>
           </details>
 
-          <details className="glass-box-3d rounded-2xl p-4 sm:p-5 border border-white/10 group cursor-pointer">
+          <details className="card-3d-led rounded-2xl p-4 sm:p-5 border-white/10 group cursor-pointer">
             <summary className="text-xs sm:text-sm font-bold text-white flex items-center justify-between list-none">
               <span>5. Quais cuidados o cliente deve tomar ao acertar um serviço?</span>
               <ChevronDown className="w-4 h-4 text-orange-400 group-open:rotate-180 transition-transform" />
@@ -509,7 +558,7 @@ export default function ApresentacaoPage() {
             </p>
           </details>
 
-          <details className="glass-box-3d rounded-2xl p-4 sm:p-5 border border-white/10 group cursor-pointer">
+          <details className="card-3d-led rounded-2xl p-4 sm:p-5 border-white/10 group cursor-pointer">
             <summary className="text-xs sm:text-sm font-bold text-white flex items-center justify-between list-none">
               <span>6. Como um profissional ou empresa pode divulgar no catálogo?</span>
               <ChevronDown className="w-4 h-4 text-orange-400 group-open:rotate-180 transition-transform" />
@@ -566,7 +615,7 @@ export default function ApresentacaoPage() {
         </Link>
         <Link
           href="/criar-conta"
-          className="glass-box-3d py-3.5 px-3 rounded-xl text-xs font-bold text-slate-300 text-center flex items-center justify-center gap-1.5 border border-white/20"
+          className="card-3d-led py-3.5 px-3 rounded-xl text-xs font-bold text-slate-300 text-center flex items-center justify-center gap-1.5 border border-white/20"
         >
           <Briefcase className="w-4 h-4 text-orange-400" />
           <span>Anunciar</span>
