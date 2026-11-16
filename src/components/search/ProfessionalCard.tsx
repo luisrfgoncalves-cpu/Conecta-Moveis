@@ -5,9 +5,10 @@ import { PublicProfessional } from '@/lib/search/actions';
 
 interface ProfessionalCardProps {
   professional: PublicProfessional;
+  isOwner?: boolean;
 }
 
-export function ProfessionalCard({ professional }: ProfessionalCardProps) {
+export function ProfessionalCard({ professional, isOwner }: ProfessionalCardProps) {
   const isNew = () => {
     const createdDate = new Date(professional.created_at);
     const thirtyDaysAgo = new Date();
@@ -52,6 +53,14 @@ export function ProfessionalCard({ professional }: ProfessionalCardProps) {
               >
                 {professional.display_name}
               </Link>
+              {isOwner && (
+                <span
+                  title="Este anúncio pertence à sua conta."
+                  className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-orange-500/20 text-orange-400 border border-orange-500/40"
+                >
+                  Seu anúncio
+                </span>
+              )}
               {professional.is_featured && (
                 <span
                   title="Destaque patrocinado por plano de visibilidade comercial. Não representa recomendação de qualidade pela plataforma."

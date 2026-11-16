@@ -12,7 +12,9 @@ import { Eye, EyeOff, Loader2, MailCheck, AlertTriangle } from 'lucide-react';
 export function SignInForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const nextUrl = searchParams.get('next') ?? '/painel';
+  const rawRedirect = searchParams.get('redirect') ?? searchParams.get('next') ?? '/painel';
+  // Validação anti open-redirect: aceita apenas caminhos internos (sem protocolo, sem //)
+  const nextUrl = rawRedirect.startsWith('/') && !rawRedirect.startsWith('//') ? rawRedirect : '/painel';
   const hasConfirmationError = searchParams.get('erro') === 'confirmacao';
 
   const [serverError, setServerError] = useState('');

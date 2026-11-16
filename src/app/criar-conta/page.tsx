@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { SignUpForm } from '@/components/auth/SignUpForm';
+import { SignUpFormSkeleton } from '@/components/auth/SignUpFormSkeleton';
 
 export const metadata: Metadata = {
   title: 'Criar conta — Conecta Móveis',
@@ -22,7 +23,7 @@ export default function CriarContaPage() {
           priority
         />
       </Link>
-      <Suspense fallback={<div className="text-slate-400 text-sm">Carregando formulário...</div>}>
+      <Suspense fallback={<SignUpFormSkeleton />}>
         <SignUpForm />
       </Suspense>
     </main>

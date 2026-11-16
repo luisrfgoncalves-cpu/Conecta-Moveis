@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { NotificarConteudoClient } from '@/components/takedown/NotificarConteudoClient';
+import { NotificarConteudoSkeleton } from '@/components/takedown/NotificarConteudoSkeleton';
 
 export const metadata: Metadata = {
   title: 'Notificação de Conteúdo e Retirada — Conecta Móveis',
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function DenunciarPage() {
   return (
-    <Suspense fallback={<div className="p-12 text-center text-slate-400">Carregando formulário...</div>}>
+    <Suspense fallback={<NotificarConteudoSkeleton />}>
       <NotificarConteudoClient />
     </Suspense>
   );

@@ -3,6 +3,7 @@ import { Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { SignInForm } from '@/components/auth/SignInForm';
+import { SignInFormSkeleton } from '@/components/auth/SignInFormSkeleton';
 
 export const metadata: Metadata = {
   title: 'Entrar — Conecta Móveis',
@@ -22,7 +23,7 @@ export default function EntrarPage() {
           priority
         />
       </Link>
-      <Suspense>
+      <Suspense fallback={<SignInFormSkeleton />}>
         <SignInForm />
       </Suspense>
     </main>

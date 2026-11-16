@@ -143,7 +143,7 @@ export function InviteRedeemClient({
             Criar Conta e Ativar Convite
           </Link>
           <Link
-            href={`/entrar?redirectTo=/convite/${token}`}
+            href={`/entrar?redirect=/convite/${token}`}
             className="w-full py-3 text-sm font-medium text-center block rounded-xl border border-white/20 text-slate-300 hover:bg-white/5 transition"
           >
             Já tenho conta (Fazer Login)

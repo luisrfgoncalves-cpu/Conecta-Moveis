@@ -283,7 +283,7 @@ vi.mock('@supabase/supabase-js', () => ({
         };
       }
 
-      if (table === 'profile_specialties') {
+      if (table === 'profile_specialties' || table === 'professional_profiles') {
         return {
           select: vi.fn(() => ({
             in: vi.fn(async () => ({ data: [], error: null })),

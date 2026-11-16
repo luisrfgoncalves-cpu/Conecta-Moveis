@@ -2,6 +2,8 @@ import { createClient } from '@/lib/supabase/server';
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 import { redirect } from 'next/navigation';
 import type { Metadata } from 'next';
+import Link from 'next/link';
+import { Eye } from 'lucide-react';
 import { ProfileWizard } from '@/components/profile/ProfileWizard';
 
 export const metadata: Metadata = {
@@ -16,7 +18,7 @@ export default async function PainelPerfilPage() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect('/entrar?next=/painel/perfil');
+    redirect('/entrar?redirect=/painel/perfil');
   }
 
   // Obter client admin para carregar service_regions e profile_specialties sem bloqueio de RLS
@@ -60,11 +62,23 @@ export default async function PainelPerfilPage() {
 
   return (
     <div className="space-y-8 max-w-4xl">
-      <div>
-        <h1 className="text-3xl font-black text-white">Meu Perfil Profissional</h1>
-        <p className="text-sm text-slate-400 mt-1">
-          Preencha os dados em etapas para publicar sua vitrine profissional e receber contatos diretos.
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-black text-white">Meu Perfil Profissional</h1>
+          <p className="text-sm text-slate-400 mt-1">
+            Preencha os dados em etapas para publicar sua vitrine profissional e receber contatos diretos.
+          </p>
+        </div>
+        {(professionalProfile as { slug?: string } | null)?.slug && (
+          <Link
+            href={`/profissionais/${(professionalProfile as { slug?: string }).slug}`}
+            target="_blank"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-orange-400 bg-orange-500/10 hover:bg-orange-500/20 border border-orange-500/30 transition shadow-sm self-start sm:self-auto"
+          >
+            <Eye className="w-4 h-4" />
+            <span>Ver como visitante</span>
+          </Link>
+        )}
       </div>
 
       <ProfileWizard

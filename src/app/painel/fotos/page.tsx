@@ -19,7 +19,7 @@ export default async function PainelFotosPage() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect('/entrar?next=/painel/fotos');
+    redirect('/entrar?redirect=/painel/fotos');
   }
 
   const { profileId, items, storage } = await getMyPortfolioData();

@@ -346,3 +346,27 @@ Este documento registra todas as avaliações do Gate de Isenção ao longo das 
   - Confirmar prazo e forma da rotina de expurgo automático de registros de acesso (6 meses — Marco Civil art. 15).
   - Revisar se "Responsável pela proteção de dados (encarregado)" satisfaz plenamente o art. 41 da LGPD quanto à identificação pública.
   - Confirmar se a referência ao JEC deve ser mantida com indicação de localização genérica ou removida.
+
+
+---
+
+### J-019 — Correção de Bugs de Fluxo, Redirecionamento Seguro e Governança de Formulários (Bloco 2)
+- **Data**: 15/11/2026
+- **Fase**: Ajuste Final Pré-Divulgação — Bloco 2 (Bugs de Fluxo e Links)
+- **Funcionalidade ou Texto**:
+  1. **(2.1)** Resolução de visibilidade de perfis: Mapeamento de user_id em PublicProfessional (searchProfessionals) para identificação segura do dono na vitrine. Todos os perfis publicados são visíveis para anônimos, usuários comuns, donos e administradores. O anunciante autenticado visualiza no seu próprio card o rótulo "Seu anúncio". No Painel do Profissional (/painel/perfil e sidebar do /painel), inclusão de botão "Ver como visitante" apontando diretamente para /profissionais/[slug].
+  2. **(2.2)** Padronização de retorno pós-login: Unificação de todos os pontos de retorno sob o parâmetro único edirect; eliminação do parâmetro vazio ?next= no botão "Entrar para contatar" do ContactForm (agora dinâmico com usePathname()); implementação de validação rigorosa anti open-redirect em SignInForm (bloqueio de URLs externas, esquemas javascript e barras duplas //, aceitando apenas caminhos internos relativos iniciados com /).
+  3. **(2.3)** Governança e textos de /planos: Eliminação de "Plano Atual" duplicado para visitantes anônimos (condicionado estritamente a usuário autenticado); substituição de "Fase MVP" por "Período de lançamento", "Investimento" por "Preço", e "portfólio" por "fotos de apresentação"; criação do botão "Tenho interesse" conectado à ação egisterPlanInterest na tabela plan_interest; integração dos limites de fotos e categorias com o registro de configurações (SYSTEM_SETTINGS_REGISTRY), adotando o padrão gratuito de 1 imagem no card + 2 no perfil (total de 3 fotos e 1 categoria).
+  4. **(2.4)** Formulários sem tela vazia e moderação de denúncias: Criação de esqueletos estruturados no servidor (SignInFormSkeleton, SignUpFormSkeleton, NotificarConteudoSkeleton) substituindo a mensagem crua "Carregando formulário…"; no fluxo de denúncias (/denunciar), a declaração formal de titularidade de direitos passa a ser exigida apenas para categorias autorais (copyright_image, 	rademark), sendo os dados de contato (nome e e-mail) obrigatórios nesses casos; para suspeita de golpe/fraude, ofensa, conteúdo grave ou termos, adota-se declaração estrita de boa-fé, com nome e e-mail opcionais para preservar canais anônimos de denúncia pública.
+  5. **(2.5)** Rastreamento e confirmação de rotas: Confirmação e validação de funcionamento das rotas /autoridades, /recuperar-senha, /como-ordenamos-os-resultados e /painel/seguranca; reformulação de 
+ot-found.tsx (404) e error.tsx com interface amigável, ícones, atalho para busca e retorno seguro à página inicial.
+- **Regras e Normas Envolvidas**: R3, R4 (ausência de endosso), R5 (neutralidade na busca), R8 (notificação e retirada com protocolo), R9 (ocultação de ilícito grave), R11 (minimização de dados), R16 (Gate de Isenção), R17 (responsabilidade nos termos da lei); Marco Civil da Internet (art. 19); CDC (arts. 30, 31 e 37).
+- **Risco**: Baixo (correções arquiteturais de fluxo e segurança de roteamento, sem quebra de integridade de banco de dados).
+- **Decisão Tomada**:
+  1. **Anti Open-Redirect**: Proteção estrita contra ataques de phishing impedindo qualquer redirecionamento após autenticação para domínios externos.
+  2. **Denúncias e Canal Cidadão**: Respeito à possibilidade de denúncias anônimas de boa-fé para infrações graves e golpes, mantendo a qualificação formal obrigatória apenas quando requerida pela Lei de Direitos Autorais (Lei 9.610/98) e Propriedade Industrial (Lei 9.279/96).
+  3. **Identificação Transparente do Próprio Anúncio**: Usuários e administradores autenticados veem o rótulo "Seu anúncio" no card da busca, evitando confusão sobre como o perfil é exibido ao público.
+- **Quem Decidiu**: Usuário (orientação para execução cirúrgica do Bloco 2).
+- **Evidência**: src/lib/search/actions.ts, src/components/search/ProfessionalCard.tsx, src/app/encontrar-profissionais/page.tsx, src/components/auth/SignInForm.tsx, src/components/contact/ContactForm.tsx, src/components/plans/PlansClient.tsx, src/lib/plans/actions.ts, src/components/takedown/NotificarConteudoClient.tsx, src/lib/takedown/actions.ts, src/app/not-found.tsx, src/app/error.tsx, src/__tests__/bloco2_fluxo_links.test.ts.
+- **Pendência para o Advogado**:
+  - Validar se o canal anônimo de denúncias para crimes graves atende aos requisitos operacionais e de guarda de logs do Marco Civil da Internet (art. 15).

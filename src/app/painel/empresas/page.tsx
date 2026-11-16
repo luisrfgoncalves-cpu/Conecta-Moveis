@@ -15,7 +15,7 @@ export default async function PainelEmpresasPage() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect('/entrar?next=/painel/empresas');
+    redirect('/entrar?redirect=/painel/empresas');
   }
 
   // Buscar empresa do usuário onde ele é o owner
