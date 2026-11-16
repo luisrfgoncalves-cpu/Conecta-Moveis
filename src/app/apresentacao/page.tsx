@@ -5,9 +5,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { 
   ArrowRight, 
-  Search, 
-  Briefcase, 
-  ShieldCheck, 
   MessageCircle, 
   Percent, 
   Camera, 
@@ -23,8 +20,6 @@ import {
   Check, 
   CheckCircle2, 
   AlertTriangle,
-  UserX,
-  TrendingDown,
   AlertCircle
 } from 'lucide-react';
 
@@ -60,7 +55,7 @@ export default function ApresentacaoPage() {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 400 && !ctaRevealed) {
+      if (window.scrollY > 350 && !ctaRevealed) {
         revealCta();
       }
     };
@@ -81,10 +76,10 @@ export default function ApresentacaoPage() {
   return (
     <div className="min-h-screen bg-[#05070d] text-slate-100 selection:bg-orange-500 selection:text-white pb-24 sm:pb-0">
       
-      {/* DOBRA 1: HERO VSL (SEM BARRA FIXA, LOGO INTEGRADO NO FUNDO DO TOPO) */}
+      {/* DOBRA 1: HERO VSL (SEM BARRA FIXA, APENAS O VÍDEO E O SUPER BOTÃO DISPARADO) */}
       <section className="relative pt-6 pb-12 sm:pt-10 sm:pb-16 px-4 sm:px-6 lg:px-8 z-10 text-center">
         
-        {/* Topo Integrado: Logo à esquerda e badge discreta */}
+        {/* Topo Integrado: Logo original à esquerda sem barra fixa */}
         <div className="max-w-6xl mx-auto flex items-center justify-between mb-8 sm:mb-12">
           <Link href="/" className="flex items-center gap-2 group transition-transform hover:scale-105">
             <Image
@@ -96,7 +91,7 @@ export default function ApresentacaoPage() {
               className="h-11 sm:h-16 w-auto object-contain drop-shadow-[0_4px_16px_rgba(0,0,0,0.9)]"
             />
           </Link>
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-950/40 border border-purple-500/40 shadow-sm backdrop-blur-md">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-950/60 border border-purple-500/50 shadow-sm backdrop-blur-md">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
             <span className="text-[11px] sm:text-xs font-bold text-slate-200">Jundiaí e Região</span>
           </div>
@@ -117,7 +112,7 @@ export default function ApresentacaoPage() {
           <strong className="text-white font-bold">diretamente pelo WhatsApp</strong> com total liberdade.
         </p>
 
-        {/* O VÍDEO CENTRALIZADO COM REPRODUÇÃO VERTICAL NATIVA */}
+        {/* O VÍDEO CENTRALIZADO COM PROPORÇÃO VERTICAL NATIVA */}
         <div className="max-w-4xl mx-auto mb-6">
           <div className="mb-3">
             <h2 className="text-base sm:text-xl font-bold text-slate-200 tracking-tight">
@@ -144,44 +139,28 @@ export default function ApresentacaoPage() {
           </div>
         </div>
 
-        {/* BOTÃO DE ALTA CONVERSÃO COM SURGIMENTO AUTOMÁTICO */}
+        {/* BOTÃO ÚNICO DISPARADO APÓS O VÍDEO (SEM POLUIÇÃO DE SEGUNDO BOTÃO E SEM BOX REPETITIVO) */}
         <div 
           id="cta-container" 
-          className={`max-w-xl mx-auto mb-10 transition-all duration-700 ease-out ${
+          className={`max-w-md mx-auto mb-8 transition-all duration-700 ease-out ${
             ctaRevealed 
               ? 'opacity-100 translate-y-0' 
               : 'opacity-0 translate-y-6 pointer-events-none'
           }`}
         >
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link
-              href="/encontrar-profissionais"
-              className="btn-super-led-pulsing w-full sm:w-auto px-10 py-5 rounded-2xl text-base sm:text-lg font-black text-white flex items-center justify-center gap-3 uppercase tracking-wide cursor-pointer shadow-2xl"
-            >
-              <Search className="w-5 h-5" />
-              <span>Consultar Anúncios no App Agora</span>
-            </Link>
-            <Link
-              href="/criar-conta"
-              className="w-full sm:w-auto px-7 py-5 rounded-2xl card-3d-led border border-purple-500/40 hover:border-orange-500/70 text-sm font-bold text-slate-200 hover:text-white transition flex items-center justify-center gap-2"
-            >
-              <Briefcase className="w-4 h-4 text-orange-400" />
-              <span>Divulgar Meus Serviços</span>
-            </Link>
-          </div>
-          <p className="text-xs text-slate-400 mt-3">Acesso livre e sem cadastros obrigatórios para consultar telefones.</p>
-        </div>
-
-        {/* Isenção Legal */}
-        <div className="max-w-2xl mx-auto p-3.5 rounded-xl border border-white/10 bg-white/[0.02] text-xs text-slate-400 flex items-center justify-center gap-2">
-          <ShieldCheck className="w-4 h-4 text-amber-400 shrink-0" />
-          <span>Plataforma técnica de catálogo publicitário. A contratação, valores e prazos são acertados exclusivamente entre você e o profissional.</span>
+          <Link
+            href="/encontrar-profissionais"
+            className="btn-super-led-pulsing w-full py-5 px-8 rounded-2xl text-base sm:text-xl font-black text-white flex items-center justify-center gap-3 uppercase tracking-wider cursor-pointer shadow-2xl"
+          >
+            <span>Entrar no App da Vitrine Agora</span>
+            <ArrowRight className="w-6 h-6" />
+          </Link>
         </div>
       </section>
 
-      {/* DOBRA 2: DORES REAIS COM CARDS 3D ROXOS VISÍVEIS NO CELULAR */}
+      {/* DOBRA 2: DORES REAIS COM FOTOS FOTOGRÁFICAS E CARDS 3D ROXOS VIVOS */}
       <section className="py-14 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto z-10">
-        <div className="text-center max-w-3xl mx-auto mb-10">
+        <div className="text-center max-w-3xl mx-auto mb-12">
           <span className="text-xs font-black text-purple-400 uppercase tracking-widest block mb-2">A Realidade do Mercado</span>
           <h2 className="text-2xl sm:text-4xl font-black text-white mb-4">
             As dificuldades reais na hora de encontrar ou divulgar serviços
@@ -191,48 +170,60 @@ export default function ApresentacaoPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="card-pain-3d rounded-3xl p-6 sm:p-8 flex flex-col justify-between">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Card Dor do Cliente com Imagem Real */}
+          <div className="card-pain-3d p-6 sm:p-7 flex flex-col justify-between">
             <div>
-              <div className="w-12 h-12 rounded-2xl bg-purple-500/20 text-purple-400 flex items-center justify-center mb-5 border border-purple-500/40">
-                <UserX className="w-6 h-6" />
+              <div className="rounded-2xl overflow-hidden border border-white/20 mb-5 relative aspect-[16/10] shadow-inner">
+                <Image
+                  src="/images/apresentacao/dor-cliente.jpg"
+                  alt="Pessoa confusa com montagem de móveis"
+                  fill
+                  className="object-cover"
+                />
               </div>
-              <h3 className="text-xl font-black text-white mb-4">Para Quem Precisa de Móveis ou Montagem</h3>
-              <ul className="space-y-3.5 text-xs sm:text-sm text-slate-200">
+              <h3 className="text-xl font-black text-white mb-3">Para Quem Precisa de Móveis ou Montagem</h3>
+              <ul className="space-y-3 text-xs sm:text-sm text-slate-200">
                 <li className="flex items-start gap-2.5">
                   <AlertCircle className="w-4 h-4 text-purple-400 shrink-0 mt-0.5" />
-                  <span><strong className="text-white">Falta de fotos do trabalho:</strong> Pedir indicações e não ter onde ver previamente fotos de serviços já concluídos.</span>
+                  <span><strong className="text-white">Falta de fotos do trabalho:</strong> Pedir indicações e não ter onde ver fotos de serviços já concluídos.</span>
                 </li>
                 <li className="flex items-start gap-2.5">
                   <AlertCircle className="w-4 h-4 text-purple-400 shrink-0 mt-0.5" />
-                  <span><strong className="text-white">Demora para receber resposta:</strong> Preencher cadastros longos em sites para aguardar dias por um retorno.</span>
+                  <span><strong className="text-white">Demora para receber resposta:</strong> Preencher cadastros longos em sites para aguardar dias por retorno.</span>
                 </li>
                 <li className="flex items-start gap-2.5">
                   <AlertCircle className="w-4 h-4 text-purple-400 shrink-0 mt-0.5" />
-                  <span><strong className="text-white">Intermediários no meio do caminho:</strong> Plataformas que cobram taxas para liberar o telefone de contato.</span>
+                  <span><strong className="text-white">Intermediários no caminho:</strong> Plataformas que cobram taxas para liberar o telefone de contato.</span>
                 </li>
               </ul>
             </div>
           </div>
 
-          <div className="card-pain-3d rounded-3xl p-6 sm:p-8 flex flex-col justify-between">
+          {/* Card Dor do Profissional com Imagem Real */}
+          <div className="card-pain-3d p-6 sm:p-7 flex flex-col justify-between">
             <div>
-              <div className="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center mb-5 border border-amber-500/40">
-                <TrendingDown className="w-6 h-6" />
+              <div className="rounded-2xl overflow-hidden border border-white/20 mb-5 relative aspect-[16/10] shadow-inner">
+                <Image
+                  src="/images/apresentacao/dor-profissional.jpg"
+                  alt="Marceneiro autônomo na oficina esperando clientes"
+                  fill
+                  className="object-cover"
+                />
               </div>
-              <h3 className="text-xl font-black text-white mb-4">Para Marceneiros e Montadores Autônomos</h3>
-              <ul className="space-y-3.5 text-xs sm:text-sm text-slate-200">
+              <h3 className="text-xl font-black text-white mb-3">Para Marceneiros e Montadores Autônomos</h3>
+              <ul className="space-y-3 text-xs sm:text-sm text-slate-200">
                 <li className="flex items-start gap-2.5">
                   <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-                  <span><strong className="text-white">Depender apenas do boca a boca:</strong> Semanas com pouca procura por falta de uma página digital simples para mostrar seus trabalhos.</span>
+                  <span><strong className="text-white">Depender apenas do boca a boca:</strong> Semanas com pouca procura por falta de uma página digital simples.</span>
                 </li>
                 <li className="flex items-start gap-2.5">
                   <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-                  <span><strong className="text-white">Taxas sobre a mão de obra:</strong> Aplicativos que cobram comissão sobre os serviços prestados ou cobram para você responder um cliente.</span>
+                  <span><strong className="text-white">Taxas sobre a mão de obra:</strong> Aplicativos que cobram comissão sobre os serviços prestados.</span>
                 </li>
                 <li className="flex items-start gap-2.5">
                   <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-                  <span><strong className="text-white">Dificuldade de divulgação local:</strong> Custo elevado de anúncios pagos na internet sem garantia de atingir a própria cidade.</span>
+                  <span><strong className="text-white">Dificuldade de divulgação local:</strong> Custo alto de anúncios na internet sem foco na cidade.</span>
                 </li>
               </ul>
             </div>
@@ -240,9 +231,9 @@ export default function ApresentacaoPage() {
         </div>
       </section>
 
-      {/* DOBRA 3: SOLUÇÕES E BENEFÍCIOS REAIS DO APP COM FOTO REAL */}
+      {/* DOBRA 3: SOLUÇÕES E BENEFÍCIOS REAIS DO APP COM FOTOS AMBIENTADAS */}
       <section className="py-14 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto z-10">
-        <div className="text-center max-w-3xl mx-auto mb-10">
+        <div className="text-center max-w-3xl mx-auto mb-12">
           <span className="text-xs font-black text-orange-400 uppercase tracking-widest block mb-2">A Proposta da Plataforma</span>
           <h2 className="text-2xl sm:text-4xl font-black text-white mb-4">
             O que o app da Vitrine Moveleira realmente entrega
@@ -252,33 +243,33 @@ export default function ApresentacaoPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 text-left mb-10">
-          <div className="card-3d-led p-5 rounded-2xl border-orange-500/40">
-            <div className="w-11 h-11 rounded-xl bg-orange-500/15 text-orange-400 flex items-center justify-center mb-4 border border-orange-500/40">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 text-left mb-12">
+          <div className="card-3d-led p-5">
+            <div className="w-11 h-11 rounded-xl bg-orange-500/20 text-orange-400 flex items-center justify-center mb-4 border border-orange-500/40">
               <MessageCircle className="w-5 h-5" />
             </div>
             <h4 className="text-base font-black text-white mb-1.5">WhatsApp Direto</h4>
             <p className="text-xs text-slate-300 leading-relaxed">Clique para abrir a conversa diretamente no WhatsApp informado pelo anunciante, sem formulários intermediários.</p>
           </div>
 
-          <div className="card-3d-led p-5 rounded-2xl border-emerald-500/40">
-            <div className="w-11 h-11 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center mb-4 border border-emerald-500/40">
+          <div className="card-3d-led p-5">
+            <div className="w-11 h-11 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center mb-4 border border-emerald-500/40">
               <Percent className="w-5 h-5" />
             </div>
             <h4 className="text-base font-black text-white mb-1.5">Sem Taxa por Serviço</h4>
             <p className="text-xs text-slate-300 leading-relaxed">A plataforma não retém comissão sobre serviços fechados. O acerto é 100% direto entre as partes.</p>
           </div>
 
-          <div className="card-3d-led p-5 rounded-2xl border-purple-500/40">
-            <div className="w-11 h-11 rounded-xl bg-purple-500/15 text-purple-400 flex items-center justify-center mb-4 border border-purple-500/40">
+          <div className="card-3d-led p-5">
+            <div className="w-11 h-11 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center mb-4 border border-purple-500/40">
               <Camera className="w-5 h-5" />
             </div>
             <h4 className="text-base font-black text-white mb-1.5">Fotos dos Anunciantes</h4>
             <p className="text-xs text-slate-300 leading-relaxed">Espaço dedicado para que cada profissional apresente suas próprias fotos de montagens e móveis realizados.</p>
           </div>
 
-          <div className="card-3d-led p-5 rounded-2xl border-amber-500/40">
-            <div className="w-11 h-11 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center mb-4 border border-amber-500/40">
+          <div className="card-3d-led p-5">
+            <div className="w-11 h-11 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center mb-4 border border-amber-500/40">
               <MapPin className="w-5 h-5" />
             </div>
             <h4 className="text-base font-black text-white mb-1.5">Foco Regional</h4>
@@ -286,33 +277,48 @@ export default function ApresentacaoPage() {
           </div>
         </div>
 
-        {/* Showcase Visual com Foto Real */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center card-3d-led rounded-3xl p-6 sm:p-8 border-purple-500/40">
-          <div className="space-y-4 text-left">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-purple-500/20 border border-purple-500/40 text-xs font-bold text-purple-300">
-              <Sparkles className="w-4 h-4" />
-              <span>Visualização Prática</span>
+        {/* 2 Cards com Fotos Reais de Solução */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="card-3d-led p-6 flex flex-col justify-between">
+            <div>
+              <div className="rounded-2xl overflow-hidden border border-white/20 mb-5 relative aspect-[16/10]">
+                <Image
+                  src="/images/apresentacao/solucao-montagem.jpg"
+                  alt="Montador profissional alinhando armário com LED"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <h3 className="text-xl font-black text-white mb-2">Montagem e Ajustes Técnicos</h3>
+              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-4">
+                Encontre montadores capacitados para montagem de móveis modulados, regulagem de dobradiças, gavetas e desmontagens com cuidado para mudança.
+              </p>
             </div>
-            <h3 className="text-xl sm:text-2xl font-black text-white leading-snug">
-              Móveis planejados, modulados e marcenaria em um só catálogo
-            </h3>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-              O aplicativo organiza os perfis por categorias oficiais com fotos, descrição de serviços prestados e canal de mensagem aberto, permitindo que você avalie o portfólio antes de iniciar qualquer conversa.
-            </p>
-            <div className="pt-2">
-              <Link href="/categorias" className="inline-flex items-center gap-2 text-xs font-bold text-orange-400 hover:text-orange-300 transition">
-                <span>Explorar categorias no catálogo</span>
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
+            <Link href="/servicos/montador-de-moveis/jundiai-sp" className="inline-flex items-center gap-2 text-xs font-bold text-orange-400 hover:text-orange-300 transition">
+              <span>Ver montadores no catálogo</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
-          <div className="rounded-2xl overflow-hidden border border-white/10 shadow-2xl relative aspect-[4/3]">
-            <Image
-              src="/images/apresentacao/cozinha-moderna.jpg"
-              alt="Exemplo de Cozinha Planejada"
-              fill
-              className="object-cover"
-            />
+
+          <div className="card-3d-led p-6 flex flex-col justify-between">
+            <div>
+              <div className="rounded-2xl overflow-hidden border border-white/20 mb-5 relative aspect-[16/10]">
+                <Image
+                  src="/images/apresentacao/solucao-projetista.jpg"
+                  alt="Projetista 3D renderizando móvel planejado"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <h3 className="text-xl font-black text-white mb-2">Projetos Sob Medida e 3D</h3>
+              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-4">
+                Conecte-se com marceneiros e projetistas de ambientes sob medida para residências, cozinhas planejadas e layouts 3D com plantas técnicas.
+              </p>
+            </div>
+            <Link href="/servicos/marceneiro/jundiai-sp" className="inline-flex items-center gap-2 text-xs font-bold text-orange-400 hover:text-orange-300 transition">
+              <span>Ver marceneiros no catálogo</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
         </div>
       </section>
@@ -328,8 +334,8 @@ export default function ApresentacaoPage() {
         </div>
 
         <div className="flex overflow-x-auto sm:grid sm:grid-cols-2 lg:grid-cols-3 gap-5 pb-4">
-          <div className="w-[85%] sm:w-auto shrink-0 card-3d-led rounded-3xl p-6 border-orange-500/40">
-            <div className="w-12 h-12 rounded-2xl bg-orange-500/15 text-orange-400 flex items-center justify-center mb-4 border border-orange-500/40">
+          <div className="w-[85%] sm:w-auto shrink-0 card-3d-led p-6">
+            <div className="w-12 h-12 rounded-2xl bg-orange-500/20 text-orange-400 flex items-center justify-center mb-4 border border-orange-500/40">
               <Wrench className="w-6 h-6" />
             </div>
             <h4 className="text-lg font-black text-white mb-2">Montador de Móveis</h4>
@@ -337,8 +343,8 @@ export default function ApresentacaoPage() {
             <span className="text-[11px] font-bold text-orange-400 bg-orange-500/10 px-3 py-1 rounded-lg border border-orange-500/30">Modulados • Guarda-Roupas • Cozinhas</span>
           </div>
 
-          <div className="w-[85%] sm:w-auto shrink-0 card-3d-led rounded-3xl p-6 border-purple-500/40">
-            <div className="w-12 h-12 rounded-2xl bg-purple-500/15 text-purple-400 flex items-center justify-center mb-4 border border-purple-500/40">
+          <div className="w-[85%] sm:w-auto shrink-0 card-3d-led p-6">
+            <div className="w-12 h-12 rounded-2xl bg-purple-500/20 text-purple-400 flex items-center justify-center mb-4 border border-purple-500/40">
               <Sparkles className="w-6 h-6" />
             </div>
             <h4 className="text-lg font-black text-white mb-2">Marceneiro (Autônomo)</h4>
@@ -346,8 +352,8 @@ export default function ApresentacaoPage() {
             <span className="text-[11px] font-bold text-purple-400 bg-purple-500/10 px-3 py-1 rounded-lg border border-purple-500/30">Cozinhas Sob Medida • Painéis • Closets</span>
           </div>
 
-          <div className="w-[85%] sm:w-auto shrink-0 card-3d-led rounded-3xl p-6 border-emerald-500/40">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center mb-4 border border-emerald-500/40">
+          <div className="w-[85%] sm:w-auto shrink-0 card-3d-led p-6">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center mb-4 border border-emerald-500/40">
               <Box className="w-6 h-6" />
             </div>
             <h4 className="text-lg font-black text-white mb-2">Loja de Planejados</h4>
@@ -355,8 +361,8 @@ export default function ApresentacaoPage() {
             <span className="text-[11px] font-bold text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-lg border border-emerald-500/30">Ambientes Completos • Showrooms</span>
           </div>
 
-          <div className="w-[85%] sm:w-auto shrink-0 card-3d-led rounded-3xl p-6 border-purple-500/40">
-            <div className="w-12 h-12 rounded-2xl bg-purple-500/15 text-purple-400 flex items-center justify-center mb-4 border border-purple-500/40">
+          <div className="w-[85%] sm:w-auto shrink-0 card-3d-led p-6">
+            <div className="w-12 h-12 rounded-2xl bg-purple-500/20 text-purple-400 flex items-center justify-center mb-4 border border-purple-500/40">
               <Hammer className="w-6 h-6" />
             </div>
             <h4 className="text-lg font-black text-white mb-2">Marcenaria e Fábrica</h4>
@@ -364,8 +370,8 @@ export default function ApresentacaoPage() {
             <span className="text-[11px] font-bold text-purple-400 bg-purple-500/10 px-3 py-1 rounded-lg border border-purple-500/30">Corte CNC • Grandes Lotes • Chapas</span>
           </div>
 
-          <div className="w-[85%] sm:w-auto shrink-0 card-3d-led rounded-3xl p-6 border-sky-500/40">
-            <div className="w-12 h-12 rounded-2xl bg-sky-500/15 text-sky-400 flex items-center justify-center mb-4 border border-sky-500/40">
+          <div className="w-[85%] sm:w-auto shrink-0 card-3d-led p-6">
+            <div className="w-12 h-12 rounded-2xl bg-sky-500/20 text-sky-400 flex items-center justify-center mb-4 border border-sky-500/40">
               <Ruler className="w-6 h-6" />
             </div>
             <h4 className="text-lg font-black text-white mb-2">Projetista</h4>
@@ -373,8 +379,8 @@ export default function ApresentacaoPage() {
             <span className="text-[11px] font-bold text-sky-400 bg-sky-500/10 px-3 py-1 rounded-lg border border-sky-500/30">Promob • Render 3D • Planta Técnica</span>
           </div>
 
-          <div className="w-[85%] sm:w-auto shrink-0 card-3d-led rounded-3xl p-6 border-amber-500/40">
-            <div className="w-12 h-12 rounded-2xl bg-amber-500/15 text-amber-400 flex items-center justify-center mb-4 border border-amber-500/40">
+          <div className="w-[85%] sm:w-auto shrink-0 card-3d-led p-6">
+            <div className="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center mb-4 border border-amber-500/40">
               <Lightbulb className="w-6 h-6" />
             </div>
             <h4 className="text-lg font-black text-white mb-2">Parceiros Complementares</h4>
@@ -395,7 +401,7 @@ export default function ApresentacaoPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="card-3d-led p-6 sm:p-8 rounded-3xl border-emerald-500/40">
+          <div className="card-3d-led p-6 sm:p-8">
             <div className="flex items-center gap-3 mb-5">
               <div className="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">
                 <Check className="w-5 h-5" />
@@ -422,7 +428,7 @@ export default function ApresentacaoPage() {
             </ul>
           </div>
 
-          <div className="card-3d-led p-6 sm:p-8 rounded-3xl border-rose-500/40">
+          <div className="card-3d-led p-6 sm:p-8 border-rose-500/50">
             <div className="flex items-center gap-3 mb-5">
               <div className="w-9 h-9 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center font-bold">
                 <AlertTriangle className="w-5 h-5" />
@@ -453,7 +459,7 @@ export default function ApresentacaoPage() {
 
       {/* DOBRA 6: CAPTURA ESTRATÉGICA DE LEADS */}
       <section className="py-14 sm:py-20 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto z-10">
-        <div className="card-3d-led rounded-3xl p-6 sm:p-10 border-orange-500/40 relative overflow-hidden text-center">
+        <div className="card-3d-led rounded-3xl p-6 sm:p-10 border-orange-500/50 relative overflow-hidden text-center">
           <div className="w-12 h-12 rounded-2xl bg-orange-500/20 text-orange-400 flex items-center justify-center mx-auto mb-4 border border-orange-500/40">
             <Bell className="w-6 h-6" />
           </div>
@@ -471,7 +477,7 @@ export default function ApresentacaoPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Seu e-mail" 
-              className="w-full sm:flex-1 bg-black/50 border border-white/20 rounded-xl px-4 py-3.5 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-orange-500 transition shadow-inner"
+              className="w-full sm:flex-1 bg-black/60 border border-white/30 rounded-xl px-4 py-3.5 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-orange-500 transition shadow-inner"
             />
             <input 
               type="text" 
@@ -479,7 +485,7 @@ export default function ApresentacaoPage() {
               value={city}
               onChange={(e) => setCity(e.target.value)}
               placeholder="Sua cidade (ex: Jundiaí)" 
-              className="w-full sm:w-44 bg-black/50 border border-white/20 rounded-xl px-4 py-3.5 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-orange-500 transition shadow-inner"
+              className="w-full sm:w-44 bg-black/60 border border-white/30 rounded-xl px-4 py-3.5 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-orange-500 transition shadow-inner"
             />
             <button 
               type="submit" 
@@ -508,7 +514,7 @@ export default function ApresentacaoPage() {
         </div>
 
         <div className="space-y-3.5">
-          <details className="card-3d-led rounded-2xl p-4 sm:p-5 border-white/10 group cursor-pointer" open>
+          <details className="card-3d-led p-4 sm:p-5 border-white/20 group cursor-pointer" open>
             <summary className="text-xs sm:text-sm font-bold text-white flex items-center justify-between list-none">
               <span>1. O visitante paga alguma coisa para consultar os contatos?</span>
               <ChevronDown className="w-4 h-4 text-orange-400 group-open:rotate-180 transition-transform" />
@@ -518,7 +524,7 @@ export default function ApresentacaoPage() {
             </p>
           </details>
 
-          <details className="card-3d-led rounded-2xl p-4 sm:p-5 border-white/10 group cursor-pointer">
+          <details className="card-3d-led p-4 sm:p-5 border-white/20 group cursor-pointer">
             <summary className="text-xs sm:text-sm font-bold text-white flex items-center justify-between list-none">
               <span>2. A Vitrine Moveleira oferece garantia sobre os serviços anunciados?</span>
               <ChevronDown className="w-4 h-4 text-orange-400 group-open:rotate-180 transition-transform" />
@@ -528,7 +534,7 @@ export default function ApresentacaoPage() {
             </p>
           </details>
 
-          <details className="card-3d-led rounded-2xl p-4 sm:p-5 border-white/10 group cursor-pointer">
+          <details className="card-3d-led p-4 sm:p-5 border-white/20 group cursor-pointer">
             <summary className="text-xs sm:text-sm font-bold text-white flex items-center justify-between list-none">
               <span>3. A plataforma cobra comissões dos profissionais sobre os serviços fechados?</span>
               <ChevronDown className="w-4 h-4 text-orange-400 group-open:rotate-180 transition-transform" />
@@ -538,7 +544,7 @@ export default function ApresentacaoPage() {
             </p>
           </details>
 
-          <details className="card-3d-led rounded-2xl p-4 sm:p-5 border-white/10 group cursor-pointer">
+          <details className="card-3d-led p-4 sm:p-5 border-white/20 group cursor-pointer">
             <summary className="text-xs sm:text-sm font-bold text-white flex items-center justify-between list-none">
               <span>4. Como os pagamentos são realizados? O dinheiro passa pelo site?</span>
               <ChevronDown className="w-4 h-4 text-orange-400 group-open:rotate-180 transition-transform" />
@@ -548,7 +554,7 @@ export default function ApresentacaoPage() {
             </p>
           </details>
 
-          <details className="card-3d-led rounded-2xl p-4 sm:p-5 border-white/10 group cursor-pointer">
+          <details className="card-3d-led p-4 sm:p-5 border-white/20 group cursor-pointer">
             <summary className="text-xs sm:text-sm font-bold text-white flex items-center justify-between list-none">
               <span>5. Quais cuidados o cliente deve tomar ao acertar um serviço?</span>
               <ChevronDown className="w-4 h-4 text-orange-400 group-open:rotate-180 transition-transform" />
@@ -558,7 +564,7 @@ export default function ApresentacaoPage() {
             </p>
           </details>
 
-          <details className="card-3d-led rounded-2xl p-4 sm:p-5 border-white/10 group cursor-pointer">
+          <details className="card-3d-led p-4 sm:p-5 border-white/20 group cursor-pointer">
             <summary className="text-xs sm:text-sm font-bold text-white flex items-center justify-between list-none">
               <span>6. Como um profissional ou empresa pode divulgar no catálogo?</span>
               <ChevronDown className="w-4 h-4 text-orange-400 group-open:rotate-180 transition-transform" />
@@ -593,7 +599,7 @@ export default function ApresentacaoPage() {
               href="/encontrar-profissionais"
               className="btn-super-led-pulsing inline-flex items-center gap-2 px-9 py-4 rounded-2xl text-sm font-black text-white"
             >
-              <span>Consultar Anúncios Agora</span>
+              <span>Entrar no App da Vitrine</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -604,21 +610,14 @@ export default function ApresentacaoPage() {
         </div>
       </footer>
 
-      {/* BARRA FIXA MOBILE */}
-      <div className="sm:hidden fixed bottom-0 left-0 right-0 z-50 p-3 bg-[#05070d]/95 backdrop-blur-xl border-t border-white/10 shadow-2xl flex items-center gap-2.5">
+      {/* BARRA FIXA MOBILE COM O BOTÃO ÚNICO DE ENTRAR NO APP */}
+      <div className="sm:hidden fixed bottom-0 left-0 right-0 z-50 p-3 bg-[#05070d]/95 backdrop-blur-xl border-t border-purple-500/30 shadow-2xl flex items-center">
         <Link
           href="/encontrar-profissionais"
-          className="btn-super-led-pulsing flex-1 py-3.5 px-3 rounded-xl text-xs font-black text-white text-center flex items-center justify-center gap-1.5 shadow-lg"
+          className="btn-super-led-pulsing w-full py-4 px-4 rounded-xl text-xs font-black text-white text-center flex items-center justify-center gap-2 shadow-lg uppercase tracking-wider"
         >
-          <Search className="w-4 h-4" />
-          <span>Buscar Anúncios no App</span>
-        </Link>
-        <Link
-          href="/criar-conta"
-          className="card-3d-led py-3.5 px-3 rounded-xl text-xs font-bold text-slate-300 text-center flex items-center justify-center gap-1.5 border border-white/20"
-        >
-          <Briefcase className="w-4 h-4 text-orange-400" />
-          <span>Anunciar</span>
+          <span>Entrar no App da Vitrine Agora</span>
+          <ArrowRight className="w-4 h-4" />
         </Link>
       </div>
 
