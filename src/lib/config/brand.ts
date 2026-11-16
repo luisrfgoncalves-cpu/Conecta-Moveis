@@ -37,7 +37,7 @@ export function getBrandConfig(): BrandConfig {
   // Base URL: VERCEL_URL / NEXT_PUBLIC_APP_URL / fallback seguro
   let baseUrl = (
     process.env.NEXT_PUBLIC_APP_URL ||
-    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://conecta-moveis.vercel.app')
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://vitrinemoveleira.vercel.app')
   ).trim();
   if (baseUrl.endsWith('/')) {
     baseUrl = baseUrl.slice(0, -1);

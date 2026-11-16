@@ -101,7 +101,7 @@ export default async function ProfissionalPublicPage({ params }: PageProps) {
     : { eligible: false, reason: 'Avaliações não disponíveis no momento.' };
   const isOwner = user ? user.id === (professional as any).user_id : false;
 
-  const profileUrl = `${process.env.NEXT_PUBLIC_SITE_URL ?? 'https://vitrine-moveleira.vercel.app'}/profissionais/${slug}`;
+  const profileUrl = `${process.env.NEXT_PUBLIC_SITE_URL ?? process.env.NEXT_PUBLIC_APP_URL ?? 'https://vitrinemoveleira.vercel.app'}/profissionais/${slug}`;
 
   const isNew = () => {
     const createdDate = new Date(professional.created_at);
