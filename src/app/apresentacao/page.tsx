@@ -126,23 +126,23 @@ export default function ApresentacaoPage() {
           perto de você.
         </h1>
 
-        {/* Sub-headline: Fonte aumentada e respirada no mobile */}
-        <p className="text-sm sm:text-sm md:text-base text-slate-200 max-w-2xl mx-auto leading-relaxed mb-5 sm:mb-4 font-normal">
+        {/* Sub-headline: Fonte aumentada e mais visível no mobile */}
+        <p className="text-[0.975rem] sm:text-sm md:text-base text-slate-200 max-w-2xl mx-auto leading-relaxed mb-5 sm:mb-4 font-normal">
           A vitrine digital que reúne quem fabrica, projeta e monta móveis na sua cidade. Sem intermediários cobrando comissões: veja fotos de serviços informadas pelos anunciantes e converse{' '}
           <strong className="text-white font-bold">direto pelo WhatsApp</strong>.
         </p>
 
-        {/* O VÍDEO CENTRALIZADO */}
-        <div className="max-w-[620px] md:max-w-[660px] lg:max-w-[700px] mx-auto mb-6 sm:mb-4">
-          <div className="card-3d-led rounded-3xl p-2 sm:p-2 vsl-frame-led relative border-2 border-orange-500/60 shadow-[0_0_40px_-5px_rgba(255,107,0,0.4)]">
-            <div className="relative rounded-2xl overflow-hidden aspect-video max-h-[46vh] sm:max-h-[48vh] bg-black border border-white/10 flex items-center justify-center">
+        {/* O VÍDEO CENTRALIZADO COM MOLDURA AJUSTADA PERFEITAMENTE */}
+        <div className="w-full max-w-[620px] md:max-w-[660px] lg:max-w-[700px] mx-auto mb-6 sm:mb-4">
+          <div className="card-3d-led rounded-3xl p-1 sm:p-1.5 vsl-frame-led relative border-2 border-orange-500/60 shadow-[0_0_40px_-5px_rgba(255,107,0,0.4)] overflow-hidden">
+            <div className="relative rounded-2xl overflow-hidden aspect-video w-full bg-black flex items-center justify-center">
               <video
                 ref={videoRef}
                 controls
                 playsInline
                 poster="/brand/vitrine-moveleira-cover.jpg"
                 preload="metadata"
-                className="w-full h-full object-contain rounded-xl"
+                className="w-full h-full object-cover rounded-xl"
                 onTimeUpdate={handleVideoProgress}
                 onEnded={handleVideoEnded}
               >
