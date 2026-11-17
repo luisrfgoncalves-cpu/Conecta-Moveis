@@ -169,7 +169,7 @@ export default function ApresentacaoPage() {
           }`}
         >
           <Link
-            href="/encontrar-profissionais"
+            href="/"
             className="btn-super-led-pulsing w-full py-4 sm:py-5 px-8 text-base sm:text-lg font-black text-white flex items-center justify-center gap-3 tracking-wide cursor-pointer shadow-2xl"
           >
             <span>Conhecer a Vitrine Moveleira</span>
@@ -568,7 +568,7 @@ export default function ApresentacaoPage() {
           </p>
           <div className="pt-2">
             <Link
-              href="/encontrar-profissionais"
+              href="/"
               className="btn-super-led-pulsing inline-flex items-center gap-2 px-9 py-4 text-base font-black text-white"
             >
               <span>Conhecer a Vitrine Moveleira</span>
