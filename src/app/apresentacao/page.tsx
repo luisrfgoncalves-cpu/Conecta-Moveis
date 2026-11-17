@@ -94,7 +94,7 @@ export default function ApresentacaoPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#05070d] text-slate-100 selection:bg-orange-500 selection:text-white pb-24 sm:pb-0">
+    <div className="min-h-screen bg-[#05070d] text-slate-100 selection:bg-orange-500 selection:text-white">
       
       {/* DOBRA 1: HERO VSL (SEM BARRA FIXA, APENAS O VÍDEO E O SUPER BOTÃO DISPARADO) */}
       <section className="relative pt-6 pb-12 sm:pt-10 sm:pb-16 px-4 sm:px-6 lg:px-8 z-10 text-center">
@@ -581,17 +581,6 @@ export default function ApresentacaoPage() {
           </div>
         </div>
       </footer>
-
-      {/* BARRA FIXA MOBILE COM O BOTÃO ÚNICO DE ENTRAR NO APP */}
-      <div className="sm:hidden fixed bottom-0 left-0 right-0 z-50 p-3 bg-[#05070d]/95 backdrop-blur-xl border-t border-purple-500/30 shadow-2xl flex items-center">
-        <Link
-          href="/encontrar-profissionais"
-          className="btn-super-led-pulsing w-full py-4 px-4 text-xs font-black text-white text-center flex items-center justify-center gap-2 shadow-lg tracking-wide"
-        >
-          <span>Conhecer a Vitrine Moveleira</span>
-          <ArrowRight className="w-4 h-4" />
-        </Link>
-      </div>
 
     </div>
   );
