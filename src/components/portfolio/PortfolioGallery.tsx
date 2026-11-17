@@ -269,16 +269,30 @@ export function PortfolioGallery({
               <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-amber-400/40 to-transparent" />
             </div>
 
-            {/* MEIO DO TEMPLATE: CENÁRIO EMOLDURADO DA FOTO */}
-            <div className="relative flex-1 min-h-[44vh] sm:min-h-[50vh] md:min-h-[54vh] bg-[#05070d]/80 flex items-center justify-center p-3 sm:p-5 overflow-hidden">
+            {/* MEIO DO TEMPLATE: CENÁRIO EMOLDURADO EM PAINEL DE MADEIRA NOBRE */}
+            <div className="relative flex-1 min-h-[44vh] sm:min-h-[50vh] md:min-h-[56vh] flex items-center justify-center p-3 sm:p-6 overflow-hidden">
               
-              {/* Moldura de Exposição da Foto com Sombra 3D e Iluminação */}
-              <div className="relative max-h-[44vh] sm:max-h-[50vh] md:max-h-[54vh] w-full h-full flex items-center justify-center">
+              {/* TEXTURA DE MADEIRA NOBRE (Cenário de Showroom que cerca a foto eliminando o fundo preto) */}
+              <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+                <Image
+                  src="/images/textura-madeira-showroom.jpg"
+                  alt="Painel ripado de madeira nobre"
+                  fill
+                  className="object-cover object-center scale-105"
+                  priority
+                />
+                {/* Iluminação suave de estúdio sobre a madeira: luz central focada e vinheta aconchegante */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#060912]/85 via-black/30 to-[#060912]/85" />
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,200,120,0.18)_0%,rgba(0,0,0,0.6)_85%)]" />
+              </div>
+
+              {/* Moldura de Exposição da Foto com Sombra 3D e Friso Dourado sobre a Madeira */}
+              <div className="relative z-10 max-h-[44vh] sm:max-h-[50vh] md:max-h-[54vh] w-full h-full flex items-center justify-center">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={activeImage.image_url}
                   alt={`${activeProject.title} — foto ${activeImageIdx + 1}`}
-                  className="max-h-[44vh] sm:max-h-[50vh] md:max-h-[54vh] max-w-full object-contain rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.8)] border border-white/15 select-none"
+                  className="max-h-[44vh] sm:max-h-[50vh] md:max-h-[54vh] max-w-full object-contain rounded-2xl shadow-[0_25px_60px_rgba(0,0,0,0.95)] border-2 border-amber-500/35 select-none bg-black/40"
                 />
 
                 {/* Selo Ilustrativo se houver */}
@@ -291,14 +305,14 @@ export function PortfolioGallery({
                 )}
               </div>
 
-              {/* Setas de Navegação Ergonômicas coladas na lateral */}
+              {/* Setas de Navegação Ergonômicas flutuando sobre o painel */}
               {activeProject.images.length > 1 && (
                 <>
                   <button
                     type="button"
                     onClick={prevImage}
                     aria-label="Foto anterior"
-                    className="absolute left-3 sm:left-5 z-20 p-2.5 sm:p-3 rounded-full bg-slate-950/85 hover:bg-orange-500 border border-white/20 text-white transition-all shadow-2xl cursor-pointer"
+                    className="absolute left-3 sm:left-5 z-20 p-2.5 sm:p-3 rounded-full bg-slate-950/90 hover:bg-orange-500 border border-amber-500/40 text-amber-300 hover:text-white transition-all shadow-2xl cursor-pointer"
                   >
                     <ChevronLeft className="w-5 h-5" />
                   </button>
@@ -306,7 +320,7 @@ export function PortfolioGallery({
                     type="button"
                     onClick={nextImage}
                     aria-label="Próxima foto"
-                    className="absolute right-3 sm:right-5 z-20 p-2.5 sm:p-3 rounded-full bg-slate-950/85 hover:bg-orange-500 border border-white/20 text-white transition-all shadow-2xl cursor-pointer"
+                    className="absolute right-3 sm:right-5 z-20 p-2.5 sm:p-3 rounded-full bg-slate-950/90 hover:bg-orange-500 border border-amber-500/40 text-amber-300 hover:text-white transition-all shadow-2xl cursor-pointer"
                   >
                     <ChevronRight className="w-5 h-5" />
                   </button>
