@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { Download, X, Smartphone, Share2, PlusSquare, ArrowRight } from 'lucide-react';
 
 interface BeforeInstallPromptEvent extends Event {
@@ -10,43 +11,68 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 export function PwaInstallBanner() {
+  const pathname = usePathname();
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showBanner, setShowBanner] = useState(false);
   const [showGuideModal, setShowGuideModal] = useState(false);
   const [isIos, setIsIos] = useState(false);
 
+  // Não exibir banner na página de apresentação para não obstruir o vídeo ou botão CTA
+  const isApresentacao = pathname?.startsWith('/apresentacao');
+
   useEffect(() => {
-    // Detectar iOS / Safari
-    if (typeof window !== 'undefined') {
-      const ua = window.navigator.userAgent.toLowerCase();
-      const isApple = /iphone|ipad|ipod/.test(ua);
-      setIsIos(isApple);
+    if (typeof window === 'undefined') return;
 
-      // Checar se já foi dispensado nesta sessão
-      const dismissed = sessionStorage.getItem('pwa_banner_dismissed');
-      const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+    const ua = window.navigator.userAgent.toLowerCase();
+    const isApple = /iphone|ipad|ipod/.test(ua);
+    setIsIos(isApple);
 
-      if (!dismissed && !isStandalone) {
-        // No iOS não há evento beforeinstallprompt, então exibe o banner após 3s
-        if (isApple) {
-          const timer = setTimeout(() => setShowBanner(true), 3000);
-          return () => clearTimeout(timer);
-        }
-      }
+    // Se estiver rodando como aplicativo instalado (modo standalone), não exibir o banner
+    const isStandalone =
+      window.matchMedia('(display-mode: standalone)').matches ||
+      Boolean((window.navigator as unknown as { standalone?: boolean }).standalone) ||
+      document.referrer.includes('android-app://');
+
+    if (isStandalone || isApresentacao) {
+      setShowBanner(false);
+      return;
+    }
+
+    // Checar se já foi dispensado nesta sessão do navegador
+    const dismissed = sessionStorage.getItem('pwa_banner_dismissed');
+
+    // Timer de fallback para TODOS os dispositivos (Android, iPhone e PC)
+    // Garante que o banner apareça mesmo se o navegador demorar ou não disparar beforeinstallprompt
+    let timer: NodeJS.Timeout | null = null;
+    if (!dismissed) {
+      timer = setTimeout(() => {
+        setShowBanner(true);
+      }, 2500);
     }
 
     const handleBeforeInstall = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
-      const dismissed = sessionStorage.getItem('pwa_banner_dismissed');
-      if (!dismissed) {
+      if (!sessionStorage.getItem('pwa_banner_dismissed') && !isApresentacao) {
         setShowBanner(true);
       }
     };
 
+    const handleAppInstalled = () => {
+      setShowBanner(false);
+      setShowGuideModal(false);
+      sessionStorage.setItem('pwa_banner_dismissed', 'true');
+    };
+
     window.addEventListener('beforeinstallprompt', handleBeforeInstall);
-    return () => window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
-  }, []);
+    window.addEventListener('appinstalled', handleAppInstalled);
+
+    return () => {
+      if (timer) clearTimeout(timer);
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
+      window.removeEventListener('appinstalled', handleAppInstalled);
+    };
+  }, [isApresentacao]);
 
   const handleInstallClick = async () => {
     if (deferredPrompt) {
@@ -67,6 +93,7 @@ export function PwaInstallBanner() {
     sessionStorage.setItem('pwa_banner_dismissed', 'true');
   };
 
+  if (isApresentacao) return null;
   if (!showBanner && !showGuideModal) return null;
 
   return (

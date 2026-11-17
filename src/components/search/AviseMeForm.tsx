@@ -1,22 +1,33 @@
 'use client';
 
 import { useState } from 'react';
-import { Bell, Mail } from 'lucide-react';
+import { Bell, Mail, X } from 'lucide-react';
 import { CATEGORIES_CATALOG } from '@/lib/profile/schemas';
 import { registerAlertRequest } from '@/lib/alerts/actions';
 
 interface AviseMeFormProps {
   cidadeSugerida?: string;
   categoriaSugerida?: string;
+  onClose?: () => void;
 }
 
-export function AviseMeForm({ cidadeSugerida = '', categoriaSugerida = '' }: AviseMeFormProps) {
+export function AviseMeForm({ cidadeSugerida = '', categoriaSugerida = '', onClose }: AviseMeFormProps) {
+  const [dismissed, setDismissed] = useState(false);
   const [email, setEmail] = useState('');
   const [cidade, setCidade] = useState(cidadeSugerida);
   const [categoria, setCategoria] = useState(categoriaSugerida);
   const [consentimento, setConsentimento] = useState(false);
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
+
+  const handleClose = () => {
+    setDismissed(true);
+    onClose?.();
+  };
+
+  if (dismissed) {
+    return null;
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,7 +46,15 @@ export function AviseMeForm({ cidadeSugerida = '', categoriaSugerida = '' }: Avi
 
   if (status === 'success') {
     return (
-      <div className="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-6 text-center space-y-2">
+      <div className="relative rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-6 text-center space-y-2">
+        <button
+          type="button"
+          onClick={handleClose}
+          aria-label="Fechar aviso"
+          className="absolute top-4 right-4 p-1.5 rounded-lg text-emerald-400 hover:text-emerald-200 hover:bg-emerald-500/20 transition cursor-pointer"
+        >
+          <X className="w-4 h-4" />
+        </button>
         <div className="w-10 h-10 mx-auto rounded-full bg-emerald-500/20 flex items-center justify-center">
           <Bell className="w-5 h-5 text-emerald-400" />
         </div>
@@ -49,8 +68,18 @@ export function AviseMeForm({ cidadeSugerida = '', categoriaSugerida = '' }: Avi
   }
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/5 p-6 space-y-4 text-left">
-      <div className="flex items-center gap-2">
+    <div className="relative rounded-2xl border border-white/10 bg-white/5 p-6 space-y-4 text-left">
+      <button
+        type="button"
+        onClick={handleClose}
+        aria-label="Fechar aviso"
+        className="absolute top-4 right-4 p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition cursor-pointer"
+        title="Fechar"
+      >
+        <X className="w-4 h-4" />
+      </button>
+
+      <div className="flex items-center gap-2 pr-8">
         <Bell className="w-5 h-5 text-orange-400 shrink-0" />
         <h4 className="text-sm font-bold text-white">Avise-me quando houver profissional</h4>
       </div>
