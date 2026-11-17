@@ -26,6 +26,15 @@ export default function ApresentacaoPage() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [ctaRevealed, setCtaRevealed] = useState(false);
 
+  useEffect(() => {
+    // No celular, o botão sempre aparece após 5 segundos no máximo como fallback
+    const mobileTimer = setTimeout(() => {
+      setCtaRevealed(true);
+    }, 5000);
+
+    return () => clearTimeout(mobileTimer);
+  }, []);
+
   const handleVideoProgress = useCallback(() => {
     if (videoRef.current) {
       const current = videoRef.current.currentTime;
@@ -150,13 +159,13 @@ export default function ApresentacaoPage() {
           </div>
         </div>
 
-        {/* BOTÃO ÚNICO DISPARADO: CANTOS ARREDONDADOS E TEXTO OBJETIVO */}
+        {/* BOTÃO ÚNICO DISPARADO: NO CELULAR SEMPRE VISÍVEL / NO DESKTOP FADE-IN */}
         <div 
           id="cta-container" 
           className={`max-w-md mx-auto mb-8 transition-all duration-700 ease-out ${
             ctaRevealed 
-              ? 'opacity-100 translate-y-0' 
-              : 'opacity-0 translate-y-6 pointer-events-none'
+              ? 'opacity-100 translate-y-0 pointer-events-auto' 
+              : 'max-sm:opacity-100 max-sm:translate-y-0 max-sm:pointer-events-auto sm:opacity-0 sm:translate-y-6 sm:pointer-events-none'
           }`}
         >
           <Link
