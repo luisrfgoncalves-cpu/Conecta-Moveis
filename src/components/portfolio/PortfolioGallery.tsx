@@ -11,7 +11,9 @@ import {
   Sparkles,
   MessageCircle,
   MapPin,
-  Star,
+  Camera,
+  Layers,
+  ArrowRight,
 } from 'lucide-react';
 import { ReportButton } from '@/components/reports/ReportButton';
 import { trackWhatsAppClick } from '@/lib/contact/actions';
@@ -112,7 +114,6 @@ export function PortfolioGallery({
     const touchEndX = e.changedTouches[0].clientX;
     const diff = touchStartXRef.current - touchEndX;
 
-    // Se deslizou mais de 45px
     if (diff > 45) {
       nextImage();
     } else if (diff < -45) {
@@ -133,6 +134,7 @@ export function PortfolioGallery({
 
   return (
     <div className="space-y-6">
+      {/* Grade de Projetos na Página */}
       {portfolio.map((project, pIdx) => (
         <div key={project.id} className="space-y-3">
           <div>
@@ -149,7 +151,6 @@ export function PortfolioGallery({
             )}
           </div>
 
-          {/* Grade de Fotos */}
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {project.images.map((img, imgIdx) => (
               <div
@@ -166,15 +167,13 @@ export function PortfolioGallery({
                   sizes="(max-width: 640px) 50vw, 33vw"
                 />
 
-                {/* Overlay de hover com botão de expansão */}
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-end justify-between p-3">
                   <span className="text-[11px] font-bold text-white flex items-center gap-1">
                     <Maximize2 className="w-3.5 h-3.5 text-orange-400" />
-                    Ampliar
+                    Ver no mostruário
                   </span>
                 </div>
 
-                {/* Selos de Foto */}
                 {img.image_type === 'ilustrativa' && (
                   <div className="absolute top-2 left-2 z-10">
                     <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-950/85 text-blue-300 border border-blue-500/30 backdrop-blur-md">
@@ -191,7 +190,6 @@ export function PortfolioGallery({
                   </div>
                 )}
 
-                {/* Botão de Denúncia */}
                 <div
                   className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity z-10"
                   onClick={(e) => e.stopPropagation()}
@@ -208,185 +206,222 @@ export function PortfolioGallery({
         </div>
       ))}
 
-      {/* LIGHTBOX MODAL EM TELA CHEIA */}
+      {/* TEMPLATE DE MOSTRUÁRIO VITRINE MOVELEIRA (ESTILO CANVA / SHOWROOM) */}
       {activeProject && activeImage && (
         <div
           role="dialog"
           aria-modal="true"
-          className="fixed inset-0 z-50 bg-slate-950/95 backdrop-blur-xl flex flex-col justify-between animate-in fade-in duration-200"
+          className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6 overflow-hidden animate-in fade-in duration-200"
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
         >
-          {/* Barra Superior (Topo) */}
-          <div className="flex items-center justify-between px-4 sm:px-6 py-3.5 border-b border-white/10 bg-slate-950/60 z-20">
-            <div className="flex items-center gap-3 min-w-0">
-              <span className="px-2.5 py-1 rounded-lg bg-orange-500/20 text-orange-400 border border-orange-500/30 text-xs font-black shrink-0">
-                {activeImageIdx + 1} / {activeProject.images.length}
-              </span>
-              <div className="min-w-0">
-                <h4 className="text-xs sm:text-sm font-bold text-white truncate">
-                  {activeProject.title}
-                </h4>
-                <p className="text-[11px] text-slate-400 truncate">
-                  {professionalName} • {professionalCity} - {professionalState}
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2 shrink-0">
-              <ReportButton
-                targetType="image"
-                targetId={activeImage.id}
-                isLoggedIn={isLoggedIn}
-              />
-              <button
-                type="button"
-                onClick={closeLightbox}
-                aria-label="Fechar visualização"
-                className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition cursor-pointer"
-                title="Fechar (Esc)"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
+          {/* FUNDO AMBIENTAL DINÂMICO DESFOCADO (Elimina 100% do espaço vazio preto em volta) */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={activeImage.image_url}
+              alt=""
+              className="w-full h-full object-cover blur-3xl opacity-40 scale-125 transform transition-all duration-700"
+            />
+            <div className="absolute inset-0 bg-slate-950/75" />
           </div>
 
-          {/* Área Central da Foto com Navegação */}
-          <div className="relative flex-1 flex items-center justify-center p-3 sm:p-6 overflow-hidden min-h-0">
-            {/* Seta Esquerda (Anterior) */}
-            {activeProject.images.length > 1 && (
-              <button
-                type="button"
-                onClick={prevImage}
-                aria-label="Foto anterior"
-                className="absolute left-2 sm:left-4 z-20 p-2.5 sm:p-3 rounded-full bg-slate-900/80 hover:bg-orange-500 border border-white/15 text-white transition-all shadow-xl cursor-pointer"
-              >
-                <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
-              </button>
-            )}
+          {/* CARD DO TEMPLATE DE APRESENTAÇÃO */}
+          <div className="relative w-full max-w-5xl max-h-[94vh] sm:max-h-[90vh] bg-slate-950/90 backdrop-blur-2xl border border-white/15 rounded-3xl shadow-2xl flex flex-col md:flex-row overflow-hidden">
+            
+            {/* LADO VISUAL: QUADRO DA FOTO (Adaptação para Vertical, Horizontal ou Quadrada) */}
+            <div className="relative flex-1 min-h-[42vh] md:min-h-0 bg-black/40 flex items-center justify-center p-3 sm:p-6 overflow-hidden group">
+              
+              {/* Moldura da Imagem */}
+              <div className="relative max-h-[42vh] sm:max-h-[50vh] md:max-h-[76vh] w-full h-full flex items-center justify-center">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={activeImage.image_url}
+                  alt={`${activeProject.title} — foto ${activeImageIdx + 1}`}
+                  className="max-h-[42vh] sm:max-h-[50vh] md:max-h-[76vh] max-w-full object-contain rounded-2xl shadow-2xl border border-white/10 select-none"
+                />
 
-            {/* Imagem em Resolução Original */}
-            <div className="relative max-h-[62vh] sm:max-h-[70vh] w-full h-full flex items-center justify-center">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={activeImage.image_url}
-                alt={`${activeProject.title} — foto ${activeImageIdx + 1}`}
-                className="max-h-[62vh] sm:max-h-[70vh] max-w-[95vw] sm:max-w-[85vw] object-contain rounded-2xl shadow-2xl border border-white/10"
-              />
+                {/* Selo no topo da foto */}
+                {activeImage.image_type === 'ilustrativa' && (
+                  <div className="absolute top-3 left-3 z-10">
+                    <span className="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-slate-950/85 text-blue-300 border border-blue-500/30 backdrop-blur-md shadow-lg">
+                      Imagem ilustrativa
+                    </span>
+                  </div>
+                )}
+              </div>
 
-              {activeImage.image_type === 'ilustrativa' && (
-                <div className="absolute top-4 left-4 z-10">
-                  <span className="px-3 py-1 rounded-lg text-xs font-bold bg-slate-950/85 text-blue-300 border border-blue-500/30 backdrop-blur-md shadow-lg">
-                    Imagem ilustrativa
-                  </span>
-                </div>
+              {/* Setas de Navegação Ergonômicas (Flutuam junto à foto) */}
+              {activeProject.images.length > 1 && (
+                <>
+                  <button
+                    type="button"
+                    onClick={prevImage}
+                    aria-label="Foto anterior"
+                    className="absolute left-3 md:left-5 z-20 p-2 sm:p-2.5 rounded-full bg-slate-950/80 hover:bg-orange-500 border border-white/15 text-white transition-all shadow-xl cursor-pointer"
+                  >
+                    <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={nextImage}
+                    aria-label="Próxima foto"
+                    className="absolute right-3 md:right-5 z-20 p-2 sm:p-2.5 rounded-full bg-slate-950/80 hover:bg-orange-500 border border-white/15 text-white transition-all shadow-xl cursor-pointer"
+                  >
+                    <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                  </button>
+                </>
               )}
             </div>
 
-            {/* Seta Direita (Próxima) */}
-            {activeProject.images.length > 1 && (
-              <button
-                type="button"
-                onClick={nextImage}
-                aria-label="Próxima foto"
-                className="absolute right-2 sm:right-4 z-20 p-2.5 sm:p-3 rounded-full bg-slate-900/80 hover:bg-orange-500 border border-white/15 text-white transition-all shadow-xl cursor-pointer"
-              >
-                <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
-              </button>
-            )}
-          </div>
-
-          {/* Miniaturas de Navegação Rápida (quando houver mais de 1 foto) */}
-          {activeProject.images.length > 1 && (
-            <div className="flex items-center justify-center gap-2 px-4 py-2 bg-slate-950/80 border-t border-white/5 overflow-x-auto max-w-full z-10">
-              {activeProject.images.map((img, thumbIdx) => (
-                <button
-                  key={img.id}
-                  type="button"
-                  onClick={() => setActiveImageIdx(thumbIdx)}
-                  className={`relative w-12 h-12 rounded-xl overflow-hidden shrink-0 border-2 transition-all cursor-pointer ${
-                    thumbIdx === activeImageIdx
-                      ? 'border-orange-500 scale-105 shadow-md'
-                      : 'border-white/15 opacity-60 hover:opacity-100'
-                  }`}
-                >
-                  <Image
-                    src={img.thumb_url || img.image_url}
-                    alt={`Miniatura ${thumbIdx + 1}`}
-                    fill
-                    className="object-cover"
-                  />
-                </button>
-              ))}
-            </div>
-          )}
-
-          {/* Template de Rodapé da Vitrine com Conversão Direta */}
-          <div className="px-4 sm:px-6 py-4 border-t border-white/10 bg-slate-950/90 z-20">
-            <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-              <div className="flex items-center gap-3 min-w-0">
-                <div className="relative w-11 h-11 rounded-2xl bg-slate-900 border border-white/15 overflow-hidden shrink-0 flex items-center justify-center">
-                  {professionalAvatar ? (
-                    <Image
-                      src={professionalAvatar}
-                      alt={professionalName}
-                      fill
-                      className="object-cover"
-                    />
-                  ) : (
-                    <span className="text-sm font-black text-slate-200">
-                      {professionalName.slice(0, 2).toUpperCase()}
-                    </span>
-                  )}
-                </div>
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-white text-sm truncate">
-                      {professionalName}
-                    </span>
-                    <span className="text-[11px] text-slate-400 flex items-center gap-1 shrink-0">
-                      <MapPin className="w-3 h-3 text-sky-400" />
-                      {professionalCity}
+            {/* LADO EDITORIAL: PAINEL DE APRESENTAÇÃO DO PROJETO (ESTILO PRANCHA / CANVA) */}
+            <div className="w-full md:w-80 lg:w-96 p-4 sm:p-6 flex flex-col justify-between border-t md:border-t-0 md:border-l border-white/10 bg-slate-900/70 backdrop-blur-md overflow-y-auto max-h-[48vh] md:max-h-[90vh]">
+              
+              {/* Cabeçalho do Card */}
+              <div className="space-y-4">
+                <div className="flex items-center justify-between pb-3 border-b border-white/10">
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-orange-400 animate-pulse" />
+                    <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-orange-400">
+                      Vitrine Moveleira • Mostruário
                     </span>
                   </div>
+
+                  <div className="flex items-center gap-1.5">
+                    <ReportButton
+                      targetType="image"
+                      targetId={activeImage.id}
+                      isLoggedIn={isLoggedIn}
+                    />
+                    <button
+                      type="button"
+                      onClick={closeLightbox}
+                      aria-label="Fechar"
+                      className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition cursor-pointer"
+                      title="Fechar (Esc)"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Título e Descrição */}
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <h3 className="text-base sm:text-lg font-black text-white leading-tight">
+                      {activeProject.title}
+                    </h3>
+                    {activeProject.images.length > 1 && (
+                      <span className="px-2 py-0.5 rounded-md bg-white/10 text-[10px] font-bold text-slate-300 shrink-0">
+                        {activeImageIdx + 1} de {activeProject.images.length}
+                      </span>
+                    )}
+                  </div>
                   {activeProject.description ? (
-                    <p className="text-xs text-slate-300 line-clamp-1 mt-0.5">
+                    <p className="text-xs text-slate-300 leading-relaxed max-h-24 overflow-y-auto pr-1">
                       {activeProject.description}
                     </p>
                   ) : (
-                    <p className="text-xs text-slate-400 line-clamp-1 mt-0.5 flex items-center gap-1">
-                      <Star className="w-3 h-3 text-orange-400" />
+                    <p className="text-xs text-slate-400 flex items-center gap-1">
+                      <Camera className="w-3.5 h-3.5 text-orange-400" />
                       Foto informada pelo anunciante
                     </p>
                   )}
                 </div>
+
+                {/* Card de Identificação do Profissional */}
+                <div className="p-3 rounded-2xl bg-white/5 border border-white/10 flex items-center gap-3">
+                  <div className="relative w-10 h-10 rounded-xl bg-slate-900 border border-white/15 overflow-hidden shrink-0 flex items-center justify-center">
+                    {professionalAvatar ? (
+                      <Image
+                        src={professionalAvatar}
+                        alt={professionalName}
+                        fill
+                        className="object-cover"
+                      />
+                    ) : (
+                      <span className="text-xs font-black text-slate-200">
+                        {professionalName.slice(0, 2).toUpperCase()}
+                      </span>
+                    )}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-xs font-bold text-white truncate">
+                      {professionalName}
+                    </p>
+                    <p className="text-[11px] text-slate-400 flex items-center gap-1 truncate">
+                      <MapPin className="w-3 h-3 text-sky-400 shrink-0" />
+                      {professionalCity} - {professionalState}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Miniaturas Carrossel (Se houver mais de 1 foto no projeto) */}
+                {activeProject.images.length > 1 && (
+                  <div className="space-y-1.5 pt-1">
+                    <div className="flex items-center justify-between text-[11px] text-slate-400">
+                      <span className="flex items-center gap-1">
+                        <Layers className="w-3 h-3 text-orange-400" />
+                        Fotos deste projeto
+                      </span>
+                    </div>
+                    <div className="flex gap-2 overflow-x-auto pb-1 max-w-full">
+                      {activeProject.images.map((img, thumbIdx) => (
+                        <button
+                          key={img.id}
+                          type="button"
+                          onClick={() => setActiveImageIdx(thumbIdx)}
+                          className={`relative w-12 h-12 rounded-xl overflow-hidden shrink-0 border-2 transition-all cursor-pointer ${
+                            thumbIdx === activeImageIdx
+                              ? 'border-orange-500 scale-105 shadow-md'
+                              : 'border-white/10 opacity-60 hover:opacity-100'
+                          }`}
+                        >
+                          <Image
+                            src={img.thumb_url || img.image_url}
+                            alt={`Miniatura ${thumbIdx + 1}`}
+                            fill
+                            className="object-cover"
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
 
-              {/* Botão de Contato com Conversão Contextual */}
-              <div className="w-full sm:w-auto shrink-0">
+              {/* Botão de WhatsApp Comercial / Ação Direta */}
+              <div className="pt-4 mt-2 border-t border-white/10 space-y-1.5">
                 {isLoggedIn ? (
                   professionalWhatsapp ? (
                     <button
                       type="button"
                       onClick={handleWhatsAppContact}
-                      className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-xs sm:text-sm font-bold flex items-center justify-center gap-2 shadow-lg transition cursor-pointer"
+                      className="w-full py-3 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white text-xs sm:text-sm font-black flex items-center justify-center gap-2 shadow-lg transition cursor-pointer"
                     >
-                      <MessageCircle className="w-4 h-4" />
+                      <MessageCircle className="w-4 h-4 shrink-0" />
                       <span>Conversar sobre este serviço</span>
+                      <ArrowRight className="w-3.5 h-3.5 ml-auto" />
                     </button>
                   ) : null
                 ) : (
                   <Link
                     href={`/criar-conta?redirect=/profissionais/${slug}`}
-                    className="w-full sm:w-auto px-5 py-2.5 rounded-xl btn-neon text-xs sm:text-sm font-bold flex items-center justify-center gap-2 shadow-lg text-center"
+                    className="w-full py-3 px-4 rounded-xl btn-neon text-xs sm:text-sm font-black flex items-center justify-center gap-2 shadow-lg text-center"
                   >
-                    <MessageCircle className="w-4 h-4" />
+                    <MessageCircle className="w-4 h-4 shrink-0" />
                     <span>Liberar contato para este serviço</span>
                   </Link>
                 )}
+                <p className="text-[10px] text-slate-400 text-center">
+                  Converse direto pelo WhatsApp sem intermediários
+                </p>
               </div>
+
             </div>
+
           </div>
+
         </div>
       )}
     </div>
