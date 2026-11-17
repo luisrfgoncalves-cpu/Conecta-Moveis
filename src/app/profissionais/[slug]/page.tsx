@@ -28,6 +28,7 @@ import { getProfileReviews, checkReviewEligibility } from '@/lib/reviews/actions
 import { isFeatureFlagActive } from '@/lib/config/actions';
 import { BackButton } from '@/components/navigation/BackButton';
 import { Breadcrumbs } from '@/components/navigation/Breadcrumbs';
+import { PortfolioGallery } from '@/components/portfolio/PortfolioGallery';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -381,61 +382,24 @@ export default async function ProfissionalPublicPage({ params }: PageProps) {
           </div>
         )}
 
-        {/* Fotos de Apresentação — Apenas imagens approved, carregamento preguiçoso */}
+        {/* Fotos de Apresentação — Com visualizador Lightbox e template da plataforma */}
         {professional.portfolio && professional.portfolio.length > 0 && (
           <div className="space-y-5 pt-2 border-t border-white/10">
             <h2 className="text-sm font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
               <Star className="w-4 h-4 text-orange-400" />
               Fotos de Apresentação ({professional.portfolio.length} {professional.portfolio.length === 1 ? 'projeto' : 'projetos'})
             </h2>
-            <div className="space-y-6">
-              {professional.portfolio.map((portfolioItem) => (
-                <div key={portfolioItem.id} className="space-y-3">
-                  <div>
-                    <h3 className="text-sm font-bold text-white">{portfolioItem.title}</h3>
-                    {portfolioItem.description && (
-                      <p className="text-xs text-slate-400 mt-0.5 leading-relaxed">{portfolioItem.description}</p>
-                    )}
-                  </div>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                    {portfolioItem.images.map((img, imgIdx) => (
-                      <div key={img.id} className="relative aspect-square rounded-xl overflow-hidden bg-slate-900 border border-white/10 group">
-                        <Image
-                          src={img.thumb_url || img.image_url}
-                          alt={`${portfolioItem.title} — foto ${imgIdx + 1}`}
-                          fill
-                          className="object-cover transition group-hover:scale-105"
-                          loading="lazy"
-                          sizes="(max-width: 640px) 50vw, 33vw"
-                        />
-                        {img.image_type === 'ilustrativa' && (
-                          <div className="absolute top-2 left-2 z-10">
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-950/80 text-blue-300 border border-blue-500/30 backdrop-blur-md">
-                              Imagem ilustrativa
-                            </span>
-                          </div>
-                        )}
-                        {img.is_demo && (
-                          <div className="absolute bottom-2 left-2 z-10">
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-purple-500/90 text-white backdrop-blur-md">
-                              <Sparkles className="w-2.5 h-2.5" />
-                              Demonstração
-                            </span>
-                          </div>
-                        )}
-                        <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                          <ReportButton
-                            targetType="image"
-                            targetId={img.id}
-                            isLoggedIn={isLoggedIn}
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
+            <PortfolioGallery
+              portfolio={professional.portfolio as any}
+              professionalId={professional.id}
+              professionalName={professional.display_name}
+              professionalCity={professional.city}
+              professionalState={professional.state}
+              professionalAvatar={professional.avatar_url}
+              professionalWhatsapp={professional.whatsapp}
+              slug={slug}
+              isLoggedIn={isLoggedIn}
+            />
           </div>
         )}
 
