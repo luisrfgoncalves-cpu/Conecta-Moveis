@@ -1,11 +1,17 @@
 'use client';
 
 import { useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 
 export function BrandIntroSound() {
+  const pathname = usePathname();
+
   useEffect(() => {
     // Tocar uma única vez por sessão do usuário
     if (typeof window === 'undefined') return;
+
+    // Não tocar na página de apresentação para não conflitar com o vídeo
+    if (pathname?.startsWith('/apresentacao')) return;
 
     const hasPlayed = sessionStorage.getItem('vm_intro_sfx_played');
     if (hasPlayed) return;
@@ -38,7 +44,7 @@ export function BrandIntroSound() {
     // Pequeno delay de 300ms para harmonizar perfeitamente com a animação de entrada do logo
     const timer = setTimeout(playIntro, 300);
     return () => clearTimeout(timer);
-  }, []);
+  }, [pathname]);
 
   return null;
 }

@@ -97,10 +97,10 @@ export default function ApresentacaoPage() {
     <div className="min-h-screen bg-[#05070d] text-slate-100 selection:bg-orange-500 selection:text-white">
       
       {/* DOBRA 1: HERO VSL (SEM BARRA FIXA, APENAS O VÍDEO E O SUPER BOTÃO DISPARADO) */}
-      <section className="relative pt-6 pb-12 sm:pt-10 sm:pb-16 px-4 sm:px-6 lg:px-8 z-10 text-center">
+      <section className="relative pt-4 pb-8 sm:pt-6 sm:pb-12 md:pt-6 md:pb-14 px-4 sm:px-6 lg:px-8 z-10 text-center">
         
         {/* Topo Integrado: Logo original à esquerda sem barra fixa */}
-        <div className="max-w-6xl mx-auto flex items-center justify-between mb-8 sm:mb-12">
+        <div className="max-w-6xl mx-auto flex items-center justify-between mb-4 sm:mb-6">
           <Link href="/" className="flex items-center gap-2 group transition-transform hover:scale-105">
             <Image
               src="/brand/vitrine-moveleira-intro.svg"
@@ -108,17 +108,17 @@ export default function ApresentacaoPage() {
               width={260}
               height={60}
               priority
-              className="h-12 sm:h-16 md:h-18 w-auto object-contain drop-shadow-[0_4px_16px_rgba(0,0,0,0.9)]"
+              className="h-10 sm:h-12 md:h-14 w-auto object-contain drop-shadow-[0_4px_16px_rgba(0,0,0,0.9)]"
             />
           </Link>
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-950/60 border border-purple-500/50 shadow-sm backdrop-blur-md">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-950/60 border border-purple-500/50 shadow-sm backdrop-blur-md">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
             <span className="text-xs sm:text-sm font-bold text-slate-200">Jundiaí e Região</span>
           </div>
         </div>
 
-        {/* Headline Principal Restaurada */}
-        <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white tracking-tight leading-[1.12] max-w-5xl mx-auto mb-5 drop-shadow-[0_0_35px_rgba(255,107,0,0.35)]">
+        {/* Headline Principal Restaurada (sem mudar texto, cirúrgico para caber com folga no PC/Tablet) */}
+        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-black text-white tracking-tight leading-[1.15] max-w-4xl mx-auto mb-3 drop-shadow-[0_0_35px_rgba(255,107,0,0.35)]">
           O jeito inteligente de encontrar{' '}
           <span className="bg-gradient-to-r from-orange-400 via-amber-300 to-orange-500 bg-clip-text text-transparent">
             marceneiros e montadores
@@ -126,22 +126,16 @@ export default function ApresentacaoPage() {
           perto de você.
         </h1>
 
-        {/* Sub-headline */}
-        <p className="text-base sm:text-xl md:text-2xl text-slate-200 max-w-3xl mx-auto leading-relaxed mb-8 font-normal">
+        {/* Sub-headline (mesmo texto, entrelinha otimizada para visualização direta do vídeo) */}
+        <p className="text-base sm:text-lg md:text-xl text-slate-200 max-w-3xl mx-auto leading-relaxed mb-5 font-normal">
           Sem intermediários cobrando comissões e sem formulários demorados. Veja fotos informadas pelos anunciantes, conheça os profissionais da sua cidade e converse{' '}
           <strong className="text-white font-bold">diretamente pelo WhatsApp</strong> com total liberdade.
         </p>
 
-        {/* O VÍDEO CENTRALIZADO COM PROPORÇÃO VERTICAL NATIVA */}
-        <div className="max-w-4xl mx-auto mb-6">
-          <div className="mb-3">
-            <h2 className="text-base sm:text-xl font-bold text-slate-200 tracking-tight">
-              Como Funciona a Vitrine moveleira
-            </h2>
-          </div>
-
-          <div className="card-3d-led rounded-3xl p-2 sm:p-4 vsl-frame-led relative border-2 border-orange-500/60 shadow-[0_0_45px_-5px_rgba(255,107,0,0.45)]">
-            <div className="relative rounded-2xl overflow-hidden aspect-video bg-black border border-white/10 flex items-center justify-center">
+        {/* O VÍDEO CENTRALIZADO COM PROPORÇÃO VERTICAL NATIVA - ENQUADRADO NA PRIMEIRA DOBRA NO PC */}
+        <div className="max-w-3xl mx-auto mb-6">
+          <div className="card-3d-led rounded-3xl p-2 sm:p-3 vsl-frame-led relative border-2 border-orange-500/60 shadow-[0_0_45px_-5px_rgba(255,107,0,0.45)]">
+            <div className="relative rounded-2xl overflow-hidden aspect-video max-h-[62vh] bg-black border border-white/10 flex items-center justify-center">
               <video
                 ref={videoRef}
                 controls
