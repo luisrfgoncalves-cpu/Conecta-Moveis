@@ -96,29 +96,29 @@ export default function ApresentacaoPage() {
   return (
     <div className="min-h-screen bg-[#05070d] text-slate-100 selection:bg-orange-500 selection:text-white">
       
-      {/* DOBRA 1: HERO VSL (SEM BARRA FIXA, APENAS O VÍDEO E O SUPER BOTÃO DISPARADO) */}
-      <section className="relative pt-2 pb-6 sm:pt-3 sm:pb-8 md:pt-4 md:pb-8 px-4 sm:px-6 lg:px-8 z-10 text-center">
+      {/* DOBRA 1: HERO VSL */}
+      <section className="relative pt-4 pb-12 sm:pt-4 sm:pb-8 md:pt-4 md:pb-8 px-4 sm:px-6 lg:px-8 z-10 text-center">
         
-        {/* Topo Integrado: Logo original à esquerda sem barra fixa */}
-        <div className="max-w-6xl mx-auto flex items-center justify-between mb-2 sm:mb-3">
+        {/* Topo Integrado: Logo ampliado no celular */}
+        <div className="max-w-6xl mx-auto flex items-center justify-between mb-4 sm:mb-3">
           <Link href="/" className="flex items-center gap-2 group transition-transform hover:scale-105">
             <Image
               src="/brand/vitrine-moveleira-intro.svg"
               alt="Vitrine Moveleira"
-              width={220}
-              height={50}
+              width={260}
+              height={60}
               priority
-              className="h-8 sm:h-9 md:h-10 w-auto object-contain drop-shadow-[0_4px_16px_rgba(0,0,0,0.9)]"
+              className="h-11 sm:h-9 md:h-10 w-auto object-contain drop-shadow-[0_4px_16px_rgba(0,0,0,0.9)]"
             />
           </Link>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-950/60 border border-purple-500/50 shadow-sm backdrop-blur-md">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-purple-950/60 border border-purple-500/50 shadow-sm backdrop-blur-md">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-[11px] sm:text-xs font-bold text-slate-200">Jundiaí e Região</span>
+            <span className="text-xs sm:text-xs font-bold text-slate-200">Jundiaí e Região</span>
           </div>
         </div>
 
-        {/* Headline Principal Restaurada (mesmo texto, entrelinha compacta no desktop) */}
-        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.6rem] font-black text-white tracking-tight leading-[1.12] max-w-4xl mx-auto mb-2 drop-shadow-[0_0_35px_rgba(255,107,0,0.35)]">
+        {/* Headline Principal: Fonte aumentada e impactante no mobile */}
+        <h1 className="text-[1.85rem] sm:text-3xl md:text-4xl lg:text-[2.6rem] font-black text-white tracking-tight leading-[1.18] sm:leading-[1.12] max-w-4xl mx-auto mb-3 sm:mb-2 drop-shadow-[0_0_35px_rgba(255,107,0,0.35)]">
           O jeito inteligente de encontrar{' '}
           <span className="bg-gradient-to-r from-orange-400 via-amber-300 to-orange-500 bg-clip-text text-transparent">
             marceneiros e montadores
@@ -126,15 +126,15 @@ export default function ApresentacaoPage() {
           perto de você.
         </h1>
 
-        {/* Sub-headline */}
-        <p className="text-xs sm:text-sm md:text-base text-slate-200 max-w-2xl mx-auto leading-relaxed mb-3 sm:mb-4 font-normal">
+        {/* Sub-headline: Fonte aumentada e respirada no mobile */}
+        <p className="text-sm sm:text-sm md:text-base text-slate-200 max-w-2xl mx-auto leading-relaxed mb-5 sm:mb-4 font-normal">
           A vitrine digital que reúne quem fabrica, projeta e monta móveis na sua cidade. Sem intermediários cobrando comissões: veja fotos de serviços informadas pelos anunciantes e converse{' '}
           <strong className="text-white font-bold">direto pelo WhatsApp</strong>.
         </p>
 
-        {/* O VÍDEO CENTRALIZADO COM PROPORÇÃO VERTICAL NATIVA - 100% ENQUADRADO NA PRIMEIRA DOBRA */}
-        <div className="max-w-[620px] md:max-w-[660px] lg:max-w-[700px] mx-auto mb-4">
-          <div className="card-3d-led rounded-3xl p-1.5 sm:p-2 vsl-frame-led relative border-2 border-orange-500/60 shadow-[0_0_40px_-5px_rgba(255,107,0,0.4)]">
+        {/* O VÍDEO CENTRALIZADO */}
+        <div className="max-w-[620px] md:max-w-[660px] lg:max-w-[700px] mx-auto mb-6 sm:mb-4">
+          <div className="card-3d-led rounded-3xl p-2 sm:p-2 vsl-frame-led relative border-2 border-orange-500/60 shadow-[0_0_40px_-5px_rgba(255,107,0,0.4)]">
             <div className="relative rounded-2xl overflow-hidden aspect-video max-h-[46vh] sm:max-h-[48vh] bg-black border border-white/10 flex items-center justify-center">
               <video
                 ref={videoRef}
@@ -153,10 +153,10 @@ export default function ApresentacaoPage() {
           </div>
         </div>
 
-        {/* BOTÃO ÚNICO DISPARADO: NO CELULAR SEMPRE VISÍVEL / NO DESKTOP FADE-IN */}
+        {/* BOTÃO ÚNICO DISPARADO: Espaçoso e bem destacado */}
         <div 
           id="cta-container" 
-          className={`max-w-md mx-auto mb-8 transition-all duration-700 ease-out ${
+          className={`max-w-md mx-auto mb-16 sm:mb-8 transition-all duration-700 ease-out ${
             ctaRevealed 
               ? 'opacity-100 translate-y-0 pointer-events-auto' 
               : 'max-sm:opacity-100 max-sm:translate-y-0 max-sm:pointer-events-auto sm:opacity-0 sm:translate-y-6 sm:pointer-events-none'
