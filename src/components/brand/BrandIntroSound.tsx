@@ -20,7 +20,8 @@ export function BrandIntroSound() {
     const playIntro = () => {
       try {
         const audio = new Audio('/brand/vitrine-moveleira-sfx.mp3');
-        audio.volume = 0.4;
+        // Volume reduzido para nível sutil e elegante (12%), sem sustos ao usuário
+        audio.volume = 0.12;
         audio.play().then(() => {
           sessionStorage.setItem('vm_intro_sfx_played', 'true');
         }).catch(() => {
