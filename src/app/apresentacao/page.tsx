@@ -126,10 +126,10 @@ export default function ApresentacaoPage() {
           perto de você.
         </h1>
 
-        {/* Sub-headline (mesmo texto, tamanho calibrado) */}
+        {/* Sub-headline */}
         <p className="text-xs sm:text-sm md:text-base text-slate-200 max-w-2xl mx-auto leading-relaxed mb-3 sm:mb-4 font-normal">
-          Sem intermediários cobrando comissões e sem formulários demorados. Veja fotos informadas pelos anunciantes, conheça os profissionais da sua cidade e converse{' '}
-          <strong className="text-white font-bold">diretamente pelo WhatsApp</strong> com total liberdade.
+          A vitrine digital que reúne quem fabrica, projeta e monta móveis na sua cidade. Sem intermediários cobrando comissões: veja fotos de serviços informadas pelos anunciantes e converse{' '}
+          <strong className="text-white font-bold">direto pelo WhatsApp</strong>.
         </p>
 
         {/* O VÍDEO CENTRALIZADO COM PROPORÇÃO VERTICAL NATIVA - 100% ENQUADRADO NA PRIMEIRA DOBRA */}
